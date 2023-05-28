@@ -1,0 +1,37 @@
+.loginimg{
+    width: 90%;
+}
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+background: #1E3B8B !important;
+color: #F5F5F5 !important;
+
+}
+.css-hyum1k-MuiToolbar-root{
+    display:block !important;
+    /* background: #1E3B8B !important; */
+}
+.css-49ifcl-MuiPaper-root-MuiAppBar-root {
+background: #1E3B8B !important;
+box-shadow:none !important
+}
+.sidebaricon {
+    color: #ffffff;
+    /* background-color: #053b5c; */
+    font-size: 1.4rem;
+    width: 40px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 3px 0px;
+    margin: auto;
+}
+.css-10hburv-MuiTypography-root{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    /* text-align: center; */
+    margin-left: 10px;
+    color: #F5F5F5;
+    font-weight: bold;
+}

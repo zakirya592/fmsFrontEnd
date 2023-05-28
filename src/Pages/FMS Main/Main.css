@@ -1,0 +1,225 @@
+.background{
+    background-image: url("../../Image/background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100vw;
+    height: 120%;
+}
+
+
+
+.s-button {
+    width: 8rem;
+    height: 2rem;
+    margin-top: 1rem;
+}
+
+.w-right {
+    position: relative;
+}
+.banc {
+     position: relative;
+     width: 78%;
+     height: 50rem;
+     left: 10%;
+     top: 10%;
+     border-radius: 100%;
+     -webkit-box-shadow: 1px 4px 15px -4px linear-gradient(to bottom, #C9E8FD 50%, #F4DAC1 50%);
+     box-shadow: 1px 4px 15px -4px linear-gradient(to bottom, #C9E8FD 50%, #F4DAC1 50%);
+     background: linear-gradient(to bottom, #C9E8FD 47%, #ffffff 10%, #F4DAC1 48%);
+     /* border: 1px solid black; */
+     z-index: 20;
+}
+.w-mainCircle {
+    position: absolute;
+    width: 80%;
+    height: 42rem;
+    border-radius: 100%;
+    left: 4rem;
+    margin-top: 40px;
+    /* -webkit-box-shadow: 1px 4px 15px -4px linear-gradient(to bottom, #C9E8FD 50%, #F4DAC1 50%); */
+    /* box-shadow: 1px 4px 15px -4px linear-gradient(to bottom, #C9E8FD 50%, #F4DAC1 50%); */
+    /* background: linear-gradient(to bottom, #C9E8FD 50%, #F4DAC1 50%); */
+    border: 1px solid black;
+    /* z-index: 2; */
+}
+
+.w-mainCircle>* {
+    position: absolute;
+}
+
+.w-mainCircle> :nth-child(1) {
+    top: 0rem;
+    left: 70%;
+}
+
+.w-mainCircle> :nth-child(2) {
+    left:88%;
+    top: 15%;
+}
+
+.w-mainCircle> :nth-child(3) {
+    left: 30%;
+    top: 30%;
+    width: 40%;
+    height: 40%;
+}
+
+.w-mainCircle> :nth-child(4) {
+    left: 94%;
+    top: 40%;
+}
+
+.w-mainCircle> :nth-child(5) {
+    left: 88%;
+    top: 62%;
+}
+.w-mainCircle> :nth-child(6) {
+    left: 78%;
+    top: 82%;
+}
+.w-mainCircle> :nth-child(7) {
+    left: 60%;
+    top: 90%;
+}
+.w-mainCircle> :nth-child(8) {
+    left: 40%;
+    top: 90%;
+}
+.w-mainCircle> :nth-child(9) {
+    left: 20%;
+    top: 85%;
+}
+.w-mainCircle> :nth-child(10) {
+    left: 5%;
+    top: 75%;
+}
+.w-mainCircle> :nth-child(11) {
+    left: 0%;
+    top: 55%;
+}
+.w-mainCircle> :nth-child(12) {
+    left: 0%;
+    top: 37%;
+}
+.w-mainCircle> :nth-child(13) {
+    left: 2%;
+    top: 15%;
+}
+.w-mainCircle> :nth-child(14) {
+    left: 20%;
+    top: 1%;
+}
+.w-mainCircle> :nth-child(15) {
+    left: 45%;
+    top: -4%;
+}
+
+
+
+.w-secCircle {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: block;
+}
+.w-secCircleindside{
+     width: 6rem;
+     height: 6rem;
+     border-radius: 100%;
+     background: white;
+    border: 1px solid #000000;
+}
+
+.w-secCircle>img {
+    transform: scale(1);
+}
+
+.w-backCircle {
+    position: absolute;
+    height: 13rem;
+    width: 13rem;
+    border-radius: 100%;
+    /* darkMode */
+    z-index: 1;
+}
+
+.textstyle{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: #1E3B8B;
+}
+
+@media screen and (max-width: 1024px) {
+    .banc{
+        width: 98%;
+        height: 45rem;
+ left: 1%;
+    }
+    .w-mainCircle {
+        position: absolute;
+        width: 80%;
+        height: 39rem;
+        left: 4rem;
+        margin-top: 40px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .banc {
+        width: 100%;
+        height: 35rem;
+        left: 1%;
+    }
+
+    .w-mainCircle {
+        position: absolute;
+        width: 100%;
+        height: 30rem;
+        left: 4rem;
+        margin-top: 40px;
+    }
+
+    .w-right {
+        display: flex;
+        align-items: flex-start;
+        justify-content: start;
+        transform: scale(0.7);
+    }
+
+    .w-mainCircle {
+        position: static;
+    }
+
+    .w-backCircle {
+        left: 8rem !important;
+    }
+
+}
+
+
+@media screen and (max-width: 480px) {
+
+
+    .w-right {
+        display: flex;
+        align-items: flex-start;
+        justify-content: start;
+        transform: scale(0.7);
+    }
+
+    .w-mainCircle {
+        position: static;
+    }
+
+    .w-backCircle {
+        left: 8rem !important;
+    }
+
+}
