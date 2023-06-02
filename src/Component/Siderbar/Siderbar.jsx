@@ -46,7 +46,7 @@ function Siderbar(props) {
           
           <Typography variant="h6" noWrap component="div" className='d-flex py-2 '>
             <ArrowCircleLeftOutlinedIcon className='my-auto text-start me-5 ms-2' />
-          <p className='text-center my-auto ms-5'>FACILITY MANAGEMENT SYSTEMS  {props.name}</p>  
+          <p className='text-center my-auto ms-5'>FACILITY MANAGEMENT SYSTEMS  </p>  
           </Typography>
         </Toolbar>
       </AppBar>

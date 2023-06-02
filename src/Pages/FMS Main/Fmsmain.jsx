@@ -126,12 +126,12 @@ function Fmsmain() {
                                             </div>
 
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={(() => {
+                                                    navigate('/workRequest')
+                                                })}>
                                                     <img src={WorkRequest} alt="upwork" width='100%' />
                                                 </div>
-                                                <p className='textstyle' onClick={(() => {
-                                                    navigate('/workRequest')
-                                                })}>Work Request </p>
+                                                <p className='textstyle' >Work Request </p>
                                             </div>
 
                                             <div className="w-secCircle">

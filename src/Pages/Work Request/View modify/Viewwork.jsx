@@ -27,7 +27,6 @@ function Viewwork() {
     const [Location, setLocation] = useState('')
     const [Building, setBuilding] = useState('')
     const [Departmentname, setDepartmentname] = useState('')
-
     const [WorkType, setWorkType] = useState('')
     const [WorkTypeDescription, setWorkTypeDescription] = useState('')
     const [WorkPriority, setWorkPriority] = useState('')
@@ -38,7 +37,6 @@ function Viewwork() {
     const [AssetCategory, setAssetCategory] = useState('')
     const [Manufacturer, setManufacturer] = useState('')
     const [Model, setModel] = useState('')
-const [Employdata, setEmploydata] = useState()
 
     return (
         <div>
@@ -60,11 +58,11 @@ const [Employdata, setEmploydata] = useState()
                             <div className="d-flex justify-content-between my-auto">
                                 <p className='color1 workitoppro my-auto'>View/Modify Work Request*</p>
                                 <div className="d-flex">
-                                    <img src={pagepin} className='me-2'></img>
+                                    <img src={pagepin} className='me-2'/>
                                     {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
                                         <Create/>
                                     <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                    <button type="button" class="btn btn-outline-primary color2"><img src={excel}></img> Export</button>
+                                    <button type="button" class="btn btn-outline-primary color2"><img src={excel}/> Export</button>
                                 </div>
                             </div>
 
