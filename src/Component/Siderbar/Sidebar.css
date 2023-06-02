@@ -40,3 +40,11 @@ box-shadow:none !important
     color: #F5F5F5;
     font-weight: bold;
 }
+.css-hyum1k-MuiToolbar-root{
+    min-height: 10px !important;
+    background-color: white !important;
+}
+.css-8u39c-MuiTypography-root{
+    background: #1E3B8B !important;
+    border-radius: 10px;
+}

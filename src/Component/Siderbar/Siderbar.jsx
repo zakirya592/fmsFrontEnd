@@ -11,8 +11,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from "react-router-dom";
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-
 import  logo  from '../../Image/log.png'
 import WorkOrder from "../../Image/WorkOrder.png"
 import WorkRequest from "../../Image/WorkRequest.png"
@@ -28,12 +26,13 @@ import Assetmanagemtn from "../../Image/Asset Management.png"
 import Location from "../../Image/Location Management.png";
 import Cleaning from "../../Image/Cleaning Works.png"
 import Preventive from "../../Image/Preventive Maintenance.png"
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 
 import "./Sidebar.css"
 const drawerWidth = 250;
 
 
-function Siderbar() {
+function Siderbar(props) {
     const navigate = useNavigate();
   return (
     <>
@@ -44,8 +43,10 @@ function Siderbar() {
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div" className='text-center'>
-          <p className='text-center '>FACILITY MANAGEMENT SYSTEMS </p>  
+          
+          <Typography variant="h6" noWrap component="div" className='d-flex py-2 '>
+            <ArrowCircleLeftOutlinedIcon className='my-auto text-start me-5 ms-2' />
+          <p className='text-center my-auto ms-5'>FACILITY MANAGEMENT SYSTEMS  {props.name}</p>  
           </Typography>
         </Toolbar>
       </AppBar>
@@ -71,7 +72,7 @@ function Siderbar() {
                   <List>
                       {['Work Request'].map((text, index) => (
                           <ListItem key={text} disablePadding onClick={(() => {
-                              navigate('/WorkRequest')
+                              navigate('/workRequest')
                           })}>
                               <ListItemButton>
                                   <ListItemIcon>
