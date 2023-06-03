@@ -132,7 +132,7 @@ function Siderbar(props) {
                   <List>
                       {['Location Management'].map((text, index) => (
                           <ListItem key={text} disablePadding onClick={(() => {
-                              navigate('/WorkRequest')
+                              navigate('/locationmanagement')
                           })}>
                               <ListItemButton>
                                   <ListItemIcon>

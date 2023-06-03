@@ -1,0 +1,104 @@
+.workitoppro{
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 27px;
+}
+.btnwork{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+}
+.line{
+    height: 6px;
+    background-color: black;
+
+}
+.topermaringpage{
+    border: 1px solid #00006A;
+    border-radius: 12px;
+}
+.serachicon{
+    left: 94%;
+    top: 50%;
+}
+.lablesection{
+    font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 19px;
+}
+.inputsection{
+    border: 1px solid #00006A;
+}
+.inputsection::placeholder{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+}
+.inputsectiondropdpwn{
+       font-family: 'Inter';
+       font-style: normal;
+       font-weight: 600;
+       font-size: 16px;
+       line-height: 19px;
+}
+.PhoneInputInput{
+    border: none !important;
+}
+.PhoneInputInput::-moz-focus-inner{
+    border: none !important;
+}
+.PhoneInputInput:focus{
+    border: none !important;
+}
+.savebtn{
+    background: #1E3B8B;
+    border-radius: 10px;
+    color: white;
+}
+.savebtn:hover {
+    background: #1f2538;
+    border-radius: 10px;
+    color: rgb(248, 248, 248);
+}
+.proceedbtn{
+    background: #1D831D;
+    border-radius: 10px;
+    color: white;
+}
+.proceedbtn:hover {
+    background: #1D830f;
+    border-radius: 10px;
+    color: rgb(248, 248, 248);
+}
+.locationfortrans{
+    padding-left: 250px !important;
+}
+
+.css-ptiqhd-MuiSvgIcon-root{
+    display: none !important;
+}
+.MuiDataGrid-columnHeadersInner{
+    background-color: #1E3B8B    ;
+    color: white;
+font-size: 15px;
+}
+.filter-group {
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: 600;
+    vertical-align: top;
+    margin-bottom: 10px;
+    color: #00006A;
+  }
+  .star{
+    color: #FF0404;
+    font-weight: bold;
+  }
