@@ -136,7 +136,7 @@ function Siderbar(props) {
                           })}>
                               <ListItemButton>
                                   <ListItemIcon>
-                                      {index % 2 === 0 ? <img src={Location} className="sidebaricon my-auto text-center" /> : <img src={Location} className="sidebaricon my-auto" />}
+                                      {index % 2 === 0 ? <img src={Location} className="sidebaricon my-auto text-center"  alt='location'/> : <img src={Location} className="sidebaricon my-auto" alt='loaction' />}
                                   </ListItemIcon>
                                   <ListItemText primary={text} />
                               </ListItemButton>
@@ -162,7 +162,7 @@ function Siderbar(props) {
                   <List>
                       {['Setup & Configuration'].map((text, index) => (
                           <ListItem key={text} disablePadding onClick={(() => {
-                              navigate('/WorkRequest')
+                              navigate('/setupconfiguration')
                           })}>
                               <ListItemButton>
                                   <ListItemIcon>

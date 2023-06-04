@@ -83,12 +83,22 @@ line-height: 19px;
 }
 
 .css-ptiqhd-MuiSvgIcon-root{
-    display: none !important;
+    color: white !important;
+}
+
+.css-1xif2b4-MuiPopper-root-MuiDataGrid-menu .MuiDataGrid-menuList{
+    background-color: #1E3B8B !important;
+    border-radius: 5px !important;
+    color: white !important;
 }
 .MuiDataGrid-columnHeadersInner{
     background-color: #1E3B8B    ;
     color: white;
 font-size: 15px;
+}
+
+.topermaringpage{
+    width: 80vw;
 }
 .filter-group {
     display: inline-block;
