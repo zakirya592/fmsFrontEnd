@@ -72,7 +72,9 @@ function Fmsmain() {
                                             </div>
 
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={(()=>{
+                                                    navigate('./setupconfiguration')
+                                                })}>
                                                     <img src={setupcon} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Setup & Configuration</p>
