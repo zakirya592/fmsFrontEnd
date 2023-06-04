@@ -90,6 +90,9 @@ line-height: 19px;
     color: white;
 font-size: 15px;
 }
+.topermaringpage{
+    width: 80vw;
+}
 .filter-group {
     display: inline-block;
     margin-right: 20px;
