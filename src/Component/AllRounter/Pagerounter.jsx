@@ -5,6 +5,7 @@ import Viewwork from '../../Pages/Work Request/View modify/Viewwork'
 import WorkOrder from "../../Pages/WorkOrder/WorkOrder"
 import LocationManagement from '../../Pages/LocationManagement/LocationManagement'
 import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfiguration'
+import PreventiveView from '../../Pages/Preventive Maintenance/PreventiveView'
 function Pagerounter() {
 
   return (
@@ -25,6 +26,9 @@ function Pagerounter() {
 
           {/* Setup & Configuration */}
           <Route exact path='/setupConfiguration' element={<SetupAndConfiguration />} />
+
+          {/* View/Modify Preventive Maintenance* */}
+          <Route exact path='/Preventive' element={<PreventiveView />} />
 
         </Routes>
       </BrowserRouter>
