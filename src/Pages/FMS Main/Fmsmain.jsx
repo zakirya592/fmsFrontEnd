@@ -43,14 +43,16 @@ function Fmsmain() {
                                 <div className="banc">
                                     <div className="w-right mt-5">
                                         <div className='w-mainCircle '>
-
+                                            {/* Cleaning Works */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={(() => {
+                                                    navigate('/Cleaning')
+                                                })}>
                                                     <img src={Cleaning} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Cleaning Works</p>
                                             </div>
-
+                                            {/* Location Management */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={(() => {
                                                     navigate('/locationmanagement')
@@ -71,9 +73,10 @@ function Fmsmain() {
                                                 <p className='textstyle'>Asset Management </p>
                                             </div>
 
+                                            {/* setupconfiguration */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside" onClick={(()=>{
-                                                    navigate('./setupconfiguration')
+                                                <div className="w-secCircleindside" onClick={(() => {
+                                                    navigate('/setupconfiguration')
                                                 })}>
                                                     <img src={setupcon} alt="upwork" width='100%' />
                                                 </div>
@@ -129,6 +132,7 @@ function Fmsmain() {
                                                 <p className='textstyle'>Log-out </p>
                                             </div>
 
+                                            {/* workRequest        */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={(() => {
                                                     navigate('/workRequest')
@@ -138,6 +142,7 @@ function Fmsmain() {
                                                 <p className='textstyle' >Work Request </p>
                                             </div>
 
+                                            {/* workorder */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={(() => {
                                                     navigate('/workorder')
@@ -147,8 +152,11 @@ function Fmsmain() {
                                                 <p className='textstyle'>Work Orders </p>
                                             </div>
 
+                                            {/* Preventive Maintenance*/}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={(() => {
+                                                    navigate('/Preventive')
+                                                })}>
                                                     <img src={Preventive} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Preventive<br></br> Maintenance</p>

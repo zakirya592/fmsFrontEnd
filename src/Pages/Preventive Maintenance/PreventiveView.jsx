@@ -30,6 +30,10 @@ function PreventiveView() {
     const [Manufacturer, setManufacturer] = useState('')
     const [Model, setModel] = useState('')
     const [Scheduling, setScheduling] = useState('')
+    const [Departmentcode, setDepartmentcode] = useState('')
+    const [Location, setLocation] = useState('')
+    const [Building, setBuilding] = useState('')
+    const [Departmentname, setDepartmentname] = useState('')
     return (
         <div>
             <div className='bg'>
@@ -360,6 +364,81 @@ function PreventiveView() {
                                         </div>
                                     </div>
                                     
+                                </div>
+
+                                <div className="row mx-auto formsection">
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
+                                                Department Code<span className='star'>*</span>
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={Departmentcode}
+                                                onChange={(event) => {
+                                                    setDepartmentcode(event.target.value)
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                <option value={"First"}>One</option>
+                                                <option value={"Second"}>Two</option>
+                                                <option value={"three"}>Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
+                                                Department Name<span className='star'>*</span>
+                                            </label>
+
+                                            <input
+                                                types='text'
+                                                id='Departmentname'
+                                                value={Departmentname}
+                                                onChange={e => {
+                                                    setDepartmentname(e.target.value)
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Department Name'
+                                                required
+                                            ></input>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
+                                                Building<span className='star'>*</span>
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={Building}
+                                                onChange={(event) => {
+                                                    setBuilding(event.target.value)
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                <option value={"First"}>One</option>
+                                                <option value={"Second"}>Two</option>
+                                                <option value={"three"}>Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
+                                                Location<span className='star'>*</span>
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={Location}
+                                                onChange={(event) => {
+                                                    setLocation(event.target.value)
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Select Location</option>
+                                                <option value={"First"}>One</option>
+                                                <option value={"Second"}>Two</option>
+                                                <option value={"three"}>Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 
                                 {/* 4th row */}

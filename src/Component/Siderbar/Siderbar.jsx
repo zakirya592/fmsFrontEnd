@@ -69,6 +69,7 @@ function Siderbar(props) {
                             <img className=" mx-auto loginimg" src={logo} alt="" />
                         </center>
                     </span>
+
                     {/* Work Request */}
                     <List>
                         {['Work Request'].map((text, index) => (
@@ -84,6 +85,7 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
+
                     {/* Work Order */}
                     <List>
                         {['Work Order'].map((text, index) => (
@@ -99,6 +101,7 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
+
                     {/* Preventive Maintenance */}
                     <List>
                         {['Preventive Maintenance'].map((text, index) => (
@@ -115,10 +118,11 @@ function Siderbar(props) {
                         ))}
                     </List>
 
+                    {/* Cleaning Works */}
                     <List>
                         {['Cleaning Works'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                navigate('/Cleaning')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
@@ -130,6 +134,7 @@ function Siderbar(props) {
                         ))}
                     </List>
 
+                    {/* Location Management */}
                     <List>
                         {['Location Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
@@ -160,6 +165,7 @@ function Siderbar(props) {
                         ))}
                     </List>
 
+                    {/* Setup & Configuration */}
                     <List>
                         {['Setup & Configuration'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
