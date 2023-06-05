@@ -87,11 +87,11 @@ function Siderbar(props) {
                   <List>
                       {['Work Order'].map((text, index) => (
                           <ListItem key={text} disablePadding onClick={(() => {
-                              navigate('/WorkRequest')
+                              navigate('/workorder')
                           })}>
                               <ListItemButton>
                                   <ListItemIcon>
-                                      {index % 2 === 0 ? <img src={WorkOrder} className="sidebaricon my-auto" /> : <img src={WorkOrder} className="sidebaricon my-auto" />}
+                                      {index % 2 === 0 ? <img src={WorkOrder} className="sidebaricon my-auto"  alt=''/> : <img src={WorkOrder} className="sidebaricon my-auto" alt="workorder" />}
                                   </ListItemIcon>
                                   <ListItemText primary={text} />
                               </ListItemButton>
