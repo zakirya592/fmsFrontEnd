@@ -139,7 +139,9 @@ function Fmsmain() {
                                             </div>
 
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={(() => {
+                                                    navigate('/workorder')
+                                                })}>
                                                     <img src={WorkOrder} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Work Orders </p>
