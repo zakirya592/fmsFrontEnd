@@ -13,7 +13,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
-
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
 function Viewwork() {
     const [Employeenumber, setEmployeenumber] = useState('')
@@ -44,11 +45,13 @@ function Viewwork() {
                 <div className=''>
                     <Box sx={{ display: 'flex' }}>
                         <Siderbar />
-                        <AppBar
-                            className='fortrans'
-                            position='fixed'
-
-                        >
+                        <AppBar className="fortrans locationfortrans" position="fixed">
+                            <Toolbar>
+                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                                    <p className="text-center my-auto ms-5">Work Request</p>
+                                </Typography>
+                            </Toolbar>
                         </AppBar>
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
@@ -56,7 +59,7 @@ function Viewwork() {
                            
                             {/* Top section */}
                             <div className="d-flex justify-content-between my-auto">
-                                <p className='color1 workitoppro my-auto'>View/Modify Work Request*</p>
+                                <p className='color1 workitoppro my-auto'>View/Modify Work Request</p>
                                 <div className="d-flex">
                                     <img src={pagepin} className='me-2'/>
                                     {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
@@ -73,7 +76,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                            Employee Number*
+                                            Employee Number<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -98,7 +101,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
-                                            Work Request Number*
+                                            Work Request Number<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -123,7 +126,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                            Request Date/Time*
+                                            Request Date/Time<span className='star'>*</span>
                                         </label>
                                             <input type="datetime-local" id="Employdata"   name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -134,7 +137,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
-                                            First Name*
+                                            First Name<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -154,7 +157,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
-                                            Middle Name*
+                                            Middle Name<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -174,7 +177,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                            Last Name*
+                                                Last Name<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -194,7 +197,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                            Mobile Number*
+                                            Mobile Number<span className='star'>*</span>
                                         </label>
 
                                         <PhoneInput
@@ -210,7 +213,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                            Landline Number*
+                                            Landline Number<span className='star'>*</span>
                                         </label>
 
                                         <PhoneInput
@@ -229,7 +232,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
-                                            Department Code*
+                                            Department Code<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={Departmentcode}
                                             onChange={(event) => {
@@ -246,7 +249,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                            Department Name*
+                                            Department Name<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -266,7 +269,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                            Building*
+                                            Building<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={Building}
                                             onChange={(event) => {
@@ -283,7 +286,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                            Location*
+                                                Location<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={Location}
                                             onChange={(event) => {
@@ -303,7 +306,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='WorkType' className='lablesection color3 text-start mb-1'>
-                                            Work Type*
+                                            Work Type<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example" value={WorkType}
                                             onChange={(event) => {
@@ -320,7 +323,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='WorkTypeDescription' className='lablesection color3 text-start mb-1'>
-                                            Work Type Description *
+                                            Work Type Description <span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -340,7 +343,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='WorkPriority' className='lablesection color3 text-start mb-1'>
-                                            Work Priority*
+                                            Work Priority<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkPriority" aria-label="Floating label select example" value={WorkPriority}
                                             onChange={(event) => {
@@ -361,7 +364,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
-                                            Work Trade*
+                                            Work Trade<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={workTrade}
                                             onChange={(event) => {
@@ -378,7 +381,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='workTradeDescription' className='lablesection color3 text-start mb-1'>
-                                            Work Trade Description  *
+                                            Work Trade Description  <span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -403,7 +406,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='ProblemCategory' className='lablesection color3 text-start mb-1'>
-                                            Problem Category*
+                                            Problem Category<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example" value={ProblemCategory}
                                             onChange={(event) => {
@@ -420,7 +423,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Problem Description*
+                                            Problem Description<span className='star'>*</span>
                                         </label>
                                         <div className="form-floating inputsectiondropdpwn">
                                             <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"></textarea>
@@ -436,7 +439,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
-                                            Asset Code*
+                                            Asset Code<span className='star'>*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example" value={AssetCode}
                                             onChange={(event) => {
@@ -453,7 +456,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                            Asset Description*
+                                            Asset Description<span className='star'>*</span>
                                         </label>
                                         <div className="form-floating inputsectiondropdpwn">
                                             <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription"></textarea>
@@ -470,7 +473,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='AssetCategory' className='lablesection color3 text-start mb-1'>
-                                            Asset Category*
+                                            Asset Category<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -490,7 +493,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Manufacturer' className='lablesection color3 text-start mb-1'>
-                                            Manufacturer*
+                                            Manufacturer<span className='star'>*</span>
                                         </label>
 
                                         <input
@@ -510,7 +513,7 @@ function Viewwork() {
                                 <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                     <div className='emailsection  d-grid my-2'>
                                         <label htmlFor='Model' className='lablesection color3 text-start mb-1'>
-                                           Model*
+                                           Model<span className='star'>*</span>
                                         </label>
 
                                         <input

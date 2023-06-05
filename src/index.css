@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 code {
@@ -22,4 +24,8 @@ code {
 }
 .color3{
   color: #00006A;
+}
+.star {
+  color: #FF0404;
+  font-weight: bold;
 }

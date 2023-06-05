@@ -44,7 +44,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <div className='emailsection  d-grid my-2'>
                             <label htmlFor='WorkOrderNumber' className='lablesection color3 text-start mb-1'>
-                                Work Order Number*
+                                Work Order Number<span className='star'>*</span>
                             </label>
 
                             <input
@@ -64,7 +64,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <div className='emailsection  d-grid my-2'>
                             <label htmlFor='WorkOrderStatus' className='lablesection color3 text-start mb-1'>
-                               Work Order Status*
+                                Work Order Status<span className='star'>*</span>
                             </label>
 
                             <input
@@ -86,7 +86,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='WorkCategory' className='lablesection color3 text-start mb-1'>
-                                Work Category*
+                                Work Category<span className='star'>*</span>
                             </label>
 
                             <input
@@ -106,7 +106,7 @@ function Create() {
                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                         <div className='emailsection d-grid my-1'>
                             <label htmlFor='WorkCategoryDescription' className='lablesection color3 text-start mb-1'>
-                                Work Category Description**
+                                Work Category Description<span className='star'>*</span>
                             </label>
                             <div className="form-floating inputsectiondropdpwn">
                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Work Category Description" id="WorkCategoryDescription"></textarea>
@@ -122,7 +122,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                Completed By Emp#*
+                                Completed By Emp#<span className='star'>*</span>
                             </label>
 
                             <input
@@ -142,7 +142,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
-                                Employee Name*
+                                Employee Name<span className='star'>*</span>
                             </label>
 
                             <input
@@ -162,7 +162,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                         <div className='emailsection d-grid my-1'>
                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                Request Date/Time*
+                                Request Date/Time<span className='star'>*</span>
                             </label>
                             <input type="datetime-local" id="Employdata" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -178,7 +178,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='FeedbackByEmp' className='lablesection color3 text-start mb-1'>
-                               Feedback By Emp#*
+                                Feedback By Emp#<span className='star'>*</span>
                             </label>
 
                             <input
@@ -198,7 +198,7 @@ function Create() {
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
-                                Employee Name*
+                                Employee Name<span className='star'>*</span>
                             </label>
 
                             <input
@@ -222,7 +222,7 @@ function Create() {
                     <div className="col-sm-12 col-md-10 col-lg-10 col-xl-10 ">
                         <div className='emailsection d-grid my-2'>
                             <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                Problem Description*
+                                Problem Description<span className='star'>*</span>
                             </label>
                             <div className="form-floating inputsectiondropdpwn">
                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"></textarea>
