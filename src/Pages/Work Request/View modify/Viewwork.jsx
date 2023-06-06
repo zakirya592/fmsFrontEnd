@@ -15,19 +15,47 @@ import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
+import axios from 'axios'
 function Viewwork() {
-    const [Employeenumber, setEmployeenumber] = useState('')
-    const [WorkRequest, setWorkRequest] = useState('')
-    const [Firstname, setFirstname] = useState('')
-    const [Middlename, setMiddlename] = useState('')
-    const [Lastname, setLastname] = useState('')
-    const [Mobilenumber, setMobilenumber] = useState('')
-    const [Landlinenumber, setLandlinenumber] = useState('')
-    const [Departmentcode, setDepartmentcode] = useState('')
-    const [Location, setLocation] = useState('')
-    const [Building, setBuilding] = useState('')
-    const [Departmentname, setDepartmentname] = useState('')
+    const [value, setvalue] = useState({
+        EmployeeID:'',
+        Firstname: '',
+        Middlename:'',
+        Lastname: '',
+        WorkRequest:'',
+        WorkRequest: '',
+        Mobilenumber: '',
+        Landlinenumber:'',
+        Departmentcode:'',
+        Location:'',
+        BuildingCode:'',
+        Departmentname:'',
+    })
+    const [HiringDate, setHiringDate] = useState('')
+    const apicall = () => {
+        // console.log(name, icon, IDget);
+        axios.post(`/api/AddworkRequestPOST`, {
+            EmployeeID: value.EmployeeID,
+            Firstname: value.Firstname,
+            Lastname: value.Lastname,
+            MobileaNumber: value.Mobilenumber,
+            LandlineNumber: value.Landlinenumber,
+            DepartmentCode: value.Departmentcode,
+            BuildingCode: value.BuildingCode,
+            LocationCode: value.Location,
+            HiringDate: HiringDate,
+        },)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    const Update = () => {
+        apicall();
+    };
+
     const [WorkType, setWorkType] = useState('')
     const [WorkTypeDescription, setWorkTypeDescription] = useState('')
     const [WorkPriority, setWorkPriority] = useState('')
@@ -62,10 +90,10 @@ function Viewwork() {
                                 <p className='color1 workitoppro my-auto'>View/Modify Work Request</p>
                                 <div className="d-flex">
                                     <img src={pagepin} className='me-2'/>
-                                    {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
+                                    {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
                                         <Create/>
-                                    <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                    <button type="button" class="btn btn-outline-primary color2"><img src={excel}/> Export</button>
+                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
+                                    <button type="button" className="btn btn-outline-primary color2"><img src={excel}/> Export</button>
                                 </div>
                             </div>
 
@@ -75,16 +103,19 @@ function Viewwork() {
 
                                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
                                             Employee Number<span className='star'>*</span>
                                         </label>
 
                                         <input
                                             types='text'
-                                            id='Employeenumber'
-                                            value={Employeenumber}
+                                            id='EmployeeID'
+                                                value={value.EmployeeID}
                                             onChange={e => {
-                                                setEmployeenumber(e.target.value)
+                                                setvalue(prevValue => ({
+                                                    ...prevValue,
+                                                    EmployeeID: e.target.value
+                                                }))
                                             }}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Employee Number'
@@ -107,10 +138,14 @@ function Viewwork() {
                                         <input
                                             types='text'
                                             id='WorkRequest'
-                                            value={WorkRequest}
-                                            onChange={e => {
-                                                setWorkRequest(e.target.value)
-                                            }}
+                                                value={value.WorkRequest}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkRequest: e.target.value
+                                                    }))
+                                                }}
+                                            
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Request Number'
                                             required
@@ -128,7 +163,11 @@ function Viewwork() {
                                         <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                             Request Date/Time<span className='star'>*</span>
                                         </label>
-                                            <input type="datetime-local" id="Employdata"   name="birthdaytime" className='rounded inputsection py-2' />
+                                            <input type="datetime-local" id="Employdata" 
+                                            value={HiringDate}
+                                                onChange={event => {
+                                                    setHiringDate(event.target.value)
+                                                }}  name="birthdaytime" className='rounded inputsection py-2' />
 
                                 
                                     </div>
@@ -143,10 +182,13 @@ function Viewwork() {
                                         <input
                                             types='text'
                                             id='Firstname'
-                                            value={Firstname}
-                                            onChange={e => {
-                                                setFirstname(e.target.value)
-                                            }}
+                                                value={value.Firstname}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Firstname: e.target.value
+                                                    }))
+                                                }}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter First Name'
                                             required
@@ -163,10 +205,14 @@ function Viewwork() {
                                         <input
                                             types='text'
                                             id='Middlename'
-                                            value={Middlename}
-                                            onChange={e => {
-                                                setMiddlename(e.target.value)
-                                            }}
+                                                value={value.Middlename}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Middlename: e.target.value
+                                                    }))
+                                                }}
+                                            
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Middle Name'
                                             required
@@ -183,10 +229,14 @@ function Viewwork() {
                                         <input
                                             types='text'
                                             id='Lastname'
-                                            value={Lastname}
-                                            onChange={e => {
-                                                setLastname(e.target.value)
-                                            }}
+                                                value={value.Lastname}
+                                          
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Lastname: e.target.value
+                                                    }))
+                                                }}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Last Name'
                                             required
@@ -202,8 +252,11 @@ function Viewwork() {
 
                                         <PhoneInput
                                             placeholder="+966   500000000"
-                                            value={Mobilenumber}
-                                            onChange={setMobilenumber}
+                                                value={value.Mobilenumber}
+                                                onChange={e=>(prevValue => ({
+                                                    ...prevValue,
+                                                    Mobilenumber: e.target.value
+                                                }))}
                                             className='rounded inputsection py-2'
                                             country="US" />
 
@@ -218,8 +271,12 @@ function Viewwork() {
 
                                         <PhoneInput
                                             placeholder="+966  0100000000"
-                                            value={Landlinenumber}
-                                            onChange={setLandlinenumber}
+                                                value={value.Landlinenumber}
+                                                onChange={e => (prevValue => ({
+                                                    ...prevValue,
+                                                    Landlinenumber: e.target.value
+                                                }))}
+                                               
                                             className='rounded inputsection py-2'
                                             country="US" />
 
@@ -234,11 +291,15 @@ function Viewwork() {
                                         <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
                                             Department Code<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={Departmentcode}
-                                            onChange={(event) => {
-                                                setDepartmentcode(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Dept Code</option>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
+                                            onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Departmentcode: e.target.value
+                                                    }))
+                                                }}>
+                                             
+                                            <option  className='inputsectiondropdpwn'>Select Dept Code</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -255,10 +316,14 @@ function Viewwork() {
                                         <input
                                             types='text'
                                             id='Departmentname'
-                                            value={Departmentname}
-                                            onChange={e => {
-                                                setDepartmentname(e.target.value)
-                                            }}
+                                                value={value.Departmentname}
+                                           
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Departmentname: e.target.value
+                                                    }))
+                                                }}
                                             className='rounded inputsection py-2'
                                             placeholder='Department Name'
                                             required
@@ -271,11 +336,15 @@ function Viewwork() {
                                         <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
                                             Building<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={Building}
-                                            onChange={(event) => {
-                                                setBuilding(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Dept Code</option>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
+                                          
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        BuildingCode: e.target.value
+                                                    }))
+                                                }}>
+                                            <option className='inputsectiondropdpwn'>Select Dept Code</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -288,11 +357,15 @@ function Viewwork() {
                                         <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={Location}
-                                            onChange={(event) => {
-                                                setLocation(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Location</option>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.Location}
+                                          
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Location: e.target.value
+                                                    }))
+                                                }}>
+                                            <option className='inputsectiondropdpwn'>Select Location</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -312,7 +385,7 @@ function Viewwork() {
                                             onChange={(event) => {
                                                 setWorkType(event.target.value)
                                             }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Work Type</option>
+                                            <option className='inputsectiondropdpwn'>Select Work Type</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -349,7 +422,7 @@ function Viewwork() {
                                             onChange={(event) => {
                                                 setWorkPriority(event.target.value)
                                             }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Work Priority</option>
+                                            <option className='inputsectiondropdpwn'>Select Work Priority</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -370,7 +443,7 @@ function Viewwork() {
                                             onChange={(event) => {
                                                 setworkTrade(event.target.value)
                                             }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Work Trade</option>
+                                            <option className='inputsectiondropdpwn'>Select Work Trade</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -412,7 +485,7 @@ function Viewwork() {
                                             onChange={(event) => {
                                                 setProblemCategory(event.target.value)
                                             }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Problem Category</option>
+                                            <option className='inputsectiondropdpwn'>Select Problem Category</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -445,7 +518,7 @@ function Viewwork() {
                                             onChange={(event) => {
                                                 setAssetCode(event.target.value)
                                             }}>
-                                            <option selected className='inputsectiondropdpwn'>Select  Asset Code</option>
+                                            <option className='inputsectiondropdpwn'>Select  Asset Code</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -532,8 +605,8 @@ function Viewwork() {
                             </div>
 
                             <div className="d-flex justify-content-between mt-3">
-                                <button type="button" class="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                <button type="button" class="border-0 px-3  savebtn py-2"><SaveIcon className='me-2'/>SAVE</button>
+                                <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Update}><SaveIcon className='me-2'/>SAVE</button>
                             </div>
                             </div>
                         </div>
