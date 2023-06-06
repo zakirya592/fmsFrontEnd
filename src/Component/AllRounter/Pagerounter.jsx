@@ -7,6 +7,7 @@ import LocationManagement from '../../Pages/LocationManagement/LocationManagemen
 import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfiguration'
 import PreventiveView from '../../Pages/Preventive Maintenance/PreventiveView'
 import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
+import TradeMaintenance from '../../Pages/Setup&Configuration/WORK TRADE MAINTENANCE/TradeMaintenance'
 function Pagerounter() {
 
   return (
@@ -27,6 +28,7 @@ function Pagerounter() {
 
           {/* Setup & Configuration */}
           <Route exact path='/setupConfiguration' element={<SetupAndConfiguration />} />
+          <Route exact path='/TradeMaintenance' element={<TradeMaintenance />} />
 
           {/* View/Modify Preventive Maintenance* */}
           <Route exact path='/Preventive' element={<PreventiveView />} />
