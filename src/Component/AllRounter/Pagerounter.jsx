@@ -7,6 +7,7 @@ import LocationManagement from '../../Pages/LocationManagement/LocationManagemen
 import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfiguration'
 import PreventiveView from '../../Pages/Preventive Maintenance/PreventiveView'
 import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
+import AssetManagement from '../../Pages/Asset Management/AssetManagement'
 function Pagerounter() {
 
   return (
@@ -34,6 +35,8 @@ function Pagerounter() {
           {/* View/Modify Cleaning Works* */}
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
+          {/* Asset Management */}
+          <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
         </Routes>
       </BrowserRouter>
     </>

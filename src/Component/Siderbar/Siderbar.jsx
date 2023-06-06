@@ -153,11 +153,11 @@ function Siderbar(props) {
                     <List>
                         {['Asset Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                navigate('/assetmanagement')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={Assetmanagemtn} className="sidebaricon my-auto" /> : <img src={Assetmanagemtn} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={Assetmanagemtn} className="sidebaricon my-auto" alt=''/> : <img src={Assetmanagemtn} className="sidebaricon my-auto"  alt=''/>}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

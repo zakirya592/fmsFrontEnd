@@ -83,7 +83,7 @@ function WorkOrder() {
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="WorkOrderNumber"
-                                                className="lablesection color3 text-start mb-1">
+                                                className="lablesection color3 text-start mb-1" >
                                                 Work Order Number<span className="star">*</span>
                                             </label>
                                             <input

@@ -1,0 +1,39 @@
+.printerPic {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 161px;
+    background: #F5F5F5;
+    border: 1px solid #000000;
+    border-radius: 8px;
+  }
+  
+  
+  .printerpic {
+    width: 128px;
+    height: 127px;
+    border-radius: 8px;
+
+  }
+  
+  .barcodepic {
+    width: 136px;
+    height: 30px;
+    top: 89.5px;
+  }
+  
+  .browserfolder {
+    width: 36.54px;
+    height: 32px;
+    left: -1px;
+    top: 48.5px;
+  }
+  
+  .camera1 {
+    width: 34px;
+    height: 31px;
+    left: 0px;
+    top: 0.55px;
+  }
+  
