@@ -352,7 +352,7 @@ function WorkOrder() {
                                 </div>
                                 {/* Seventh row  */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                             Appiontment Date/Time<span className="star">*</span>
@@ -362,7 +362,7 @@ function WorkOrder() {
                                 
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='scheduledate' className='lablesection color3 text-start mb-1'>
                                             Scheduled Date/Time<span className="star">*</span>
@@ -375,7 +375,7 @@ function WorkOrder() {
                                 </div>
                                 {/* Eight row */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 ">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='startdate' className='lablesection color3 text-start mb-1'>
                                             Start Date/Time<span className="star">*</span>
@@ -385,7 +385,7 @@ function WorkOrder() {
                                 
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 ">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='endDate' className='lablesection color3 text-start mb-1'>
                                             End Date/Time<span className="star">*</span>
@@ -395,7 +395,7 @@ function WorkOrder() {
                                 
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='totaldays' className='lablesection color3 text-start mb-1'>
                                             Total days<span className="star">*</span>
@@ -403,7 +403,7 @@ function WorkOrder() {
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='totalhours' className='lablesection color3 text-start mb-1'>
                                             Total hours<span className="star">*</span>
@@ -411,7 +411,7 @@ function WorkOrder() {
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='totalminutes' className='lablesection color3 text-start mb-1'>
                                             Total Minutes<span className="star">*</span>
@@ -419,7 +419,7 @@ function WorkOrder() {
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
                                   </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='costofwork' className='lablesection color3 text-start mb-1'>
                                             Cost of Work<span className="star">*</span>
