@@ -57,7 +57,7 @@ function Pagerounter() {
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
           {/* ===================== Asset Management=====================  */}
-          <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
+          <Route exact path='/assetmanagement' element={<AssetManagement />} />
         </Routes>
       </BrowserRouter>
     </>
