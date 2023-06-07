@@ -15,15 +15,14 @@ import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Swal from "sweetalert2";
 import axios from 'axios'
 function Viewwork() {
     const [value, setvalue] = useState({
-        EmployeeID: '',
-        Firstname: '',
-        Middlename: '',
-        Lastname: '',
-        MobileNumber: '',
-        LandlineNumber: '',
+        EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
+        Departmentcode: '', Departmentname: '',//Department api input 
+        BuildingCode: '', //AddBuildingInworkRequestPOST api input
+        Location: '',// //AddLocationInworkRequestPOST api input
         RequestDateTime: '',
         WorkType: "",
         workTrade: '',
@@ -36,10 +35,7 @@ function Viewwork() {
         FeedbackEmp: '',
         Feedback_Remarks: '',
         WorkRequest: '',
-        Departmentcode: '',
-        Location: '',
-        BuildingCode: '',
-        Departmentname: '',
+       
     })
 
     const [WorkTypeDescription, setWorkTypeDescription] = useState('')
@@ -49,11 +45,13 @@ function Viewwork() {
     const [Manufacturer, setManufacturer] = useState('')
     const [Model, setModel] = useState('')
 
+    // generateId random
     const generateId = () => {
         const randomNumber = Math.floor(Math.random() * 100000000);
         return randomNumber.toString().padStart(8, '0');
     };
-    const apicall = () => {
+    //  AddworkRequestPOST api
+    const AddworkRequestPOST = () => {
         const generatedId = generateId();
         axios.post(`/api/AddworkRequestPOST`, {
             EmployeeID: generatedId,
@@ -71,26 +69,64 @@ function Viewwork() {
                 console.log(err);
             });
     };
-    const secondprotion = () => {
-        axios.post(`/api/AddworkRequestsecondPOST`, {
-            EmployeeID: value.EmployeeID,
-            Firstname: value.Firstname,
-            Middlename: value.Middlename,
-            Lastname: value.Lastname,
-            MobileaNumber: value.MobileNumber,
-            LandlineNumber: value.LandlineNumber,
+    // Department api
+    const Departmentapi = () => {
+        axios.post(`/api/AddDepartmentInworkRequestPOST`, {
+            DepartmentCode: value.DepartmentCode,
+            DepartmentDesc: value.Departmentname,
         },)
             .then((res) => {
                 console.log(res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileaNumber: '', LandlineNumber: '' }));
+                setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
+
+                })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    // AddBuildingInworkRequestPOST api
+    const AddBuildingapi = () => {
+        axios.post(`/api/AddBuildingInworkRequestPOST`, {
+            BuildingCode: value.BuildingCode,
+            BuildingDesc: value.Departmentname,
+        },)
+            .then((res) => {
+                console.log(res.data);
+                setvalue(prevState => ({ ...prevState, BuildingCode: '', Departmentname: '' }));
             })
             .catch((err) => {
                 console.log(err);
             });
     };
+
+    // AddLocationInworkRequestPOST api
+    const AddLocationapi = () => {
+        axios.post(`/api/AddLocationInworkRequestPOST`, {
+            LocationCode: value.Location,
+            LocationDesc: value.Departmentname,
+        },)
+            .then((res) => {
+                console.log(res.data);
+                setvalue(prevState => ({ ...prevState, Location: '', Departmentname: '' }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+
     const Update = () => {
-        apicall();
-        // secondprotion();
+        // AddworkRequestPOST();
+        // Departmentapi();
+        // AddBuildingapi()
+        AddLocationapi();
+        // Swal.fire({
+        //     title: "Success",
+        //     text: "Registration Submitted Successfully, kindly wait for Admin Approva",
+        //     icon: "success",
+        //     confirmButtonText: "OK",
+        // })
     };
 
 
