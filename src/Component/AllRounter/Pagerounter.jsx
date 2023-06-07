@@ -23,7 +23,7 @@ function Pagerounter() {
           {/* Word Order  */}
           <Route exact path='/workorder' element={<WorkOrder />} />
 
-          {/* Location Management */}
+          {/* Location Management na */}
           <Route exact path='/locationmanagement' element={<LocationManagement />} />
 
           {/* Setup & Configuration */}
@@ -37,6 +37,7 @@ function Pagerounter() {
 
           {/* Asset Management */}
           <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
+          {/* Add more pages here  and */}
           {/*My Add more pages here for to check the ad */}
         </Routes>
       </BrowserRouter>
