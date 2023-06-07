@@ -121,12 +121,12 @@ function Viewwork() {
         // Departmentapi();
         // AddBuildingapi()
         AddLocationapi();
-        // Swal.fire({
-        //     title: "Success",
-        //     text: "Registration Submitted Successfully, kindly wait for Admin Approva",
-        //     icon: "success",
-        //     confirmButtonText: "OK",
-        // })
+        Swal.fire({
+            title: "Success",
+            text: "you have Success submited the Data",
+            icon: "success",
+            confirmButtonText: "OK",
+        })
     };
 
 
