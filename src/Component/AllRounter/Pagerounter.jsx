@@ -37,6 +37,8 @@ function Pagerounter() {
 
           {/* Asset Management */}
           <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
+          {/* Add more pages here  and */}
+          {/*My Add more pages here for to check the ad */}
         </Routes>
       </BrowserRouter>
     </>
