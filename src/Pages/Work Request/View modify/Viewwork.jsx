@@ -23,9 +23,8 @@ function Viewwork() {
         Middlename:'',
         Lastname: '',
         WorkRequest:'',
-        WorkRequest: '',
-        Mobilenumber: '',
-        Landlinenumber:'',
+        MobileNumber: '',
+        LandlineNumber:'',
         Departmentcode:'',
         Location:'',
         BuildingCode:'',
@@ -37,16 +36,14 @@ function Viewwork() {
         axios.post(`/api/AddworkRequestPOST`, {
             EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
+            Middlename: value.Middlename,
             Lastname: value.Lastname,
-            MobileaNumber: value.Mobilenumber,
-            LandlineNumber: value.Landlinenumber,
-            DepartmentCode: value.Departmentcode,
-            BuildingCode: value.BuildingCode,
-            LocationCode: value.Location,
-            HiringDate: HiringDate,
+            MobileaNumber: 'value.MobileNumber',
+            LandlineNumber: value.LandlineNumber,
         },)
             .then((res) => {
                 console.log(res.data);
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileaNumber:'', LandlineNumber :''}));
             })
             .catch((err) => {
                 console.log(err);
@@ -252,11 +249,13 @@ function Viewwork() {
 
                                         <PhoneInput
                                             placeholder="+966   500000000"
-                                                value={value.Mobilenumber}
-                                                onChange={e=>(prevValue => ({
-                                                    ...prevValue,
-                                                    Mobilenumber: e.target.value
-                                                }))}
+                                                value={value.MobileNumber}
+                                                onChange={(phoneNumber) =>
+                                                    setvalue((prevValue) => ({
+                                                        ...prevValue,
+                                                        MobileNumber: phoneNumber,
+                                                    }))
+                                                }
                                             className='rounded inputsection py-2'
                                             country="US" />
 
@@ -271,12 +270,13 @@ function Viewwork() {
 
                                         <PhoneInput
                                             placeholder="+966  0100000000"
-                                                value={value.Landlinenumber}
-                                                onChange={e => (prevValue => ({
-                                                    ...prevValue,
-                                                    Landlinenumber: e.target.value
-                                                }))}
-                                               
+                                                value={value.LandlineNumber}
+                                                onChange={(LandlineNumber) =>
+                                                    setvalue((prevValue) => ({
+                                                        ...prevValue,
+                                                        LandlineNumber: LandlineNumber,
+                                                    }))
+                                                }
                                             className='rounded inputsection py-2'
                                             country="US" />
 
