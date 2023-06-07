@@ -15,7 +15,6 @@ import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios'
 function Viewwork() {
     const [value, setvalue] = useState({
@@ -36,7 +35,6 @@ function Viewwork() {
         CompletedByEmp:'',
         FeedbackEmp:'',
         Feedback_Remarks:'',
-
         WorkRequest:'',
         Departmentcode:'',
         Location:'',
@@ -50,11 +48,15 @@ function Viewwork() {
     const [AssetCategory, setAssetCategory] = useState('')
     const [Manufacturer, setManufacturer] = useState('')
     const [Model, setModel] = useState('')
-    
+
+    const generateId = () => {
+        const randomNumber = Math.floor(Math.random() * 100000000);
+        return randomNumber.toString().padStart(8, '0');
+    };
     const apicall = () => {
-        const generatedId = uuidv4();
+        const generatedId = generateId();
         axios.post(`/api/AddworkRequestPOST`, {
-            EmployeeID: value.EmployeeID,
+            EmployeeID: generatedId,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
