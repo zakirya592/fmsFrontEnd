@@ -15,6 +15,7 @@ import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios'
 function Viewwork() {
     const [value, setvalue] = useState({
@@ -22,17 +23,36 @@ function Viewwork() {
         Firstname: '',
         Middlename:'',
         Lastname: '',
-        WorkRequest:'',
         MobileNumber: '',
         LandlineNumber:'',
+        RequestDateTime:'',
+        WorkType:"",
+        workTrade:'',
+        WorkOrder:'',
+        WorkPriority:'',
+        ProblemCategory:'',
+        ProblemDescription:'',
+        AssetItemTag:'',
+        CompletedByEmp:'',
+        FeedbackEmp:'',
+        Feedback_Remarks:'',
+
+        WorkRequest:'',
         Departmentcode:'',
         Location:'',
         BuildingCode:'',
         Departmentname:'',
     })
-    const [HiringDate, setHiringDate] = useState('')
+
+    const [WorkTypeDescription, setWorkTypeDescription] = useState('')
+    const [workTradeDescription, setworkTradeDescription] = useState('')
+    const [AssetCode, setAssetCode] = useState('')
+    const [AssetCategory, setAssetCategory] = useState('')
+    const [Manufacturer, setManufacturer] = useState('')
+    const [Model, setModel] = useState('')
+    
     const apicall = () => {
-        // console.log(name, icon, IDget);
+        const generatedId = uuidv4();
         axios.post(`/api/AddworkRequestPOST`, {
             EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
@@ -49,20 +69,29 @@ function Viewwork() {
                 console.log(err);
             });
     };
+    const secondprotion = () => {
+        axios.post(`/api/AddworkRequestsecondPOST`, {
+            EmployeeID: value.EmployeeID,
+            Firstname: value.Firstname,
+            Middlename: value.Middlename,
+            Lastname: value.Lastname,
+            MobileaNumber: value.MobileNumber,
+            LandlineNumber: value.LandlineNumber,
+        },)
+            .then((res) => {
+                console.log(res.data);
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileaNumber: '', LandlineNumber: '' }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     const Update = () => {
         apicall();
+        // secondprotion();
     };
 
-    const [WorkType, setWorkType] = useState('')
-    const [WorkTypeDescription, setWorkTypeDescription] = useState('')
-    const [WorkPriority, setWorkPriority] = useState('')
-    const [workTrade, setworkTrade] = useState('')
-    const [workTradeDescription, setworkTradeDescription] = useState('')
-    const [ProblemCategory, setProblemCategory] = useState('')
-    const [AssetCode, setAssetCode] = useState('')
-    const [AssetCategory, setAssetCategory] = useState('')
-    const [Manufacturer, setManufacturer] = useState('')
-    const [Model, setModel] = useState('')
+ 
 
     return (
         <div>
@@ -161,10 +190,15 @@ function Viewwork() {
                                             Request Date/Time<span className='star'>*</span>
                                         </label>
                                             <input type="datetime-local" id="Employdata" 
-                                            value={HiringDate}
-                                                onChange={event => {
-                                                    setHiringDate(event.target.value)
-                                                }}  name="birthdaytime" className='rounded inputsection py-2' />
+                                           
+                                                value={value.RequestDateTime}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        RequestDateTime: e.target.value
+                                                    }))
+                                                }}
+                                                 name="birthdaytime" className='rounded inputsection py-2' />
 
                                 
                                     </div>
@@ -381,10 +415,14 @@ function Viewwork() {
                                         <label htmlFor='WorkType' className='lablesection color3 text-start mb-1'>
                                             Work Type<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example" value={WorkType}
-                                            onChange={(event) => {
-                                                setWorkType(event.target.value)
-                                            }}>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example"
+                                                value={value.WorkType}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkType: e.target.value
+                                                    }))
+                                                }}>
                                             <option className='inputsectiondropdpwn'>Select Work Type</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
@@ -418,10 +456,14 @@ function Viewwork() {
                                         <label htmlFor='WorkPriority' className='lablesection color3 text-start mb-1'>
                                             Work Priority<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkPriority" aria-label="Floating label select example" value={WorkPriority}
-                                            onChange={(event) => {
-                                                setWorkPriority(event.target.value)
-                                            }}>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkPriority" aria-label="Floating label select example"
+                                                value={value.WorkPriority}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkPriority: e.target.value
+                                                    }))
+                                                }}>
                                             <option className='inputsectiondropdpwn'>Select Work Priority</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
@@ -439,10 +481,14 @@ function Viewwork() {
                                         <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
                                             Work Trade<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={workTrade}
-                                            onChange={(event) => {
-                                                setworkTrade(event.target.value)
-                                            }}>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
+                                        value={value.WorkTrade}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkTrade: e.target.value
+                                                    }))
+                                                }}>
                                             <option className='inputsectiondropdpwn'>Select Work Trade</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
@@ -481,10 +527,14 @@ function Viewwork() {
                                         <label htmlFor='ProblemCategory' className='lablesection color3 text-start mb-1'>
                                             Problem Category<span className='star'>*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example" value={ProblemCategory}
-                                            onChange={(event) => {
-                                                setProblemCategory(event.target.value)
-                                            }}>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example" 
+                                                value={value.ProblemCategory}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        ProblemCategory: e.target.value
+                                                    }))
+                                                }}>
                                             <option className='inputsectiondropdpwn'>Select Problem Category</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
@@ -499,7 +549,13 @@ function Viewwork() {
                                             Problem Description<span className='star'>*</span>
                                         </label>
                                         <div className="form-floating inputsectiondropdpwn">
-                                            <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"></textarea>
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription" value={value.ProblemDescription}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            ProblemDescription: e.target.value
+                                                        }))
+                                                    }}></textarea>
                                           
                                         </div>
                                     </div>
