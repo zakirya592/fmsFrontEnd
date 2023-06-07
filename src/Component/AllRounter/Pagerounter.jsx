@@ -23,7 +23,7 @@ function Pagerounter() {
           {/* Word Order  */}
           <Route exact path='/workorder' element={<WorkOrder />} />
 
-          {/* Location Management */}
+          {/* Location Management na */}
           <Route exact path='/locationmanagement' element={<LocationManagement />} />
 
           {/* Setup & Configuration */}
