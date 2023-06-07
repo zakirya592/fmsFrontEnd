@@ -24,16 +24,16 @@ function Pagerounter() {
           {/* ---------Home Section----------- */}
           <Route exact path='/' element={<Fmsmain name="John" />} />
 
-          {/* Viewwork */}
+          {/*=====================  Viewwork =====================  */}
           <Route exact path='/workRequest' element={<Viewwork />} />
 
-          {/* Word Order  */}
+          {/*=====================  Word Order=====================   */}
           <Route exact path='/workorder' element={<WorkOrder />} />
 
-          {/* Location Management na */}
+          {/*=========== Location Management==============  */}
           <Route exact path='/locationmanagement' element={<LocationManagement />} />
 
-          {/* Setup & Configuration */}
+          {/*===================== Setup & Configuration================== */}
           <Route exact path='/setupConfiguration' element={<SetupAndConfiguration />} />
           {/*TradeMaintenance*/}
           <Route exact path='/TradeMaintenance' element={<TradeMaintenance />} />
@@ -50,13 +50,13 @@ function Pagerounter() {
           {/*Assectsubcategory*/}
           <Route exact path='/Assectsubcategorymaintence' element={<Assectsubcategory />} />
 
-          {/* View/Modify Preventive Maintenance* */}
+          {/* ================View/Modify Preventive Maintenance* ==================*/}
           <Route exact path='/Preventive' element={<PreventiveView />} />
 
-          {/* View/Modify Cleaning Works* */}
+          {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
-          {/* Asset Management */}
+          {/* ===================== Asset Management=====================  */}
           <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
         </Routes>
       </BrowserRouter>

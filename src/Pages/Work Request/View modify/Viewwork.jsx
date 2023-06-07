@@ -60,7 +60,7 @@ function Viewwork() {
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
-            MobileaNumber: value.MobileNumber,
+            "MobileNumber": value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
         },)
             .then((res) => {
