@@ -25,6 +25,8 @@ function Viewwork() {
         Location: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
+        AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
+        AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         RequestDateTime: '',
         workTrade: '',
         WorkOrder: '',
@@ -39,10 +41,6 @@ function Viewwork() {
     })
 
     const [workTradeDescription, setworkTradeDescription] = useState('')
-    const [AssetCode, setAssetCode] = useState('')
-    const [AssetCategory, setAssetCategory] = useState('')
-    const [Manufacturer, setManufacturer] = useState('')
-    const [Model, setModel] = useState('')
 
     // generateId random
     const generateId = () => {
@@ -132,6 +130,33 @@ function Viewwork() {
             .then((res) => {
                 console.log('AddWorkPriorityInworkRequestPOST 6th api', res.data);
                 setvalue(prevState => ({ ...prevState, WorkPriority: '' }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        //  AddAssetItemTagIDInworkRequestPOST
+        await axios.post(`/api/AddAssetItemTagIDInworkRequestPOST`, {
+            AssetItemTagID: value.AssetCode,
+        },)
+            .then((res) => {
+                console.log('AddAssetItemTagIDInworkRequestPOST 7th api', res.data);
+                setvalue(prevState => ({ ...prevState, AssetCode: '', }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        // AddassetItemInworkRequestPOST
+        await axios.post(`/api/AddassetItemInworkRequestPOST`, {
+            AssetItemDescription: value.AssetItemDescription,
+            AssetCategory: value.AssetCategory,
+            Manufacturer: value.Manufacturer,
+            Model: value.Model,
+        },)
+            .then((res) => {
+                console.log('AddassetItemInworkRequestPOST 8th api', res.data);
+                setvalue(prevState => ({ ...prevState, AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '', }));
             })
             .catch((err) => {
                 console.log(err);
@@ -629,9 +654,13 @@ function Viewwork() {
                                             <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
                                                 Asset Code<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example" value={AssetCode}
-                                                onChange={(event) => {
-                                                    setAssetCode(event.target.value)
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example"
+                                                value={value.AssetCode}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        AssetCode: e.target.value
+                                                    }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select  Asset Code</option>
                                                 <option value={"First"}>One</option>
@@ -647,7 +676,13 @@ function Viewwork() {
                                                 Asset Description<span className='star'>*</span>
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription"></textarea>
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription" value={value.AssetItemDescription}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            AssetItemDescription: e.target.value
+                                                        }))
+                                                    }}></textarea>
 
                                             </div>
                                         </div>
@@ -667,9 +702,12 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='AssetCategory'
-                                                value={AssetCategory}
+                                                value={value.AssetCategory}
                                                 onChange={e => {
-                                                    setAssetCategory(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        AssetCategory: e.target.value
+                                                    }))
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Category '
@@ -687,9 +725,12 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='Manufacturer'
-                                                value={Manufacturer}
+                                                value={value.Manufacturer}
                                                 onChange={e => {
-                                                    setManufacturer(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Manufacturer: e.target.value
+                                                    }))
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Manufacturer'
@@ -707,9 +748,12 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='Model'
-                                                value={Model}
+                                                value={value.Model}
                                                 onChange={e => {
-                                                    setModel(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Model: e.target.value
+                                                    }))
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Model'
