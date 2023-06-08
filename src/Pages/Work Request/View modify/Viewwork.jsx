@@ -23,11 +23,11 @@ function Viewwork() {
         Departmentcode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
         Location: '',// //AddLocationInworkRequestPOST api input
+        WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
+        WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         RequestDateTime: '',
-        WorkType: "",
         workTrade: '',
         WorkOrder: '',
-        WorkPriority: '',
         ProblemCategory: '',
         ProblemDescription: '',
         AssetItemTag: '',
@@ -35,10 +35,9 @@ function Viewwork() {
         FeedbackEmp: '',
         Feedback_Remarks: '',
         WorkRequest: '',
-       
+
     })
 
-    const [WorkTypeDescription, setWorkTypeDescription] = useState('')
     const [workTradeDescription, setworkTradeDescription] = useState('')
     const [AssetCode, setAssetCode] = useState('')
     const [AssetCategory, setAssetCategory] = useState('')
@@ -50,10 +49,12 @@ function Viewwork() {
         const randomNumber = Math.floor(Math.random() * 100000000);
         return randomNumber.toString().padStart(8, '0');
     };
-    //  AddworkRequestPOST api
-    const AddworkRequestPOST = () => {
+
+
+    const Update = async () => {
+        //  AddworkRequestPOST api
         const generatedId = generateId();
-        axios.post(`/api/AddworkRequestPOST`, {
+        await axios.post(`/api/AddworkRequestPOST`, {
             EmployeeID: generatedId,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
@@ -62,71 +63,87 @@ function Viewwork() {
             LandlineNumber: value.LandlineNumber,
         },)
             .then((res) => {
-                console.log(res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileaNumber: '', LandlineNumber: '' }));
+                console.log('Add work api first api', res.data);
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '' }));
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
-    // Department api
-    const Departmentapi = () => {
-        axios.post(`/api/AddDepartmentInworkRequestPOST`, {
+
+        // Department api
+        await axios.post(`/api/AddDepartmentInworkRequestPOST`, {
             DepartmentCode: value.DepartmentCode,
             DepartmentDesc: value.Departmentname,
         },)
             .then((res) => {
-                console.log(res.data);
+                console.log('department api second', res.data);
                 setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
 
-                })
+            })
             .catch((err) => {
                 console.log(err);
             });
-    };
 
-    // AddBuildingInworkRequestPOST api
-    const AddBuildingapi = () => {
-        axios.post(`/api/AddBuildingInworkRequestPOST`, {
+        // AddBuildingInworkRequestPOST api
+        await axios.post(`/api/AddBuildingInworkRequestPOST`, {
             BuildingCode: value.BuildingCode,
-            BuildingDesc: value.Departmentname,
+            BuildingDesc: '',
         },)
             .then((res) => {
-                console.log(res.data);
-                setvalue(prevState => ({ ...prevState, BuildingCode: '', Departmentname: '' }));
+                console.log('Add Bbuilding work requse api 3rd', res.data);
+                setvalue(prevState => ({ ...prevState, BuildingCode: '' }));
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
 
-    // AddLocationInworkRequestPOST api
-    const AddLocationapi = () => {
-        axios.post(`/api/AddLocationInworkRequestPOST`, {
+        // AddLocationInworkRequestPOST api
+        await axios.post(`/api/AddLocationInworkRequestPOST`, {
             LocationCode: value.Location,
-            LocationDesc: value.Departmentname,
+            LocationDesc: '',
         },)
             .then((res) => {
-                console.log(res.data);
-                setvalue(prevState => ({ ...prevState, Location: '', Departmentname: '' }));
+                console.log('Add loaction api 4th', res.data);
+                setvalue(prevState => ({ ...prevState, Location: '' }));
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
 
+        // AddWorkTypeInworkRequestPOST
+        await axios.post(`/api/AddWorkTypeInworkRequestPOST`, {
+            WorkTypeCode: value.WorkType,
+            WorkTypeDesc: value.WorkTypeDesc,
+        },)
+            .then((res) => {
+                console.log('AddWorkTypeInworkRequestPOST 5th api', res.data);
+                setvalue(prevState => ({ ...prevState, WorkType: '', WorkTypeDesc: '' }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
-    const Update = () => {
-        // AddworkRequestPOST();
-        // Departmentapi();
-        // AddBuildingapi()
-        AddLocationapi();
-        // Swal.fire({
-        //     title: "Success",
-        //     text: "you have Success submited the Data",
-        //     icon: "success",
-        //     confirmButtonText: "OK",
-        // })
+        // AddWorkPriorityInworkRequestPOST
+        await axios.post(`/api/AddWorkPriorityInworkRequestPOST`, {
+            WorkPriorityCode: value.WorkPriority,
+            WorkPriorityDesc: '',
+            WorkPrioritySeq: '',
+        },)
+            .then((res) => {
+                console.log('AddWorkPriorityInworkRequestPOST 6th api', res.data);
+                setvalue(prevState => ({ ...prevState, WorkPriority: '' }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+             await Swal.fire({
+            title: "Success",
+            text: "you have Success submited the Data",
+            icon: "success",
+            confirmButtonText: "OK",
+        })
+
     };
 
 
@@ -478,9 +495,12 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='WorkTypeDescription'
-                                                value={WorkTypeDescription}
+                                                value={value.WorkTypeDesc}
                                                 onChange={e => {
-                                                    setWorkTypeDescription(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkTypeDesc: e.target.value
+                                                    }))
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Work Type Description '
@@ -544,6 +564,7 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='WorkTypeDescription'
+
                                                 value={workTradeDescription}
                                                 onChange={e => {
                                                     setworkTradeDescription(e.target.value)
