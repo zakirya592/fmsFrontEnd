@@ -30,15 +30,19 @@ import Preventive from "../../Image/Preventive Maintenance.png"
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SetupSidebar from '../../Pages/Setup&Configuration/SetupSidebar';
 import "./Sidebar.css"
+import UserManagementSidebar from '../../Pages/UserManagement/UserManagementSidebar';
 const drawerWidth = 250;
 
 
 function Siderbar(props) {
     const [showSidebar, setShowSidebar] = useState(false);
-    
+    const [showUserSidebar, setShowUserSidebar]=useState(false);
     const handleClick = () => {
         setShowSidebar(!showSidebar);
       };
+     const  handleUserSidebar = ( ) => {
+        setShowUserSidebar(!showUserSidebar)
+     }
 
     const navigate = useNavigate();
     return (
@@ -194,19 +198,17 @@ function Siderbar(props) {
 
                     <List>
                         {['User Management'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
-                            })}>
+                            <ListItem key={text} disablePadding onClick={handleUserSidebar}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={usermanagment} className="sidebaricon my-auto" /> : <img src={usermanagment} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={usermanagment} className="sidebaricon my-auto" alt=''/> : <img src={usermanagment} className="sidebaricon my-auto" alt=''/>}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
-
+                    {showUserSidebar && <UserManagementSidebar/>}
                     <List>
                         {['Purchasing  Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {

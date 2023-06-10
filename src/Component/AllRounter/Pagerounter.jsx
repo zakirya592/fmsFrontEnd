@@ -8,6 +8,10 @@ import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfi
 import PreventiveView from '../../Pages/Preventive Maintenance/PreventiveView'
 import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
 import AssetManagement from '../../Pages/Asset Management/AssetManagement'
+import SystemModules from "../../Pages/UserManagement/SystemModules/SystemModules"
+import UserAuthority from '../../Pages/UserManagement/UserAuthority/UserAuthorityLevel'
+import UserCredentials from '../../Pages/UserManagement/UserCredentials/UserCredentials'
+import UserSystemAccess from '../../Pages/UserManagement/UserSystemAccess/UserSystemAccess'
 import TradeMaintenance from '../../Pages/Setup&Configuration/WORK TRADE MAINTENANCE/TradeMaintenance'
 import Departmentmaintence from '../../Pages/Setup&Configuration/Department maintence/Departmentmaintence'
 import Failurecode from '../../Pages/Setup&Configuration/Failure code/Failurecode'
@@ -94,6 +98,20 @@ function Pagerounter() {
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
+          {/* Asset Management */}
+          <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
+
+          {/* System Modules */}
+          <Route exact path = "/systemmodules" element ={<SystemModules/>}/>
+
+          {/* User Authourity Levels */}
+          <Route exact path= "/userauthority" element = {<UserAuthority/>}/>
+
+          {/* User Credentials  */}
+          <Route exact path = "/userCredentials" element = {<UserCredentials/>}/>
+
+          {/* userSystemAccess */}
+          <Route exact path="/usersystemaccess" element={<UserSystemAccess/>}/>
           {/* ===================== Asset Management=====================  */}
           <Route exact path='/assetmanagement' element={<AssetManagement />} />
         </Routes>
