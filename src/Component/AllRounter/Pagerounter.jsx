@@ -8,6 +8,10 @@ import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfi
 import PreventiveView from '../../Pages/Preventive Maintenance/PreventiveView'
 import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
 import AssetManagement from '../../Pages/Asset Management/AssetManagement'
+import SystemModules from "../../Pages/UserManagement/SystemModules/SystemModules"
+import UserAuthority from '../../Pages/UserManagement/UserAuthority/UserAuthorityLevel'
+import UserCredentials from '../../Pages/UserManagement/UserCredentials/UserCredentials'
+import UserSystemAccess from '../../Pages/UserManagement/UserSystemAccess/UserSystemAccess'
 function Pagerounter() {
 
   return (
@@ -37,7 +41,18 @@ function Pagerounter() {
 
           {/* Asset Management */}
           <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
-          {/* Add more pages here  and */}
+
+          {/* System Modules */}
+          <Route exact path = "/systemmodules" element ={<SystemModules/>}/>
+
+          {/* User Authourity Levels */}
+          <Route exact path= "/userauthority" element = {<UserAuthority/>}/>
+
+          {/* User Credentials  */}
+          <Route exact path = "/userCredentials" element = {<UserCredentials/>}/>
+
+          {/* userSystemAccess */}
+          <Route exact path="/usersystemaccess" element={<UserSystemAccess/>}/>
         </Routes>
       </BrowserRouter>
     </>

@@ -7,7 +7,6 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import "./usermanagementsidebar.css"
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -62,7 +61,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List  className='setupsidebar'>
                         {['. System Modules'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/systemmodules')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -74,7 +73,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List  className='setupsidebar'>
                         {['. User Authority Levels'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/userauthority')
                             })}>
                                 <ListItemButton >
                                     <ListItemText primary={text} />
@@ -82,11 +81,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
                             </ListItem>
                         ))}
         </List>
-        {/* User Credentials */}
+        {/*User Credentials */}
         <List className='setupsidebar'>
                         {['. User Credentials'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/userCredentials')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -98,7 +97,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. User System Access '].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/usersystemaccess')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
