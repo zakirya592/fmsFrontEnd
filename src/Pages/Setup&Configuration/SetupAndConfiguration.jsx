@@ -67,7 +67,7 @@ function SetupAndConfiguration() {
           <div className="topermaringpage mb- container">
             <div className="py-3">
               <div className="d-flex justify-content-between my-auto">
-                <p className="color1 workitoppro my-auto">ASSET TYPE MAINTENANCE
+                <p className="color1 workitoppro my-auto">WORK TRADE MAINTENANCE
                   <span className='star'>*</span>
                 </p>
                 <div className="d-flex">
