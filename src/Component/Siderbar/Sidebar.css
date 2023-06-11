@@ -1,6 +1,13 @@
 .loginimg{
     width: 90%;
 }
+.toperheaderside{
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 600;
+    font-size: 50px;
+    line-height: 73px;
+}
 .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
 background: #1E3B8B !important;
 color: #F5F5F5 !important;
