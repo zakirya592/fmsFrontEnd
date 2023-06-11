@@ -1,17 +1,14 @@
 import React, { useState } from 'react'
-import Siderbar from '../../../Component/Siderbar/Siderbar'
+import Siderbar from '../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
-import "./Viewmodify.css"
-import { useNavigate } from "react-router-dom";
-import excel from "../../../Image/excel.png"
+import excel from "../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,7 +16,9 @@ import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import axios from 'axios'
-function Viewwork() {
+import { useNavigate } from 'react-router-dom';
+
+function CreateWorkRequest() {
     
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
@@ -172,9 +171,11 @@ function Viewwork() {
             confirmButtonText: "OK",
         })
     };
-
     const navigate = useNavigate();
 
+    const Goback = () => {
+        navigate(-1); // Navigate back one step in the browser history
+      };
     return (
         <div>
             <div className='bg'>
@@ -184,7 +185,7 @@ function Viewwork() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2"  onClick= {Goback}/>
                                     <p className="text-center my-auto mx-auto">Work Request</p>
                                 </Typography>
                             </Toolbar>
@@ -195,18 +196,15 @@ function Viewwork() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View/Modify Work Request</p>
+                                    <p className='color1 workitoppro my-auto'>Create Work Request</p>
                                     <div className="d-flex">
-                                        {/* pagepin  */}
-                                        <Create />
+
                                         {/* create */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                navigate('/createworkrequest')
-                            })}><PrintIcon className='me-1' />Create</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive"><PrintIcon className='me-1' />Create</button>
                                         {/* print  */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
-                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel} /> Export</button>
+                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel}  alt=''/> Export</button>
                                     </div>
                                 </div>
 
@@ -821,4 +819,4 @@ function Viewwork() {
     )
 }
 
-export default Viewwork
+export default CreateWorkRequest

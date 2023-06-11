@@ -21,8 +21,12 @@
     border-radius: 12px;
 }
 .serachicon{
-    left: 94%;
-    top: 50%;
+    left: 90% !important;
+    top: 40% !important;
+    font-size: 20px;
+}
+.PhoneInputCountry {
+    padding-left: 10px;
 }
 .lablesection{
     font-family: 'Inter';

@@ -46,4 +46,8 @@ box-shadow:none !important
 .css-8u39c-MuiTypography-root{
     background: #1E3B8B !important;
     border-radius: 10px;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    font-family: Inter;
+    font-style: italic;
 }

@@ -27,7 +27,6 @@ import Assetmanagemtn from "../../Image/Asset Management.png"
 import Location from "../../Image/Location Management.png";
 import Cleaning from "../../Image/Cleaning Works.png"
 import Preventive from "../../Image/Preventive Maintenance.png"
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SetupSidebar from '../../Pages/Setup&Configuration/SetupSidebar';
 import "./Sidebar.css"
 import UserManagementSidebar from '../../Pages/UserManagement/UserManagementSidebar';
@@ -54,13 +53,14 @@ function Siderbar(props) {
                     position="fixed"
                     sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
                 >
-                    <Toolbar>
+<Toolbar>
+  <Typography variant="h6" noWrap component="div" className='d-flex py-2'>
+    {/* style={{ fontStyle: 'italic', fontWeight: 600, fontSize: '50px', lineHeight: '73px', color: '#FFFFFF' }} */}
+    <p className='text-center my-auto mx-auto'>FACILITY MANAGEMENT SYSTEMS</p>
+  </Typography>
+</Toolbar>
 
-                        <Typography variant="h6" noWrap component="div" className='d-flex py-2 '>
-                            <ArrowCircleLeftOutlinedIcon className='my-auto text-start me-5 ms-2' />
-                            <p className='text-center my-auto ms-5'>FACILITY MANAGEMENT SYSTEMS  </p>
-                        </Typography>
-                    </Toolbar>
+
                 </AppBar>
                 <Drawer
                     sx={{

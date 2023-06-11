@@ -31,6 +31,7 @@ import RequestStatus from '../../Pages/Setup&Configuration/Request Status/Reques
 import Day from '../../Pages/Setup&Configuration/Day/Day'
 import Frequency from '../../Pages/Setup&Configuration/Frequency/Frequency'
 import Nationality from '../../Pages/Setup&Configuration/Nationality/Nationality'
+import CreateWorkRequest from '../View work/CreateWorkRequest'
 function Pagerounter() {
 
   return (
@@ -42,7 +43,8 @@ function Pagerounter() {
 
           {/*=====================  Viewwork =====================  */}
           <Route exact path='/workRequest' element={<Viewwork />} />
-
+          {/* create work Request */}
+          <Route exact path = "/createworkrequest" element ={<CreateWorkRequest/>}/>
           {/*=====================  Word Order=====================   */}
           <Route exact path='/workorder' element={<WorkOrder />} />
 
