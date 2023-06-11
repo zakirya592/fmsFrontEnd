@@ -53,13 +53,6 @@ function Siderbar(props) {
                     position="fixed"
                     sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
                 >
-<Toolbar>
-  <Typography variant="h6" noWrap component="div" className='d-flex py-2'>
-    {/* style={{ fontStyle: 'italic', fontWeight: 600, fontSize: '50px', lineHeight: '73px', color: '#FFFFFF' }} */}
-    <p className='text-center toperheaderside my-auto mx-auto'>FACILITY MANAGEMENT SYSTEMS</p>
-  </Typography>
-</Toolbar>
-
 
                 </AppBar>
                 <Drawer

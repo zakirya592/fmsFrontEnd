@@ -1,6 +1,8 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
 import Siderbar from '../../Component/Siderbar/Siderbar'
 import "./Main.css"
 import WorkOrder from "../../Image/WorkOrder.png"
@@ -29,11 +31,13 @@ function Fmsmain() {
                 <div className=''>
                     <Box sx={{ display: 'flex' }}>
                         <Siderbar />
-                        <AppBar
-                            className='fortrans'
-                            position='fixed'
+                        <AppBar className="fortrans locationfortrans" position="fixed">
+                            <Toolbar>
+                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                    <p className='text-center toperheaderside my-auto mx-auto'>FACILITY MANAGEMENT SYSTEMS</p>
 
-                        >
+                                </Typography>
+                            </Toolbar>
                         </AppBar>
                         <div className="background">
 

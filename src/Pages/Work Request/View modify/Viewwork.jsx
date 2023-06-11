@@ -8,7 +8,7 @@ import excel from "../../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SaveIcon from '@mui/icons-material/Save';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
@@ -295,19 +295,22 @@ function Viewwork() {
                                             <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
                                                 Request Status<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
+                                            <select className='rounded inputsectiondropdpwn   color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
                                                         Departmentcode: e.target.value
                                                     }))
-                                                }}>
-
+                                                }}
+                                                // dropdownIcon={<CaretDownOutlined />}
+                                                suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
+                                                >
                                                 <option className='inputsectiondropdpwn'>Select Stutus</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
                                             </select>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -404,7 +407,10 @@ function Viewwork() {
                                                     }))
                                                 }
                                                 className='rounded inputsection py-2'
-                                                country="US" />
+                                                defaultCountry="1" // Set the default country to Saudi Arabia (country code: 'sa')
+                                                enableAreaCodes={true} // Enable area codes if necessary
+                                                countryCodeEditable={false} // Make the country code not editable
+/>
 
                                         </div>
                                     </div>
@@ -454,7 +460,7 @@ function Viewwork() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
+                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
                                                 Department Name<span className='star'>*</span>
@@ -478,7 +484,7 @@ function Viewwork() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
                                                 Building<span className='star'>*</span>
@@ -499,7 +505,7 @@ function Viewwork() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
@@ -523,7 +529,7 @@ function Viewwork() {
                                 </div>
                                 {/* 3rd row */}
                                 <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkType' className='lablesection color3 text-start mb-1'>
                                                 Work Type<span className='star'>*</span>
@@ -567,7 +573,7 @@ function Viewwork() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkPriority' className='lablesection color3 text-start mb-1'>
                                                 Work Priority<span className='star'>*</span>
@@ -592,7 +598,7 @@ function Viewwork() {
 
                                 {/* 4th row */}
                                 <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
                                                 Work Trade<span className='star'>*</span>
