@@ -417,8 +417,8 @@ function Viewwork() {
                                                     }))
                                                 }
                                                 className='rounded inputsection custom-phone-input py-2'
-                                                defaultCountry='sa'
-                                               
+                                                defaultCountry="SA"
+                                                dropdownClass='custom-phone-dropdown'
                                                />
 
                                         </div>
@@ -441,7 +441,7 @@ function Viewwork() {
                                                     }))
                                                 }
                                                 className='rounded inputsection py-2'
-                                                country="US" />
+                                                defaultCountry="SA" />
 
                                         </div>
                                     </div>

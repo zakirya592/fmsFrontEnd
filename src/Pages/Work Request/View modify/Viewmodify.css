@@ -16,10 +16,16 @@ select {
     padding: 0px 0px 1rem 1rem;
     
 }
-.custom-phone-input .react-tel-input .selected-flag .dropdown-icon {
-    background-image: url('../../../Image/drop.png');
-    /* additional custom styles */
-}
+/* .PhoneInputCountrySelectArrow {
+     background-image: url("../../../Image/drop.png") !important;
+     display:block;
+     background-repeat: no-repeat;
+} */
+/* .PhoneInputCountryIcon {
+     background-image: url("../../../Image/phone.png") !important;
+     z-index: 1000 !important;
+} */
+
 .btnwork{
     font-family: 'Inter';
     font-style: normal;
