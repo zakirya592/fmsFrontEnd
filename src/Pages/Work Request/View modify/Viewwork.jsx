@@ -18,7 +18,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
+import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
+// CSS style for custom dropdown icon
+const dropdownIconStyle = {
+    backgroundImage: 'url("../../../Image/drop.png")',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 8px center',
+    backgroundSize: '12px 12px',
+};
 function Viewwork() {
     
     const [value, setvalue] = useState({
@@ -31,6 +39,7 @@ function Viewwork() {
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         RequestDateTime: '',
+        RequestStatus:'',
         workTrade: '',
         WorkOrder: '',
         ProblemCategory: '',
@@ -292,14 +301,14 @@ function Viewwork() {
                                     {/* change the value for the request status  */}
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
                                                 Request Status<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn   color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
+                                            <select className='rounded inputsectiondropdpwn   color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        Departmentcode: e.target.value
+                                                        RequestStatus: e.target.value
                                                     }))
                                                 }}
                                                 // dropdownIcon={<CaretDownOutlined />}
@@ -393,12 +402,13 @@ function Viewwork() {
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='MobileNumber' className='lablesection color3 text-start mb-1'>
                                                 Mobile Number<span className='star'>*</span>
                                             </label>
 
                                             <PhoneInput
                                                 placeholder="+966   500000000"
+                                                id='MobileNumber'
                                                 value={value.MobileNumber}
                                                 onChange={(phoneNumber) =>
                                                     setvalue((prevValue) => ({
@@ -406,23 +416,23 @@ function Viewwork() {
                                                         MobileNumber: phoneNumber,
                                                     }))
                                                 }
-                                                className='rounded inputsection py-2'
-                                                defaultCountry="1" // Set the default country to Saudi Arabia (country code: 'sa')
-                                                enableAreaCodes={true} // Enable area codes if necessary
-                                                countryCodeEditable={false} // Make the country code not editable
-/>
+                                                className='rounded inputsection custom-phone-input py-2'
+                                                defaultCountry='sa'
+                                               
+                                               />
 
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='Landlinenumber' className='lablesection color3 text-start mb-1'>
                                                 Landline Number<span className='star'>*</span>
                                             </label>
 
                                             <PhoneInput
                                                 placeholder="+966  0100000000"
+                                                id='Landlinenumber'
                                                 value={value.LandlineNumber}
                                                 onChange={(LandlineNumber) =>
                                                     setvalue((prevValue) => ({
@@ -439,7 +449,7 @@ function Viewwork() {
                                 {/* second row */}
                                 <div className="row mx-auto formsection">
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
                                                 Department Code<span className='star'>*</span>
@@ -505,7 +515,7 @@ function Viewwork() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>

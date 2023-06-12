@@ -30,6 +30,7 @@ function CreateWorkRequest() {
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         RequestDateTime: '',
+        RequestStatus:'',
         workTrade: '',
         WorkOrder: '',
         ProblemCategory: '',
@@ -290,14 +291,14 @@ function CreateWorkRequest() {
                                     {/* change the value for the request status  */}
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
                                                 Request Status<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        Departmentcode: e.target.value
+                                                        RequestStatus: e.target.value
                                                     }))
                                                 }}>
 
@@ -431,7 +432,7 @@ function CreateWorkRequest() {
                                 {/* second row */}
                                 <div className="row mx-auto formsection">
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
                                                 Department Code<span className='star'>*</span>
@@ -452,7 +453,7 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
+                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
                                                 Department Name<span className='star'>*</span>
@@ -476,7 +477,7 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
                                                 Building<span className='star'>*</span>
@@ -521,7 +522,7 @@ function CreateWorkRequest() {
                                 </div>
                                 {/* 3rd row */}
                                 <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkType' className='lablesection color3 text-start mb-1'>
                                                 Work Type<span className='star'>*</span>
@@ -565,7 +566,7 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkPriority' className='lablesection color3 text-start mb-1'>
                                                 Work Priority<span className='star'>*</span>
@@ -590,7 +591,7 @@ function CreateWorkRequest() {
 
                                 {/* 4th row */}
                                 <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
                                                 Work Trade<span className='star'>*</span>
