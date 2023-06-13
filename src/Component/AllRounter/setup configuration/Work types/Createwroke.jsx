@@ -85,7 +85,7 @@ function Createwroke() {
                                     }))
                                 }}
                                 className='rounded inputsection py-2'
-                                placeholder='Employee Name'
+                                placeholder='WorkType Code'
                                 required
                             ></input>
                         </div>
@@ -107,7 +107,7 @@ function Createwroke() {
                                     }))
                                 }}
                                 className='rounded inputsection py-2'
-                                placeholder='Employee Name'
+                                placeholder='WorkType Desc'
                                 required
                             ></input>
                         </div>

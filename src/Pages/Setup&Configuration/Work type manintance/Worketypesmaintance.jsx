@@ -112,7 +112,7 @@ const getapi=()=>{
 
     const filteredData = getdata && getdata.map((row,indes)=>({
 ...row,
-id: indes,
+id: indes+1,
 // SEQ:row.EmployeeID,
  workTrade:row.WorkTypeCode,
  description:row.WorkTypeDesc
