@@ -33,6 +33,7 @@ import Frequency from '../../Pages/Setup&Configuration/Frequency/Frequency'
 import Nationality from '../../Pages/Setup&Configuration/Nationality/Nationality'
 import CreateWorkRequest from '../View work/CreateWorkRequest'
 import Updataworktype from '../../Pages/Setup&Configuration/Work type manintance/Updataworktype'
+import Updataworktrade from '../../Pages/Setup&Configuration/Work trade/Updataworktrade'
 function Pagerounter() {
 
   return (
@@ -53,11 +54,12 @@ function Pagerounter() {
           <Route exact path='/locationmanagement' element={<LocationManagement />} />
 
           {/*===================== Setup & Configuration================== */}
-          {/* =================# Set-Up-Work Trade Maintenance-prmWorkTrade=============== */}
-          <Route exact path='/WORKTRADE' element={<SetupAndConfiguration />} />
           {/*Worketypesmaintance*/}
           <Route exact path='/Worketypes' element={<Worketypesmaintance />} />
           <Route exact path='/Updata/Worktypes/:EmployeeID' element={<Updataworktype />} />
+          {/* =================# Set-Up-Work Trade Maintenance-prmWorkTrade=============== */}
+          <Route exact path='/WORKTRADE' element={<SetupAndConfiguration />} />
+          <Route exact path='/Updata/WORKTRADE/:EmployeeID' element={<Updataworktrade />} />
           {/*Workstatus*/}
           <Route exact path='/Workstatus' element={<Workstatus />} />
           {/*Workpriority*/}

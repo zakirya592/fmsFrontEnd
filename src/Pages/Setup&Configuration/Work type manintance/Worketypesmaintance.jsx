@@ -19,8 +19,7 @@ import "./Updata.css"
 import { useNavigate } from 'react-router-dom';
 function Worketypesmaintance() {
     const navigate = useNavigate()
-    const rowStyle = { borderBottom: '1px solid #ddd' }; // Add border style for rows
-
+    
 const [getdata, setgetdata] = useState([])
 
 const getapi=()=>{
