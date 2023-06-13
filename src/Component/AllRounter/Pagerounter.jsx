@@ -32,6 +32,7 @@ import Day from '../../Pages/Setup&Configuration/Day/Day'
 import Frequency from '../../Pages/Setup&Configuration/Frequency/Frequency'
 import Nationality from '../../Pages/Setup&Configuration/Nationality/Nationality'
 import CreateWorkRequest from '../View work/CreateWorkRequest'
+import Updataworktype from '../../Pages/Setup&Configuration/Work type manintance/Updataworktype'
 function Pagerounter() {
 
   return (
@@ -56,6 +57,7 @@ function Pagerounter() {
           <Route exact path='/WORKTRADE' element={<SetupAndConfiguration />} />
           {/*Worketypesmaintance*/}
           <Route exact path='/Worketypes' element={<Worketypesmaintance />} />
+          <Route exact path='/Updata/Worktypes/:EmployeeID' element={<Updataworktype />} />
           {/*Workstatus*/}
           <Route exact path='/Workstatus' element={<Workstatus />} />
           {/*Workpriority*/}
