@@ -8,7 +8,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import Typography from '@mui/material/Typography';
 import { useNavigate, useParams } from "react-router-dom";
-
+import Swal from "sweetalert2";
+import "./Updata.css"
 function Updataworktype() {
     const navigate = useNavigate()
     let { EmployeeID } = useParams();
@@ -36,8 +37,15 @@ function Updataworktype() {
         },)
             .then((res) => {
                 console.log('Add', res.data);
-                navigate(`/Worketypes`);
+                
                 setWorkTypeDesc('')
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    navigate(`/Worketypes`);
+                      });
             })
             .catch((err) => {
                 console.log(err);
@@ -63,7 +71,7 @@ function Updataworktype() {
                 <form onSubmit={postapi}>
 
                 <div className="row mx-auto px-3 formsection">
-                    <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2">
+                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 my-2">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='WorkTypeDesc' className='lablesection color3 text-start mb-1'>
                                 WorkType Desc<span className='star'>*</span>
@@ -76,7 +84,7 @@ function Updataworktype() {
                                 onChange={e => {
                                     setWorkTypeDesc(e.target.value)
                                 }}
-                                className='rounded inputsection py-2'
+                                className='rounded inputsection py-2 borderfo'
                                 placeholder='Employee Name'
                                 required
                             ></input>

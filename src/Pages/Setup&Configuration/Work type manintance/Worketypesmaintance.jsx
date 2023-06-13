@@ -14,11 +14,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import Createwroke from '../../../Component/AllRounter/setup configuration/Work types/Createwroke';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 function Worketypesmaintance() {
     const navigate = useNavigate()
+    const rowStyle = { borderBottom: '1px solid #ddd' }; // Add border style for rows
+
 const [getdata, setgetdata] = useState([])
 
 const getapi=()=>{
@@ -75,15 +76,6 @@ const getapi=()=>{
                     'User has been deleted.',
                     'success'
                 )
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary User is safe :)',
-                    'error'
-                )
             }
         })
 
@@ -127,7 +119,9 @@ id: indes+1,
                     <AppBar className="fortrans locationfortrans" position="fixed">
                         <Toolbar>
                             <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => {
+                                    navigate(`/`);
+                                }} />
                                 <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
                             </Typography>
                         </Toolbar>
@@ -158,14 +152,18 @@ id: indes+1,
                                 <DataGrid
                                     rows={filteredData}
                                     columns={columns}
-                                    pageSize={5}
+                                    // pageSize={5}
+                                    
+                                    pagination pageSize={25}
                                     checkboxSelection
                                     disableRowSelectionOnClick
                                 />
                             </div>
                         </div>
                         <div className="d-flex justify-content-between w-100 mt-3 mb-3">
-                            <button type="button" className="border-0 px-3 savebtn py-2">
+                            <button type="button" className="border-0 px-3 savebtn py-2 " onClick={() => {
+                                navigate(`/`);
+                            }}>
                                 <ArrowCircleLeftOutlinedIcon className='me-2' />
                                 Back
                             </button>

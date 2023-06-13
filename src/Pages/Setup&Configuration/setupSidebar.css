@@ -1,33 +1,31 @@
 .css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper {
-    background-color: #C9E8FD !important;
-    color: #1E3B8B !important;
-margin: 50px 0px 0px 250px;
-border: 4px solid #1E3B8B;
-border-radius: 10.8235px;
+  background-color: #c9e8fd !important;
+  color: #1e3b8b !important;
+  margin: 50px 0px 0px 250px;
+  border: 4px solid #1e3b8b;
+  border-radius: 10.8235px;
 }
-.setupsidebar{
-    margin-bottom: -30px !important;
-    font-family: 'Inter' !important;
-    line-height: 19px !important;
+.setupsidebar {
+  margin-bottom: -30px !important;
+  font-family: "Inter" !important;
+  line-height: 19px !important;
 }
-.css-10hburv-MuiTypography-root{
-    font-weight: 700 !important;
-    font-family: 'Inter';
-    font-style: normal !important;
-
+.css-10hburv-MuiTypography-root {
+  font-weight: 700 !important;
+  font-family: "Inter";
+  font-style: normal !important;
 }
-.css-78trlr-MuiButtonBase-root-MuiIconButton-root{
-    border: 2px solid #FFFFFF !important;
-    background: #1E3B8B !important;
-    color: white !important;
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+  border: 2px solid #ffffff !important;
+  background: #1e3b8b !important;
+  color: white !important;
 }
-.setupsidebarlast{
-    margin-bottom: 50px !important;
+.setupsidebarlast {
+  margin-bottom: 50px !important;
 }
-.setupsidebar:hover{
-color: #EF643B
-!important;
+.setupsidebar:hover {
+  color: #ef643b !important;
 }
-.userCredentials{
-    width: 50% !important;
+.userCredentials {
+  width: 50% !important;
 }

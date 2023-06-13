@@ -6,6 +6,8 @@
     background: #D7F2FD;
     border: 3px solid #000000;
     border-radius: 12px;
+    left: 54% !important;
+    width: 610px !important;
 }
 .btnworkactive{
     background-color: #1E3B8B !important;
