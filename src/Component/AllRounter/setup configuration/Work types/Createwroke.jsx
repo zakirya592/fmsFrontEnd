@@ -56,18 +56,16 @@ function Createwroke() {
                 MenuListProps={{
                     'aria-labelledby': 'fade-button',
                 }}
-                anchorEl={anchorEl}
+               anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
                 TransitionComponent={Fade}
+               
             >
 
                 <form onSubmit={postapi}>
 
-
                 <div className="row mx-auto px-3 w-100 formsection">
-
-                
                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='WorkTypeCode' className='lablesection color3 text-start mb-1'>
@@ -112,7 +110,6 @@ function Createwroke() {
                             ></input>
                         </div>
                     </div>
-
                     
                 </div>
 

@@ -15,6 +15,7 @@ import Siderbar from '../../../Component/Siderbar/Siderbar';
 import Createwroke from '../../../Component/AllRounter/setup configuration/Work types/Createwroke';
 import axios from 'axios';
 import Swal from "sweetalert2";
+import "./Updata.css"
 import { useNavigate } from 'react-router-dom';
 function Worketypesmaintance() {
     const navigate = useNavigate()
@@ -80,7 +81,6 @@ const getapi=()=>{
         })
 
     };
-
    
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
@@ -101,7 +101,10 @@ const getapi=()=>{
             ),},
     ];
 
-
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
     const filteredData = getdata && getdata.map((row,indes)=>({
 ...row,
 id: indes+1,
@@ -153,8 +156,11 @@ id: indes+1,
                                     rows={filteredData}
                                     columns={columns}
                                     // pageSize={5}
-                                    
-                                    pagination pageSize={25}
+                                    pagination
+                                    // pageSize={25}
+                                    rowsPerPageOptions={[25, 50, 100]} // Optional: Set available page size options
+                                    paginationModel={paginationModel}
+                                    onPaginationModelChange={setPaginationModel}
                                     checkboxSelection
                                     disableRowSelectionOnClick
                                 />

@@ -1,0 +1,9 @@
+.css-12u49z-MuiDataGrid-root .MuiDataGrid-row:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell{
+    border-right: 1px solid #c9c8c8;
+}
+.css-pdct74-MuiTablePagination-selectLabel{
+    margin: auto;
+}
+.css-levciy-MuiTablePagination-displayedRows{
+    margin: auto;
+}
