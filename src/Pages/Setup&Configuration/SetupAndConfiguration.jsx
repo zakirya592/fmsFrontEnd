@@ -19,68 +19,68 @@ import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import Newcreate from '../../Component/AllRounter/setup configuration/work trade/Newcreate';
 function SetupAndConfiguration() {
-      const navigate = useNavigate()
-    
-const [getdata, setgetdata] = useState([])
+  const navigate = useNavigate()
 
-const getapi=()=>{
-  axios.get(`/api/WorkTRADE_GET_LIST`, {
+  const [getdata, setgetdata] = useState([])
+
+  const getapi = () => {
+    axios.get(`/api/WorkTRADE_GET_LIST`, {
     },)
-        .then((res) => {
-            console.log('TO get the list', res);
-            setgetdata(res.data.recordset)
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
-    useEffect(() => {
-        getapi()
-    }, [])
-    
-   // Deleted api section
-    const Deletedapi = (workTrade) => {
-        console.log(workTrade);
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success mx-2',
-                cancelButton: 'btn btn-danger mx-2',
-                // actions: 'mx-3'
-            },
-            buttonsStyling: false
-        })
+      .then((res) => {
+        console.log('TO get the list', res);
+        setgetdata(res.data.recordset)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  useEffect(() => {
+    getapi()
+  }, [])
 
-        swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.delete(`/api/WORKTRADE_DELETE_BYID/${workTrade}`)
-                    .then((res) => {
-                        // Handle successful delete response
-                        console.log('Deleted successfully', res);
-                        getapi()
-                        // Refresh the table data if needed
-                        // You can call the API again or remove the deleted row from the state
-                    })
-                    .catch((err) => {
-                        // Handle delete error
-                        console.log('Error deleting', err);
-                    });
-                swalWithBootstrapButtons.fire(
-                    'Deleted!',
-                    'User has been deleted.',
-                    'success'
-                )
-            }
-        })
+  // Deleted api section
+  const Deletedapi = (workTrade) => {
+    console.log(workTrade);
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success mx-2',
+        cancelButton: 'btn btn-danger mx-2',
+        // actions: 'mx-3'
+      },
+      buttonsStyling: false
+    })
 
-    };
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`/api/WORKTRADE_DELETE_BYID/${workTrade}`)
+          .then((res) => {
+            // Handle successful delete response
+            console.log('Deleted successfully', res);
+            getapi()
+            // Refresh the table data if needed
+            // You can call the API again or remove the deleted row from the state
+          })
+          .catch((err) => {
+            // Handle delete error
+            console.log('Error deleting', err);
+          });
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'User has been deleted.',
+          'success'
+        )
+      }
+    })
+
+  };
   const columns = [
     { field: 'id', headerName: 'SEQ.', width: 150 },
     { field: 'workTrade', headerName: 'WORK TRADE', width: 270 },
@@ -94,7 +94,7 @@ const getapi=()=>{
           <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
             navigate(`/Updata/WORKTRADE/${params.row.WorkTypeCode}`);
           }}>
-            <FlipCameraAndroidIcon/>
+            <FlipCameraAndroidIcon />
           </button>
           <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkTypeCode)}>
             <DeleteOutlineIcon />
@@ -140,7 +140,7 @@ const getapi=()=>{
                   <span className='star'>*</span>
                 </p>
                 <div className="d-flex">
-                    <Newcreate/>
+                  <Newcreate />
                   <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                     <img src={excel} alt="export" className='me-1' />
                     Import <GetAppIcon />
@@ -151,7 +151,7 @@ const getapi=()=>{
                 </div>
               </div>
               <hr className="color3 line width" />
-              <div style={{ height: 420, width: '80%' }} className='tableleft'> 
+              <div style={{ height: 420, width: '80%' }} className='tableleft'>
                 <DataGrid
                   rows={filteredData}
                   columns={columns}
@@ -172,7 +172,7 @@ const getapi=()=>{
                 Back
               </button>
               <button type="button" className="border-0 px-3 savebtn py-2">
-                <SaveIcon className='me-2'/>
+                <SaveIcon className='me-2' />
                 SAVE
               </button>
             </div>
