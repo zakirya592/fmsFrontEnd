@@ -11,17 +11,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import "./Updata.css"
 
-function Updataworktrade() {
+function Updataworkstatus() {
     const navigate = useNavigate()
     let { EmployeeID } = useParams();
     console.log(EmployeeID);
-    const [WorkTradeDesc, setWorkTradeDesc] = useState()
+    const [WorkStatusDesc, setWorkStatusDesc] = useState()
     const getapi = () => {
-        axios.get(`/api/WorkTRADE_GET_BYID/${EmployeeID}`, {
+        axios.get(`/api/WorkStatus_GET_BYID/${EmployeeID}`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res.data);
-                setWorkTradeDesc(res.data.recordset[0].WorkTradeDesc)
+                setWorkStatusDesc(res.data.recordset[0].WorkStatusDesc)
             })
             .catch((err) => {
                 console.log(err);
@@ -33,18 +33,19 @@ function Updataworktrade() {
 
     const postapi = (e) => {
         e.preventDefault();
-        axios.put(`/api/WorkTrade_Put/${EmployeeID}`, {
-            WorkTradeDesc: WorkTradeDesc,
+        axios.put(`/api/WorkStatus_Put/${EmployeeID}`, {
+            WorkStatusDesc: WorkStatusDesc,
         },)
             .then((res) => {
                 console.log('Add', res.data);
-                setWorkTradeDesc('')
+
+                setWorkStatusDesc('')
                 Swal.fire(
                     'Updata!',
                     ' You have successfully updated.',
                     'success'
                 ).then(() => {
-                    navigate(`/WORKTRADE`);
+                    navigate(`/Workstatus`);
                 });
             })
             .catch((err) => {
@@ -60,8 +61,8 @@ function Updataworktrade() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => { navigate(`/WORKTRADE`); }} />
-                                    <p className="text-center my-auto mx-auto">Updata Worktypes</p>
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => { navigate(`/Workstatus`); }} />
+                                    <p className="text-center my-auto mx-auto">Updata WorkStatus</p>
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -73,19 +74,19 @@ function Updataworktrade() {
                                     <div className="row mx-auto px-3 formsection">
                                         <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 my-2">
                                             <div className='emailsection position-relative d-grid my-1'>
-                                                <label htmlFor='WorkTypeDesc' className='lablesection color3 text-start mb-1'>
-                                                    WorkTrade Desc<span className='star'>*</span>
+                                                <label htmlFor='WorkStatusDesc' className='lablesection color3 text-start mb-1'>
+                                                    WorkType Desc<span className='star'>*</span>
                                                 </label>
 
                                                 <input
                                                     types='text'
-                                                    id='WorkTypeDesc'
-                                                    value={WorkTradeDesc}
+                                                    id='WorkStatusDesc'
+                                                    value={WorkStatusDesc}
                                                     onChange={e => {
-                                                        setWorkTradeDesc(e.target.value)
+                                                        setWorkStatusDesc(e.target.value)
                                                     }}
                                                     className='rounded inputsection py-2 borderfo'
-                                                    placeholder='WorkTrade Desc'
+                                                    placeholder='WorkStatus Desc'
                                                     required
                                                 ></input>
                                             </div>
@@ -95,7 +96,7 @@ function Updataworktrade() {
                                     </div>
 
                                     <div className="d-flex justify-content-between my-2 p-4 ">
-                                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => { navigate(`/WORKTRADE`); }}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => { navigate(`/Workstatus`); }}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Save</button>
 
                                     </div>
@@ -110,4 +111,4 @@ function Updataworktrade() {
     )
 }
 
-export default Updataworktrade
+export default Updataworkstatus

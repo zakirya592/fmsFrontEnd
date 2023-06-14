@@ -34,6 +34,7 @@ import Nationality from '../../Pages/Setup&Configuration/Nationality/Nationality
 import CreateWorkRequest from '../View work/CreateWorkRequest'
 import Updataworktype from '../../Pages/Setup&Configuration/Work type manintance/Updataworktype'
 import Updataworktrade from '../../Pages/Setup&Configuration/Work trade/Updataworktrade'
+import Updataworkstatus from '../../Pages/Setup&Configuration/Work Status/Updataworkstatus'
 function Pagerounter() {
 
   return (
@@ -46,7 +47,7 @@ function Pagerounter() {
           {/*=====================  Viewwork =====================  */}
           <Route exact path='/workRequest' element={<Viewwork />} />
           {/* create work Request */}
-          <Route exact path = "/createworkrequest" element ={<CreateWorkRequest/>}/>
+          <Route exact path="/createworkrequest" element={<CreateWorkRequest />} />
           {/*=====================  Word Order=====================   */}
           <Route exact path='/workorder' element={<WorkOrder />} />
 
@@ -62,6 +63,7 @@ function Pagerounter() {
           <Route exact path='/Updata/WORKTRADE/:EmployeeID' element={<Updataworktrade />} />
           {/*Workstatus*/}
           <Route exact path='/Workstatus' element={<Workstatus />} />
+          <Route exact path='/Updata/Workstatus/:EmployeeID' element={<Updataworkstatus />} />
           {/*Workpriority*/}
           <Route exact path='/Workpriority' element={<Workpriority />} />
           {/*Workcategory*/}
@@ -105,19 +107,19 @@ function Pagerounter() {
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
           {/* Asset Management */}
-          <Route exact path='/assetmanagement' element={<AssetManagement/>}/>
+          <Route exact path='/assetmanagement' element={<AssetManagement />} />
 
           {/* System Modules */}
-          <Route exact path = "/systemmodules" element ={<SystemModules/>}/>
+          <Route exact path="/systemmodules" element={<SystemModules />} />
 
           {/* User Authourity Levels */}
-          <Route exact path= "/userauthority" element = {<UserAuthority/>}/>
+          <Route exact path="/userauthority" element={<UserAuthority />} />
 
           {/* User Credentials  */}
-          <Route exact path = "/userCredentials" element = {<UserCredentials/>}/>
+          <Route exact path="/userCredentials" element={<UserCredentials />} />
 
           {/* userSystemAccess */}
-          <Route exact path="/usersystemaccess" element={<UserSystemAccess/>}/>
+          <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
           {/* ===================== Asset Management=====================  */}
           <Route exact path='/assetmanagement' element={<AssetManagement />} />
         </Routes>
