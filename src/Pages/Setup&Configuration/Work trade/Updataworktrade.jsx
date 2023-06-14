@@ -17,11 +17,11 @@ function Updataworktrade() {
     console.log(EmployeeID);
     const [WorkTradeDesc, setWorkTradeDesc] = useState()
     const getapi = () => {
-        axios.get(`/api/WorkType_GET_BYID/${EmployeeID}`, {
+        axios.get(`/api/WorkTRADE_GET_BYID/${EmployeeID}`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res.data);
-                setWorkTradeDesc(res.data.recordset[0])
+                setWorkTradeDesc(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
                 console.log(err);
