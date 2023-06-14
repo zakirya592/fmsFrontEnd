@@ -135,10 +135,6 @@ id: indes+1,
                                     <span className='star'>*</span>
                                 </p>
                                 <div className="d-flex">
-                                    {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                        <AddCircleOutlineIcon className="me-1" />
-                                        New
-                                    </button> */}
                                     <Createwroke/>
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <img src={excel} alt="export" className='me-1' />
@@ -157,7 +153,7 @@ id: indes+1,
                                     // pageSize={5}
                                     pagination
                                     // pageSize={25}
-                                    rowsPerPageOptions={[25, 50, 100]} // Optional: Set available page size options
+                                    rowsPerPageOptions={<div className="my-pagination-options">[25, 50, 100]</div>}
                                     paginationModel={paginationModel}
                                     onPaginationModelChange={setPaginationModel}
                                     checkboxSelection
