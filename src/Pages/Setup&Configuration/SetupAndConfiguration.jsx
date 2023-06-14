@@ -93,7 +93,6 @@ const getapi=()=>{
         <div>
           <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
             navigate(`/Updata/WORKTRADE/${params.row.WorkTypeCode}`);
-            
           }}>
             <FlipCameraAndroidIcon/>
           </button>
@@ -127,7 +126,9 @@ const getapi=()=>{
           <AppBar className="fortrans locationfortrans" position="fixed">
             <Toolbar>
               <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => {
+                  navigate(`/`);
+                }} />
                 <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
               </Typography>
             </Toolbar>
@@ -164,7 +165,9 @@ const getapi=()=>{
               </div>
             </div>
             <div className="d-flex justify-content-between mt-3 mb-3">
-              <button type="button" className="border-0 px-3 savebtn py-2">
+              <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => {
+                navigate(`/`);
+              }} >
                 <ArrowCircleLeftOutlinedIcon className='me-2' />
                 Back
               </button>

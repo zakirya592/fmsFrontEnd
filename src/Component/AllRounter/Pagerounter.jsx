@@ -34,6 +34,7 @@ import Nationality from '../../Pages/Setup&Configuration/Nationality/Nationality
 import CreateWorkRequest from '../View work/CreateWorkRequest'
 import Updataworktype from '../../Pages/Setup&Configuration/Work type manintance/Updataworktype'
 import Updataworktrade from '../../Pages/Setup&Configuration/Work trade/Updataworktrade'
+import Updataworkstatus from '../../Pages/Setup&Configuration/Work Status/Updataworkstatus'
 function Pagerounter() {
 
   return (
@@ -62,6 +63,7 @@ function Pagerounter() {
           <Route exact path='/Updata/WORKTRADE/:EmployeeID' element={<Updataworktrade />} />
           {/*Workstatus*/}
           <Route exact path='/Workstatus' element={<Workstatus />} />
+          <Route exact path='/Updata/Workstatus/:EmployeeID' element={<Updataworkstatus />} />
           {/*Workpriority*/}
           <Route exact path='/Workpriority' element={<Workpriority />} />
           {/*Workcategory*/}
