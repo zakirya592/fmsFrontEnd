@@ -18,11 +18,12 @@ function Updatworkpriority() {
     const [WorkPrioritySeq, setWorkPrioritySeq] = useState()
     const [WorkPriorityDesc, setWorkPriorityDesc] = useState()
     const getapi = () => {
-        axios.get(`/api/WorkStatus_GET_BYID/${EmployeeID}`, {
+        axios.get(`/api/WorkPriority_GET_BYID/${EmployeeID}`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res.data);
                 setWorkPrioritySeq(res.data.recordset[0].WorkPrioritySeq)
+                setWorkPriorityDesc(res.data.recordset[0].WorkPriorityDesc)
             })
             .catch((err) => {
                 console.log(err);
@@ -105,7 +106,7 @@ function Updatworkpriority() {
                                                     id='WorkPriorityDesc'
                                                     value={WorkPriorityDesc}
                                                     onChange={e => {
-                                                        WorkPriorityDesc(e.target.value)
+                                                        setWorkPriorityDesc(e.target.value)
                                                     }}
                                                     className='rounded inputsection py-2 borderfo'
                                                     placeholder='WorkPriority Desc'
@@ -113,8 +114,6 @@ function Updatworkpriority() {
                                                 ></input>
                                             </div>
                                         </div>
-
-
                                     </div>
 
                                     <div className="d-flex justify-content-between my-2 p-4 ">

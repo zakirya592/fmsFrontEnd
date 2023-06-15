@@ -67,7 +67,7 @@ function Pagerounter() {
           <Route exact path='/Updata/Workstatus/:EmployeeID' element={<Updataworkstatus />} />
           {/*Workpriority*/}
           <Route exact path='/Workpriority' element={<Workpriority />} />
-          <Route exact path='/Updata/Updatworkpriority' element={<Updatworkpriority />} />
+          <Route exact path='/Updata/Updatworkpriority/:EmployeeID' element={<Updatworkpriority />} />
           {/*Workcategory*/}
           <Route exact path='/Workcategory' element={<Workcategory />} />
           {/*TradeMaintenance*/}

@@ -24,7 +24,7 @@ function Workpriority() {
     const [getdata, setgetdata] = useState([])
 
     const getapi = () => {
-        axios.get(`/api/WorkTRADE_GET_LIST`, {
+        axios.get(`/api/WorkPriority_GET_LIST`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
@@ -39,8 +39,8 @@ function Workpriority() {
     }, [])
 
     // Deleted api section
-    const Deletedapi = (workTrade) => {
-        console.log(workTrade);
+    const Deletedapi = (WorkPriorityCode) => {
+        console.log(WorkPriorityCode);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -60,7 +60,7 @@ function Workpriority() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/WORKTRADE_DELETE_BYID/${workTrade}`)
+                axios.delete(`/api/WORKPriority_DELETE_BYID/${WorkPriorityCode}`)
                     .then((res) => {
                         // Handle successful delete response
                         console.log('Deleted successfully', res);
@@ -81,9 +81,10 @@ function Workpriority() {
         })
 
     };
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
-        { field: 'workTrade', headerName: 'PRIORITY CODE', width: 270 },
+        { field: 'WorkPriorityCode', headerName: 'PRIORITY CODE', width: 270 },
         { field: 'description', headerName: 'DESCRIPTION', width: 270 },
         {
             field: 'action',
@@ -91,10 +92,12 @@ function Workpriority() {
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork">
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
+                        navigate(`/Updata/Updatworkpriority/${params.row.WorkPriorityCode}`);
+                    }}>
                         <FlipCameraAndroidIcon />
                     </button>
-                    <button type="button" className="btn  mx-1 color2 btnwork">
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkPriorityCode)}>
                         <DeleteOutlineIcon />
                     </button>
                 </div>
@@ -106,12 +109,13 @@ function Workpriority() {
         pageSize: 25,
         page: 0,
     });
+    
     const filteredData = getdata && getdata.map((row, indes) => ({
         ...row,
         id: indes + 1,
         // SEQ:row.EmployeeID,
-        workTrade: row.WorkTypeCode,
-        WorkTradeDesc: row.WorkTradeDesc
+        WorkPriorityCode: row.WorkPriorityCode,
+        description: row.WorkPriorityDesc
 
     }))
 

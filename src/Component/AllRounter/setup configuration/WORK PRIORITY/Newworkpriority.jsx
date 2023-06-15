@@ -19,6 +19,7 @@ function Newworkpriority() {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    window.location.reload(); // Reload the page
   };
 
   const postapi = (e) => {
@@ -44,7 +45,7 @@ function Newworkpriority() {
       })
       .catch((err) => {
         console.log(err);
-        toast.error(`You will not add due to ${err}`, {
+        toast.error(`You will not add due to ${err.message}`, {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -76,7 +77,7 @@ function Newworkpriority() {
         }}
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         TransitionComponent={Fade}
 
       >

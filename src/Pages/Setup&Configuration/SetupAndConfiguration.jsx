@@ -81,6 +81,7 @@ function SetupAndConfiguration() {
     })
 
   };
+
   const columns = [
     { field: 'id', headerName: 'SEQ.', width: 150 },
     { field: 'workTrade', headerName: 'WORK TRADE', width: 270 },
@@ -116,7 +117,6 @@ function SetupAndConfiguration() {
     WorkTradeDesc: row.WorkTradeDesc
 
   }))
-
 
   return (
     <>
