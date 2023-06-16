@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import React from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -14,11 +14,78 @@ import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
-
+import axios from 'axios';
+import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
+import NewWorkcatagres from '../../../Component/AllRounter/setup configuration/Work Catagres/NewWorkcatagres';
 function Workcategory() {
+
+    const navigate = useNavigate()
+
+    const [getdata, setgetdata] = useState([])
+
+    const getapi = () => {
+        axios.get(`/api/WorkCatagres_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
+
+    // Deleted api section
+    const Deletedapi = (WorkCategoryCode) => {
+        console.log(WorkCategoryCode);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/WORKCatagres_DELETE_BYID/${WorkCategoryCode}`)
+                    .then((res) => {
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        getapi()
+                        // Refresh the table data if needed
+                        // You can call the API again or remove the deleted row from the state
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                    });
+                swalWithBootstrapButtons.fire(
+                    'Deleted!',
+                    'User has been deleted.',
+                    'success'
+                )
+            }
+        })
+
+    };
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
-        { field: 'workTrade', headerName: 'WORK CATEGORY CODE', width: 270 },
+        { field: 'WorkCategoryCode', headerName: 'WORK CATEGORY CODE', width: 270 },
         { field: 'description', headerName: 'DESCRIPTION', width: 270 },
         {
             field: 'action',
@@ -26,10 +93,12 @@ function Workcategory() {
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork">
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
+                        navigate(`/Updata/workcategory/${params.row.WorkCategoryCode}`);
+                    }}>
                         <FlipCameraAndroidIcon />
                     </button>
-                    <button type="button" className="btn  mx-1 color2 btnwork">
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkCategoryCode)}>
                         <DeleteOutlineIcon />
                     </button>
                 </div>
@@ -37,19 +106,18 @@ function Workcategory() {
         },
     ];
 
-    const generateRandomData = () => {
-        const rows = [];
-        for (let i = 1; i <= 10; i++) {
-            rows.push({
-                id: i,
-                workTrade: `Work Trade Number ${i}`,
-                description: `Description Number  ${i}`,
-            });
-        }
-        return rows;
-    };
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
+    const filteredData = getdata && getdata.map((row, indes) => ({
+        ...row,
+        id: indes + 1,
+        // SEQ:row.EmployeeID,
+        WorkCategoryCode: row.WorkCategoryCode,
+        description: row.WorkCategoryDesc
 
-    const rows = generateRandomData();
+    }))
 
     return (
         <>
@@ -59,7 +127,9 @@ function Workcategory() {
                     <AppBar className="fortrans locationfortrans" position="fixed">
                         <Toolbar>
                             <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => {
+                                    navigate(`/`);
+                                }} />
                                 <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
                             </Typography>
                         </Toolbar>
@@ -71,10 +141,7 @@ function Workcategory() {
                                     <span className='star'>*</span>
                                 </p>
                                 <div className="d-flex">
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                        <AddCircleOutlineIcon className="me-1" />
-                                        New
-                                    </button>
+                                    <NewWorkcatagres />
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
@@ -87,16 +154,21 @@ function Workcategory() {
                             <hr className="color3 line width" />
                             <div style={{ height: 420, width: '80%' }} className='tableleft'>
                                 <DataGrid
-                                    rows={rows}
+                                    rows={filteredData}
                                     columns={columns}
-                                    pageSize={5}
+                                    pagination
+                                    rowsPerPageOptions={[25, 50, 100]} // Optional: Set available page size options
+                                    paginationModel={paginationModel}
+                                    onPaginationModelChange={setPaginationModel}
                                     checkboxSelection
                                     disableRowSelectionOnClick
                                 />
                             </div>
                         </div>
                         <div className="d-flex justify-content-between w-100 mt-3 mb-3">
-                            <button type="button" className="border-0 px-3 savebtn py-2">
+                            <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => {
+                                navigate(`/`);
+                            }}>
                                 <ArrowCircleLeftOutlinedIcon className='me-2' />
                                 Back
                             </button>

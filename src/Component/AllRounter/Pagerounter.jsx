@@ -36,6 +36,7 @@ import Updataworktype from '../../Pages/Setup&Configuration/Work type manintance
 import Updataworktrade from '../../Pages/Setup&Configuration/Work trade/Updataworktrade'
 import Updataworkstatus from '../../Pages/Setup&Configuration/Work Status/Updataworkstatus'
 import Updatworkpriority from '../../Pages/Setup&Configuration/Work Priority/Updatworkpriority'
+import Updataworkcategory from '../../Pages/Setup&Configuration/Work Category/Updataworkcategory'
 function Pagerounter() {
 
   return (
@@ -70,6 +71,7 @@ function Pagerounter() {
           <Route exact path='/Updata/Updatworkpriority/:EmployeeID' element={<Updatworkpriority />} />
           {/*Workcategory*/}
           <Route exact path='/Workcategory' element={<Workcategory />} />
+          <Route exact path='/Updata/workcategory/:EmployeeID' element={<Updataworkcategory />} />
           {/*TradeMaintenance*/}
           <Route exact path='/TradeMaintenance' element={<TradeMaintenance />} />
           {/*Departmentmaintence*/}
