@@ -4,6 +4,8 @@ import Fade from '@mui/material/Fade';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Createwroke() {
     // generateId random
     const generateId = () => {
@@ -20,10 +22,11 @@ function Createwroke() {
     };
     const handleClose = () => {
         setAnchorEl(null);
+        window.location.reload(); // Reload the page
     };
 
     const postapi =(e)=>{
-        // e.preventDefault();
+        e.preventDefault();
         const generatedId = generateId();
         axios.post(`/api/WorkType_post`, {
          WorkTypeCode: value.WorkTypeCode,
@@ -32,10 +35,30 @@ function Createwroke() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTypeDesc :''}));
-                setAnchorEl(null);
+                // setAnchorEl(null);
+                toast.success('Add record successfully', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             })
             .catch((err) => {
                 console.log(err);
+                  toast.error(`The Record already exists in the table`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
     }
 
@@ -58,7 +81,7 @@ function Createwroke() {
                 }}
                anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
+                // onClose={handleClose}
                 TransitionComponent={Fade}
                
             >
@@ -82,7 +105,7 @@ function Createwroke() {
                                         WorkTypeCode: e.target.value
                                     }))
                                 }}
-                                className='rounded inputsection py-2'
+                                className='rounded inputsection py-2 px-2'
                                 placeholder='WorkType Code'
                                 required
                             ></input>
@@ -104,7 +127,7 @@ function Createwroke() {
                                         WorkTypeDesc: e.target.value
                                     }))
                                 }}
-                                className='rounded inputsection py-2'
+                                className='rounded inputsection py-2 px-2'
                                 placeholder='WorkType Desc'
                                 required
                             ></input>
@@ -116,12 +139,13 @@ function Createwroke() {
                 <div className="d-flex justify-content-between my-2 p-4 ">
                     <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleClose}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                     <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
-
                 </div>
 
                 </form>
 
             </Menu>
+            <ToastContainer />
+
         </>
     )
 }

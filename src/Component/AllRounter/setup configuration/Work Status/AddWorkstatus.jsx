@@ -45,11 +45,7 @@ function AddWorkstatus() {
                     progress: undefined,
                     theme: "light",
                 });
-                // Swal.fire(
-                //     'Add!',
-                //     'Add record successfully',
-                //     'success'
-                // )
+               
             })
             .catch((err) => {
                 console.log(err);
@@ -109,7 +105,7 @@ function AddWorkstatus() {
                                             WorkStatusCode: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2'
                                     placeholder='WorkStatus Code'
                                     required
                                 ></input>
@@ -132,7 +128,7 @@ function AddWorkstatus() {
                                             WorkStatusDesc: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2' 
                                     placeholder='WorkStatus Desc'
                                     required
                                 ></input>
@@ -144,7 +140,6 @@ function AddWorkstatus() {
                     <div className="d-flex justify-content-between my-2 p-4 ">
                         <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleClose}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
-
                     </div>
 
                 </form>

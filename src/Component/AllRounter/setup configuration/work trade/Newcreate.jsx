@@ -5,6 +5,8 @@ import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutl
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Newcreate() {
    
     const [value, setvalue] = useState({
@@ -17,6 +19,7 @@ function Newcreate() {
     };
     const handleClose = () => {
         setAnchorEl(null);
+        window.location.reload(); // Reload the page
     };
 
     const postapi = (e) => {
@@ -29,15 +32,30 @@ function Newcreate() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc:'' }));
-                setAnchorEl(null);
-                Swal.fire(
-                    'Add!',
-                    'Add record successfully',
-                    'success'
-                )
+                // setAnchorEl(null);
+                toast.success('Add record successfully', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             })
             .catch((err) => {
                 console.log(err);
+                toast.error(`The Error is due to ${err}`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
     }
 
@@ -60,7 +78,7 @@ function Newcreate() {
                 }}
                 anchorEl={anchorEl}
                 open={open}
-                onClose={handleClose}
+                // onClose={handleClose}
                 TransitionComponent={Fade}
 
             >
@@ -84,7 +102,7 @@ function Newcreate() {
                                             WorkTypeCode: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2'
                                     placeholder='WorkType Code'
                                     required
                                 ></input>
@@ -106,7 +124,7 @@ function Newcreate() {
                                             WorkTradeCode: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2'
                                     placeholder='WorkType Code'
                                     required
                                 ></input>
@@ -128,7 +146,7 @@ function Newcreate() {
                                             WorkTradeDesc: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2'
                                     placeholder='WorkType Desc'
                                     required
                                 ></input>
@@ -140,12 +158,12 @@ function Newcreate() {
                     <div className="d-flex justify-content-between my-2 p-4 ">
                         <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleClose}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
-
                     </div>
 
                 </form>
 
             </Menu>
+            <ToastContainer />
         </>
     )
 }

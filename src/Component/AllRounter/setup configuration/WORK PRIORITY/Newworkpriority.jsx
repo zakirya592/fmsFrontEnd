@@ -101,7 +101,7 @@ function Newworkpriority() {
                       WorkPrioritySeq: e.target.value
                     }))
                   }}
-                  className='rounded inputsection py-2'
+                  className='rounded inputsection py-2 px-2'
                   placeholder='WorkPriority Seq'
                   required
                 ></input>
@@ -123,7 +123,7 @@ function Newworkpriority() {
                       WorkPriorityCode: e.target.value
                     }))
                   }}
-                  className='rounded inputsection py-2'
+                  className='rounded inputsection py-2 px-2'
                   placeholder='WorkPriority Code'
                   required
                 ></input>
@@ -145,7 +145,7 @@ function Newworkpriority() {
                       WorkPriorityDesc: e.target.value
                     }))
                   }}
-                  className='rounded inputsection py-2'
+                  className='rounded inputsection py-2 px-2'
                   placeholder='WorkPriority Desc'
                   required
                 ></input>
@@ -157,7 +157,6 @@ function Newworkpriority() {
           <div className="d-flex justify-content-between my-2 p-4 ">
             <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleClose}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
             <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
-
           </div>
 
         </form>

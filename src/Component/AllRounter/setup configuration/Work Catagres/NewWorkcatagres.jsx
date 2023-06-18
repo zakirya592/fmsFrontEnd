@@ -91,6 +91,7 @@ function NewWorkcatagres() {
                 <form onSubmit={postapi}>
 
                     <div className="row mx-auto px-3 w-100 formsection firstname">
+                        
                         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                             <div className='emailsection position-relative d-grid my-1'>
                                 <label htmlFor='WorkCategoryCode' className='lablesection color3 text-start mb-1'>
@@ -107,7 +108,7 @@ function NewWorkcatagres() {
                                             WorkCategoryCode: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2'
                                     placeholder='WorkCategory Code'
                                     required
                                 ></input>
@@ -130,7 +131,7 @@ function NewWorkcatagres() {
                                             WorkCategoryDesc: e.target.value
                                         }))
                                     }}
-                                    className='rounded inputsection py-2'
+                                    className='rounded inputsection py-2 px-2'
                                     placeholder='WorkCategory Desc'
                                     required
                                 ></input>
@@ -142,7 +143,6 @@ function NewWorkcatagres() {
                     <div className="d-flex justify-content-between my-2 p-4 ">
                         <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleClose}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
-
                     </div>
 
                 </form>
