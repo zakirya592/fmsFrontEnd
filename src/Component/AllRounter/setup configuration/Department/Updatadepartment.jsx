@@ -66,7 +66,7 @@ function Updatadepartment() {
                                 </Typography>
                             </Toolbar>
                         </AppBar>
-                        <div className="topermaringpage mb-4 container">
+                        <div className="topermaringpage bgupdata mb-4 container">
                             <div className="py-3">
 
                                 <form onSubmit={postapi}>

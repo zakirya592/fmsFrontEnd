@@ -65,13 +65,13 @@ function Updataworktype() {
                               </Typography>
                           </Toolbar>
                       </AppBar>
-                      <div className="topermaringpage mb-4 container">
+                      <div className="topermaringpage  bgupdata mb-4 container">
                           <div className="py-3">
                             
                 <form onSubmit={postapi}>
 
                 <div className="row mx-auto px-3 formsection">
-                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 my-2">
+                    <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2">
                         <div className='emailsection position-relative d-grid my-1'>
                             <label htmlFor='WorkTypeDesc' className='lablesection color3 text-start mb-1'>
                                 WorkType Desc<span className='star'>*</span>
@@ -84,7 +84,7 @@ function Updataworktype() {
                                 onChange={e => {
                                     setWorkTypeDesc(e.target.value)
                                 }}
-                                className='rounded inputsection py-2 borderfo'
+                                className='rounded inputsection py-2 borderfo px-2'
                                 placeholder='Employee Name'
                                 required
                             ></input>
