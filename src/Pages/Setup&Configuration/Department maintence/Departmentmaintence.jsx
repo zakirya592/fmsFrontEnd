@@ -8,7 +8,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import Typography from '@mui/material/Typography';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
@@ -21,9 +20,9 @@ import Newdepartment from '../../../Component/AllRounter/setup configuration/Dep
 function Departmentmaintence() {
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 150 },
-        { field: 'DepartmentCode', headerName: 'DEPARTMENT CODE', width: 270 },
-        { field: 'Department', headerName: 'DESCRIPTION', width: 270 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
+        { field: 'DepartmentCode', headerName: 'DEPARTMENT CODE', width: 200 },
+        { field: 'Department', headerName: 'DESCRIPTION', width: 350 },
         {
             field: 'action',
             headerName: 'ACTION',
@@ -35,7 +34,8 @@ function Departmentmaintence() {
                     }}>
                         <FlipCameraAndroidIcon />
                     </button>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.DepartmentCode)}>
+                    <button type="button" className="btn  mx-1 color2 btnwork" 
+                    onClick={() => Deletedapi(params.row.DepartmentCode)}>
                         <DeleteOutlineIcon />
                     </button>
                 </div>
@@ -160,6 +160,8 @@ function Departmentmaintence() {
                                   onPaginationModelChange={setPaginationModel}
                                   checkboxSelection
                                   disableRowSelectionOnClick
+                                  disableMultipleSelection
+
                               />
                           </div>
                       </div>

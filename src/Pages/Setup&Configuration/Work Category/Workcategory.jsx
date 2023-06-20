@@ -84,9 +84,9 @@ function Workcategory() {
     };
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 150 },
-        { field: 'WorkCategoryCode', headerName: 'WORK CATEGORY CODE', width: 270 },
-        { field: 'description', headerName: 'DESCRIPTION', width: 270 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
+        { field: 'WorkCategoryCode', headerName: 'WORK CATEGORY CODE', width: 200 },
+        { field: 'description', headerName: 'DESCRIPTION', width: 350 },
         {
             field: 'action',
             headerName: 'ACTION',

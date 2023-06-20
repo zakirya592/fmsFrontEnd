@@ -84,7 +84,7 @@ function Newworkpriority() {
 
         <form onSubmit={postapi}>
 
-          <div className="row mx-auto px-3 w-100 formsection ">
+          <div className="row mx-auto  w-100 formsection ">
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <div className='emailsection position-relative d-grid my-1'>
                 <label htmlFor='WorkPrioritySeq' className='lablesection color3 text-start mb-1'>

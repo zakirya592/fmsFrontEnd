@@ -83,9 +83,9 @@ function Workpriority() {
     };
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 150 },
-        { field: 'WorkPriorityCode', headerName: 'PRIORITY CODE', width: 270 },
-        { field: 'description', headerName: 'DESCRIPTION', width: 270 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
+        { field: 'WorkPriorityCode', headerName: 'PRIORITY CODE', width: 200 },
+        { field: 'description', headerName: 'DESCRIPTION', width: 350 },
         {
             field: 'action',
             headerName: 'ACTION',

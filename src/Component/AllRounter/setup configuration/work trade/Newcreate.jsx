@@ -8,9 +8,9 @@ import Swal from "sweetalert2";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function Newcreate() {
-   
+
     const [value, setvalue] = useState({
-        WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc:''
+        WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc: ''
     })
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -31,7 +31,7 @@ function Newcreate() {
         },)
             .then((res) => {
                 console.log('Add', res.data);
-                setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc:'' }));
+                setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc: '' }));
                 // setAnchorEl(null);
                 toast.success('Add record successfully', {
                     position: "bottom-center",

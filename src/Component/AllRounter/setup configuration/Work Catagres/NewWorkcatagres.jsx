@@ -90,7 +90,7 @@ function NewWorkcatagres() {
 
                 <form onSubmit={postapi}>
 
-                    <div className="row mx-auto px-3 w-100 formsection firstname">
+                    <div className="row mx-auto w-100 formsection firstname">
                         
                         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                             <div className='emailsection position-relative d-grid my-1'>

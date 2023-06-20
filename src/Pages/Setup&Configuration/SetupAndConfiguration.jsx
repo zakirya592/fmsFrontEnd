@@ -83,9 +83,9 @@ function SetupAndConfiguration() {
   };
 
   const columns = [
-    { field: 'id', headerName: 'SEQ.', width: 150 },
-    { field: 'workTrade', headerName: 'WORK TRADE', width: 270 },
-    { field: 'WorkTradeDesc', headerName: 'DESCRIPTION', width: 270 },
+    { field: 'id', headerName: 'SEQ.', width: 100 },
+    { field: 'workTrade', headerName: 'WORK TRADE', width: 200 },
+    { field: 'WorkTradeDesc', headerName: 'DESCRIPTION', width: 350 },
     {
       field: 'action',
       headerName: 'ACTION',
