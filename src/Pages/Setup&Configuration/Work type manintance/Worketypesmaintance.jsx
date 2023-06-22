@@ -1,4 +1,4 @@
-import React ,{useState,useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
@@ -10,16 +10,23 @@ import Typography from '@mui/material/Typography';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridRowId } from '@mui/x-data-grid';
+
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import Createwroke from '../../../Component/AllRounter/setup configuration/Work types/Createwroke';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import "./Updata.css"
 import { useNavigate } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import { CSVLink, CSVDownload } from "react-csv";
+
 function Worketypesmaintance() {
     const navigate = useNavigate()
-    
+    const componentpdf = useRef();
+    const genertpdf = useReactToPrint({
+        content: () => componentpdf.current,
+    });
 const [getdata, setgetdata] = useState([])
 
 const getapi=()=>{
@@ -112,8 +119,18 @@ id: indes+1,
  description:row.WorkTypeDesc
 
     }))
+    
+    const [selectionModel, setSelectionModel] = useState([]);
 
-    return (
+    const handleSelectionModelChange = (selection) => {
+        if (selection.length > 1) {
+            const selectionSet = new Set(selectionModel);
+            const result = selection.filter((s) => !selectionSet.has(s));
+            setSelectionModel(result);
+        } else {
+            setSelectionModel(selection);
+        }
+    };    return (
         <>
             <div className="bg">
                 <Box sx={{ display: "flex" }}>
@@ -140,24 +157,28 @@ id: indes+1,
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
                                     </button>
-                                    <button type="button" className="btn btn-outline-primary color2">
-                                        <img src={excel} alt="export" className='me-1' /> Export <FileUploadIcon />
+                                    <button type="button" className="btn btn-outline-primary color2" onClick={genertpdf}>
+                                        <img src={excel} alt="export" className='me-1' htmlFor='epoet'  /> Export  <FileUploadIcon />
                                     </button>
+                                    
+                                    {/* <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
+                                   </CSVLink> */}
                                 </div>
                             </div>
                             <hr className="color3 line width" />
-                            <div style={{ height: 420, width: '80%' }} className='tableleft'>
+                            <div style={{ height: 420, width: '80%' }} className='tableleft' ref={componentpdf}  >
                                 <DataGrid
                                     rows={filteredData}
                                     columns={columns}
-                                    // pageSize={5}
                                     pagination
-                                    // pageSize={25}
                                     rowsPerPageOptions={<div className="my-pagination-options">[25, 50, 100]</div>}
                                     paginationModel={paginationModel}
                                     onPaginationModelChange={setPaginationModel}
-                                    checkboxSelection
+                                    // checkboxSelection
                                     disableRowSelectionOnClick
+                                    selectionModel={selectionModel}
+                                    hideFooterSelectedRowCount
+                                    onSelectionModelChange={handleSelectionModelChange}
                                 />
                             </div>
                         </div>
