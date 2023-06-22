@@ -10,8 +10,7 @@ import Typography from '@mui/material/Typography';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { DataGrid, GridRowId } from '@mui/x-data-grid';
-
+import { DataGrid } from '@mui/x-data-grid';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import Createwroke from '../../../Component/AllRounter/setup configuration/Work types/Createwroke';
 import axios from 'axios';
@@ -27,24 +26,24 @@ function Worketypesmaintance() {
     const genertpdf = useReactToPrint({
         content: () => componentpdf.current,
     });
-const [getdata, setgetdata] = useState([])
+    const [getdata, setgetdata] = useState([])
 
-const getapi=()=>{
-    axios.get(`/api/WorkType_GET_LIST`, {
-    },)
-        .then((res) => {
-            console.log('TO get the list', res.data);
-            setgetdata(res.data.recordset)
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
+    const getapi = () => {
+        axios.get(`/api/WorkType_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res.data);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
     useEffect(() => {
         getapi()
     }, [])
-    
-   // Deleted api section
+
+    // Deleted api section
     const Deletedapi = (workTrade) => {
         console.log(workTrade);
         const swalWithBootstrapButtons = Swal.mixin({
@@ -87,12 +86,13 @@ const getapi=()=>{
         })
 
     };
-   
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
         { field: 'workTrade', headerName: 'WORK TYPE', width: 200 },
         { field: 'description', headerName: 'DESCRIPTION', width: 350 },
-        {field: 'action',headerName: 'ACTION',width: 170,
+        {
+            field: 'action', headerName: 'ACTION', width: 170,
             renderCell: (params) => (
                 <div>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
@@ -101,36 +101,28 @@ const getapi=()=>{
                         <FlipCameraAndroidIcon />
                     </button>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkTypeCode)}>
-                        <DeleteOutlineIcon  />
+                        <DeleteOutlineIcon />
                     </button>
                 </div>
-            ),},
+            ),
+        },
     ];
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
-    const filteredData = getdata && getdata.map((row,indes)=>({
-...row,
-id: indes+1,
-// SEQ:row.EmployeeID,
- workTrade:row.WorkTypeCode,
- description:row.WorkTypeDesc
+    const filteredData = getdata && getdata.map((row, indes) => ({
+        ...row,
+        id: indes + 1,
+        // SEQ:row.EmployeeID,
+        workTrade: row.WorkTypeCode,
+        description: row.WorkTypeDesc
 
     }))
-    
-    const [selectionModel, setSelectionModel] = useState([]);
 
-    const handleSelectionModelChange = (selection) => {
-        if (selection.length > 1) {
-            const selectionSet = new Set(selectionModel);
-            const result = selection.filter((s) => !selectionSet.has(s));
-            setSelectionModel(result);
-        } else {
-            setSelectionModel(selection);
-        }
-    };    return (
+
+    return (
         <>
             <div className="bg">
                 <Box sx={{ display: "flex" }}>
@@ -152,17 +144,17 @@ id: indes+1,
                                     <span className='star'>*</span>
                                 </p>
                                 <div className="d-flex">
-                                    <Createwroke/>
+                                    <Createwroke />
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
                                     </button>
-                                    <button type="button" className="btn btn-outline-primary color2" onClick={genertpdf}>
+                                    {/* <button type="button" className="btn btn-outline-primary color2" onClick={genertpdf}>
                                         <img src={excel} alt="export" className='me-1' htmlFor='epoet'  /> Export  <FileUploadIcon />
-                                    </button>
-                                    
-                                    {/* <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
-                                   </CSVLink> */}
+                                    </button> */}
+
+                                    <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
+                                    </CSVLink>
                                 </div>
                             </div>
                             <hr className="color3 line width" />
@@ -174,11 +166,10 @@ id: indes+1,
                                     rowsPerPageOptions={<div className="my-pagination-options">[25, 50, 100]</div>}
                                     paginationModel={paginationModel}
                                     onPaginationModelChange={setPaginationModel}
-                                    // checkboxSelection
                                     disableRowSelectionOnClick
-                                    selectionModel={selectionModel}
+                                    checkboxSelection
                                     hideFooterSelectedRowCount
-                                    onSelectionModelChange={handleSelectionModelChange}
+                                // radioButtonSelection
                                 />
                             </div>
                         </div>
