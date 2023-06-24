@@ -7,3 +7,15 @@
 .css-levciy-MuiTablePagination-displayedRows{
     margin: auto;
 }
+.css-wnkddu-MuiPaper-root-MuiAlert-root{
+    width: 100%;
+    height: 100% ;
+    border: 2px solid rgb(19, 19, 104);
+    border-radius: 10px !important ;
+}
+
+.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop{
+    background-color: #D7F2FD !important;
+    border-radius: 10px;
+    border: 2px solid rgb(19, 19, 104);
+}

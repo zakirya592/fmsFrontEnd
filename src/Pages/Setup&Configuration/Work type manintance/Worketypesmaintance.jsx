@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
+import { Typography } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AppBar from '@mui/material/AppBar';
+import Modal from '@mui/material/Modal';
 import Toolbar from '@mui/material/Toolbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import Typography from '@mui/material/Typography';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
@@ -16,18 +18,67 @@ import Createwroke from '../../../Component/AllRounter/setup configuration/Work 
 import axios from 'axios';
 import Swal from "sweetalert2";
 import "./Updata.css"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { CSVLink, CSVDownload } from "react-csv";
 
 function Worketypesmaintance() {
     const navigate = useNavigate()
+    let { EmployeeID } = useParams();
+    console.log(EmployeeID);
+    const [WorkTypeDesc, setWorkTypeDesc] = useState("")
+    const [getdata, setgetdata] = useState([])
+    
+    const [open, setOpen] = useState(false);
+    const getapi1 = () => {
+        axios.get(`/api/WorkType_GET_BYID/${EmployeeID}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res.data);
+                setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi1()
+    }, [])
+    const postapi = () => {
+        axios.put(`/api/WorkType_Put/${EmployeeID}`, {
+          WorkTypeDesc: WorkTypeDesc,
+        })
+          .then((res) => {
+            console.log('Add', res.data);
+            setWorkTypeDesc('');
+            Swal.fire(
+              'Update!',
+              'You have successfully updated.',
+              'success'
+            ).then(() => {
+              navigate(`/Worketypes`);
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
     const componentpdf = useRef();
     const genertpdf = useReactToPrint({
         content: () => componentpdf.current,
     });
-    const [getdata, setgetdata] = useState([])
 
+
+    const handleClick = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+      };
+      const handleSaveClick = () => {
+        postapi();
+        handleClose();
+      };
     const getapi = () => {
         axios.get(`/api/WorkType_GET_LIST`, {
         },)
@@ -95,11 +146,69 @@ function Worketypesmaintance() {
             field: 'action', headerName: 'ACTION', width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
-                        navigate(`/Updata/Worktypes/${params.row.WorkTypeCode}`);
-                    }}>
-                        <FlipCameraAndroidIcon />
-                    </button>
+ <button
+        type="button"
+        className="btn mx-1 color2 btnwork"
+        onClick={handleClick}
+      >
+        <FlipCameraAndroidIcon />
+      </button>
+
+      <Modal
+            open={open}
+            onClose={handleClose}
+            style={{
+              zIndex: 1500,
+              top: '50%',
+              left: '55%',
+              width: '30%',
+              height: '22%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <form onSubmit={postapi}>
+              {/* Modal content */}
+              <div className="row mx-auto px-3 formsection">
+                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2">
+                  <div className="emailsection position-relative d-grid my-1 popupfield">
+                    <label htmlFor="WorkTypeDesc" className="lablesection color3 text-start mb-1">
+                      WorkType Desc<span className="star">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="WorkTypeDesc"
+                      value={WorkTypeDesc}
+                      onChange={(e) => {
+                        setWorkTypeDesc(e.target.value);
+                      }}
+                      className="rounded inputsection py-2 borderfo px-2"
+                      placeholder="Work Type Description"
+                      required
+                    ></input>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex justify-content-between p-4">
+                <button
+                  type="button"
+                  className="border-0 px-3 savebtn py-2"
+                  onClick={() => {
+                    navigate(`/Worketypes`);
+                  }}
+                >
+                  <ArrowCircleLeftOutlinedIcon className="me-2" />
+                  Back
+                </button>
+                <button type="button" className="border-0 px-3 savebtn py-2" onClick={handleSaveClick}>
+                  <AddCircleOutlineIcon className="me-2" />
+                  Save
+                </button>
+              </div>
+            </form>
+          </Modal>
+
+
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkTypeCode)}>
                         <DeleteOutlineIcon />
                     </button>
