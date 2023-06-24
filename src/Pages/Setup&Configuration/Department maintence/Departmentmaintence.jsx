@@ -161,7 +161,6 @@ function Departmentmaintence() {
                                   checkboxSelection
                                   disableRowSelectionOnClick
                                   disableMultipleSelection
-
                               />
                           </div>
                       </div>

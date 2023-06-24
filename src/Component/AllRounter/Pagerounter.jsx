@@ -76,8 +76,6 @@ function Pagerounter() {
           {/*Departmentmaintence*/}
           <Route exact path='/Departmentmaintence' element={<Departmentmaintence />} />
           <Route exact path='/Updata/department/:EmployeeID' element={<Updatadepartment />} />
-          {/*TradeMaintenance*/}
-          <Route exact path='/TradeMaintenance' element={<TradeMaintenance />} />
           {/*Buildingcode*/}
           <Route exact path='/Buildingcode' element={<Buildingcode />} />
           {/*Loactioncode*/}
@@ -90,6 +88,8 @@ function Pagerounter() {
           <Route exact path='/Failurecode' element={<Failurecode />} />
           {/*Soluctioncode*/}
           <Route exact path='/Soluctioncode' element={<Soluctioncode />} />
+          {/*TradeMaintenance*/}
+          <Route exact path='/TradeMaintenance' element={<TradeMaintenance />} />
           {/*Day*/}
           <Route exact path='/Day' element={<Day />} />
           {/*Frequency*/}

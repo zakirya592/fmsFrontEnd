@@ -18,12 +18,14 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import AddWorkstatus from '../../../Component/AllRounter/setup configuration/Work Status/AddWorkstatus';
+import Menu from '@mui/material/Menu';
+import Fade from '@mui/material/Fade';
+
 function Workstatus() {
 
     const navigate = useNavigate()
-
     const [getdata, setgetdata] = useState([])
-
+    // Get api
     const getapi = () => {
         axios.get(`/api/WorkStatus_GET_LIST`, {
         },)
@@ -38,7 +40,6 @@ function Workstatus() {
     useEffect(() => {
         getapi()
     }, [])
-
     // Deleted api section
     const Deletedapi = (WorkStatusCode) => {
         console.log(WorkStatusCode);
@@ -82,7 +83,7 @@ function Workstatus() {
         })
 
     };
-
+    // columns
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
         { field: 'WORKSTATUS', headerName: 'WORK STATUS CODE', width: 200 },
@@ -98,6 +99,7 @@ function Workstatus() {
                     }}>
                         <FlipCameraAndroidIcon />
                     </button>
+                    
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkStatusCode)}>
                         <DeleteOutlineIcon />
                     </button>
@@ -105,11 +107,12 @@ function Workstatus() {
             ),
         },
     ];
-
+    // paginationModel
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
+    // filteredData
     const filteredData = getdata && getdata.map((row, indes) => ({
         ...row,
         id: indes + 1,
@@ -119,6 +122,12 @@ function Workstatus() {
 
     }))
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
     return (
         <>
             <div className="bg">
@@ -141,7 +150,7 @@ function Workstatus() {
                                     <span className='star'>*</span>
                                 </p>
                                 <div className="d-flex">
-                                  <AddWorkstatus/>
+                                    <AddWorkstatus />
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />

@@ -2,15 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
-import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Siderbar from '../../../Component/Siderbar/Siderbar';
-import Typography from '@mui/material/Typography';
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 // import "./Updata.css"
-
+import Menu from '@mui/material/Menu';
+import Fade from '@mui/material/Fade';
 function Updataworkstatus() {
     const navigate = useNavigate()
     let { EmployeeID } = useParams();
@@ -52,20 +48,35 @@ function Updataworkstatus() {
                 console.log(err);
             });
     }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+   
     return (
         <>
-            <div className='bg'>
-                <div className=''>
-                    <Box sx={{ display: 'flex' }}>
-                        <Siderbar />
-                        <AppBar className="fortrans locationfortrans" position="fixed">
-                            <Toolbar>
-                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => { navigate(`/Workstatus`); }} />
-                                    <p className="text-center my-auto mx-auto">Updata WorkStatus</p>
-                                </Typography>
-                            </Toolbar>
-                        </AppBar>
+                <button type="button" id="fade-button"
+                    aria-controls={open ? 'fade-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick} className="btn btn-outline-primary mx-1 color2 btnwork">
+                    <AddCircleOutlineIcon className="me-1" />
+                    New
+                </button>
+                <Menu
+                    id="fade-menu"
+                    MenuListProps={{
+                        'aria-labelledby': 'fade-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    // onClose={handleClose}
+                    TransitionComponent={Fade}
+
+                >
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
 
@@ -104,9 +115,11 @@ function Updataworkstatus() {
                                 </form>
                             </div>
                         </div>
-                    </Box>
-                </div>
-            </div>
+
+               
+
+               
+                </Menu>
         </>
     )
 }
