@@ -23,8 +23,25 @@ import { CSVLink } from "react-csv";
 function Soluctioncode() {
     const ref = useRef(null)
     const [eSolutionStatusDesc, seteSolutionStatusDesc] = useState()
+
+    function updata(SolutiontatusCode) {
+        console.log(SolutiontatusCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/Solution_GET_BYID/${SolutiontatusCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                seteSolutionStatusDesc(res.data.recordset[0].SolutionStatusDesc)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     const postapi = (SolutiontatusCode) => {
         SolutiontatusCode.preventDefault();
+        console.log(SolutiontatusCode);
         axios.put(`/api/Solution_Put/${SolutiontatusCode}`, {
             SolutionStatusDesc: eSolutionStatusDesc,
         },)
@@ -41,11 +58,7 @@ function Soluctioncode() {
                 console.log(err);
             });
     }
-  
-    const updata = (SolutiontatusCode) => {
-        console.log(SolutiontatusCode);
-        ref.current.click()
-    }
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
         { field: 'SolutiontatusCode', headerName: 'SOLUTION CODE', width: 270 },
@@ -143,8 +156,6 @@ function Soluctioncode() {
 
     }))
 
-
-
     return (
         <>
             <div className="bg">
@@ -213,31 +224,31 @@ function Soluctioncode() {
                         </div>
                         <div class="modal-body">
                             <form onSubmit={postapi}>
-                                            <div className='emailsection position-relative d-grid my-1'>
-                                                <label htmlFor='DepartmentDesc' className='lablesection color3 text-start mb-1'>
-                                                   SolutionStatus Desc<span className='star'>*</span>
-                                                </label>
+                                <div className='emailsection position-relative d-grid my-1'>
+                                    <label htmlFor='DepartmentDesc' className='lablesection color3 text-start mb-1'>
+                                        SolutionStatus Desc<span className='star'>*</span>
+                                    </label>
 
-                                                <input
-                                                    types='text'
-                                                    id='DepartmentDesc'
-                                                    value={eSolutionStatusDesc}
-                                                    onChange={e => {
-                                                        seteSolutionStatusDesc(e.target.value)
-                                                    }}
-                                                    className='rounded inputsection py-2 borderfo'
-                                                    placeholder='SolutionStatus Desc'
-                                                    required
-                                                ></input>
-                                            </div>
+                                    <input
+                                        types='text'
+                                        id='DepartmentDesc'
+                                        value={eSolutionStatusDesc}
+                                        onChange={e => {
+                                            seteSolutionStatusDesc(e.target.value)
+                                        }}
+                                        className='rounded inputsection py-2 borderfo'
+                                        placeholder='SolutionStatus Desc'
+                                        required
+                                    ></input>
+                                </div>
 
-                                    <div className="d-flex justify-content-between p-4 ">
+                                <div className="d-flex justify-content-between p-4 ">
                                     <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                        <button type="submit" class="border-0 px-3 savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Save</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Save</button>
 
-                                    </div>
+                                </div>
 
-                                </form>
+                            </form>
                         </div>
                         {/* <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
