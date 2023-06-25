@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
@@ -20,6 +20,10 @@ import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { CSVLink } from "react-csv";
 function RequestStatus() {
+    const ref = useRef(null)
+    const [itemCode, setItemCode] = useState(null);
+    const [eRequestStatusDesc, seteRequestStatusDesc] = useState()
+    const [open, setOpen] = useState(false)
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
         { field: 'RequestStatusCode', headerName: 'REQUEST STATUS CODE', width: 270 },
@@ -30,7 +34,11 @@ function RequestStatus() {
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork">
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.RequestStatusCode)}>
+                        <FlipCameraAndroidIcon />
+                    </button>
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
                         <FlipCameraAndroidIcon />
                     </button>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.RequestStatusCode)}>
@@ -115,6 +123,53 @@ function RequestStatus() {
 
     }))
 
+     // Updata section
+    // GEt by id Api
+    function updata(RequestStatusCode) {
+        console.log(RequestStatusCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/RequestStatus_GET_BYID/${RequestStatusCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                seteRequestStatusDesc(res.data.recordset[0].RequestStatusDesc)
+                setItemCode(RequestStatusCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    // UPdata api
+    const postapi = (e) => {
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/RequestStatus_Put/${itemCode}`, {
+            RequestStatusDesc: eRequestStatusDesc,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                seteRequestStatusDesc('')
+                getapi()
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
         <>
             <div className="bg">
@@ -171,6 +226,45 @@ function RequestStatus() {
                         </div>
                     </div>
                 </Box>
+            </div>
+
+                 {/* <!-- Modal --> */}
+            <div class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog bgupdata">
+                    <div class="modal-content bgupdata">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Updata Soluction Code</h5>
+                            {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                        </div>
+                        <div class="modal-body">
+                            <form onSubmit={postapi}>
+                                <div className='emailsection position-relative d-grid my-1'>
+                                    <label htmlFor='DepartmentDesc' className='lablesection color3 text-start mb-1'>
+                                        FailureStatus Desc<span className='star'>*</span>
+                                    </label>
+
+                                    <input
+                                        types='text'
+                                        id='DepartmentDesc'
+                                        value={eRequestStatusDesc}
+                                        onChange={e => {
+                                            seteRequestStatusDesc(e.target.value)
+                                        }}
+                                        className='rounded inputsection py-2 borderfo'
+                                        placeholder='RequestStatus Desc'
+                                        required
+                                    ></input>
+                                </div>
+
+                                <div className="d-flex justify-content-between p-4 ">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )

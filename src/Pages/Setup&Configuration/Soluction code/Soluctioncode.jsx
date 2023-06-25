@@ -47,6 +47,8 @@ function Soluctioncode() {
     ];
 
     const [eSolutionStatusDesc, seteSolutionStatusDesc] = useState()
+    const [open, setOpen] = useState(false)
+    // GEt by id Api
     function updata(SolutiontatusCode) {
         console.log(SolutiontatusCode);
         ref.current.click()
@@ -62,36 +64,37 @@ function Soluctioncode() {
                 console.log(err);
 
             });
-        }
-    const [open, setOpen] = useState(false);
+    }
 
     const handleClose = () => {
         setOpen(false);
     };
+    // UPdata api
     const postapi = (e) => {
-                e.preventDefault();
-            // ref.current.click(SolutiontatusCode)
-                 console.log(itemCode);
-                axios.put(`/api/Solution_Put/${itemCode}`, {
-                    SolutionStatusDesc: eSolutionStatusDesc,
-                },)
-                    .then((res) => {
-                        console.log('Add', res.data);
-                        seteSolutionStatusDesc('')
-                        getapi()
-                        Swal.fire(
-                            'Updata!',
-                            ' You have successfully updated.',
-                            'success'
-                        ).then(() => {
-                            handleClose();
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            };
-   
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/Solution_Put/${itemCode}`, {
+            SolutionStatusDesc: eSolutionStatusDesc,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                seteSolutionStatusDesc('')
+                getapi()
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    //    List of table
     const navigate = useNavigate()
     const [getdata, setgetdata] = useState([])
     const getapi = () => {
@@ -164,7 +167,7 @@ function Soluctioncode() {
         SolutionStatusDesc: row.SolutionStatusDesc
 
     }))
-    
+
     return (
         <>
             <div className="bg">
