@@ -22,7 +22,7 @@ import { CSVLink } from "react-csv"
 
 function Soluctioncode() {
     const ref = useRef(null)
-
+    const [itemCode, setItemCode] = useState(null);
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
         { field: 'SolutiontatusCode', headerName: 'SOLUTION CODE', width: 270 },
@@ -56,26 +56,36 @@ function Soluctioncode() {
             .then((res) => {
                 console.log('TO get the list hg', res.data);
                 seteSolutionStatusDesc(res.data.recordset[0].SolutionStatusDesc)
+                setItemCode(SolutiontatusCode); // Store the WorkTypeCode in state
             })
             .catch((err) => {
                 console.log(err);
+
             });
         }
-        const postapi = (SolutiontatusCode) => {
-                SolutiontatusCode.preventDefault();
-            ref.current.click(SolutiontatusCode)
-                 console.log();
-                axios.put(`/api/Solution_Put/${SolutiontatusCode}`, {
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const postapi = (e) => {
+                e.preventDefault();
+            // ref.current.click(SolutiontatusCode)
+                 console.log(itemCode);
+                axios.put(`/api/Solution_Put/${itemCode}`, {
                     SolutionStatusDesc: eSolutionStatusDesc,
                 },)
                     .then((res) => {
                         console.log('Add', res.data);
                         seteSolutionStatusDesc('')
+                        getapi()
                         Swal.fire(
                             'Updata!',
                             ' You have successfully updated.',
                             'success'
-                        )
+                        ).then(() => {
+                            handleClose();
+                        });
                     })
                     .catch((err) => {
                         console.log(err);
@@ -244,7 +254,7 @@ function Soluctioncode() {
 
                                 <div className="d-flex justify-content-between p-4 ">
                                     <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="submit" class="border-0 px-3 savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Save</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
                                 </div>
 
                             </form>

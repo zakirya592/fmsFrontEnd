@@ -18,7 +18,7 @@ import Createwroke from '../../../Component/AllRounter/setup configuration/Work 
 import axios from 'axios';
 import Swal from "sweetalert2";
 import "./Updata.css"
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { CSVLink } from "react-csv";
 
@@ -30,52 +30,50 @@ function Worketypesmaintance() {
     const [itemCode, setItemCode] = useState(null);
 
     const componentpdf = useRef();
-    
-
     const handleClick = (WorkTypeCode) => {
         setOpen(true);
         console.log(WorkTypeCode);
         axios
-          .get(`/api/WorkType_GET_BYID/${WorkTypeCode}`)
-          .then((res) => {
-            console.log('To get the list', res.data);
-            setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc);
-            setItemCode(WorkTypeCode); // Store the WorkTypeCode in state
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-      
-      const postapi = () => {
-        axios
-          .put(`/api/WorkType_Put/${itemCode}`, {
-            WorkTypeDesc: WorkTypeDesc,
-          })
-          .then((res) => {
-            console.log('Update', res.data);
-            getapi()
-            setWorkTypeDesc('');
-            Swal.fire('Update!', 'You have successfully updated.', 'success').then(() => {
-              handleClose();
+            .get(`/api/WorkType_GET_BYID/${WorkTypeCode}`)
+            .then((res) => {
+                console.log('To get the list', res.data);
+                setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc);
+                setItemCode(WorkTypeCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
             });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-      
-      function handleSaveClick() {
+    };
+
+    const postapi = () => {
+        axios
+            .put(`/api/WorkType_Put/${itemCode}`, {
+                WorkTypeDesc: WorkTypeDesc,
+            })
+            .then((res) => {
+                console.log('Update', res.data);
+                getapi()
+                setWorkTypeDesc('');
+                Swal.fire('Update!', 'You have successfully updated.', 'success').then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    function handleSaveClick() {
         postapi();
         handleClose();
-      }
-      
-      const handleClose = () => {
+    }
+
+    const handleClose = () => {
         setOpen(false);
-      };
-      
-      
-      
+    };
+
+
+
 
     const getapi = () => {
         axios.get(`/api/WorkType_GET_LIST`, {
@@ -198,10 +196,10 @@ function Worketypesmaintance() {
                                     Back
                                 </button>
                                 <button
-  type="button"
-  className="border-0 px-3 savebtn py-2"
-  onClick={() => handleSaveClick(params.row.WorkTypeCode)}
->
+                                    type="button"
+                                    className="border-0 px-3 savebtn py-2"
+                                    onClick={() => handleSaveClick(params.row.WorkTypeCode)}
+                                >
                                     <AddCircleOutlineIcon className="me-2" />
                                     Save
                                 </button>
@@ -213,7 +211,7 @@ function Worketypesmaintance() {
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkTypeCode)}>
                         <DeleteOutlineIcon />
                     </button>
-                
+
                 </div>
             ),
         },
@@ -231,7 +229,7 @@ function Worketypesmaintance() {
         description: row.WorkTypeDesc
 
     }))
-       const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
 
     const handleRowSelection = (id, isSelected, resetSelection) => {
         if (resetSelection) {
@@ -295,11 +293,11 @@ function Worketypesmaintance() {
                                     disableRowSelectionOnClick
                                     checkboxSelection
                                     hideFooterSelectedRowCount
-                                    radioButtonSelection   
+                                    radioButtonSelection
                                     selectedRows={selectedRows}
                                     onSelectionModelChange={handleRowSelection}
                                 />
-                                
+
                             </div>
                         </div>
                         <div className="d-flex justify-content-between w-100 mt-3 mb-3">
