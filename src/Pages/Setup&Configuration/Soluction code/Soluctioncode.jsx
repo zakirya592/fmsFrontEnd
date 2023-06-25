@@ -18,46 +18,10 @@ import axios from 'axios';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
-import { CSVLink } from "react-csv";
+import { CSVLink } from "react-csv"
 
 function Soluctioncode() {
     const ref = useRef(null)
-    const [eSolutionStatusDesc, seteSolutionStatusDesc] = useState()
-
-    function updata(SolutiontatusCode) {
-        console.log(SolutiontatusCode);
-        ref.current.click()
-        // get api
-        axios.get(`/api/Solution_GET_BYID/${SolutiontatusCode}`, {
-        },)
-            .then((res) => {
-                console.log('TO get the list hg', res.data);
-                seteSolutionStatusDesc(res.data.recordset[0].SolutionStatusDesc)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    const postapi = (SolutiontatusCode) => {
-        SolutiontatusCode.preventDefault();
-        console.log(SolutiontatusCode);
-        axios.put(`/api/Solution_Put/${SolutiontatusCode}`, {
-            SolutionStatusDesc: eSolutionStatusDesc,
-        },)
-            .then((res) => {
-                console.log('Add', res.data);
-                seteSolutionStatusDesc('')
-                Swal.fire(
-                    'Updata!',
-                    ' You have successfully updated.',
-                    'success'
-                )
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
@@ -82,6 +46,42 @@ function Soluctioncode() {
         },
     ];
 
+    const [eSolutionStatusDesc, seteSolutionStatusDesc] = useState()
+    function updata(SolutiontatusCode) {
+        console.log(SolutiontatusCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/Solution_GET_BYID/${SolutiontatusCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                seteSolutionStatusDesc(res.data.recordset[0].SolutionStatusDesc)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+        const postapi = (SolutiontatusCode) => {
+                SolutiontatusCode.preventDefault();
+            ref.current.click(SolutiontatusCode)
+                 console.log();
+                axios.put(`/api/Solution_Put/${SolutiontatusCode}`, {
+                    SolutionStatusDesc: eSolutionStatusDesc,
+                },)
+                    .then((res) => {
+                        console.log('Add', res.data);
+                        seteSolutionStatusDesc('')
+                        Swal.fire(
+                            'Updata!',
+                            ' You have successfully updated.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            };
+   
     const navigate = useNavigate()
     const [getdata, setgetdata] = useState([])
     const getapi = () => {
@@ -150,12 +150,11 @@ function Soluctioncode() {
     const filteredData = getdata && getdata.map((row, indes) => ({
         ...row,
         id: indes + 1,
-        // SEQ:row.EmployeeID,
         SolutiontatusCode: row.SolutiontatusCode,
         SolutionStatusDesc: row.SolutionStatusDesc
 
     }))
-
+    
     return (
         <>
             <div className="bg">
@@ -196,7 +195,8 @@ function Soluctioncode() {
                                     onPaginationModelChange={setPaginationModel}
                                     checkboxSelection
                                     disableRowSelectionOnClick
-                                    disableMultipleSelection
+                                    disableMultipleSelection={true}
+                                    maxSelected={1} // can select only one, no top select all box
                                 />
                             </div>
                         </div>
@@ -219,7 +219,7 @@ function Soluctioncode() {
                 <div class="modal-dialog bgupdata">
                     <div class="modal-content bgupdata">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Updata</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Updata Soluction Code</h5>
                             {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
                         </div>
                         <div class="modal-body">
@@ -245,15 +245,10 @@ function Soluctioncode() {
                                 <div className="d-flex justify-content-between p-4 ">
                                     <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="submit" class="border-0 px-3 savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Save</button>
-
                                 </div>
 
                             </form>
                         </div>
-                        {/* <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Understood</button>
-                        </div> */}
                     </div>
                 </div>
             </div>

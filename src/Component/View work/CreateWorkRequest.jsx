@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Siderbar from '../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -42,7 +42,27 @@ function CreateWorkRequest() {
         WorkRequest: '',
 
     })
-
+    const [getdataapi, setgetdataapi] = useState()
+    function getapi() {
+        const requestBody = {
+            
+        };
+        // get api
+        axios.get(`/api/getworkRequest`, {
+            EmployeeID: 1,
+                },)
+            .then((res) => {
+            console.log('TO get the list by ID', res.data);
+                // setgetdataapi(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+      getapi()
+    }, [])
+    
     const [workTradeDescription, setworkTradeDescription] = useState('')
 
     // generateId random
@@ -193,9 +213,7 @@ function CreateWorkRequest() {
                         </AppBar>
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
-
-
-                                {/* Top section */}
+                               {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Create Work Request</p>
                                     <div className="d-flex">
@@ -806,7 +824,7 @@ function CreateWorkRequest() {
                                     </div>
 
                                 </div>
-
+                            
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Update}><SaveIcon className='me-2' />SAVE</button>
