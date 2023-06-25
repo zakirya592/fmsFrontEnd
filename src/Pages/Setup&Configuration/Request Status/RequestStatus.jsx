@@ -230,10 +230,10 @@ function RequestStatus() {
 
                  {/* <!-- Modal --> */}
             <div class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog bgupdata">
+                <div class="modal-dialog bgupdata" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
                     <div class="modal-content bgupdata">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Updata Soluction Code</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Updata Request Status Code</h5>
                             {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
                         </div>
                         <div class="modal-body">

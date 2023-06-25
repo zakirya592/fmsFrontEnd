@@ -19,62 +19,15 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import "./Updata.css"
 import { useNavigate } from 'react-router-dom';
-import { useReactToPrint } from 'react-to-print';
 import { CSVLink } from "react-csv";
 
 function Worketypesmaintance() {
     const navigate = useNavigate()
-    const [WorkTypeDesc, setWorkTypeDesc] = useState("")
-    const [getdata, setgetdata] = useState([])
-    const [open, setOpen] = useState(false);
+    const [WorkTypeDesc, setWorkTypeDesc] = useState()
+    const ref = useRef(null)
     const [itemCode, setItemCode] = useState(null);
-
-    const componentpdf = useRef();
-    const handleClick = (WorkTypeCode) => {
-        setOpen(true);
-        console.log(WorkTypeCode);
-        axios
-            .get(`/api/WorkType_GET_BYID/${WorkTypeCode}`)
-            .then((res) => {
-                console.log('To get the list', res.data);
-                setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc);
-                setItemCode(WorkTypeCode); // Store the WorkTypeCode in state
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    const postapi = () => {
-        axios
-            .put(`/api/WorkType_Put/${itemCode}`, {
-                WorkTypeDesc: WorkTypeDesc,
-            })
-            .then((res) => {
-                console.log('Update', res.data);
-                getapi()
-                setWorkTypeDesc('');
-                Swal.fire('Update!', 'You have successfully updated.', 'success').then(() => {
-                    handleClose();
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    function handleSaveClick() {
-        postapi();
-        handleClose();
-    }
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-
-
-
+    const [open, setOpen] = useState(false)
+    const [getdata, setgetdata] = useState([])
     const getapi = () => {
         axios.get(`/api/WorkType_GET_LIST`, {
         },)
@@ -142,72 +95,13 @@ function Worketypesmaintance() {
             field: 'action', headerName: 'ACTION', width: 170,
             renderCell: (params) => (
                 <div>
-                    <button
-                        type="button"
-                        className="btn mx-1 color2 btnwork"
-                        // onClick={handleClick}
-                        onClick={() => handleClick(params.row.WorkTypeCode)}
-                    >
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.WorkTypeCode)}>
                         <FlipCameraAndroidIcon />
                     </button>
-
-                    <Modal
-                        open={open}
-                        onClose={handleClose}
-                        style={{
-                            zIndex: 1500,
-                            top: '50%',
-                            left: '55%',
-                            width: '30%',
-                            height: '22%',
-                            transform: 'translate(-50%, -50%)',
-                        }}
-                    >
-                        <form >
-                            {/* Modal content */}
-                            <div className="row mx-auto px-3 formsection">
-                                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2">
-                                    <div className="emailsection position-relative d-grid my-1 popupfield">
-                                        <label htmlFor="WorkTypeDesc" className="lablesection color3 text-start mb-1">
-                                            WorkType Desc<span className="star">*</span>
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            id="WorkTypeDesc"
-                                            value={WorkTypeDesc}
-                                            onChange={(e) => {
-                                                setWorkTypeDesc(e.target.value);
-                                            }}
-                                            className="rounded inputsection py-2 borderfo px-2"
-                                            placeholder="Work Type Description"
-                                            required
-                                        ></input>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="d-flex justify-content-between p-4">
-                                <button
-                                    type="button"
-                                    className="border-0 px-3 savebtn py-2"
-                                    onClick={handleClose}
-                                >
-                                    <ArrowCircleLeftOutlinedIcon className="me-2" />
-                                    Back
-                                </button>
-                                <button
-                                    type="button"
-                                    className="border-0 px-3 savebtn py-2"
-                                    onClick={() => handleSaveClick(params.row.WorkTypeCode)}
-                                >
-                                    <AddCircleOutlineIcon className="me-2" />
-                                    Save
-                                </button>
-                            </div>
-                        </form>
-                    </Modal>
-
-
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
+                        <FlipCameraAndroidIcon />
+                    </button>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkTypeCode)}>
                         <DeleteOutlineIcon />
                     </button>
@@ -246,6 +140,53 @@ function Worketypesmaintance() {
             });
         }
     };
+
+    // Updata section
+    // GEt by id Api
+    function updata(WorkTypeCode) {
+        console.log(WorkTypeCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/WorkType_GET_BYID/${WorkTypeCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc)
+
+                setItemCode(WorkTypeCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    // UPdata api
+    const postapi = (e) => {
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/WorkType_Put/${itemCode}`, {
+            WorkTypeDesc: WorkTypeDesc,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                getapi()
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <>
             <div className="bg">
@@ -282,7 +223,7 @@ function Worketypesmaintance() {
                                 </div>
                             </div>
                             <hr className="color3 line width" />
-                            <div style={{ height: 420, width: '80%' }} className='tableleft' ref={componentpdf}  >
+                            <div style={{ height: 420, width: '80%' }} className='tableleft' >
                                 <DataGrid
                                     rows={filteredData}
                                     columns={columns}
@@ -315,21 +256,43 @@ function Worketypesmaintance() {
                     </div>
                 </Box>
 
-                {/* <!-- Modal --> */}
-                <div class="modal fade mt-5" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                ...
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Understood</button>
-                            </div>
+           
+            </div>
+             {/* Model */}
+            <div class="modal fade mt-5 " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog bgupdata" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
+                    <div class="modal-content bgupdata">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Updata WorkType </h5>
+                            {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                        </div>
+                        <div class="modal-body">
+                            <form onSubmit={postapi}>
+
+                                <div className='emailsection position-relative d-grid my-1'>
+                                    <label htmlFor='WorkTypeDesc' className='lablesection color3 text-start mb-1'>
+                                        WorkType Desc<span className='star'>*</span>
+                                    </label>
+
+                                    <input
+                                        types='text'
+                                        id='WorkTypeDesc'
+                                        value={WorkTypeDesc}
+                                        onChange={e => {
+                                            setWorkTypeDesc(e.target.value)
+                                        }}
+                                        className='rounded inputsection py-2 borderfo'
+                                        placeholder='WorkType Desc'
+                                        required
+                                    ></input>
+                                </div>
+
+                                <div className="d-flex justify-content-between p-4 ">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
+                                </div>
+
+                            </form>
                         </div>
                     </div>
                 </div>

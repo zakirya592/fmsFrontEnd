@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-// import './setupAndConfiguration.css';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
@@ -18,11 +17,14 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import AddWorkstatus from '../../../Component/AllRounter/setup configuration/Work Status/AddWorkstatus';
-import Menu from '@mui/material/Menu';
-import Fade from '@mui/material/Fade';
+import { CSVLink } from "react-csv";
 
 function Workstatus() {
 
+    const [WorkStatusDesc, setWorkStatusDesc] = useState()
+    const ref = useRef(null)
+    const [itemCode, setItemCode] = useState(null);
+    const [open, setOpen] = useState(false)
     const navigate = useNavigate()
     const [getdata, setgetdata] = useState([])
     // Get api
@@ -94,9 +96,11 @@ function Workstatus() {
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
-                        navigate(`/Updata/Workstatus/${params.row.WorkStatusCode}`);
-                    }}>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.WorkStatusCode)}>
+                        <FlipCameraAndroidIcon />
+                    </button>
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
                         <FlipCameraAndroidIcon />
                     </button>
                     
@@ -122,12 +126,53 @@ function Workstatus() {
 
     }))
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+    // Updata section
+    // GEt by id Api
+    function updata(WorkStatusCode) {
+        console.log(WorkStatusCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/WorkStatus_GET_BYID/${WorkStatusCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                setWorkStatusDesc(res.data.recordset[0].WorkStatusDesc)
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+                setItemCode(WorkStatusCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
     };
+    // UPdata api
+    const postapi = (e) => {
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/WorkStatus_Put/${itemCode}`, {
+            WorkStatusDesc: WorkStatusDesc,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                getapi()
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
         <>
             <div className="bg">
@@ -155,9 +200,8 @@ function Workstatus() {
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
                                     </button>
-                                    <button type="button" className="btn btn-outline-primary color2">
-                                        <img src={excel} alt="export" className='me-1' /> Export <FileUploadIcon />
-                                    </button>
+                                    <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
+                                    </CSVLink>
                                 </div>
                             </div>
                             <hr className="color3 line width" />
@@ -188,6 +232,45 @@ function Workstatus() {
                         </div>
                     </div>
                 </Box>
+            </div>
+            {/* Model */}
+            <div class="modal fade mt-5 " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog bgupdata" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
+                    <div class="modal-content bgupdata">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Updata WorkStatus </h5>
+                            {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                        </div>
+                        <div class="modal-body">
+                            <form onSubmit={postapi}>
+
+                                <div className='emailsection position-relative d-grid my-1'>
+                                    <label htmlFor='WorkStatusDesc' className='lablesection color3 text-start mb-1'>
+                                        WorkStatus Desc<span className='star'>*</span>
+                                    </label>
+
+                                    <input
+                                        types='text'
+                                        id='WorkStatusDesc'
+                                        value={WorkStatusDesc}
+                                        onChange={e => {
+                                            setWorkStatusDesc(e.target.value)
+                                        }}
+                                        className='rounded inputsection py-2 borderfo'
+                                        placeholder='WorkStatus Desc'
+                                        required
+                                    ></input>
+                                </div>
+
+                                <div className="d-flex justify-content-between p-4 ">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )

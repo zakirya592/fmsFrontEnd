@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
@@ -17,7 +17,14 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import Newdepartment from '../../../Component/AllRounter/setup configuration/Department/Newdepartment';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { CSVLink } from "react-csv";
 function Departmentmaintence() {
+
+    const ref = useRef(null)
+    const [itemCode, setItemCode] = useState(null);
+    const [eDepartmentDesc, seteDepartmentDesc] = useState()
+    const [open, setOpen] = useState(false)
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
@@ -29,9 +36,11 @@ function Departmentmaintence() {
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
-                        navigate(`/Updata/department/${params.row.DepartmentCode}`);
-                    }}>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.DepartmentCode)}>
+                        <FlipCameraAndroidIcon />
+                    </button>
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
                         <FlipCameraAndroidIcon />
                     </button>
                     <button type="button" className="btn  mx-1 color2 btnwork" 
@@ -117,6 +126,54 @@ function Departmentmaintence() {
         Department: row.DepartmentDesc
 
     }))
+
+    // Updata section
+    // GEt by id Api
+    function updata(DepartmentCode) {
+        console.log(DepartmentCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/Department_GET_BYID/${DepartmentCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                seteDepartmentDesc(res.data.recordset[0].DepartmentDesc)
+                setItemCode(DepartmentCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    // UPdata api
+    const postapi = (e) => {
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/Department_Put/${itemCode}`, {
+            DepartmentDesc: eDepartmentDesc,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                seteDepartmentDesc('')
+                getapi()
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
   return (
       <>
           <div className="bg">
@@ -144,9 +201,8 @@ function Departmentmaintence() {
                                       <img src={excel} alt="export" className='me-1' />
                                       Import <GetAppIcon />
                                   </button>
-                                  <button type="button" className="btn btn-outline-primary color2">
-                                      <img src={excel} alt="export" className='me-1' /> Export <FileUploadIcon />
-                                  </button>
+                                  <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
+                                  </CSVLink>
                               </div>
                           </div>
                           <hr className="color3 line width" />
@@ -178,6 +234,43 @@ function Departmentmaintence() {
                       </div>
                   </div>
               </Box>
+          </div>
+          <div class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog bgupdata" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
+                  <div class="modal-content bgupdata">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Updata  Department </h5>
+                          {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                      </div>
+                      <div class="modal-body">
+                          <form onSubmit={postapi}>
+                              <div className='emailsection position-relative d-grid my-1'>
+                                  <label htmlFor='DepartmentDesc' className='lablesection color3 text-start mb-1'>
+                                      Department Desc<span className='star'>*</span>
+                                  </label>
+
+                                  <input
+                                      types='text'
+                                      id='DepartmentDesc'
+                                      value={eDepartmentDesc}
+                                      onChange={e => {
+                                          seteDepartmentDesc(e.target.value)
+                                      }}
+                                      className='rounded inputsection py-2 borderfo'
+                                      placeholder='Department Desc'
+                                      required
+                                  ></input>
+                              </div>
+
+                              <div className="d-flex justify-content-between p-4 ">
+                                  <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                  <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
+                              </div>
+
+                          </form>
+                      </div>
+                  </div>
+              </div>
           </div>
       </>
   )

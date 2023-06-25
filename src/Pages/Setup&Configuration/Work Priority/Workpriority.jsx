@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
@@ -18,9 +18,15 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import Newworkpriority from '../../../Component/AllRounter/setup configuration/WORK PRIORITY/Newworkpriority';
+import { CSVLink } from "react-csv";
 function Workpriority() {
-    const navigate = useNavigate()
 
+    const ref = useRef(null)
+    const [itemCode, setItemCode] = useState(null);
+    const [WorkPrioritySeq, setWorkPrioritySeq] = useState()
+    const [WorkPriorityDesc, setWorkPriorityDesc] = useState()
+    const [open, setOpen] = useState(false)
+    const navigate = useNavigate()
     const [getdata, setgetdata] = useState([])
 
     const getapi = () => {
@@ -92,9 +98,11 @@ function Workpriority() {
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => {
-                        navigate(`/Updata/Updatworkpriority/${params.row.WorkPriorityCode}`);
-                    }}>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.WorkPriorityCode)}>
+                        <FlipCameraAndroidIcon />
+                    </button>
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
                         <FlipCameraAndroidIcon />
                     </button>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkPriorityCode)}>
@@ -118,6 +126,57 @@ function Workpriority() {
         description: row.WorkPriorityDesc
 
     }))
+
+    // Updata section
+    // GEt by id Api
+    function updata(WorkPriorityCode) {
+        console.log(WorkPriorityCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/WorkPriority_GET_BYID/${WorkPriorityCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                setWorkPrioritySeq(res.data.recordset[0].WorkPrioritySeq)
+                setWorkPriorityDesc(res.data.recordset[0].WorkPriorityDesc)
+
+                setItemCode(WorkPriorityCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    // UPdata api
+    const postapi = (e) => {
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/WorkPriority_Put/${itemCode}`, {
+            WorkPriorityDesc: WorkPriorityDesc,
+            WorkPrioritySeq: WorkPrioritySeq,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                setWorkPriorityDesc('')
+                setWorkPrioritySeq('')
+                getapi()
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     return (
         <>
@@ -146,9 +205,8 @@ function Workpriority() {
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
                                     </button>
-                                    <button type="button" className="btn btn-outline-primary color2">
-                                        <img src={excel} alt="export" className='me-1' /> Export <FileUploadIcon />
-                                    </button>
+                                    <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
+                                    </CSVLink>
                                 </div>
                             </div>
                             <hr className="color3 line width" />
@@ -180,6 +238,63 @@ function Workpriority() {
                     </div>
                 </Box>
             </div>
+            {/* Model */}
+            <div class="modal fade mt-5 " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog bgupdata" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
+                    <div class="modal-content bgupdata">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Updata Workpriority </h5>
+                            {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                        </div>
+                        <div class="modal-body">
+                            <form onSubmit={postapi}>
+
+                                        <div className='emailsection position-relative d-grid my-1'>
+                                            <label htmlFor='WorkPrioritySeq' className='lablesection color3 text-start mb-1'>
+                                                WorkPriority Seq<span className='star'>*</span>
+                                            </label>
+
+                                            <input
+                                                types='text'
+                                                id='WorkPrioritySeq'
+                                                value={WorkPrioritySeq}
+                                                onChange={e => {
+                                                    setWorkPrioritySeq(e.target.value)
+                                                }}
+                                                className='rounded inputsection py-2 borderfo'
+                                                placeholder='WorkStatus Desc'
+                                                required
+                                            ></input>
+                                        </div>
+
+                                        <div className='emailsection position-relative d-grid my-3'>
+                                            <label htmlFor='WorkPriorityDesc' className='lablesection color3 text-start mb-1'>
+                                                WorkPriority Desc<span className='star'>*</span>
+                                            </label>
+
+                                            <input
+                                                types='text'
+                                                id='WorkPriorityDesc'
+                                                value={WorkPriorityDesc}
+                                                onChange={e => {
+                                                    setWorkPriorityDesc(e.target.value)
+                                                }}
+                                                className='rounded inputsection py-2 borderfo'
+                                                placeholder='WorkPriority Desc'
+                                                required
+                                            ></input>
+                                        </div>
+                                <div className="d-flex justify-content-between p-4 ">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </>
     )
 }
