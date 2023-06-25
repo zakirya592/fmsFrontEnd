@@ -27,49 +27,54 @@ function Worketypesmaintance() {
     const [WorkTypeDesc, setWorkTypeDesc] = useState("")
     const [getdata, setgetdata] = useState([])
     const [open, setOpen] = useState(false);
+    const [itemCode, setItemCode] = useState(null);
+
     const componentpdf = useRef();
     
+
     const handleClick = (WorkTypeCode) => {
         setOpen(true);
         console.log(WorkTypeCode);
-        axios.get(`/api/WorkType_GET_BYID/${WorkTypeCode}`, {
-        },)
-            .then((res) => {
-                console.log('TO get the list', res.data);
-                setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc)
-            })
-            .catch((err) => {
-                console.log(err);
+        axios
+          .get(`/api/WorkType_GET_BYID/${WorkTypeCode}`)
+          .then((res) => {
+            console.log('To get the list', res.data);
+            setWorkTypeDesc(res.data.recordset[0].WorkTypeDesc);
+            setItemCode(WorkTypeCode); // Store the WorkTypeCode in state
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      
+      const postapi = () => {
+        axios
+          .put(`/api/WorkType_Put/${itemCode}`, {
+            WorkTypeDesc: WorkTypeDesc,
+          })
+          .then((res) => {
+            console.log('Update', res.data);
+            setWorkTypeDesc('');
+            Swal.fire('Update!', 'You have successfully updated.', 'success').then(() => {
+              handleClose();
             });
-        };
-        const postapi = (WorkTypeCode) => {
-            axios.put(`/api/WorkType_Put/${WorkTypeCode}`, {
-                WorkTypeDesc: WorkTypeDesc,
-            })
-                .then((res) => {
-                    console.log('Add', res.data);
-                    setWorkTypeDesc('');
-                    Swal.fire(
-                        'Update!',
-                        'You have successfully updated.',
-                        'success'
-                    ).then(() => {
-                        handleClose();
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        };
-
-    function handleSaveClick() {
-        postapi(); // Call the handleClick function and get the postapi function reference
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      
+      function handleSaveClick() {
+        postapi();
         handleClose();
-    };
-
-    const handleClose = () => {
+      }
+      
+      const handleClose = () => {
         setOpen(false);
-    };
+      };
+      
+      
+      
 
     const getapi = () => {
         axios.get(`/api/WorkType_GET_LIST`, {
@@ -191,7 +196,11 @@ function Worketypesmaintance() {
                                     <ArrowCircleLeftOutlinedIcon className="me-2" />
                                     Back
                                 </button>
-                                <button type="button" className="border-0 px-3 savebtn py-2" onClick={handleSaveClick}>
+                                <button
+  type="button"
+  className="border-0 px-3 savebtn py-2"
+  onClick={() => handleSaveClick(params.row.WorkTypeCode)}
+>
                                     <AddCircleOutlineIcon className="me-2" />
                                     Save
                                 </button>
