@@ -54,6 +54,7 @@ function Worketypesmaintance() {
           })
           .then((res) => {
             console.log('Update', res.data);
+            getapi()
             setWorkTypeDesc('');
             Swal.fire('Update!', 'You have successfully updated.', 'success').then(() => {
               handleClose();
