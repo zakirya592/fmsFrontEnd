@@ -229,15 +229,14 @@ function Soluctioncode() {
 
             {/* <!-- Modal --> */}
             <div class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog bgupdata">
+            <div className="modal-dialog" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
                     <div class="modal-content bgupdata">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Updata Soluction Code</h5>
-                            {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                            <h5 class="modal-title" id="staticBackdropLabel"> Update Solution Code</h5>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body pt-0">
                             <form onSubmit={postapi}>
-                                <div className='emailsection position-relative d-grid my-1'>
+                                <div className='emailsection position-relative d-grid'>
                                     <label htmlFor='DepartmentDesc' className='lablesection color3 text-start mb-1'>
                                         SolutionStatus Desc<span className='star'>*</span>
                                     </label>
@@ -255,7 +254,7 @@ function Soluctioncode() {
                                     ></input>
                                 </div>
 
-                                <div className="d-flex justify-content-between p-4 ">
+                                <div className="d-flex justify-content-between pt-3 ">
                                     <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
                                 </div>
