@@ -12,7 +12,7 @@ import GetAppIcon from '@mui/icons-material/GetApp';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridCellCheckboxRenderer } from '@mui/x-data-grid';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import Createwroke from '../../../Component/AllRounter/setup configuration/Work types/Createwroke';
 import axios from 'axios';
@@ -20,7 +20,7 @@ import Swal from "sweetalert2";
 import "./Updata.css"
 import { useNavigate} from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 function Worketypesmaintance() {
     const navigate = useNavigate()
@@ -213,6 +213,7 @@ function Worketypesmaintance() {
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WorkTypeCode)}>
                         <DeleteOutlineIcon />
                     </button>
+                
                 </div>
             ),
         },
@@ -230,7 +231,23 @@ function Worketypesmaintance() {
         description: row.WorkTypeDesc
 
     }))
+       const [selectedRows, setSelectedRows] = useState([]);
 
+    const handleRowSelection = (id, isSelected, resetSelection) => {
+        if (resetSelection) {
+            setSelectedRows(id);
+        } else {
+            setSelectedRows((prevSelectedRows) => {
+                if (isSelected) {
+                    // Add newly selected rows to the selection
+                    return [...prevSelectedRows, ...id];
+                } else {
+                    // Remove deselected rows from the selection
+                    return prevSelectedRows.filter((rowId) => !id.includes(rowId));
+                }
+            });
+        }
+    };
     return (
         <>
             <div className="bg">
@@ -278,8 +295,11 @@ function Worketypesmaintance() {
                                     disableRowSelectionOnClick
                                     checkboxSelection
                                     hideFooterSelectedRowCount
-                                // radioButtonSelection
+                                    radioButtonSelection   
+                                    selectedRows={selectedRows}
+                                    onSelectionModelChange={handleRowSelection}
                                 />
+                                
                             </div>
                         </div>
                         <div className="d-flex justify-content-between w-100 mt-3 mb-3">
@@ -296,6 +316,25 @@ function Worketypesmaintance() {
                         </div>
                     </div>
                 </Box>
+
+                {/* <!-- Modal --> */}
+                <div class="modal fade mt-5" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -52,6 +52,22 @@ function Viewwork() {
 
     })
 
+    function getapi() {
+        // get api
+        axios.get(`/api/getworkRequest`, {
+                EmployeeID: '32299722',
+           
+        },)
+            .then((res) => {
+                console.log('TO get the list ny ID', res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
     const [workTradeDescription, setworkTradeDescription] = useState('')
 
     // generateId random
