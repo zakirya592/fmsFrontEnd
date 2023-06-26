@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Siderbar from '../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -19,7 +19,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
 function CreateWorkRequest() {
-    
+
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         Departmentcode: '', Departmentname: '',//Department api input 
@@ -30,7 +30,7 @@ function CreateWorkRequest() {
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         RequestDateTime: '',
-        RequestStatus:'',
+        RequestStatus: '',
         workTrade: '',
         WorkOrder: '',
         ProblemCategory: '',
@@ -42,27 +42,21 @@ function CreateWorkRequest() {
         WorkRequest: '',
 
     })
-    const [getdataapi, setgetdataapi] = useState()
+
+    const [getdata, setgetdata] = useState([])
     function getapi() {
-        const requestBody = {
-            
-        };
-        // get api
-        axios.get(`/api/getworkRequest`, {
-            EmployeeID: 1,
-                },)
+        axios.post(`/api/getworkRequest`, {
+            EmployeeID: value.EmployeeID
+        },)
             .then((res) => {
-            console.log('TO get the list by ID', res.data);
-                // setgetdataapi(res.data.recordset)
+                console.log('Add work api first api', res.data.recordset[0]);
+                setgetdata(res.data.recordset)
             })
             .catch((err) => {
                 console.log(err);
             });
     }
-    useEffect(() => {
-      getapi()
-    }, [])
-    
+
     const [workTradeDescription, setworkTradeDescription] = useState('')
 
     // generateId random
@@ -196,7 +190,7 @@ function CreateWorkRequest() {
 
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
-      };
+    };
     return (
         <div>
             <div className='bg'>
@@ -206,14 +200,14 @@ function CreateWorkRequest() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2"  onClick= {Goback}/>
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={Goback} />
                                     <p className="text-center my-auto mx-auto">Work Request</p>
                                 </Typography>
                             </Toolbar>
                         </AppBar>
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
-                               {/* Top section */}
+                                {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Create Work Request</p>
                                     <div className="d-flex">
@@ -221,9 +215,9 @@ function CreateWorkRequest() {
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive"><PrintIcon className='me-1' />Create</button>
                                         {/* print  */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" ><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
-                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel}  alt=''/> Export</button>
+                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel} alt='' /> Export</button>
                                     </div>
                                 </div>
 
@@ -254,7 +248,7 @@ function CreateWorkRequest() {
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
-                                                <SearchOutlined className=' serachicon' />
+                                                <SearchOutlined className=' serachicon' onClick={getapi} />
                                             </p>
                                         </div>
                                     </div>
@@ -328,9 +322,9 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* Row Two */}
-                                <div className="row mx-auto formsection">
 
+                                {/* Row Two */}
+                                <div className="row mx-auto formsection" >
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
@@ -341,6 +335,7 @@ function CreateWorkRequest() {
                                                 types='text'
                                                 id='Firstname'
                                                 value={value.Firstname}
+                                                // value={item.Firstname}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -401,8 +396,54 @@ function CreateWorkRequest() {
                                             ></input>
                                         </div>
                                     </div>
+                                          
                                 </div>
 
+                                {/* Row Three */}
+                                <div className="row mx-auto formsection" >
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <div className='emailsection  d-grid my-2'>
+                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
+                                                Mobile Number<span className='star'>*</span>
+                                            </label>
+
+                                            <PhoneInput
+                                                placeholder="+966   500000000"
+                                                value={value.MobileNumber}
+                                                onChange={(phoneNumber) =>
+                                                    setvalue((prevValue) => ({
+                                                        ...prevValue,
+                                                        MobileNumber: phoneNumber,
+                                                    }))
+                                                }
+                                                className='rounded inputsection py-2'
+                                                country="US" />
+
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <div className='emailsection  d-grid my-2'>
+                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
+                                                Landline Number<span className='star'>*</span>
+                                            </label>
+
+                                            <PhoneInput
+                                                placeholder="+966  0100000000"
+                                                value={value.LandlineNumber}
+                                                onChange={(LandlineNumber) =>
+                                                    setvalue((prevValue) => ({
+                                                        ...prevValue,
+                                                        LandlineNumber: LandlineNumber,
+                                                    }))
+                                                }
+                                                className='rounded inputsection py-2'
+                                                country="US" />
+
+                                        </div>
+                                    </div>
+                                </div>
                                 {/* Row Three */}
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -694,18 +735,18 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-  <div className="d-flex align-items-center justify-content-center mt-4">
-    <button type="button" className="btn color2 btnwork">
-      <AddCircleOutlineIcon />
-    </button>
-    <button type="button" className="btn  color2 btnwork">
-      <DeleteIcon />
-    </button>
-    <button type="button" className="btn color2 btnwork">
-      <FlipCameraAndroidIcon />
-    </button>
-  </div>
-</div>
+                                        <div className="d-flex align-items-center justify-content-center mt-4">
+                                            <button type="button" className="btn color2 btnwork">
+                                                <AddCircleOutlineIcon />
+                                            </button>
+                                            <button type="button" className="btn  color2 btnwork">
+                                                <DeleteIcon />
+                                            </button>
+                                            <button type="button" className="btn color2 btnwork">
+                                                <FlipCameraAndroidIcon />
+                                            </button>
+                                        </div>
+                                    </div>
 
 
                                 </div>
@@ -824,7 +865,7 @@ function CreateWorkRequest() {
                                     </div>
 
                                 </div>
-                            
+
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Update}><SaveIcon className='me-2' />SAVE</button>
@@ -833,8 +874,8 @@ function CreateWorkRequest() {
                         </div>
                     </Box>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
