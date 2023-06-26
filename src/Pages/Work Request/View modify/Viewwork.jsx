@@ -51,24 +51,47 @@ function Viewwork() {
         WorkRequest: '',
 
     })
-
-    function getapi() {
-        // get api
-        axios.get(`/api/getworkRequest`, {
-                EmployeeID: '32299722',
-           
-        },)
-            .then((res) => {
-                console.log('TO get the list ny ID', res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-    useEffect(() => {
-        getapi()
-    }, [])
-    const [workTradeDescription, setworkTradeDescription] = useState('')
+// post api for the data 
+function postapi(EmployeeID) {
+    axios
+      .post(`/api/getworkRequest`, {
+        EmployeeID,
+      })
+      .then((res) => {
+        console.log(res.data)
+        const {
+            Firstname,
+            Lastname,
+            Middlename,
+            MobileNumber,
+            LandlineNumber,
+            DepartmentCode,
+          } = res.data.recordsets[0][0];
+        setvalue((prevValue) => ({
+          ...prevValue,
+          Firstname,
+          Lastname,
+          Middlename,
+          MobileNumber,
+          LandlineNumber,
+          DepartmentCode,
+        }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  
+  useEffect(() => {
+    postapi();
+  }, []);
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          postapi(value.EmployeeID);
+        }
+      }
+      const [workTradeDescription, setworkTradeDescription] = useState('')
 
     // generateId random
     const generateId = () => {
@@ -255,6 +278,7 @@ function Viewwork() {
                                                         EmployeeID: e.target.value
                                                     }))
                                                 }}
+                                                onKeyDown={handleKeyPress}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Employee Number'
                                                 required
