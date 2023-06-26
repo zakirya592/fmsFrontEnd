@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -28,10 +28,10 @@ const dropdownIconStyle = {
     backgroundSize: '12px 12px',
 };
 function Viewwork() {
-    
+
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-        Departmentcode: '', Departmentname: '',//Department api input 
+        DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
         Location: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
@@ -39,7 +39,7 @@ function Viewwork() {
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         RequestDateTime: '',
-        RequestStatus:'',
+        RequestStatus: '',
         workTrade: '',
         WorkOrder: '',
         ProblemCategory: '',
@@ -51,47 +51,51 @@ function Viewwork() {
         WorkRequest: '',
 
     })
-// post api for the data 
-function postapi(EmployeeID) {
-    axios
-      .post(`/api/getworkRequest`, {
-        EmployeeID,
-      })
-      .then((res) => {
-        console.log(res.data)
-        const {
-            Firstname,
-            Lastname,
-            Middlename,
-            MobileNumber,
-            LandlineNumber,
-            DepartmentCode,
-          } = res.data.recordsets[0][0];
-        setvalue((prevValue) => ({
-          ...prevValue,
-          Firstname,
-          Lastname,
-          Middlename,
-          MobileNumber,
-          LandlineNumber,
-          DepartmentCode,
-        }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  
-  useEffect(() => {
-    postapi();
-  }, []);
+    // post api for the data 
+    function postapi(EmployeeID) {
+        axios
+            .post(`/api/getworkRequest`, {
+                EmployeeID,
+            })
+            .then((res) => {
+                console.log(res.data)
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        postapi();
+    }, []);
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
-          e.preventDefault();
-          postapi(value.EmployeeID);
+            e.preventDefault();
+            postapi(value.EmployeeID);
         }
-      }
-      const [workTradeDescription, setworkTradeDescription] = useState('')
+    }
+    const [workTradeDescription, setworkTradeDescription] = useState('')
 
     // generateId random
     const generateId = () => {
@@ -249,8 +253,8 @@ function postapi(EmployeeID) {
                                         <Create />
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                navigate('/createworkrequest')
-                            })}><PrintIcon className='me-1' />Create</button>
+                                            navigate('/createworkrequest')
+                                        })}><PrintIcon className='me-1' />Create</button>
                                         {/* print  */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
@@ -353,13 +357,13 @@ function postapi(EmployeeID) {
                                                 }}
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
-                                                >
+                                            >
                                                 <option className='inputsectiondropdpwn'>Select Stutus</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
                                             </select>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -459,7 +463,7 @@ function postapi(EmployeeID) {
                                                 className='rounded inputsection custom-phone-input py-2'
                                                 defaultCountry="SA"
                                                 dropdownClass='custom-phone-dropdown'
-                                               />
+                                            />
 
                                         </div>
                                     </div>
@@ -491,21 +495,25 @@ function postapi(EmployeeID) {
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
                                                 Department Code<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
+                                            <select
+                                                className='rounded inputsectiondropdpwn color2 py-2'
+                                                id='DepartmentCode'
+                                                aria-label='Floating label select example'
+                                                value={value.DepartmentCode}
+                                                onChange={(e) => {
+                                                    setvalue((prevValue) => ({
                                                         ...prevValue,
-                                                        Departmentcode: e.target.value
-                                                    }))
-                                                }}>
-
-                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                        DepartmentCode: e.target.value,
+                                                    }));
+                                                }}
+                                            >
+                                                <option value={value.DepartmentCode}>{value.DepartmentCode}</option>
+                                                <option>first</option>
+                                                <option >Second</option>
+                                                <option >Third</option>
                                             </select>
                                         </div>
                                     </div>
@@ -539,7 +547,7 @@ function postapi(EmployeeID) {
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
                                                 Building<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
+                                            <select className='roundedinputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
 
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -547,7 +555,7 @@ function postapi(EmployeeID) {
                                                         BuildingCode: e.target.value
                                                     }))
                                                 }}>
-                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                <option value={value.BuildingCode}>{value.BuildingCode}</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
@@ -560,15 +568,15 @@ function postapi(EmployeeID) {
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.Location}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.LocationCode}
 
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        Location: e.target.value
+                                                        LocationCode: e.target.value
                                                     }))
                                                 }}>
-                                                <option className='inputsectiondropdpwn'>Select Location</option>
+                                                <option className='inputsectiondropdpwn' value={value.LocationCode}>{value.LocationCode}</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
@@ -733,18 +741,18 @@ function postapi(EmployeeID) {
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-  <div className="d-flex align-items-center justify-content-center mt-4">
-    <button type="button" className="btn color2 btnwork">
-      <AddCircleOutlineIcon />
-    </button>
-    <button type="button" className="btn  color2 btnwork">
-      <DeleteIcon />
-    </button>
-    <button type="button" className="btn color2 btnwork">
-      <FlipCameraAndroidIcon />
-    </button>
-  </div>
-</div>
+                                        <div className="d-flex align-items-center justify-content-center mt-4">
+                                            <button type="button" className="btn color2 btnwork">
+                                                <AddCircleOutlineIcon />
+                                            </button>
+                                            <button type="button" className="btn  color2 btnwork">
+                                                <DeleteIcon />
+                                            </button>
+                                            <button type="button" className="btn color2 btnwork">
+                                                <FlipCameraAndroidIcon />
+                                            </button>
+                                        </div>
+                                    </div>
 
 
                                 </div>
