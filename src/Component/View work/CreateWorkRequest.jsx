@@ -19,10 +19,12 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
 function CreateWorkRequest() {
+    const navigate = useNavigate();
+    const [workTradeDescription, setworkTradeDescription] = useState('')
 
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-        Departmentcode: '', Departmentname: '',//Department api input 
+        DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
         Location: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
@@ -43,22 +45,6 @@ function CreateWorkRequest() {
 
     })
 
-    const [getdata, setgetdata] = useState([])
-    function getapi() {
-        axios.post(`/api/getworkRequest`, {
-            EmployeeID: value.EmployeeID
-        },)
-            .then((res) => {
-                console.log('Add work api first api', res.data.recordset[0]);
-                setgetdata(res.data.recordset)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    const [workTradeDescription, setworkTradeDescription] = useState('')
-
     // generateId random
     const generateId = () => {
         const randomNumber = Math.floor(Math.random() * 100000000);
@@ -70,12 +56,15 @@ function CreateWorkRequest() {
         //  AddworkRequestPOST api
         const generatedId = generateId();
         await axios.post(`/api/AddworkRequestPOST`, {
-            EmployeeID: generatedId,
+            EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
             "MobileNumber": value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
+            DepartmentCode: value.DepartmentCode,
+            BuildingCode: value.BuildingCode,
+            LocationCode: value.Location,
         },)
             .then((res) => {
                 console.log('Add work api first api', res.data);
@@ -94,32 +83,6 @@ function CreateWorkRequest() {
                 console.log('department api second', res.data);
                 setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddBuildingInworkRequestPOST api
-        await axios.post(`/api/AddBuildingInworkRequestPOST`, {
-            BuildingCode: value.BuildingCode,
-            BuildingDesc: '',
-        },)
-            .then((res) => {
-                console.log('Add Bbuilding work requse api 3rd', res.data);
-                setvalue(prevState => ({ ...prevState, BuildingCode: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddLocationInworkRequestPOST api
-        await axios.post(`/api/AddLocationInworkRequestPOST`, {
-            LocationCode: value.Location,
-            LocationDesc: '',
-        },)
-            .then((res) => {
-                console.log('Add loaction api 4th', res.data);
-                setvalue(prevState => ({ ...prevState, Location: '' }));
             })
             .catch((err) => {
                 console.log(err);
@@ -179,14 +142,14 @@ function CreateWorkRequest() {
                 console.log(err);
             });
 
-        await Swal.fire({
-            title: "Success",
-            text: "you have Success submited the Data",
-            icon: "success",
-            confirmButtonText: "OK",
-        })
+        // await Swal.fire({
+        //     title: "Success",
+        //     text: "you have Success submited the Data",
+        //     icon: "success",
+        //     confirmButtonText: "OK",
+        // })
     };
-    const navigate = useNavigate();
+  
 
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
@@ -248,7 +211,7 @@ function CreateWorkRequest() {
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
-                                                <SearchOutlined className=' serachicon' onClick={getapi} />
+                                                <SearchOutlined className=' serachicon' />
                                             </p>
                                         </div>
                                     </div>
@@ -410,6 +373,7 @@ function CreateWorkRequest() {
 
                                             <PhoneInput
                                                 placeholder="+966   500000000"
+                                                id='MobileNumber'
                                                 value={value.MobileNumber}
                                                 onChange={(phoneNumber) =>
                                                     setvalue((prevValue) => ({
@@ -417,8 +381,10 @@ function CreateWorkRequest() {
                                                         MobileNumber: phoneNumber,
                                                     }))
                                                 }
-                                                className='rounded inputsection py-2'
-                                                country="US" />
+                                                className='rounded inputsection custom-phone-input py-2'
+                                                defaultCountry="SA"
+                                                dropdownClass='custom-phone-dropdown'
+                                            />
 
                                         </div>
                                     </div>
@@ -431,6 +397,7 @@ function CreateWorkRequest() {
 
                                             <PhoneInput
                                                 placeholder="+966  0100000000"
+                                                id='Landlinenumber'
                                                 value={value.LandlineNumber}
                                                 onChange={(LandlineNumber) =>
                                                     setvalue((prevValue) => ({
@@ -439,55 +406,12 @@ function CreateWorkRequest() {
                                                     }))
                                                 }
                                                 className='rounded inputsection py-2'
-                                                country="US" />
+                                                defaultCountry="SA" />
 
                                         </div>
                                     </div>
                                 </div>
-                                {/* Row Three */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Mobile Number<span className='star'>*</span>
-                                            </label>
 
-                                            <PhoneInput
-                                                placeholder="+966   500000000"
-                                                value={value.MobileNumber}
-                                                onChange={(phoneNumber) =>
-                                                    setvalue((prevValue) => ({
-                                                        ...prevValue,
-                                                        MobileNumber: phoneNumber,
-                                                    }))
-                                                }
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Landline Number<span className='star'>*</span>
-                                            </label>
-
-                                            <PhoneInput
-                                                placeholder="+966  0100000000"
-                                                value={value.LandlineNumber}
-                                                onChange={(LandlineNumber) =>
-                                                    setvalue((prevValue) => ({
-                                                        ...prevValue,
-                                                        LandlineNumber: LandlineNumber,
-                                                    }))
-                                                }
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-                                </div>
                                 {/* second row */}
                                 <div className="row mx-auto formsection">
 
@@ -496,15 +420,17 @@ function CreateWorkRequest() {
                                             <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
                                                 Department Code<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={value.Departmentcode}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
+                                                value={value.DepartmentCode}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        Departmentcode: e.target.value
+                                                        DepartmentCode: e.target.value
                                                     }))
-                                                }}>
+                                                }}
+                                                >
 
-                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                <option className='inputsectiondropdpwn' >Select Dept Code</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
@@ -562,8 +488,8 @@ function CreateWorkRequest() {
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.Location}
-
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" 
+                                            value={value.Location}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -709,7 +635,8 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         AssetCode: e.target.value
                                                     }))
-                                                }}>
+                                                }}
+                                             >
                                                 <option className='inputsectiondropdpwn'>Select  Asset Code</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
@@ -747,7 +674,6 @@ function CreateWorkRequest() {
                                             </button>
                                         </div>
                                     </div>
-
 
                                 </div>
 

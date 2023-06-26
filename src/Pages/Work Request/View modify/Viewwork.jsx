@@ -28,7 +28,8 @@ const dropdownIconStyle = {
     backgroundSize: '12px 12px',
 };
 function Viewwork() {
-
+    const navigate = useNavigate();
+    const [workTradeDescription, setworkTradeDescription] = useState('')
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
@@ -102,14 +103,14 @@ function Viewwork() {
     useEffect(() => {
         postapi();
     }, []);
+
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
         }
     }
-    const [workTradeDescription, setworkTradeDescription] = useState('')
-
+    
     // generateId random
     const generateId = () => {
         const randomNumber = Math.floor(Math.random() * 100000000);
@@ -118,10 +119,8 @@ function Viewwork() {
 
 
     const Update = async () => {
-        //  AddworkRequestPOST api
-        const generatedId = generateId();
         await axios.post(`/api/AddworkRequestPOST`, {
-            EmployeeID: generatedId,
+            EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
@@ -238,7 +237,6 @@ function Viewwork() {
         })
     };
 
-    const navigate = useNavigate();
 
     return (
         <div>
