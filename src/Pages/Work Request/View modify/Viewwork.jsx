@@ -20,13 +20,7 @@ import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
-// CSS style for custom dropdown icon
-const dropdownIconStyle = {
-    backgroundImage: 'url("../../../Image/drop.png")',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'right 8px center',
-    backgroundSize: '12px 12px',
-};
+
 function Viewwork() {
     const navigate = useNavigate();
     const [workTradeDescription, setworkTradeDescription] = useState('')
@@ -52,26 +46,26 @@ function Viewwork() {
         WorkRequest: '',
 
     })
+
+    // const [modelerrro, setModelError] = useState(false);
+    // useEffect(() => {
+    //     if (modelerrro) {
+    //         Swal.fire('Oops...!', 'Something went wrong!', 'error');
+    //     }
+    // }, [modelerrro]);
+   
+    
     // post api for the data 
     function postapi(EmployeeID) {
-        axios
-            .post(`/api/getworkRequest`, {
+        axios.post(`/api/getworkRequest`, {
                 EmployeeID,
-            })
-            .then((res) => {
+            }).then((res) => {
                 console.log(res.data)
-
                 if (res.data.recordsets[0].length === 0) {
-                    Swal.fire(
-                        'Oops...!',
-                        'Something went wrong!',
-                        'error'
-                    )
-                    // Array is empty, fetch data from the database
-                    console.log("NOt  ok data");
+                        Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                    // setModelError(true);
                 } else {
-                    // Array is not empty, update the state with the response data
-                    console.log("ok data");
+
                     const {
                         Firstname,
                         Lastname,
@@ -109,14 +103,8 @@ function Viewwork() {
             e.preventDefault();
             postapi(value.EmployeeID);
         }
+        // setModelError(true);
     }
-    
-    // generateId random
-    const generateId = () => {
-        const randomNumber = Math.floor(Math.random() * 100000000);
-        return randomNumber.toString().padStart(8, '0');
-    };
-
 
     const Update = async () => {
         await axios.post(`/api/AddworkRequestPOST`, {

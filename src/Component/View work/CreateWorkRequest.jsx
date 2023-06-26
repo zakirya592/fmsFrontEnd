@@ -149,7 +149,7 @@ function CreateWorkRequest() {
         //     confirmButtonText: "OK",
         // })
     };
-  
+
 
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
@@ -359,7 +359,7 @@ function CreateWorkRequest() {
                                             ></input>
                                         </div>
                                     </div>
-                                          
+
                                 </div>
 
                                 {/* Row Three */}
@@ -428,7 +428,7 @@ function CreateWorkRequest() {
                                                         DepartmentCode: e.target.value
                                                     }))
                                                 }}
-                                                >
+                                            >
 
                                                 <option className='inputsectiondropdpwn' >Select Dept Code</option>
                                                 <option value={"First"}>One</option>
@@ -488,8 +488,8 @@ function CreateWorkRequest() {
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" 
-                                            value={value.Location}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
+                                                value={value.Location}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -636,7 +636,7 @@ function CreateWorkRequest() {
                                                         AssetCode: e.target.value
                                                     }))
                                                 }}
-                                             >
+                                            >
                                                 <option className='inputsectiondropdpwn'>Select  Asset Code</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
