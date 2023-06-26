@@ -59,27 +59,40 @@ function Viewwork() {
             })
             .then((res) => {
                 console.log(res.data)
-                const {
-                    Firstname,
-                    Lastname,
-                    Middlename,
-                    MobileNumber,
-                    LandlineNumber,
-                    DepartmentCode,
-                    BuildingCode,
-                    LocationCode,
-                } = res.data.recordsets[0][0];
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    Firstname,
-                    Lastname,
-                    Middlename,
-                    MobileNumber,
-                    LandlineNumber,
-                    DepartmentCode,
-                    BuildingCode,
-                    LocationCode,
-                }));
+
+                if (res.data.recordsets[0].length === 0) {
+                    Swal.fire(
+                        'Oops...!',
+                        'Something went wrong!',
+                        'error'
+                    )
+                    // Array is empty, fetch data from the database
+                    console.log("NOt  ok data");
+                } else {
+                    // Array is not empty, update the state with the response data
+                    console.log("ok data");
+                    const {
+                        Firstname,
+                        Lastname,
+                        Middlename,
+                        MobileNumber,
+                        LandlineNumber,
+                        DepartmentCode,
+                        BuildingCode,
+                        LocationCode,
+                    } = res.data.recordsets[0][0];
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        Firstname,
+                        Lastname,
+                        Middlename,
+                        MobileNumber,
+                        LandlineNumber,
+                        DepartmentCode,
+                        BuildingCode,
+                        LocationCode,
+                    }));
+                }
             })
             .catch((err) => {
                 console.log(err);
