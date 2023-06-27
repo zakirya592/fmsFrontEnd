@@ -26,7 +26,7 @@ function CreateWorkRequest() {
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
-        Location: '',// //AddLocationInworkRequestPOST api input
+        LocationCode: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
@@ -46,26 +46,29 @@ function CreateWorkRequest() {
     })
 
     // generateId random
-    const generateId = () => {
-        const randomNumber = Math.floor(Math.random() * 100000000);
-        return randomNumber.toString().padStart(8, '0');
-    };
+    // const generateId = () => {
+    //     const randomNumber = Math.floor(Math.random() * 100000000);
+    //     return randomNumber.toString().padStart(8, '0');
+    // };
 
 
     const Update = async () => {
         //  AddworkRequestPOST api
-        const generatedId = generateId();
+        // const generatedId = generateId();
         await axios.post(`/api/AddworkRequestPOST`, {
-            EmployeeID: generatedId,
+            EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
-            "MobileNumber": value.MobileNumber,
+            MobileNumber: value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
+            BuildingCode:value.BuildingCode,
+            DepartmentCode:value.DepartmentCode,
+            LocationCode:value.LocationCode,
         },)
             .then((res) => {
                 console.log('Add work api first api', res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '' }));
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
             })
             .catch((err) => {
                 console.log(err);
@@ -486,11 +489,11 @@ function CreateWorkRequest() {
                                                 Location<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
-                                                value={value.Location}
+                                                value={value.LocationCode}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        Location: e.target.value
+                                                        LocationCode: e.target.value
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Location</option>

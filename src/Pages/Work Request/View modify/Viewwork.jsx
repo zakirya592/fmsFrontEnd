@@ -94,9 +94,6 @@ function Viewwork() {
             });
     }
 
-    useEffect(() => {
-        postapi();
-    }, []);
 
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
