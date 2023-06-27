@@ -63,7 +63,7 @@ function CreateWorkRequest() {
             "MobileNumber": value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
             DepartmentCode: value.DepartmentCode,
-            BuildingCode: value.BuildingCode,
+            BuildingCode: value.BuildingCode, 
             LocationCode: value.Location,
         },)
             .then((res) => {
