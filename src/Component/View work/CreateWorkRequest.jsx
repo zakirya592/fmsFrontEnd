@@ -56,15 +56,12 @@ function CreateWorkRequest() {
         //  AddworkRequestPOST api
         const generatedId = generateId();
         await axios.post(`/api/AddworkRequestPOST`, {
-            EmployeeID: value.EmployeeID,
+            EmployeeID: generatedId,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
             "MobileNumber": value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
-            DepartmentCode: value.DepartmentCode,
-            BuildingCode: value.BuildingCode, 
-            LocationCode: value.Location,
         },)
             .then((res) => {
                 console.log('Add work api first api', res.data);
