@@ -142,12 +142,12 @@ function CreateWorkRequest() {
                 console.log(err);
             });
 
-        // await Swal.fire({
-        //     title: "Success",
-        //     text: "you have Success submited the Data",
-        //     icon: "success",
-        //     confirmButtonText: "OK",
-        // })
+        await Swal.fire({
+            title: "Success",
+            text: "you have Success submited the Data",
+            icon: "success",
+            confirmButtonText: "OK",
+        })
     };
 
 
