@@ -94,8 +94,8 @@ function Viewwork() {
         }
     }
 
-    const Update = async () => {
-        await axios.put(`/api/updateWorkRequest`, {
+    const Update =() => {
+       axios.put(`/api/updateWorkRequest`, {
             EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
