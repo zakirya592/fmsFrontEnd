@@ -108,7 +108,7 @@ function Viewwork() {
         },)
             .then((res) => {
                 console.log('Add work api first api', res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '' }));
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode:''}));
             })
             .catch((err) => {
                 console.log(err);
