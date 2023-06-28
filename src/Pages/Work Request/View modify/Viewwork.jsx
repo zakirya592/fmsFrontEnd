@@ -46,15 +46,7 @@ function Viewwork() {
         WorkRequest: '',
 
     })
-
-    // const [modelerrro, setModelError] = useState(false);
-    // useEffect(() => {
-    //     if (modelerrro) {
-    //         Swal.fire('Oops...!', 'Something went wrong!', 'error');
-    //     }
-    // }, [modelerrro]);
-   
-    
+  
     // post api for the data 
     function postapi(EmployeeID) {
         axios.post(`/api/getworkRequest`, {
@@ -104,13 +96,16 @@ function Viewwork() {
     }
 
     const Update = async () => {
-        await axios.post(`/api/AddworkRequestPOST`, {
+        await axios.put(`/api/updateWorkRequest`, {
             EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
-            "MobileNumber": value.MobileNumber,
+            MobileNumber: value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
+            BuildingCode: value.BuildingCode,
+            DepartmentCode: value.DepartmentCode,
+            LocationCode: value.LocationCode,
         },)
             .then((res) => {
                 console.log('Add work api first api', res.data);
@@ -119,104 +114,9 @@ function Viewwork() {
             .catch((err) => {
                 console.log(err);
             });
-
-        // Department api
-        await axios.post(`/api/AddDepartmentInworkRequestPOST`, {
-            DepartmentCode: value.DepartmentCode,
-            DepartmentDesc: value.Departmentname,
-        },)
-            .then((res) => {
-                console.log('department api second', res.data);
-                setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddBuildingInworkRequestPOST api
-        await axios.post(`/api/AddBuildingInworkRequestPOST`, {
-            BuildingCode: value.BuildingCode,
-            BuildingDesc: '',
-        },)
-            .then((res) => {
-                console.log('Add Bbuilding work requse api 3rd', res.data);
-                setvalue(prevState => ({ ...prevState, BuildingCode: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddLocationInworkRequestPOST api
-        await axios.post(`/api/AddLocationInworkRequestPOST`, {
-            LocationCode: value.Location,
-            LocationDesc: '',
-        },)
-            .then((res) => {
-                console.log('Add loaction api 4th', res.data);
-                setvalue(prevState => ({ ...prevState, Location: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddWorkTypeInworkRequestPOST
-        await axios.post(`/api/AddWorkTypeInworkRequestPOST`, {
-            WorkTypeCode: value.WorkType,
-            WorkTypeDesc: value.WorkTypeDesc,
-        },)
-            .then((res) => {
-                console.log('AddWorkTypeInworkRequestPOST 5th api', res.data);
-                setvalue(prevState => ({ ...prevState, WorkType: '', WorkTypeDesc: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddWorkPriorityInworkRequestPOST
-        await axios.post(`/api/AddWorkPriorityInworkRequestPOST`, {
-            WorkPriorityCode: value.WorkPriority,
-            WorkPriorityDesc: '',
-            WorkPrioritySeq: '',
-        },)
-            .then((res) => {
-                console.log('AddWorkPriorityInworkRequestPOST 6th api', res.data);
-                setvalue(prevState => ({ ...prevState, WorkPriority: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        //  AddAssetItemTagIDInworkRequestPOST
-        await axios.post(`/api/AddAssetItemTagIDInworkRequestPOST`, {
-            AssetItemTagID: value.AssetCode,
-        },)
-            .then((res) => {
-                console.log('AddAssetItemTagIDInworkRequestPOST 7th api', res.data);
-                setvalue(prevState => ({ ...prevState, AssetCode: '', }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        // AddassetItemInworkRequestPOST
-        await axios.post(`/api/AddassetItemInworkRequestPOST`, {
-            AssetItemDescription: value.AssetItemDescription,
-            AssetCategory: value.AssetCategory,
-            Manufacturer: value.Manufacturer,
-            Model: value.Model,
-        },)
-            .then((res) => {
-                console.log('AddassetItemInworkRequestPOST 8th api', res.data);
-                setvalue(prevState => ({ ...prevState, AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '', }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
         await Swal.fire({
             title: "Success",
-            text: "you have Success submited the Data",
+            text: "you have Success Updata the Data",
             icon: "success",
             confirmButtonText: "OK",
         })
