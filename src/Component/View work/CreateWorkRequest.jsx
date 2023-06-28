@@ -17,7 +17,8 @@ import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function CreateWorkRequest() {
     const navigate = useNavigate();
     const [workTradeDescription, setworkTradeDescription] = useState('')
@@ -69,85 +70,98 @@ function CreateWorkRequest() {
             .then((res) => {
                 console.log('Add work api first api', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
+                if (res.status==201){
+                Swal.fire({
+                    title: "Success",
+                    text: "you have Success submited the Data",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                })
+                
+            }
             })
             .catch((err) => {
                 console.log(err);
+                toast.error(`The ID is  duplicate Give unique`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
 
         // Department api
-        await axios.post(`/api/AddDepartmentInworkRequestPOST`, {
-            DepartmentCode: value.DepartmentCode,
-            DepartmentDesc: value.Departmentname,
-        },)
-            .then((res) => {
-                console.log('department api second', res.data);
-                setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
+        // await axios.post(`/api/AddDepartmentInworkRequestPOST`, {
+        //     DepartmentCode: value.DepartmentCode,
+        //     DepartmentDesc: value.Departmentname,
+        // },)
+        //     .then((res) => {
+        //         console.log('department api second', res.data);
+        //         setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        //     })
+        //     .catch((err) => {
+        //         console.log('DepartmentCode' ,err);
+        //     });
 
         // AddWorkTypeInworkRequestPOST
-        await axios.post(`/api/AddWorkTypeInworkRequestPOST`, {
-            WorkTypeCode: value.WorkType,
-            WorkTypeDesc: value.WorkTypeDesc,
-        },)
-            .then((res) => {
-                console.log('AddWorkTypeInworkRequestPOST 5th api', res.data);
-                setvalue(prevState => ({ ...prevState, WorkType: '', WorkTypeDesc: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // await axios.post(`/api/AddWorkTypeInworkRequestPOST`, {
+        //     WorkTypeCode: value.WorkType,
+        //     WorkTypeDesc: value.WorkTypeDesc,
+        // },)
+        //     .then((res) => {
+        //         console.log('AddWorkTypeInworkRequestPOST 5th api', res.data);
+        //         setvalue(prevState => ({ ...prevState, WorkType: '', WorkTypeDesc: '' }));
+        //     })
+        //     .catch((err) => {
+        //         console.log('WorkTypeCode',err);
+        //     });
 
         // AddWorkPriorityInworkRequestPOST
-        await axios.post(`/api/AddWorkPriorityInworkRequestPOST`, {
-            WorkPriorityCode: value.WorkPriority,
-            WorkPriorityDesc: '',
-            WorkPrioritySeq: '',
-        },)
-            .then((res) => {
-                console.log('AddWorkPriorityInworkRequestPOST 6th api', res.data);
-                setvalue(prevState => ({ ...prevState, WorkPriority: '' }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // await axios.post(`/api/AddWorkPriorityInworkRequestPOST`, {
+        //     WorkPriorityCode: value.WorkPriority,
+        //     WorkPriorityDesc: '',
+        //     WorkPrioritySeq: '',
+        // },)
+        //     .then((res) => {
+        //         console.log('AddWorkPriorityInworkRequestPOST 6th api', res.data);
+        //         setvalue(prevState => ({ ...prevState, WorkPriority: '' }));
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
 
         //  AddAssetItemTagIDInworkRequestPOST
-        await axios.post(`/api/AddAssetItemTagIDInworkRequestPOST`, {
-            AssetItemTagID: value.AssetCode,
-        },)
-            .then((res) => {
-                console.log('AddAssetItemTagIDInworkRequestPOST 7th api', res.data);
-                setvalue(prevState => ({ ...prevState, AssetCode: '', }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // await axios.post(`/api/AddAssetItemTagIDInworkRequestPOST`, {
+        //     AssetItemTagID: value.AssetCode,
+        // },)
+        //     .then((res) => {
+        //         console.log('AddAssetItemTagIDInworkRequestPOST 7th api', res.data);
+        //         setvalue(prevState => ({ ...prevState, AssetCode: '', }));
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
 
         // AddassetItemInworkRequestPOST
-        await axios.post(`/api/AddassetItemInworkRequestPOST`, {
-            AssetItemDescription: value.AssetItemDescription,
-            AssetCategory: value.AssetCategory,
-            Manufacturer: value.Manufacturer,
-            Model: value.Model,
-        },)
-            .then((res) => {
-                console.log('AddassetItemInworkRequestPOST 8th api', res.data);
-                setvalue(prevState => ({ ...prevState, AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '', }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // await axios.post(`/api/AddassetItemInworkRequestPOST`, {
+        //     AssetItemDescription: value.AssetItemDescription,
+        //     AssetCategory: value.AssetCategory,
+        //     Manufacturer: value.Manufacturer,
+        //     Model: value.Model,
+        // },)
+        //     .then((res) => {
+        //         console.log('AddassetItemInworkRequestPOST 8th api', res.data);
+        //         setvalue(prevState => ({ ...prevState, AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '', }));
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
 
-        await Swal.fire({
-            title: "Success",
-            text: "you have Success submited the Data",
-            icon: "success",
-            confirmButtonText: "OK",
-        })
     };
 
 
@@ -801,6 +815,7 @@ function CreateWorkRequest() {
                     </Box>
                 </div>
             </div >
+            <ToastContainer />
         </div >
     )
 }
