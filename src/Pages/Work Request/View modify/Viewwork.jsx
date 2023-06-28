@@ -92,7 +92,6 @@ function Viewwork() {
             e.preventDefault();
             postapi(value.EmployeeID);
         }
-        // setModelError(true);
     }
 
     const Update = async () => {
