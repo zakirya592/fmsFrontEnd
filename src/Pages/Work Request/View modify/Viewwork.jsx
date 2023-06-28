@@ -107,7 +107,7 @@ function Viewwork() {
             LocationCode: value.LocationCode,
         },)
             .then((res) => {
-                console.log('Add work api first api', res.data);
+                console.log('Updata the api data ', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode:''}));
             })
             .catch((err) => {
