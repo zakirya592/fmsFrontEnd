@@ -241,7 +241,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
-                                                Request Status<span className='star'>*</span>
+                                                prmRequestStatus<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {
@@ -253,7 +253,7 @@ function Viewwork() {
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                             >
-                                                <option className='inputsectiondropdpwn'>Select Stutus</option>
+                                                <option className='inputsectiondropdpwn'>prmRequestStatus</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
@@ -431,7 +431,7 @@ function Viewwork() {
                                                     }))
                                                 }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='Department Name'
+                                                placeholder='ADD DEPT NAME'
                                                 required
                                             ></input>
                                         </div>
@@ -520,7 +520,7 @@ function Viewwork() {
                                                     }))
                                                 }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='Work Type Description '
+                                                placeholder='ADD Work Type Desc'
                                                 required
                                             ></input>
                                         </div>
@@ -587,7 +587,7 @@ function Viewwork() {
                                                     setworkTradeDescription(e.target.value)
                                                 }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='Work Trade Description '
+                                                placeholder='ADD Work Trade Desc  '
                                                 required
                                             ></input>
                                         </div>
@@ -611,7 +611,7 @@ function Viewwork() {
                                                         AssetCode: e.target.value
                                                     }))
                                                 }}>
-                                                <option className='inputsectiondropdpwn'>Select  Asset Code</option>
+                                                <option className='inputsectiondropdpwn'>AssetItemTagID</option>
                                                 <option value={"First"}>One</option>
                                                 <option value={"Second"}>Two</option>
                                                 <option value={"three"}>Three</option>
@@ -624,7 +624,7 @@ function Viewwork() {
                                                 Asset Description<span className='star'>*</span>
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription" value={value.AssetItemDescription}
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="tblAssetTransaction.[AssetItemDescription]" id="AssetDescription" value={value.AssetItemDescription}
                                                     onChange={e => {
                                                         setvalue(prevValue => ({
                                                             ...prevValue,
