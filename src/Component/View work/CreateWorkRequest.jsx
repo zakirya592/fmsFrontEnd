@@ -46,16 +46,7 @@ function CreateWorkRequest() {
 
     })
 
-    // generateId random
-    // const generateId = () => {
-    //     const randomNumber = Math.floor(Math.random() * 100000000);
-    //     return randomNumber.toString().padStart(8, '0');
-    // };
-
-
-    const Update = async () => {
-        //  AddworkRequestPOST api
-        // const generatedId = generateId();
+    const Createapi = async () => {
         await axios.post(`/api/AddworkRequestPOST`, {
             EmployeeID: value.EmployeeID,
             Firstname: value.Firstname,
@@ -164,10 +155,84 @@ function CreateWorkRequest() {
 
     };
 
+    const Updated = async () => {
+        await axios.put(`/api/updateWorkRequest`, {
+            EmployeeID: value.EmployeeID,
+            Firstname: value.Firstname,
+            Middlename: value.Middlename,
+            Lastname: value.Lastname,
+            MobileNumber: value.MobileNumber,
+            LandlineNumber: value.LandlineNumber,
+            BuildingCode: value.BuildingCode,
+            DepartmentCode: value.DepartmentCode,
+            LocationCode: value.LocationCode,
+        },)
+            .then((res) => {
+                console.log('Updata the api data ', res.data);
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '' }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        await Swal.fire({
+            title: "Success",
+            text: "you have Success Updata the Data",
+            icon: "success",
+            confirmButtonText: "OK",
+        })
+    };
+
+    // post api for the data 
+    function postapi(EmployeeID) {
+        axios.post(`/api/getworkRequest`, {
+            EmployeeID,
+        }).then((res) => {
+            console.log(res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                // setModelError(true);
+            } else {
+
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                }));
+            }
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            postapi(value.EmployeeID);
+        }
+    }
 
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
     };
+
     return (
         <div>
             <div className='bg'>
@@ -190,7 +255,7 @@ function CreateWorkRequest() {
                                     <div className="d-flex">
 
                                         {/* create */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive"><PrintIcon className='me-1' />Create</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={Createapi}><PrintIcon className='me-1' />Create</button>
                                         {/* print  */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" ><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
@@ -218,6 +283,7 @@ function CreateWorkRequest() {
                                                         EmployeeID: e.target.value
                                                     }))
                                                 }}
+                                                onKeyDown={handleKeyPress}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Employee Number'
                                                 required
@@ -808,7 +874,7 @@ function CreateWorkRequest() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Update}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updated}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
                         </div>
