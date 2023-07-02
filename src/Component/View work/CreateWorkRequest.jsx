@@ -229,6 +229,94 @@ function CreateWorkRequest() {
         }
     }
 
+    // Dropdown list
+    // Location
+    const [dropdownLocation, setdropdownLocation] = useState([])
+    useEffect(() => {
+        axios.get(`/api/Location_LIST`).then((res) => {
+                console.log("Loaction list", res.data.recordset);
+                setdropdownLocation(res.data.recordsets[0])
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+    // dropdownDepartmentLIST
+    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
+    useEffect(() => {
+        axios.get(`/api/Department_LIST`).then((res) => {
+            console.log("Department LIST", res.data.recordset);
+            setdropdownDepartmentLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+    // /Building_LIST WorkType_LIST
+    const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
+    const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
+    const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
+    const [dropdownWorkTradeLIST, setdropdownWorkTradeLIST] = useState([])
+    const [dropdownAssetTypeLIST, setdropdownAssetTypeLIST] = useState([])
+    const [dropdownProblemCategoryLIST, setdropdownProblemCategoryLIST] = useState([])
+    useEffect(() => {
+        // Building_LIST
+        axios.get(`/api/Building_LIST`).then((res) => {
+            console.log("dropdownBuilding LIST", res.data.recordset);
+            setdropdownBuildingLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // WorkType_LIST
+        axios.get(`/api/WorkType_LIST`).then((res) => {
+            console.log("WorkType LIST", res.data.recordset);
+            setdropdownworktypesLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // WorkPriority_LIST
+        axios.get(`/api/WorkPriority_LIST`).then((res) => {
+            console.log("WorkPriority LIST", res.data.recordset);
+            setdropdownWorkPriorityLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // WorkTrade_LIST
+        axios.get(`/api/WorkTrade_LIST`).then((res) => {
+            console.log("WorkTrade_LIST", res.data.recordset);
+            setdropdownWorkTradeLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // AssetType_LIST
+        axios.get(`/api/AssetType_LIST`).then((res) => {
+            console.log("AssetType_LIST", res.data.recordset);
+            setdropdownAssetTypeLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // ProblemCategory_LIST
+        axios.get(`/api/ProblemCategory_LIST`).then((res) => {
+            console.log("ProblemCategory_LIST", res.data.recordset);
+            setdropdownProblemCategoryLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+
+
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
     };
@@ -511,9 +599,13 @@ function CreateWorkRequest() {
                                             >
 
                                                 <option className='inputsectiondropdpwn' >Select Dept Code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownDepartmentLIST && dropdownDepartmentLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.DepartmentCode}>{itme.DepartmentCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -556,9 +648,13 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Dept Code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -568,6 +664,7 @@ function CreateWorkRequest() {
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
                                             </label>
+                                            
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
                                                 value={value.LocationCode}
                                                 onChange={e => {
@@ -575,11 +672,16 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         LocationCode: e.target.value
                                                     }))
-                                                }}>
+                                                }}
+                                                >
                                                 <option className='inputsectiondropdpwn'>Select Location</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownLocation && dropdownLocation.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.LocationCode}>{itme.LocationCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -601,9 +703,13 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Work Type</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownworktypesLIST && dropdownworktypesLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkTypeCode}>{itme.WorkTypeCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -645,9 +751,13 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Work Priority</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownWorkPriorityLIST && dropdownWorkPriorityLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkPriorityCode}>{itme.WorkPriorityCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -670,9 +780,13 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Work Trade</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkTypeCode}>{itme.WorkTypeCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -718,9 +832,13 @@ function CreateWorkRequest() {
                                                 }}
                                             >
                                                 <option className='inputsectiondropdpwn'>Select  Asset Code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.AssetTypeCode}>{itme.AssetTypeCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -845,9 +963,13 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Problem Category</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.ProblemCategoryCode}>{itme.ProblemCategoryCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
