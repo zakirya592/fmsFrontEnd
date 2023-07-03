@@ -319,7 +319,101 @@ function CreateWorkRequest() {
 
     }, [])
 
+    // Department
+    const [DeptDesc, setDeptDesc] = useState([])
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            DepartmentCode: e.target.value,
+        }));
+        axios.get(`/api/Department_desc_LIST/${Deptnale}`)
+            .then((res) => {
+                console.log(res.data);
+                setDeptDesc(res.data.recordset[0].DepartmentDesc)
 
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    // WorkTypedesc
+    const [WorkTypedesc, setWorkTypedesc] = useState([])
+    const Workypesdesc = (e) => {
+        const Deptnale = e.target.value;
+        setvalue(prevValue => ({
+            ...prevValue,
+            WorkType: e.target.value
+        }))
+        axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
+            .then((res) => {
+                console.log(res.data);
+                setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    // prmWorkTrade
+    const [WorkTradedesc, setWorkTradedesc] = useState([])
+    const Worktrandedesc = (e) => {
+        const Deptnale = e.target.value;
+        setvalue(prevValue => ({
+            ...prevValue,
+            WorkTrade: e.target.value
+        }))
+        axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
+            .then((res) => {
+                console.log(res.data.recordsets);
+                setWorkTradedesc(res.data.recordsets.WorkTradeDesc)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    // AssetType_descrip_LIST
+    const [AssetTypedesc, setAssetTypedesc] = useState([])
+    const AssetDesc = (e) => {
+        const Deptnale = e.target.value;
+        setvalue(prevValue => ({
+            ...prevValue,
+            AssetCode: e.target.value
+        }))
+        axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
+            .then((res) => {
+                console.log(res.data);
+                setAssetTypedesc(res.data.recordset[0].AssetTypeDesc)
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    // ProblemCategory_descrip
+    const [Problemdesc, setProblemdesc] = useState([])
+    const ProblemDesc = (e) => {
+        const Deptnale = e.target.value;
+        setvalue(prevValue => ({
+            ...prevValue,
+            ProblemCategory: e.target.value
+        }))
+        axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
+            .then((res) => {
+                console.log(res.data);
+                setProblemdesc(res.data.recordset[0].ProblemCategoryDesc)
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
@@ -598,12 +692,7 @@ function CreateWorkRequest() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
                                                 value={value.DepartmentCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        DepartmentCode: e.target.value
-                                                    }))
-                                                }}
+                                                onChange={handleProvinceChange}
                                             >
 
                                                 <option className='inputsectiondropdpwn' >Select Dept Code</option>
@@ -627,14 +716,13 @@ function CreateWorkRequest() {
                                             <input
                                                 types='text'
                                                 id='Departmentname'
-                                                value={value.Departmentname}
-
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Departmentname: e.target.value
-                                                    }))
-                                                }}
+                                                value={DeptDesc}
+                                                // onChange={e => {
+                                                //     setvalue(prevValue => ({
+                                                //         ...prevValue,
+                                                //         Departmentname: e.target.value
+                                                //     }))
+                                                // }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='ADD DEPT NAME'
                                                 required
@@ -704,12 +792,7 @@ function CreateWorkRequest() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example"
                                                 value={value.WorkType}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        WorkType: e.target.value
-                                                    }))
-                                                }}>
+                                                onChange={Workypesdesc}>
                                                 <option className='inputsectiondropdpwn'>Select Work Type</option>
                                                 {
                                                     dropdownworktypesLIST && dropdownworktypesLIST.map((itme, index) => {
@@ -731,13 +814,7 @@ function CreateWorkRequest() {
                                             <input
                                                 types='text'
                                                 id='WorkTypeDescription'
-                                                value={value.WorkTypeDesc}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        WorkTypeDesc: e.target.value
-                                                    }))
-                                                }}
+                                                value={WorkTypedesc}
                                                 className='rounded inputsection py-2'
                                                 placeholder='ADD Work Type Desc '
                                                 required
@@ -781,12 +858,7 @@ function CreateWorkRequest() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
                                                 value={value.WorkTrade}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        WorkTrade: e.target.value
-                                                    }))
-                                                }}>
+                                                onChange={Worktrandedesc}>
                                                 <option className='inputsectiondropdpwn'>Select Work Trade</option>
                                                 {
                                                     dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
@@ -808,11 +880,7 @@ function CreateWorkRequest() {
                                             <input
                                                 types='text'
                                                 id='WorkTypeDescription'
-
-                                                value={workTradeDescription}
-                                                onChange={e => {
-                                                    setworkTradeDescription(e.target.value)
-                                                }}
+                                                value={WorkTradedesc}
                                                 className='rounded inputsection py-2'
                                                 placeholder='ADD Work Trade Desc '
                                                 required
@@ -832,12 +900,7 @@ function CreateWorkRequest() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example"
                                                 value={value.AssetCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        AssetCode: e.target.value
-                                                    }))
-                                                }}
+                                                onChange={AssetDesc}
                                             >
                                                 <option className='inputsectiondropdpwn'>AssetItemTagID</option>
                                                 {
@@ -856,13 +919,9 @@ function CreateWorkRequest() {
                                                 Asset Description<span className='star'>*</span>
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder=" tblAssetTransaction.[AssetItemDescription]" id="AssetDescription" value={value.AssetItemDescription}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            AssetItemDescription: e.target.value
-                                                        }))
-                                                    }}></textarea>
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder=" tblAssetTransaction.[AssetItemDescription]" id="AssetDescription"
+                                                 value={AssetTypedesc}
+                                                   ></textarea>
 
                                             </div>
                                         </div>
@@ -964,12 +1023,7 @@ function CreateWorkRequest() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example"
                                                 value={value.ProblemCategory}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        ProblemCategory: e.target.value
-                                                    }))
-                                                }}>
+                                                onChange={ProblemDesc}>
                                                 <option className='inputsectiondropdpwn'>Select Problem Category</option>
                                                 {
                                                     dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {
@@ -988,13 +1042,9 @@ function CreateWorkRequest() {
                                                 Problem Description<span className='star'>*</span>
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription" value={value.ProblemDescription}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            ProblemDescription: e.target.value
-                                                        }))
-                                                    }}></textarea>
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"
+                                                    value={Problemdesc}
+                                                  ></textarea>
 
                                             </div>
                                         </div>
