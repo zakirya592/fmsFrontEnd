@@ -543,7 +543,7 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
 
-                                                <option className='inputsectiondropdpwn'>prmRequestStatus</option>
+                                                <option className='inputsectiondropdpwn'>Request Status</option>
                                                 {
                                                     RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
                                                         return (
@@ -854,7 +854,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
-                                                prmWorkTrade<span className='star'>*</span>
+                                                Work Trade<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
                                                 value={value.WorkTrade}
