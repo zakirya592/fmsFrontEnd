@@ -84,75 +84,6 @@ function CreateWorkRequest() {
                     theme: "light",
                 });
             });
-
-        // Department api
-        // await axios.post(`/api/AddDepartmentInworkRequestPOST`, {
-        //     DepartmentCode: value.DepartmentCode,
-        //     DepartmentDesc: value.Departmentname,
-        // },)
-        //     .then((res) => {
-        //         console.log('department api second', res.data);
-        //         setvalue(prevState => ({ ...prevState, DepartmentCode: '', Departmentname: '' }));
-
-        //     })
-        //     .catch((err) => {
-        //         console.log('DepartmentCode' ,err);
-        //     });
-
-        // AddWorkTypeInworkRequestPOST
-        // await axios.post(`/api/AddWorkTypeInworkRequestPOST`, {
-        //     WorkTypeCode: value.WorkType,
-        //     WorkTypeDesc: value.WorkTypeDesc,
-        // },)
-        //     .then((res) => {
-        //         console.log('AddWorkTypeInworkRequestPOST 5th api', res.data);
-        //         setvalue(prevState => ({ ...prevState, WorkType: '', WorkTypeDesc: '' }));
-        //     })
-        //     .catch((err) => {
-        //         console.log('WorkTypeCode',err);
-        //     });
-
-        // AddWorkPriorityInworkRequestPOST
-        // await axios.post(`/api/AddWorkPriorityInworkRequestPOST`, {
-        //     WorkPriorityCode: value.WorkPriority,
-        //     WorkPriorityDesc: '',
-        //     WorkPrioritySeq: '',
-        // },)
-        //     .then((res) => {
-        //         console.log('AddWorkPriorityInworkRequestPOST 6th api', res.data);
-        //         setvalue(prevState => ({ ...prevState, WorkPriority: '' }));
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-
-        //  AddAssetItemTagIDInworkRequestPOST
-        // await axios.post(`/api/AddAssetItemTagIDInworkRequestPOST`, {
-        //     AssetItemTagID: value.AssetCode,
-        // },)
-        //     .then((res) => {
-        //         console.log('AddAssetItemTagIDInworkRequestPOST 7th api', res.data);
-        //         setvalue(prevState => ({ ...prevState, AssetCode: '', }));
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-
-        // AddassetItemInworkRequestPOST
-        // await axios.post(`/api/AddassetItemInworkRequestPOST`, {
-        //     AssetItemDescription: value.AssetItemDescription,
-        //     AssetCategory: value.AssetCategory,
-        //     Manufacturer: value.Manufacturer,
-        //     Model: value.Model,
-        // },)
-        //     .then((res) => {
-        //         console.log('AddassetItemInworkRequestPOST 8th api', res.data);
-        //         setvalue(prevState => ({ ...prevState, AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '', }));
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-
     };
 
     const Updated = async () => {
@@ -369,7 +300,7 @@ function CreateWorkRequest() {
         axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
             .then((res) => {
                 console.log(res.data.recordsets);
-                setWorkTradedesc(res.data.recordsets.WorkTradeDesc)
+                setWorkTradedesc(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
                 console.log(err);

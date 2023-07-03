@@ -261,7 +261,7 @@ function Viewwork() {
         axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
             .then((res) => {
                 console.log('WorkTrade_descri_LIST',res.data);
-                setWorkTradedescp(res.data.recordsets[0].WorkTradeDesc)
+                setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
                 console.log(err);
