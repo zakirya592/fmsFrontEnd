@@ -292,14 +292,6 @@ function CreateWorkRequest() {
             .catch((err) => {
                 console.log(err);
             });
-        // WorkTrade_LIST
-        axios.get(`/api/WorkTrade_LIST`).then((res) => {
-            console.log("WorkTrade_LIST", res.data.recordset);
-            setdropdownWorkTradeLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
             console.log("AssetType_LIST", res.data.recordset);
@@ -353,6 +345,14 @@ function CreateWorkRequest() {
 
 
             })
+            .catch((err) => {
+                console.log(err);
+            });
+        // WorkTrade_LIST
+        axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
+            console.log("WorkTrade_LIST", res.data.recordset);
+            setdropdownWorkTradeLIST(res.data.recordsets[0])
+        })
             .catch((err) => {
                 console.log(err);
             });

@@ -183,14 +183,6 @@ function Viewwork() {
             .catch((err) => {
                 console.log(err);
             });
-        // WorkTrade_LIST
-        axios.get(`/api/WorkTrade_LIST`).then((res) => {
-            console.log("WorkTrade_LIST", res.data.recordset);
-            setdropdownWorkTradeLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
             console.log("AssetType_LIST", res.data.recordset);
@@ -247,20 +239,28 @@ function Viewwork() {
             .catch((err) => {
                 console.log(err);
             });
+        // WorkTrade_LIST
+        axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
+            console.log("WorkTrade_LIST", res.data.recordset);
+            setdropdownWorkTradeLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     // prmWorkTrade
     const [WorkTradedesc, setWorkTradedesc] = useState([])
     const Worktrandedesc = (e) => {
-        const Deptnale = e.target.value;
+        const Deptnaled = e.target.value;
         setvalue(prevValue => ({
             ...prevValue,
             WorkTrade: e.target.value
         }))
-        axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
+        axios.get(`/api/WorkTrade_descri_LIST/${Deptnaled}`)
             .then((res) => {
-                console.log(res.data.recordsets);
-                setWorkTradedesc(res.data.recordsets.WorkTradeDesc)
+                console.log('WorkTrade_descri_LIST',res.data.recordsets);
+                setWorkTradedesc(res.data.recordsets[0].WorkTradeDesc)
             })
             .catch((err) => {
                 console.log(err);
@@ -342,7 +342,7 @@ function Viewwork() {
             Workrequestpost(value.RequestNumber);
         }
     }
-    
+
     // Putapi
     const WorkRequestNumber = async () => {
         await axios.put(`/api/updatesecondWorkRequest`, {
