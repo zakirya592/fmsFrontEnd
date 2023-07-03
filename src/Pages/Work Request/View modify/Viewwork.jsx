@@ -32,9 +32,9 @@ function Viewwork() {
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
+        RequestNumber: '', workTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
-        workTrade: '',
         WorkOrder: '',
         ProblemCategory: '',
         ProblemDescription: '',
@@ -42,7 +42,7 @@ function Viewwork() {
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
-        WorkRequest: '',
+       
 
     })
   
@@ -85,7 +85,6 @@ function Viewwork() {
             });
     }
 
-
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -108,16 +107,16 @@ function Viewwork() {
             .then((res) => {
                 console.log('Updata the api data ', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode:''}));
+                Swal.fire({
+                    title: "Success",
+                    text: "you have Success Updata the Data",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                })
             })
             .catch((err) => {
                 console.log(err);
             });
-        await Swal.fire({
-            title: "Success",
-            text: "you have Success Updata the Data",
-            icon: "success",
-            confirmButtonText: "OK",
-        })
     };
 
     // Dropdown list
@@ -307,6 +306,72 @@ function Viewwork() {
             });
     }
 
+    // Work Request Number
+    // post api for the data 
+    function Workrequestpost(RequestNumber) {
+        axios.post(`/api/getworkRequestsecond`, {
+            RequestNumber,
+        }).then((res) => {
+            console.log('you have post a work requset',res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                // setModelError(true);
+            } else {
+
+                const {
+                    WorkType,
+                    WorkTrade,
+                    WorkPriority,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    WorkType,
+                    WorkTrade,
+                    WorkPriority,
+                }));
+            }
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    function handleKeyPressworkrequest(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            Workrequestpost(value.RequestNumber);
+        }
+    }
+    
+    // Putapi
+    const WorkRequestNumber = async () => {
+        await axios.put(`/api/updatesecondWorkRequest`, {
+            RequestNumber: value.RequestNumber,
+            WorkType: value.WorkType,
+            WorkTrade: value.WorkTrade,
+            WorkPriority: value.WorkPriority,
+        },)
+            .then((res) => {
+                console.log('Updata the api data ', res.data);
+                setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
+                Swal.fire({
+                    title: "Success",
+                    text: "you have Success Updata the Data",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+// All function 
+    const Updatealldata =()=>{
+        Update();
+        WorkRequestNumber();
+    }
+
     return (
         <div>
             <div className='bg'>
@@ -384,14 +449,14 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='WorkRequest'
-                                                value={value.WorkRequest}
+                                                value={value.RequestNumber}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        WorkRequest: e.target.value
+                                                        RequestNumber: e.target.value
                                                     }))
                                                 }}
-
+                                                onKeyDown={handleKeyPressworkrequest}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Request Number'
                                                 required
@@ -985,7 +1050,7 @@ function Viewwork() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Update}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
                         </div>

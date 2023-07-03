@@ -32,6 +32,7 @@ function CreateWorkRequest() {
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
+        RequestNumber:"",
         RequestDateTime: '',
         RequestStatus: '',
         workTrade: '',
@@ -42,7 +43,6 @@ function CreateWorkRequest() {
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
-        WorkRequest: '',
 
     })
 
@@ -415,6 +415,89 @@ function CreateWorkRequest() {
             });
     }
 
+    // Work Request Number
+    // post api for the data 
+    function Workrequestpost(RequestNumber) {
+        axios.post(`/api/getworkRequestsecond`, {
+            RequestNumber,
+        }).then((res) => {
+            console.log('you have post a work requset', res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                // setModelError(true);
+            } else {
+
+                const {
+                    WorkType,
+                    WorkTrade,
+                    WorkPriority,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    WorkType,
+                    WorkTrade,
+                    WorkPriority,
+                }));
+            }
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    function handleKeyPressworkrequest(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            Workrequestpost(value.RequestNumber);
+        }
+    }
+
+    const workrequsrpostapi = async () => {
+        await axios.post(`/api/AddworkRequestsecondPOST`, {
+            RequestNumber: value.RequestNumber,
+            WorkType: value.WorkType,
+            WorkTrade: value.WorkTrade,
+            AssetItemTagID: value.AssetCode,
+            WorkPriority: value.WorkPriority,
+        },)
+            .then((res) => {
+                console.log('Add work api first api', res.data);
+                setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority :""}));
+            })
+            .catch((err) => {
+                console.log(err);
+            });  
+
+    };
+    // Putapi
+    const WorkRequestNumber = async () => {
+        await axios.put(`/api/updatesecondWorkRequest`, {
+            RequestNumber: value.RequestNumber,
+            WorkType: value.WorkType,
+            WorkTrade: value.WorkTrade,
+            WorkPriority: value.WorkPriority,
+        },)
+            .then((res) => {
+                console.log('Updata the api data ', res.data);
+                setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
+             })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    // All Createapi function
+    const allCreateapi=()=>{
+        Createapi();
+        workrequsrpostapi()
+    }
+
+    // All Updata api  function 
+    const Updatealldata = () => {
+        Updated()
+        WorkRequestNumber();
+    }
+
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
     };
@@ -441,7 +524,7 @@ function CreateWorkRequest() {
                                     <div className="d-flex">
 
                                         {/* create */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={Createapi}><PrintIcon className='me-1' />Create</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}><PrintIcon className='me-1' />Create</button>
                                         {/* print  */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" ><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
@@ -491,14 +574,14 @@ function CreateWorkRequest() {
                                             <input
                                                 types='text'
                                                 id='WorkRequest'
-                                                value={value.WorkRequest}
+                                                value={value.RequestNumber}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        WorkRequest: e.target.value
+                                                        RequestNumber: e.target.value
                                                     }))
                                                 }}
-
+                                                onKeyDown={handleKeyPressworkrequest}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Request Number'
                                                 required
@@ -1054,7 +1137,7 @@ function CreateWorkRequest() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updated}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
                         </div>
