@@ -350,7 +350,7 @@ function CreateWorkRequest() {
             });
         // WorkTrade_LIST
         axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
-            console.log("WorkTrade_LIST", res.data.recordset);
+            console.log("WorkTrade LIST", res.data);
             setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -946,7 +946,7 @@ function CreateWorkRequest() {
                                                 {
                                                     dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
                                                         return (
-                                                            <option key={index} value={itme.WorkTypeCode}>{itme.WorkTypeCode}</option>
+                                                            <option key={index} value={itme.WorkTradeCode}>{itme.WorkTradeCode}</option>
                                                         )
                                                     })
                                                 }

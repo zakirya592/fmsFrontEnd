@@ -247,20 +247,21 @@ function Viewwork() {
             .catch((err) => {
                 console.log(err);
             });
+            
     }
 
     // prmWorkTrade
-    const [WorkTradedesc, setWorkTradedesc] = useState([])
+    const [WorkTradedescp, setWorkTradedescp] = useState([])
     const Worktrandedesc = (e) => {
-        const Deptnaled = e.target.value;
+        const Deptnale = e.target.value;
         setvalue(prevValue => ({
             ...prevValue,
             WorkTrade: e.target.value
         }))
-        axios.get(`/api/WorkTrade_descri_LIST/${Deptnaled}`)
+        axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
             .then((res) => {
-                console.log('WorkTrade_descri_LIST',res.data.recordsets);
-                setWorkTradedesc(res.data.recordsets[0].WorkTradeDesc)
+                console.log('WorkTrade_descri_LIST',res.data);
+                setWorkTradedescp(res.data.recordsets[0].WorkTradeDesc)
             })
             .catch((err) => {
                 console.log(err);
@@ -841,7 +842,7 @@ function Viewwork() {
                                                 {
                                                     dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
                                                         return (
-                                                            <option key={index} value={itme.WorkTypeCode}>{itme.WorkTypeCode}</option>
+                                                            <option key={index} value={itme.WorkTradeCode}>{itme.WorkTradeCode}</option>
                                                         )
                                                     })
                                                 }
@@ -858,7 +859,7 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='WorkTypeDescription'
-                                                value={WorkTradedesc}
+                                                value={WorkTradedescp}
                                                 className='rounded inputsection py-2'
                                                 placeholder='ADD Work Trade Desc  '
                                                 required
