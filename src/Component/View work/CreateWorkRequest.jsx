@@ -228,11 +228,21 @@ function CreateWorkRequest() {
             postapi(value.EmployeeID);
         }
     }
+     // Dropdown list
 
-    // Dropdown list
-    // Location
+     const [RequestStatusLIST, setRequestStatusLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
+    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     useEffect(() => {
+        // RequestStatus_LIST
+        axios.get(`/api/RequestStatus_LIST`).then((res) => {
+            console.log("RequestStatus_LIST", res.data.recordset);
+            setRequestStatusLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+            // Location
         axios.get(`/api/Location_LIST`).then((res) => {
                 console.log("Loaction list", res.data.recordset);
                 setdropdownLocation(res.data.recordsets[0])
@@ -240,12 +250,7 @@ function CreateWorkRequest() {
             .catch((err) => {
                 console.log(err);
             });
-
-    }, [])
-
-    // dropdownDepartmentLIST
-    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
-    useEffect(() => {
+            // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             console.log("Department LIST", res.data.recordset);
             setdropdownDepartmentLIST(res.data.recordsets[0])
@@ -253,7 +258,6 @@ function CreateWorkRequest() {
             .catch((err) => {
                 console.log(err);
             });
-
     }, [])
 
     // /Building_LIST WorkType_LIST
@@ -446,9 +450,13 @@ function CreateWorkRequest() {
                                                 }}>
 
                                                 <option className='inputsectiondropdpwn'>prmRequestStatus</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                {
+                                                    RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.RequestStatusCode}>{itme.RequestStatusCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
