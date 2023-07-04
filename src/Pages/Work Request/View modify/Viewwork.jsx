@@ -278,7 +278,7 @@ function Viewwork() {
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
                 console.log(res.data);
-                setAssetTypedesc(res.data.recordset[0].AssetTypeDesc)
+                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
 
 
             })
@@ -884,7 +884,7 @@ function Viewwork() {
                                                 {
                                                     dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
                                                         return (
-                                                            <option key={index} value={itme.AssetTypeCode}>{itme.AssetTypeCode}</option>
+                                                            <option key={index} value={itme.AssetItemTagID}>{itme.AssetItemTagID}</option>
                                                         )
                                                     })
                                                 }
