@@ -271,10 +271,12 @@ function Viewwork() {
     const [AssetTypedesc, setAssetTypedesc] = useState([])
     const AssetDesc = (e) => {
         const Deptnale = e.target.value;
+        
         setvalue(prevValue => ({
             ...prevValue,
             AssetCode: e.target.value
         }))
+
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
                 console.log(res.data);
@@ -285,6 +287,15 @@ function Viewwork() {
             .catch((err) => {
                 console.log(err);
             });
+
+        axios.get(`/api/AssetType_model_all_LIST/${Deptnale}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
     }
 
     // ProblemCategory_descrip
