@@ -271,7 +271,7 @@ function Viewwork() {
     const [AssetTypedesc, setAssetTypedesc] = useState([])
     const AssetDesc = (e) => {
         const Deptnale = e.target.value;
-        
+
         setvalue(prevValue => ({
             ...prevValue,
             AssetCode: e.target.value
@@ -288,7 +288,7 @@ function Viewwork() {
                 console.log(err);
             });
 
-        axios.get(`/api/AssetType_model_all_LIST/${Deptnale}`)
+        axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
             .then((res) => {
                 console.log(res.data);
             })
