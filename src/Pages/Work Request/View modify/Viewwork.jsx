@@ -269,6 +269,9 @@ function Viewwork() {
     }
     // AssetType_descrip_LIST
     const [AssetTypedesc, setAssetTypedesc] = useState([])
+    const [Manufacturerdesc, setManufacturerdesc] = useState([])
+    const [AssetCategory, setAssetCategory] = useState([])
+    const [Model, setModel] = useState()
     const AssetDesc = (e) => {
         const Deptnale = e.target.value;
 
@@ -291,6 +294,9 @@ function Viewwork() {
         axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
             .then((res) => {
                 console.log(res.data);
+                setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                setAssetCategory(res.data.recordset[0].AssetCategory)
+                setModel(res.data.recordset[0].Model)
             })
             .catch((err) => {
                 console.log(err);
@@ -950,13 +956,7 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='AssetCategory'
-                                                value={value.AssetCategory}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        AssetCategory: e.target.value
-                                                    }))
-                                                }}
+                                                value={AssetCategory}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Category '
                                                 required
@@ -973,13 +973,13 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='Manufacturer'
-                                                value={value.Manufacturer}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Manufacturer: e.target.value
-                                                    }))
-                                                }}
+                                                value={Manufacturerdesc}
+                                                // onChange={e => {
+                                                //     setvalue(prevValue => ({
+                                                //         ...prevValue,
+                                                //         Manufacturer: e.target.value
+                                                //     }))
+                                                // }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Manufacturer'
                                                 required
@@ -996,13 +996,7 @@ function Viewwork() {
                                             <input
                                                 types='text'
                                                 id='Model'
-                                                value={value.Model}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Model: e.target.value
-                                                    }))
-                                                }}
+                                                value={Model}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Model'
                                                 required
