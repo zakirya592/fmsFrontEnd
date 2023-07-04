@@ -271,18 +271,31 @@ function Viewwork() {
     const [AssetTypedesc, setAssetTypedesc] = useState([])
     const AssetDesc = (e) => {
         const Deptnale = e.target.value;
+
         setvalue(prevValue => ({
             ...prevValue,
             AssetCode: e.target.value
         }))
+
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                // console.log(res.data);
-                setAssetTypedesc(res.data.recordset[0].AssetTypeDesc)
+                console.log(res.data);
+                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+
+
             })
             .catch((err) => {
                 console.log(err);
             });
+
+        axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
     }
 
     // ProblemCategory_descrip
@@ -882,7 +895,7 @@ function Viewwork() {
                                                 {
                                                     dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
                                                         return (
-                                                            <option key={index} value={itme.AssetTypeCode}>{itme.AssetTypeCode}</option>
+                                                            <option key={index} value={itme.AssetItemTagID}>{itme.AssetItemTagID}</option>
                                                         )
                                                     })
                                                 }
