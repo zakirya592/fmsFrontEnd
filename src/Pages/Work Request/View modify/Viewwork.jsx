@@ -25,9 +25,9 @@ function Viewwork() {
     const navigate = useNavigate();
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-        DepartmentCode: '', Departmentname: '',//Department api input 
-        BuildingCode: '', //AddBuildingInworkRequestPOST api input
-        Location: '',// //AddLocationInworkRequestPOST api input
+        DepartmentCode: 'Select Dept Code', Departmentname: '',//Department api input 
+        BuildingCode: 'Select Building', //AddBuildingInworkRequestPOST api input
+        Location: 'Select Location',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
@@ -46,7 +46,7 @@ function Viewwork() {
         axios.post(`/api/getworkRequest`, {
                 EmployeeID,
             }).then((res) => {
-                // console.log(res.data)
+                console.log(res.data)
                 if (res.data.recordsets[0].length === 0) {
                         Swal.fire('Oops...!', 'Something went wrong!', 'error')
                     // setModelError(true);
@@ -73,6 +73,14 @@ function Viewwork() {
                     BuildingCode,
                     LocationCode,
                 }));
+                const Depauto=res.data.recordsets[0][0].DepartmentCode
+                    axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                        .then((res) => {
+                            setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
             }
         })
             .catch((err) => {
@@ -199,7 +207,7 @@ function Viewwork() {
             });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
-            console.log("AssetType_LIST", res.data.recordset);
+            // console.log("AssetType_LIST", res.data.recordset);
             setdropdownAssetTypeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -228,8 +236,6 @@ function Viewwork() {
             .then((res) => {
                 // console.log(res.data);
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -247,8 +253,6 @@ function Viewwork() {
             .then((res) => {
                 // console.log(res.data);
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -346,7 +350,6 @@ function Viewwork() {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
             } else {
-
                 const {
                     WorkType,
                     WorkTrade,
@@ -358,6 +361,32 @@ function Viewwork() {
                     WorkTrade,
                     WorkPriority,
                 }));
+                // console.log('Work Request Number', res.data.recordsets[0][0]);
+                const workaout = res.data.recordsets[0][0].WorkType
+                axios.get(`/api/WorkType_descri_LIST/${workaout}`)
+                    .then((res) => {
+                        // console.log(res.data);
+                        setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
+                    // console.log("WorkTrade_LIST", res.data.recordset);
+                    setdropdownWorkTradeLIST(res.data.recordsets[0])
+                    const worktradauto= res.data.recordsets[0][0].WorkTradeCode;
+                    axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
+                        .then((res) => {
+                            console.log('WorkTrade_descri_LIST',res.data);
+                            setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }
         })
             .catch((err) => {
@@ -681,12 +710,6 @@ function Viewwork() {
                                                 id='DepartmentCode'
                                                 aria-label='Floating label select example'
                                                 value={value.DepartmentCode}
-                                                // onChange={(e) => {
-                                                //     setvalue((prevValue) => ({
-                                                //         ...prevValue,
-                                                //         DepartmentCode: e.target.value,
-                                                //     }));
-                                                // }}
                                                 onChange={handleProvinceChange}
                                             >
                                                 <option value={value.DepartmentCode}>{value.DepartmentCode}</option>
@@ -785,12 +808,6 @@ function Viewwork() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example"
                                                 value={value.WorkType}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         WorkType: e.target.value
-                                                //     }))
-                                                // }}
                                                 onChange={Workypesdesc}>
                                                 <option className='inputsectiondropdpwn'>Select Work Type</option>
                                                 {

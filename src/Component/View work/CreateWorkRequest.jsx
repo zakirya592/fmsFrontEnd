@@ -21,8 +21,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function CreateWorkRequest() {
     const navigate = useNavigate();
-    const [workTradeDescription, setworkTradeDescription] = useState('')
-
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
@@ -59,7 +57,7 @@ function CreateWorkRequest() {
             LocationCode:value.LocationCode,
         },)
             .then((res) => {
-                console.log('Add work api first api', res.data);
+                // console.log('Add work api first api', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
                 if (res.status==201){
                 Swal.fire({
@@ -99,7 +97,7 @@ function CreateWorkRequest() {
             LocationCode: value.LocationCode,
         },)
             .then((res) => {
-                console.log('Updata the api data ', res.data);
+                // console.log('Updata the api data/ ', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '' }));
             })
             .catch((err) => {
@@ -118,7 +116,7 @@ function CreateWorkRequest() {
         axios.post(`/api/getworkRequest`, {
             EmployeeID,
         }).then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
@@ -145,6 +143,14 @@ function CreateWorkRequest() {
                     BuildingCode,
                     LocationCode,
                 }));
+                const Depauto = res.data.recordsets[0][0].DepartmentCode
+                axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                    .then((res) => {
+                        setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }
         })
             .catch((err) => {
@@ -158,12 +164,12 @@ function CreateWorkRequest() {
             e.preventDefault();
             postapi(value.EmployeeID);
             axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-                console.log("Transactions_LIST", res.data);
+                // console.log("Transactions_LIST", res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
                 axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
                     .then((res) => {
-                        console.log('For auto selection', res.data);
+                        // console.log('For auto selection', res.data);
                         setManufacturerdesc(res.data.recordset[0].Manufacturer)
                         setAssetCategory(res.data.recordset[0].AssetCategory)
                         setModel(res.data.recordset[0].Model)
@@ -185,7 +191,6 @@ function CreateWorkRequest() {
     useEffect(() => {
         // RequestStatus_LIST
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
-            console.log("RequestStatus_LIST", res.data.recordset);
             setRequestStatusLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -193,7 +198,6 @@ function CreateWorkRequest() {
             });
             // Location
         axios.get(`/api/Location_LIST`).then((res) => {
-                console.log("Loaction list", res.data.recordset);
                 setdropdownLocation(res.data.recordsets[0])
             })
             .catch((err) => {
@@ -201,7 +205,6 @@ function CreateWorkRequest() {
             });
             // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
-            console.log("Department LIST", res.data.recordset);
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -219,7 +222,6 @@ function CreateWorkRequest() {
     useEffect(() => {
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
-            console.log("dropdownBuilding LIST", res.data.recordset);
             setdropdownBuildingLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -227,7 +229,6 @@ function CreateWorkRequest() {
             });
         // WorkType_LIST
         axios.get(`/api/WorkType_LIST`).then((res) => {
-            console.log("WorkType LIST", res.data.recordset);
             setdropdownworktypesLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -235,7 +236,6 @@ function CreateWorkRequest() {
             });
         // WorkPriority_LIST
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
-            console.log("WorkPriority LIST", res.data.recordset);
             setdropdownWorkPriorityLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -243,7 +243,6 @@ function CreateWorkRequest() {
             });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
-            console.log("AssetType_LIST", res.data.recordset);
             setdropdownAssetTypeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -251,7 +250,6 @@ function CreateWorkRequest() {
             });
         // ProblemCategory_LIST
         axios.get(`/api/ProblemCategory_LIST`).then((res) => {
-            console.log("ProblemCategory_LIST", res.data.recordset);
             setdropdownProblemCategoryLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -270,7 +268,6 @@ function CreateWorkRequest() {
         }));
         axios.get(`/api/Department_desc_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
 
 
@@ -289,7 +286,6 @@ function CreateWorkRequest() {
         }))
         axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
 
 
@@ -299,7 +295,6 @@ function CreateWorkRequest() {
             });
         // WorkTrade_LIST
         axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
-            console.log("WorkTrade LIST", res.data);
             setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -317,7 +312,6 @@ function CreateWorkRequest() {
         }))
         axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data.recordsets);
                 setWorkTradedesc(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
@@ -337,7 +331,6 @@ function CreateWorkRequest() {
         }))
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
                     .then((res) => {
@@ -365,7 +358,6 @@ function CreateWorkRequest() {
         }))
         axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
                 setProblemdesc(res.data.recordset[0].ProblemCategoryDesc)
 
 
@@ -381,7 +373,6 @@ function CreateWorkRequest() {
         axios.post(`/api/getworkRequestsecond`, {
             RequestNumber,
         }).then((res) => {
-            console.log('you have post a work requset', res.data)
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
@@ -398,6 +389,30 @@ function CreateWorkRequest() {
                     WorkTrade,
                     WorkPriority,
                 }));
+                const workaout = res.data.recordsets[0][0].WorkType
+                axios.get(`/api/WorkType_descri_LIST/${workaout}`)
+                    .then((res) => {
+                        // console.log(res.data);
+                        setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
+                    // console.log("WorkTrade_LIST", res.data.recordset);
+                    setdropdownWorkTradeLIST(res.data.recordsets[0])
+                    const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
+                    axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
+                        .then((res) => {
+                            setWorkTradedesc(res.data.recordset[0].WorkTradeDesc)
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }
         })
             .catch((err) => {
@@ -421,7 +436,6 @@ function CreateWorkRequest() {
             WorkPriority: value.WorkPriority,
         },)
             .then((res) => {
-                console.log('Add work api first api', res.data);
                 setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority :""}));
             })
             .catch((err) => {
@@ -438,7 +452,6 @@ function CreateWorkRequest() {
             WorkPriority: value.WorkPriority,
         },)
             .then((res) => {
-                console.log('Updata the api data ', res.data);
                 setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
              })
             .catch((err) => {
