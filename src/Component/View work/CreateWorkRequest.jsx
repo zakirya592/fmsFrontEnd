@@ -161,6 +161,16 @@ function CreateWorkRequest() {
                 console.log("Transactions_LIST", res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+                axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
+                    .then((res) => {
+                        console.log('For auto selection', res.data);
+                        setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                        setAssetCategory(res.data.recordset[0].AssetCategory)
+                        setModel(res.data.recordset[0].Model)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             })
                 .catch((err) => {
                     console.log(err);
@@ -329,16 +339,16 @@ function CreateWorkRequest() {
             .then((res) => {
                 console.log(res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
-            .then((res) => {
-                console.log(res.data);
-                setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                setAssetCategory(res.data.recordset[0].AssetCategory)
-                setModel(res.data.recordset[0].Model)
+                axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
+                    .then((res) => {
+                        // console.log(res.data);
+                        setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                        setAssetCategory(res.data.recordset[0].AssetCategory)
+                        setModel(res.data.recordset[0].Model)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             })
             .catch((err) => {
                 console.log(err);

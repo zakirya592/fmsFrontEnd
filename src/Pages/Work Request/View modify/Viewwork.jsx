@@ -40,41 +40,41 @@ function Viewwork() {
         FeedbackEmp: '',
         Feedback_Remarks: '',
     })
-  
+
     // post api for the data 
     function postapi(EmployeeID) {
         axios.post(`/api/getworkRequest`, {
-                EmployeeID,
-            }).then((res) => {
-                // console.log(res.data)
-                if (res.data.recordsets[0].length === 0) {
-                        Swal.fire('Oops...!', 'Something went wrong!', 'error')
-                    // setModelError(true);
-                } else {
+            EmployeeID,
+        }).then((res) => {
+            // console.log(res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                // setModelError(true);
+            } else {
 
-                    const {
-                        Firstname,
-                        Lastname,
-                        Middlename,
-                        MobileNumber,
-                        LandlineNumber,
-                        DepartmentCode,
-                        BuildingCode,
-                        LocationCode,
-                    } = res.data.recordsets[0][0];
-                    setvalue((prevValue) => ({
-                        ...prevValue,
-                        Firstname,
-                        Lastname,
-                        Middlename,
-                        MobileNumber,
-                        LandlineNumber,
-                        DepartmentCode,
-                        BuildingCode,
-                        LocationCode,
-                    }));
-                }
-            })
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                }));
+            }
+        })
             .catch((err) => {
                 console.log(err);
             });
@@ -84,10 +84,21 @@ function Viewwork() {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
+            
             axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
                 console.log("Transactions_LIST", res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+                axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
+                    .then((res) => {
+                        console.log('For auto selection', res.data);
+                        setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                        setAssetCategory(res.data.recordset[0].AssetCategory)
+                        setModel(res.data.recordset[0].Model)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             })
                 .catch((err) => {
                     console.log(err);
@@ -109,7 +120,7 @@ function Viewwork() {
         },)
             .then((res) => {
                 // console.log('Updata the api data ', res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode:''}));
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '' }));
                 Swal.fire({
                     title: "Success",
                     text: "you have Success Updata the Data",
@@ -207,8 +218,8 @@ function Viewwork() {
 
     // Department
     const [DeptDesc, setDeptDesc] = useState([])
-    const handleProvinceChange =(e)=>{
-        const Deptnale=e.target.value;
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
         setvalue((prevValue) => ({
             ...prevValue,
             DepartmentCode: e.target.value,
@@ -250,7 +261,7 @@ function Viewwork() {
             .catch((err) => {
                 console.log(err);
             });
-            
+
     }
 
     // prmWorkTrade
@@ -287,22 +298,21 @@ function Viewwork() {
             .then((res) => {
                 // console.log(res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+
+                axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
+                    .then((res) => {
+                        // console.log(res.data);
+                        setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                        setAssetCategory(res.data.recordset[0].AssetCategory)
+                        setModel(res.data.recordset[0].Model)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             })
             .catch((err) => {
                 console.log(err);
             });
-
-        axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
-            .then((res) => {
-                // console.log(res.data);
-                setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                setAssetCategory(res.data.recordset[0].AssetCategory)
-                setModel(res.data.recordset[0].Model)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
     }
 
     // ProblemCategory_descrip
@@ -385,8 +395,8 @@ function Viewwork() {
             });
     };
 
-// All function 
-    const Updatealldata =()=>{
+    // All function 
+    const Updatealldata = () => {
         Update();
         WorkRequestNumber();
     }
@@ -830,7 +840,7 @@ function Viewwork() {
                                                         WorkPriority: e.target.value
                                                     }))
                                                 }}
-                                                >
+                                            >
                                                 <option className='inputsectiondropdpwn'>Select Work Priority</option>
                                                 {
                                                     dropdownWorkPriorityLIST && dropdownWorkPriorityLIST.map((itme, index) => {
@@ -855,7 +865,7 @@ function Viewwork() {
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
                                                 value={value.WorkTrade}
                                                 onChange={Worktrandedesc}
-                                                >
+                                            >
                                                 <option className='inputsectiondropdpwn'>Select Work Trade</option>
                                                 {
                                                     dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
@@ -917,13 +927,13 @@ function Viewwork() {
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="tblAssetTransaction.[AssetItemDescription]" id="AssetDescription"
                                                     value={AssetTypedesc}
-                                                    // onChange={e => {
-                                                    //     setvalue(prevValue => ({
-                                                    //         ...prevValue,
-                                                    //         AssetItemDescription: e.target.value
-                                                    //     }))
-                                                    // }}
-                                                    ></textarea>
+                                                // onChange={e => {
+                                                //     setvalue(prevValue => ({
+                                                //         ...prevValue,
+                                                //         AssetItemDescription: e.target.value
+                                                //     }))
+                                                // }}
+                                                ></textarea>
 
                                             </div>
                                         </div>
@@ -1041,13 +1051,13 @@ function Viewwork() {
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"
                                                     value={Problemdesc}
-                                                    // onChange={e => {
-                                                    //     setvalue(prevValue => ({
-                                                    //         ...prevValue,
-                                                    //         ProblemDescription: e.target.value
-                                                    //     }))
-                                                    // }}
-                                                    ></textarea>
+                                                // onChange={e => {
+                                                //     setvalue(prevValue => ({
+                                                //         ...prevValue,
+                                                //         ProblemDescription: e.target.value
+                                                //     }))
+                                                // }}
+                                                ></textarea>
 
                                             </div>
                                         </div>
