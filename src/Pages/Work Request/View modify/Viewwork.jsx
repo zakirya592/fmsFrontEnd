@@ -35,15 +35,10 @@ function Viewwork() {
         RequestNumber: '', workTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
-        WorkOrder: '',
-        ProblemCategory: '',
-        ProblemDescription: '',
         AssetItemTag: '',
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
-       
-
     })
   
     // post api for the data 
@@ -51,7 +46,7 @@ function Viewwork() {
         axios.post(`/api/getworkRequest`, {
                 EmployeeID,
             }).then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data.recordsets[0].length === 0) {
                         Swal.fire('Oops...!', 'Something went wrong!', 'error')
                     // setModelError(true);
@@ -84,11 +79,19 @@ function Viewwork() {
                 console.log(err);
             });
     }
-
+    const [AssetItemTagautom, setAssetItemTagautom] = useState('AssetItemTagID')
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
+            axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
+                console.log("Transactions_LIST", res.data);
+                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
 
@@ -105,7 +108,7 @@ function Viewwork() {
             LocationCode: value.LocationCode,
         },)
             .then((res) => {
-                console.log('Updata the api data ', res.data);
+                // console.log('Updata the api data ', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode:''}));
                 Swal.fire({
                     title: "Success",
@@ -127,7 +130,7 @@ function Viewwork() {
     useEffect(() => {
         // RequestStatus_LIST
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
-            console.log("RequestStatus_LIST", res.data.recordset);
+            // console.log("RequestStatus_LIST", res.data.recordset);
             setRequestStatusLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -135,7 +138,7 @@ function Viewwork() {
             });
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
-            console.log("Loaction list", res.data.recordset);
+            // console.log("Loaction list", res.data.recordset);
             setdropdownLocation(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -143,7 +146,7 @@ function Viewwork() {
             });
         // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
-            console.log("Department LIST", res.data.recordset);
+            // console.log("Department LIST", res.data.recordset);
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -161,7 +164,7 @@ function Viewwork() {
     useEffect(() => {
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
-            console.log("dropdownBuilding LIST", res.data.recordset);
+            // console.log("dropdownBuilding LIST", res.data.recordset);
             setdropdownBuildingLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -169,7 +172,7 @@ function Viewwork() {
             });
         // WorkType_LIST
         axios.get(`/api/WorkType_LIST`).then((res) => {
-            console.log("WorkType LIST", res.data.recordset);
+            // console.log("WorkType LIST", res.data.recordset);
             setdropdownworktypesLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -177,7 +180,7 @@ function Viewwork() {
             });
         // WorkPriority_LIST
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
-            console.log("WorkPriority LIST", res.data.recordset);
+            // console.log("WorkPriority LIST", res.data.recordset);
             setdropdownWorkPriorityLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -185,7 +188,7 @@ function Viewwork() {
             });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
-            console.log("AssetType_LIST", res.data.recordset);
+            // console.log("AssetType_LIST", res.data.recordset);
             setdropdownAssetTypeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -193,7 +196,7 @@ function Viewwork() {
             });
         // ProblemCategory_LIST
         axios.get(`/api/ProblemCategory_LIST`).then((res) => {
-            console.log("ProblemCategory_LIST", res.data.recordset);
+            // console.log("ProblemCategory_LIST", res.data.recordset);
             setdropdownProblemCategoryLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -212,7 +215,7 @@ function Viewwork() {
         }));
         axios.get(`/api/Department_desc_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
 
 
@@ -231,7 +234,7 @@ function Viewwork() {
         }))
         axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
 
 
@@ -241,7 +244,7 @@ function Viewwork() {
             });
         // WorkTrade_LIST
         axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
-            console.log("WorkTrade_LIST", res.data.recordset);
+            // console.log("WorkTrade_LIST", res.data.recordset);
             setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -260,7 +263,7 @@ function Viewwork() {
         }))
         axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
             .then((res) => {
-                console.log('WorkTrade_descri_LIST',res.data);
+                // console.log('WorkTrade_descri_LIST',res.data);
                 setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
@@ -282,10 +285,8 @@ function Viewwork() {
 
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -293,7 +294,7 @@ function Viewwork() {
 
         axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setManufacturerdesc(res.data.recordset[0].Manufacturer)
                 setAssetCategory(res.data.recordset[0].AssetCategory)
                 setModel(res.data.recordset[0].Model)
@@ -314,7 +315,7 @@ function Viewwork() {
         }))
         axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setProblemdesc(res.data.recordset[0].ProblemCategoryDesc)
 
 
@@ -330,7 +331,7 @@ function Viewwork() {
         axios.post(`/api/getworkRequestsecond`, {
             RequestNumber,
         }).then((res) => {
-            console.log('you have post a work requset',res.data)
+            // console.log('you have post a work requset',res.data)
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
@@ -370,7 +371,7 @@ function Viewwork() {
             WorkPriority: value.WorkPriority,
         },)
             .then((res) => {
-                console.log('Updata the api data ', res.data);
+                // console.log('Updata the api data ', res.data);
                 setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
                 Swal.fire({
                     title: "Success",
@@ -897,7 +898,7 @@ function Viewwork() {
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example"
                                                 value={value.AssetCode}
                                                 onChange={AssetDesc}>
-                                                <option className='inputsectiondropdpwn'>AssetItemTagID</option>
+                                                <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
                                                 {
                                                     dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
                                                         return (
