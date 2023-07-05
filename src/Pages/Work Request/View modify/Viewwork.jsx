@@ -35,15 +35,10 @@ function Viewwork() {
         RequestNumber: '', workTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
-        WorkOrder: '',
-        ProblemCategory: '',
-        ProblemDescription: '',
         AssetItemTag: '',
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
-       
-
     })
   
     // post api for the data 
@@ -51,7 +46,7 @@ function Viewwork() {
         axios.post(`/api/getworkRequest`, {
                 EmployeeID,
             }).then((res) => {
-                // console.log(res.data)
+                // // console.log(res.data)
                 if (res.data.recordsets[0].length === 0) {
                         Swal.fire('Oops...!', 'Something went wrong!', 'error')
                     // setModelError(true);
@@ -84,11 +79,19 @@ function Viewwork() {
                 console.log(err);
             });
     }
-
+    const [AssetItemTagautom, setAssetItemTagautom] = useState('AssetItemTagID')
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
+            axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
+                console.log("Transactions_LIST", res.data);
+                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
 
@@ -185,7 +188,7 @@ function Viewwork() {
             });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
-            console.log("AssetType LIST", res.data.recordset);
+            console.log("AssetType_LIST", res.data.recordset);
             setdropdownAssetTypeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
@@ -282,10 +285,8 @@ function Viewwork() {
 
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -293,7 +294,7 @@ function Viewwork() {
 
         axios.get(`/api/AssetType_model_all_LIST/${AssetTypedesc}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setManufacturerdesc(res.data.recordset[0].Manufacturer)
                 setAssetCategory(res.data.recordset[0].AssetCategory)
                 setModel(res.data.recordset[0].Model)
@@ -897,7 +898,7 @@ function Viewwork() {
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example"
                                                 value={value.AssetCode}
                                                 onChange={AssetDesc}>
-                                                <option className='inputsectiondropdpwn'>AssetItemTagID</option>
+                                                <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
                                                 {
                                                     dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
                                                         return (

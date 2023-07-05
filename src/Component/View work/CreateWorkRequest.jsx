@@ -152,11 +152,19 @@ function CreateWorkRequest() {
             });
     }
 
-
+    const [AssetItemTagautom, setAssetItemTagautom] = useState('AssetItemTagID')
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
+            axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
+                console.log("Transactions_LIST", res.data);
+                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
      // Dropdown list
@@ -927,7 +935,7 @@ function CreateWorkRequest() {
                                                 value={value.AssetCode}
                                                 onChange={AssetDesc}
                                             >
-                                                <option className='inputsectiondropdpwn'>AssetItemTagID</option>
+                                                <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
                                                 {
                                                     dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
                                                         return (
