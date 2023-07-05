@@ -87,7 +87,7 @@ function Viewwork() {
                 console.log(err);
             });
     }
-    const [AssetItemTagautom, setAssetItemTagautom] = useState('AssetItemTagID')
+    const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -457,7 +457,7 @@ function Viewwork() {
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                             navigate('/createworkrequest')
-                                        })}><PrintIcon className='me-1' />Create</button>
+                                        })}><AddCircleOutlineIcon className='me-1' />Create</button>
                                         {/* print  */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
@@ -742,7 +742,7 @@ function Viewwork() {
                                                 //     }))
                                                 // }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='ADD DEPT NAME'
+                                                placeholder='Department Name'
                                                 required
                                             ></input>
                                         </div>
@@ -838,7 +838,7 @@ function Viewwork() {
                                                 //     }))
                                                 // }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='ADD Work Type Desc'
+                                                placeholder='Work Type Description '
                                                 required
                                             ></input>
                                         </div>
@@ -906,7 +906,7 @@ function Viewwork() {
                                                 id='WorkTypeDescription'
                                                 value={WorkTradedescp}
                                                 className='rounded inputsection py-2'
-                                                placeholder='ADD Work Trade Desc  '
+                                                placeholder='Work Trade Description'
                                                 required
                                             ></input>
                                         </div>
@@ -1066,7 +1066,7 @@ function Viewwork() {
                                                 Problem Description<span className='star'>*</span>
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description " id="ProblemDescription"
                                                     value={Problemdesc}
                                                 // onChange={e => {
                                                 //     setvalue(prevValue => ({

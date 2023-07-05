@@ -158,16 +158,17 @@ function CreateWorkRequest() {
             });
     }
 
-    const [AssetItemTagautom, setAssetItemTagautom] = useState('AssetItemTagID')
+    const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
             axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-                // console.log("Transactions_LIST", res.data);
+                console.log("Transactions_LIST", res.data.recordset[0].AssetItemDescription);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
+                const assetauto = res.data.recordset[0].AssetItemDescription
+                axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
                     .then((res) => {
                         // console.log('For auto selection', res.data);
                         setManufacturerdesc(res.data.recordset[0].Manufacturer)
@@ -434,8 +435,14 @@ function CreateWorkRequest() {
             WorkTrade: value.WorkTrade,
             AssetItemTagID: value.AssetCode,
             WorkPriority: value.WorkPriority,
+            RequestStatus: value.RequestStatus,
+            DepartmentCode:value.DepartmentCode,
+            BuildingCode:value.BuildingCode,
+            LocationCode:value.LocationCode,
+            EmployeeID:value.EmployeeID,
         },)
             .then((res) => {
+                console.log(res.data);
                 setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority :""}));
             })
             .catch((err) => {
@@ -497,7 +504,7 @@ function CreateWorkRequest() {
                                     <div className="d-flex">
 
                                         {/* create */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}><PrintIcon className='me-1' />Create</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
                                         {/* print  */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" ><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
@@ -780,7 +787,7 @@ function CreateWorkRequest() {
                                                 //     }))
                                                 // }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='ADD DEPT NAME'
+                                                placeholder='Department Name'
                                                 required
                                             ></input>
                                         </div>
@@ -872,7 +879,7 @@ function CreateWorkRequest() {
                                                 id='WorkTypeDescription'
                                                 value={WorkTypedesc}
                                                 className='rounded inputsection py-2'
-                                                placeholder='ADD Work Type Desc '
+                                                placeholder='Work Type Description  '
                                                 required
                                             ></input>
                                         </div>
@@ -938,7 +945,7 @@ function CreateWorkRequest() {
                                                 id='WorkTypeDescription'
                                                 value={WorkTradedesc}
                                                 className='rounded inputsection py-2'
-                                                placeholder='ADD Work Trade Desc '
+                                                placeholder='Work Trade Description '
                                                 required
                                             ></input>
                                         </div>
