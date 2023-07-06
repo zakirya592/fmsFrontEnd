@@ -58,11 +58,11 @@ function CreateWorkRequest() {
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
+                // setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
                 if (res.status==201){
                 Swal.fire({
                     title: "Success",
-                    text: "you have Success submited the Data",
+                    text: "Work Request is created !!!",
                     icon: "success",
                     confirmButtonText: "OK",
                 })
@@ -447,7 +447,7 @@ function CreateWorkRequest() {
         },)
             .then((res) => {
                 console.log(res.data);
-                setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
+                // setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
             })
             .catch((err) => {
                 console.log(err);
@@ -1121,7 +1121,9 @@ function CreateWorkRequest() {
                                 </div>
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                                        navigate('/workRequest')
+                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
