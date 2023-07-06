@@ -472,7 +472,7 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi=()=>{
-        // Createapi();
+        Createapi();
         workrequsrpostapi()
     }
 
@@ -1122,7 +1122,7 @@ function CreateWorkRequest() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
                         </div>
