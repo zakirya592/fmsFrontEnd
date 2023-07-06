@@ -35,8 +35,7 @@ function CreateWorkRequest() {
         RequestStatus: '',
         workTrade: '',
         WorkOrder: '',
-        ProblemCategory: '',
-        ProblemDescription: '',
+        ProblemCategory: '', ProblemDescription: '',
         AssetItemTag: '',
         CompletedByEmp: '',
         FeedbackEmp: '',
@@ -350,7 +349,6 @@ function CreateWorkRequest() {
     }
 
     // ProblemCategory_descrip
-    const [Problemdesctext, setProblemdesctext] = useState()
     const ProblemDesc = (e) => {
         const Deptnale = e.target.value;
         setvalue(prevValue => ({
@@ -444,6 +442,7 @@ function CreateWorkRequest() {
             EmployeeID:value.EmployeeID,
             ProblemCategory:value.ProblemCategory,
             ProblemDescription: value.ProblemDescription,
+            RequestDateTime: '12-3-2025',
         },)
             .then((res) => {
                 console.log(res.data);
@@ -472,7 +471,7 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi=()=>{
-        Createapi();
+        // Createapi();
         workrequsrpostapi()
     }
 
@@ -1112,6 +1111,12 @@ function CreateWorkRequest() {
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description" id="ProblemDescription"
                                                     value={value.ProblemDescription}
+                                                //      onChange={e => {
+                                                //     setvalue(prevValue => ({
+                                                //         ...prevValue,
+                                                //         ProblemDescription: e.target.value
+                                                //     }))
+                                                // }}
                                                   ></textarea>
 
                                             </div>
