@@ -350,7 +350,7 @@ function CreateWorkRequest() {
     }
 
     // ProblemCategory_descrip
-    const [Problemdesc, setProblemdesc] = useState([])
+    const [Problemdesctext, setProblemdesctext] = useState()
     const ProblemDesc = (e) => {
         const Deptnale = e.target.value;
         setvalue(prevValue => ({
@@ -359,9 +359,11 @@ function CreateWorkRequest() {
         }))
         axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
             .then((res) => {
-                setProblemdesc(res.data.recordset[0].ProblemCategoryDesc)
-
-
+                // setProblemdesctext(res.data.recordset[0].ProblemCategoryDesc)
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    ProblemDescription: res.data.recordset[0].ProblemCategoryDesc
+                }))
             })
             .catch((err) => {
                 console.log(err);
@@ -440,10 +442,12 @@ function CreateWorkRequest() {
             BuildingCode:value.BuildingCode,
             LocationCode:value.LocationCode,
             EmployeeID:value.EmployeeID,
+            ProblemCategory:value.ProblemCategory,
+            ProblemDescription: value.ProblemDescription,
         },)
             .then((res) => {
                 console.log(res.data);
-                setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority :""}));
+                setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
             })
             .catch((err) => {
                 console.log(err);
@@ -468,7 +472,7 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi=()=>{
-        Createapi();
+        // Createapi();
         workrequsrpostapi()
     }
 
@@ -954,7 +958,7 @@ function CreateWorkRequest() {
                                 </div>
 
                                 <hr className='color3 line' />
-                                {/* 6th row */}
+                                {/* 5th row */}
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
@@ -989,6 +993,7 @@ function CreateWorkRequest() {
                                             </div>
                                         </div>
                                     </div>
+                                    {/* Icons section */}
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                         <div className="d-flex align-items-center justify-content-center mt-4">
                                             <button type="button" className="btn color2 btnwork">
@@ -1005,7 +1010,7 @@ function CreateWorkRequest() {
 
                                 </div>
 
-                                {/* 7th */}
+                                {/* 6th */}
                                 <div className="row mx-auto formsection">
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -1077,7 +1082,7 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* 8th  */}
+                                {/* 7th  */}
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
@@ -1105,8 +1110,8 @@ function CreateWorkRequest() {
                                                 Problem Description<span className='star'>*</span>
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"
-                                                    value={Problemdesc}
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description" id="ProblemDescription"
+                                                    value={value.ProblemDescription}
                                                   ></textarea>
 
                                             </div>
