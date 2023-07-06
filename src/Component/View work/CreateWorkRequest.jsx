@@ -30,12 +30,12 @@ function CreateWorkRequest() {
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
-        RequestNumber:"",
+        ProblemCategory: '', ProblemDescription: '',
         RequestDateTime: '',
+        RequestNumber:"",
         RequestStatus: '',
         workTrade: '',
         WorkOrder: '',
-        ProblemCategory: '', ProblemDescription: '',
         AssetItemTag: '',
         CompletedByEmp: '',
         FeedbackEmp: '',
@@ -355,17 +355,17 @@ function CreateWorkRequest() {
             ...prevValue,
             ProblemCategory: e.target.value
         }))
-        axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
-            .then((res) => {
-                // setProblemdesctext(res.data.recordset[0].ProblemCategoryDesc)
-                setvalue(prevValue => ({
-                    ...prevValue,
-                    ProblemDescription: res.data.recordset[0].ProblemCategoryDesc
-                }))
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        // axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
+        //     .then((res) => {
+        //         // setProblemdesctext(res.data.recordset[0].ProblemCategoryDesc)
+        //         setvalue(prevValue => ({
+        //             ...prevValue,
+        //             ProblemDescription: res.data.recordset[0].ProblemCategoryDesc
+        //         }))
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
     }
 
     // Work Request Number
@@ -442,7 +442,7 @@ function CreateWorkRequest() {
             EmployeeID:value.EmployeeID,
             ProblemCategory:value.ProblemCategory,
             ProblemDescription: value.ProblemDescription,
-            RequestDateTime: '12-3-2025',
+            RequestDateTime: value.RequestDateTime,
         },)
             .then((res) => {
                 console.log(res.data);
@@ -471,7 +471,7 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi=()=>{
-        // Createapi();
+        Createapi();
         workrequsrpostapi()
     }
 
@@ -1111,12 +1111,12 @@ function CreateWorkRequest() {
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description" id="ProblemDescription"
                                                     value={value.ProblemDescription}
-                                                //      onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         ProblemDescription: e.target.value
-                                                //     }))
-                                                // }}
+                                                     onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        ProblemDescription: e.target.value
+                                                    }))
+                                                }}
                                                   ></textarea>
 
                                             </div>
