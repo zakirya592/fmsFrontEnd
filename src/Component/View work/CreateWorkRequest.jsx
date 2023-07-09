@@ -28,7 +28,7 @@ function CreateWorkRequest() {
         LocationCode: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
-        AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
+        AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         ProblemCategory: '', ProblemDescription: '',
         RequestDateTime: '',
@@ -168,8 +168,8 @@ function CreateWorkRequest() {
                 console.log("Transactions_LIST", res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                console.log(res.data.recordset[0].AssetItemTagID);
                 const assetauto = res.data.recordset[0].AssetItemDescription
+                console.log(assetauto);
                 axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
                     .then((res) => {
                         // console.log('For auto selection', res.data);
@@ -331,7 +331,7 @@ function CreateWorkRequest() {
         const Deptnale = e.target.value;
         setvalue(prevValue => ({
             ...prevValue,
-            AssetCode: e.target.value
+            AssetItemTagID: e.target.value
         }))
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
             .then((res) => {
@@ -390,7 +390,8 @@ function CreateWorkRequest() {
                     ProblemDescription,
                     RequestStatus,
                     ProblemCategory,
-                    RequestDateTime
+                    RequestDateTime,
+                    AssetItemTagID
                 } = res.data.recordsets[0][0];
                 
                 setvalue((prevValue) => ({
@@ -401,7 +402,8 @@ function CreateWorkRequest() {
                     ProblemDescription,
                     RequestStatus,
                     ProblemCategory,
-                    RequestDateTime
+                    RequestDateTime,
+                    AssetItemTagID
                 }));
                 const workaout = res.data.recordsets[0][0].WorkType
                 axios.get(`/api/WorkType_descri_LIST/${workaout}`)
@@ -446,7 +448,7 @@ function CreateWorkRequest() {
             RequestNumber: value.RequestNumber,
             WorkType: value.WorkType,
             WorkTrade: value.WorkTrade,
-            AssetItemTagID: value.AssetCode,
+            AssetItemTagID: value.AssetItemTagID,
             WorkPriority: value.WorkPriority,
             RequestStatus: value.RequestStatus,
             DepartmentCode:value.DepartmentCode,
@@ -459,7 +461,7 @@ function CreateWorkRequest() {
         },)
             .then((res) => {
                 console.log(res.data);
-                // setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetCode: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
+                // setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetItemTagID: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
             })
             .catch((err) => {
                 console.log(err);
@@ -975,11 +977,11 @@ function CreateWorkRequest() {
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='AssetItemTagID' className='lablesection color3 text-start mb-1'>
                                                 Asset Code<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example"
-                                                value={value.AssetCode}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemTagID" aria-label="Floating label select example"
+                                                value={value.AssetItemTagID}
                                                 onChange={AssetDesc}
                                             >
                                                 <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
