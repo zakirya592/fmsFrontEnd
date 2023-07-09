@@ -320,23 +320,12 @@ function Viewwork() {
     }
 
     // ProblemCategory_descrip
-    const [Problemdesc, setProblemdesc] = useState([])
     const ProblemDesc = (e) => {
         const Deptnale = e.target.value;
         setvalue(prevValue => ({
             ...prevValue,
             ProblemCategory: e.target.value
         }))
-        axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
-            .then((res) => {
-                // console.log(res.data);
-                setProblemdesc(res.data.recordset[0].ProblemCategoryDesc)
-
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
     }
 
     // Work Request Number
@@ -354,12 +343,20 @@ function Viewwork() {
                     WorkType,
                     WorkTrade,
                     WorkPriority,
+                    ProblemDescription,
+                    RequestStatus,
+                    ProblemCategory,
+                    RequestDateTime
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
                     WorkTrade,
                     WorkPriority,
+                    ProblemDescription,
+                    RequestStatus,
+                    ProblemCategory,
+                    RequestDateTime
                 }));
                 // console.log('Work Request Number', res.data.recordsets[0][0]);
                 const workaout = res.data.recordsets[0][0].WorkType
@@ -411,7 +408,7 @@ function Viewwork() {
         },)
             .then((res) => {
                 // console.log('Updata the api data ', res.data);
-                setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
+                // setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
                 Swal.fire({
                     title: "Success",
                     text: "you have Success Updata the Data",
@@ -1067,13 +1064,13 @@ function Viewwork() {
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description " id="ProblemDescription"
-                                                    value={Problemdesc}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         ProblemDescription: e.target.value
-                                                //     }))
-                                                // }}
+                                                    value={value.ProblemDescription}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        ProblemDescription: e.target.value
+                                                    }))
+                                                }}
                                                 ></textarea>
 
                                             </div>
