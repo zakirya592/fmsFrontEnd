@@ -20,7 +20,8 @@ import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
-
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 function Viewwork() {
     const navigate = useNavigate();
     const [value, setvalue] = useState({
@@ -40,6 +41,49 @@ function Viewwork() {
         FeedbackEmp: '',
         Feedback_Remarks: '',
     })
+    const [activePage, setActivePage] = useState(0);
+    
+    const [codeSections, setCodeSections] = useState
+    ([{ // Initial code section
+        AssetCode: '',
+        AssetDescription: '',
+        AssetCategory: '',
+        Manufacturer: '',
+        Model: '',
+        ProblemCategory: '',
+        ProblemDescription: ''
+      }]);
+      
+      const addCodeSection = () => {
+        setCodeSections(prevSections => [...prevSections, { // Add a new code section object
+          AssetCode: '',
+          AssetDescription: '',
+          AssetCategory: '',
+          Manufacturer: '',
+          Model: '',
+          ProblemCategory: '',
+          ProblemDescription: ''
+        }]);
+      };
+    
+      const handleInputChange = (e, index) => {
+        const { id, value } = e.target;
+        setCodeSections((prevSections) => {
+          const updatedSections = [...prevSections];
+          updatedSections[index][id] = value;
+          return updatedSections;
+        });
+      };
+      
+    
+      const deleteCodeSection = (index) => {
+        setCodeSections((prevSections) => {
+          const updatedSections = [...prevSections];
+          updatedSections.splice(index, 1);
+          return updatedSections;
+        });
+      };
+      
 
     // post api for the data 
     function postapi(EmployeeID) {
@@ -913,6 +957,8 @@ function Viewwork() {
 
                                 <hr className='color3 line' />
                                 {/* 6th row */}
+                                {codeSections.slice(activePage, activePage + 1).map((section, index) => (
+                                            <div key={index}>
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
@@ -954,10 +1000,10 @@ function Viewwork() {
                                     </div>
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                         <div className="d-flex align-items-center justify-content-center mt-4">
-                                            <button type="button" className="btn color2 btnwork">
+                                            <button type="button" className="btn color2 btnwork" onClick={addCodeSection}>
                                                 <AddCircleOutlineIcon />
                                             </button>
-                                            <button type="button" className="btn  color2 btnwork">
+                                            <button type="button" className="btn  color2 btnwork" onClick={() => deleteCodeSection(index)}>
                                                 <DeleteIcon />
                                             </button>
                                             <button type="button" className="btn color2 btnwork">
@@ -1078,9 +1124,20 @@ function Viewwork() {
                                     </div>
 
                                 </div>
+                                </div>
+                                ))}
+
+
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <Stack spacing={2}>
+                                    <Pagination
+  count={codeSections.length}
+  page={activePage + 1}
+  onChange={(event, page) => setActivePage(page - 1)}
+/>
+    </Stack>
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
