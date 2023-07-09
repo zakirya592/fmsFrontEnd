@@ -1186,7 +1186,7 @@ function CreateWorkRequest() {
                 updatedSections[index].ProblemDescription = e.target.value;
                 setCodeSections(updatedSections);
               }}
-           
+            
                                                   ></textarea>
 
                                             </div>
