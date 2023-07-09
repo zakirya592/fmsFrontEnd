@@ -167,8 +167,8 @@ function CreateWorkRequest() {
             axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
                 console.log("Transactions_LIST", res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                console.log(res.data.recordset[0]);
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+                console.log(res.data.recordset[0].AssetItemTagID);
                 const assetauto = res.data.recordset[0].AssetItemDescription
                 axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
                     .then((res) => {
@@ -498,6 +498,7 @@ function CreateWorkRequest() {
         navigate(-1); // Navigate back one step in the browser history
     };
 
+   
     return (
         <div>
             <div className='bg'>
