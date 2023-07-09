@@ -150,6 +150,8 @@ function CreateWorkRequest() {
                     .catch((err) => {
                         console.log(err);
                     });
+                    console.log(res.data);
+                    
             }
         })
             .catch((err) => {
@@ -163,8 +165,9 @@ function CreateWorkRequest() {
             e.preventDefault();
             postapi(value.EmployeeID);
             axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-                console.log("Transactions_LIST", res.data.recordset[0].AssetItemDescription);
+                console.log("Transactions_LIST", res.data);
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                console.log(res.data.recordset[0]);
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
                 const assetauto = res.data.recordset[0].AssetItemDescription
                 axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
@@ -181,6 +184,7 @@ function CreateWorkRequest() {
                 .catch((err) => {
                     console.log(err);
                 });
+      
         }
     }
      // Dropdown list
@@ -378,17 +382,26 @@ function CreateWorkRequest() {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
             } else {
-
+               console.log(res.data);
                 const {
                     WorkType,
                     WorkTrade,
                     WorkPriority,
+                    ProblemDescription,
+                    RequestStatus,
+                    ProblemCategory,
+                    RequestDateTime
                 } = res.data.recordsets[0][0];
+                
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
                     WorkTrade,
                     WorkPriority,
+                    ProblemDescription,
+                    RequestStatus,
+                    ProblemCategory,
+                    RequestDateTime
                 }));
                 const workaout = res.data.recordsets[0][0].WorkType
                 axios.get(`/api/WorkType_descri_LIST/${workaout}`)
