@@ -547,6 +547,7 @@ function CreateWorkRequest() {
             ProblemCategory: '',
             ProblemDescription: ''
         }]);
+        codeSections.slice(activePage, activePage + 1)
     };
 
     const handleInputChange = (e, index) => {
@@ -559,12 +560,17 @@ function CreateWorkRequest() {
     };
 
 
+
     const deleteCodeSection = (index) => {
+        if (codeSections.length === 1) {
+            return; // Prevent deleting the only section
+        }
         setCodeSections((prevSections) => {
             const updatedSections = [...prevSections];
             updatedSections.splice(index, 1);
             return updatedSections;
         });
+        setActivePage(0);
     };
    
     return (
