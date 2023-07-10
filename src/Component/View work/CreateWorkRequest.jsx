@@ -547,7 +547,6 @@ function CreateWorkRequest() {
             ProblemCategory: '',
             ProblemDescription: ''
         }]);
-        codeSections.slice(activePage, activePage + 1)
     };
 
     const handleInputChange = (e, index) => {
