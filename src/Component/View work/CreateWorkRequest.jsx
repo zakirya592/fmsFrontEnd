@@ -166,26 +166,26 @@ function CreateWorkRequest() {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
-            axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-                console.log("Transactions_LIST", res.data);
-                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                const assetauto = res.data.recordset[0].AssetItemDescription
-                console.log(assetauto);
-                axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
-                    .then((res) => {
-                        // console.log('For auto selection', res.data);
-                        setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                        setAssetCategory(res.data.recordset[0].AssetCategory)
-                        setModel(res.data.recordset[0].Model)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
+            //     console.log("Transactions_LIST", res.data);
+            //     setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+            //     setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+            //     const assetauto = res.data.recordset[0].AssetItemDescription
+            //     console.log(assetauto);
+            //     axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
+            //         .then((res) => {
+            //             // console.log('For auto selection', res.data);
+            //             setManufacturerdesc(res.data.recordset[0].Manufacturer)
+            //             setAssetCategory(res.data.recordset[0].AssetCategory)
+            //             setModel(res.data.recordset[0].Model)
+            //         })
+            //         .catch((err) => {
+            //             console.log(err);
+            //         });
+            // })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
       
         }
     }
@@ -431,6 +431,27 @@ function CreateWorkRequest() {
                     .catch((err) => {
                         console.log(err);
                     });
+                const AssetItemTagIDauto = res.data.recordsets[0][0].AssetItemTagID
+                console.log(AssetItemTagIDauto);
+                axios.get(`/api/AssetType_descrip_LIST/${AssetItemTagIDauto}`)
+                    .then((res) => {
+                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                        const modellist = res.data.recordset[0].AssetItemDescription
+                        axios.get(`/api/AssetType_model_all_LIST/${modellist}`)
+                            .then((res) => {
+                                // console.log(res.data);
+                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                                setAssetCategory(res.data.recordset[0].AssetCategory)
+                                setModel(res.data.recordset[0].Model)
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
             }
         })
             .catch((err) => {
@@ -442,6 +463,7 @@ function CreateWorkRequest() {
         if (e.key === 'Enter') {
             e.preventDefault();
             Workrequestpost(value.RequestNumber);
+            
         }
     }
 
@@ -1152,7 +1174,13 @@ function CreateWorkRequest() {
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id={`ProblemCategory-${index}`} aria-label="Floating label select example"
                                                 value={value.ProblemCategory}
-                                                onChange={ProblemDesc}>
+                                                        onChange={e => {
+                                                            setvalue(prevValue => ({
+                                                                ...prevValue,
+                                                                ProblemCategory: e.target.value
+                                                            })
+                                                            )
+                                                }}>
                                                 <option className='inputsectiondropdpwn'>Select Problem Category</option>
                                                 {
                                                     dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {

@@ -137,24 +137,24 @@ function Viewwork() {
             e.preventDefault();
             postapi(value.EmployeeID);
             
-            axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-                console.log("Transactions_LIST", res.data);
-                setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
-                    .then((res) => {
-                        console.log('For auto selection', res.data);
-                        setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                        setAssetCategory(res.data.recordset[0].AssetCategory)
-                        setModel(res.data.recordset[0].Model)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
+            //     console.log("Transactions_LIST", res.data);
+            //     setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+            //     setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+            //     axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
+            //         .then((res) => {
+            //             console.log('For auto selection', res.data);
+            //             setManufacturerdesc(res.data.recordset[0].Manufacturer)
+            //             setAssetCategory(res.data.recordset[0].AssetCategory)
+            //             setModel(res.data.recordset[0].Model)
+            //         })
+            //         .catch((err) => {
+            //             console.log(err);
+            //         });
+            // })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
         }
     }
 
@@ -390,7 +390,8 @@ function Viewwork() {
                     ProblemDescription,
                     RequestStatus,
                     ProblemCategory,
-                    RequestDateTime
+                    RequestDateTime,
+                    AssetItemTagID
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -400,7 +401,8 @@ function Viewwork() {
                     ProblemDescription,
                     RequestStatus,
                     ProblemCategory,
-                    RequestDateTime
+                    RequestDateTime,
+                    AssetItemTagID
                 }));
                 // console.log('Work Request Number', res.data.recordsets[0][0]);
                 const workaout = res.data.recordsets[0][0].WorkType
@@ -425,6 +427,26 @@ function Viewwork() {
                             console.log(err);
                         });
                 })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                const AssetItemTagIDauto = res.data.recordsets[0][0].AssetItemTagID
+                console.log(AssetItemTagIDauto);
+                axios.get(`/api/AssetType_descrip_LIST/${AssetItemTagIDauto}`)
+                    .then((res) => {
+                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                        const modellist = res.data.recordset[0].AssetItemDescription
+                        axios.get(`/api/AssetType_model_all_LIST/${modellist}`)
+                            .then((res) => {
+                                // console.log(res.data);
+                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                                setAssetCategory(res.data.recordset[0].AssetCategory)
+                                setModel(res.data.recordset[0].Model)
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
                     .catch((err) => {
                         console.log(err);
                     });
