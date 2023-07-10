@@ -26,7 +26,8 @@
     top: 50%;
 }
 .lablesection{
-    font-family: 'Inter';
+    /* font-family: 'Inter'; */
+    font-family: 'Roboto', sans-serif !important;
 font-style: normal;
 font-weight: 600;
 font-size: 16px;
