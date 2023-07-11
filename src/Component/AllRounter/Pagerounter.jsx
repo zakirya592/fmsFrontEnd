@@ -55,7 +55,6 @@ function Pagerounter() {
 
           {/*=========== Location Management==============  */}
           <Route exact path='/locationmanagement' element={<LocationManagement />} />
-
           {/*===================== Setup & Configuration================== */}
           {/*Worketypesmaintance*/}
           <Route exact path='/Worketypes' element={<Worketypesmaintance />} />
