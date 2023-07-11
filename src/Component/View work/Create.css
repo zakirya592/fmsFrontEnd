@@ -4,8 +4,8 @@
 }
 .css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper{
     background: #D7F2FD;
-    border: 3px solid #000000;
-    border-radius: 12px;
+    border: 1px solid #000000;
+    border-radius: 12px !important;
 }
 .btnworkactive{
     background-color: #1E3B8B !important;

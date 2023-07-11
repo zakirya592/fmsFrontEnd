@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Fmsmain from '../../Pages/FMS Main/Fmsmain'
 import Viewwork from '../../Pages/Work Request/View modify/Viewwork'
+import WorkRequest from '../../Pages/Work Request/View modify/WorkRequest'
 import WorkOrder from "../../Pages/WorkOrder/WorkOrder"
 import LocationManagement from '../../Pages/LocationManagement/LocationManagement'
 import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfiguration'
@@ -46,9 +47,10 @@ function Pagerounter() {
         <Routes>
           {/* ---------Home Section----------- */}
           <Route exact path='/' element={<Fmsmain name="John" />} />
-
-          {/*=====================  Viewwork =====================  */}
-          <Route exact path='/workRequest' element={<Viewwork />} />
+          {/*=====================  work Request=====================   */}
+          <Route exact path="/workrequest" element={<WorkRequest/>}/>
+          {/*===================== View workRequest Viewwork =====================  */}
+          <Route exact path='/viewworkRequest' element={<Viewwork />} />
           {/* create work Request */}
           <Route exact path="/createworkrequest" element={<CreateWorkRequest />} />
           {/*=====================  Word Order=====================   */}
