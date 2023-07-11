@@ -431,27 +431,6 @@ function CreateWorkRequest() {
                     .catch((err) => {
                         console.log(err);
                     });
-                const AssetItemTagIDauto = res.data.recordsets[0][0].AssetItemTagID
-                console.log(AssetItemTagIDauto);
-                axios.get(`/api/AssetType_descrip_LIST/${AssetItemTagIDauto}`)
-                    .then((res) => {
-                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                        const modellist = res.data.recordset[0].AssetItemDescription
-                        axios.get(`/api/AssetType_model_all_LIST/${modellist}`)
-                            .then((res) => {
-                                // console.log(res.data);
-                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                                setAssetCategory(res.data.recordset[0].AssetCategory)
-                                setModel(res.data.recordset[0].Model)
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-
             }
         })
             .catch((err) => {
@@ -463,7 +442,34 @@ function CreateWorkRequest() {
         if (e.key === 'Enter') {
             e.preventDefault();
             Workrequestpost(value.RequestNumber);
-            
+            axios.get(`/api/WorkRequestItems_GET_BYID/${value.RequestNumber}`)
+                .then((res) => {
+                    console.log('WorkRequestItems_GET_BYID', res.data);
+                    setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+                    const assetdascauto = res.data.recordset[0].AssetItemTagID
+                    console.log(assetdascauto);
+                    axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
+                        .then((res) => {
+                            setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                            const modellistmode = res.data.recordset[0].AssetItemDescription
+                            axios.get(`/api/AssetType_model_all_LIST/${modellistmode}`)
+                                .then((res) => {
+                                    // console.log(res.data);
+                                    setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                                    setAssetCategory(res.data.recordset[0].AssetCategory)
+                                    setModel(res.data.recordset[0].Model)
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
 
@@ -492,6 +498,25 @@ function CreateWorkRequest() {
             });  
 
     };
+
+    const AssetItemTagIDpost = async () => {
+        await axios.post(`/api/WorkRequestItems_post`, {
+            RequestNumber: value.RequestNumber,
+            AssetItemTagID: value.AssetItemTagID,
+            AssetItemQty: '1',
+            AssetItemQtyUsed: '1',
+          
+        },)
+            .then((res) => {
+                console.log('3rd api',res.data);
+                // setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetItemTagID: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    };
+
     // Putapi
     const WorkRequestNumber = async () => {
         await axios.put(`/api/updatesecondWorkRequest`, {
@@ -512,6 +537,7 @@ function CreateWorkRequest() {
     const allCreateapi=()=>{
         Createapi();
         workrequsrpostapi()
+        AssetItemTagIDpost()
     }
 
     // All Updata api  function 
