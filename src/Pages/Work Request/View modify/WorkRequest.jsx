@@ -270,7 +270,7 @@ function WorkRequest() {
                       rows={filteredRows}
                       columns={columns}
                       pagination
-                      rowsPerPageOptions={[10, 25, 500]} // Optional: Set available page size options
+                      rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
                       paginationModel={paginationModel}
                       onPaginationModelChange={setPaginationModel}
                       checkboxSelection
