@@ -19,14 +19,19 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
+import moment from 'moment';
+
 function WorkRequest() {
   const navigate = useNavigate();
   const [getdata, setgetdata] = useState([])
+  const [WorkTypes, setWorkTypes] = useState([])
+  // List a data thougth api 
   const getapi = () => {
     axios.get(`/api/workRequest_GET_LIST`, {
     },)
       .then((res) => {
         console.log('TO get the list', res);
+        setWorkTypes(res.data.recordset);
         setgetdata(res.data.recordset)
       })
       .catch((err) => {
@@ -36,6 +41,7 @@ function WorkRequest() {
   useEffect(() => {
     getapi()
   }, [])
+
   const columns = [
     { field: 'id', headerName: 'SEQ.', width: 90 },
     { field: 'RequestNumber', headerName: 'WORK REQUEST#', width: 160 },
@@ -123,26 +129,33 @@ function WorkRequest() {
   const [requestByEmployee, setrequestByEmployee] = useState('');
   const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
 
-  // const filteredRows = rows.filter((row) =>
-  //   row['REQUEST BY EMP#'].toLowerCase().includes(requestByEmployee.toLowerCase()) &&
-  //   row['REQUEST STATUS'].toLowerCase().includes(RequestStatusFilterValue.toLowerCase())
+  // const filterdata = getdata.filter((row) =>
+  //   // row['REQUEST BY EMP#'].toLowerCase().includes(requestByEmployee.toLowerCase()) &&
+  //   // row['REQUEST STATUS'].toLowerCase().includes(RequestStatusFilterValue.toLowerCase())
+  //   row => !RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue &&
+  //   !requestByEmployee || row.EmployeeID === requestByEmployee
   // );
+  
 
-  const filteredRows = getdata && getdata.map((row, indes) => ({
+  const filteredRows = getdata && getdata.filter(row => (
+    (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
+    (!requestByEmployee || row.EmployeeID === requestByEmployee)
+  )).map((row, indes) => ({
     ...row,
     id: indes + 1,
     RequestNumber: row.RequestNumber,
     RequestStatus: row.RequestStatus ,
     EmployeeID: row.EmployeeID,
     WorkPriority: row.WorkPriority,
-    RequestDateTime:row.RequestDateTime,
+    RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
     WorkType: row.WorkType,
   }))
 
   useEffect(() => {
-    axios.get(`/api/WorkType_descri_LIST/${filteredRows}`)
+    axios.get(`/api/WorkType_descri_LIST/WT03`)
       .then((res) => {
-        console.log(res);
+        const workTypeDescriptions = res.data; // Assuming the response contains the descriptions as an array
+        console.log(workTypeDescriptions);
       })
       .catch((err) => {
         console.log(err);
@@ -187,6 +200,7 @@ function WorkRequest() {
                       </button>
                     </div>
                   </div>
+                 
                   <hr className="color3 line" />
                   {/* Search Fields */}
                   <div className="row mx-auto formsection">
