@@ -24,15 +24,19 @@ import moment from 'moment';
 function WorkRequest() {
   const navigate = useNavigate();
   const [getdata, setgetdata] = useState([])
-  const [WorkTypes, setWorkTypes] = useState([])
+  const [WorkTypes, setWorkTypes] = useState()
+  const [wordecss, setwordecss] = useState()
   // List a data thougth api 
   const getapi = () => {
     axios.get(`/api/workRequest_GET_LIST`, {
     },)
       .then((res) => {
         console.log('TO get the list', res);
-        setWorkTypes(res.data.recordset);
         setgetdata(res.data.recordset)
+        // setWorkTypes(res.data.recordset.map((item,ind)=>{
+        //   console.log("work desc sing",item.WorkType);
+        //   setwordecss(item.WorkType)
+        // }));
       })
       .catch((err) => {
         console.log(err);
@@ -49,7 +53,7 @@ function WorkRequest() {
     { field: 'EmployeeID', headerName: 'REQUEST BY EMP#', width: 160 },
     { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
     { field: 'RequestDateTime', headerName: 'REQUEST DATE', width: 200 },
-    { field: 'WORK TYPE DESC', headerName: 'WORK TYPE DESC', width: 160 },
+    { field: 'workTypeDesc', headerName: 'WORK TYPE DESC', width: 160 },
     { field: 'WORK TRADE DESC', headerName: 'WORK TRADE DESC', width: 160 },
     { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
   ];
@@ -104,42 +108,13 @@ function WorkRequest() {
 
     );
   }
-
-  // const generateRandomData = () => {
-  //   const rows = [];
-  //   for (let i = 1; i <= 10; i++) {
-  //     rows.push({
-  //       id: i,
-  //       'SEQ.': i,
-  //       'WORK REQUEST#': `Work Request-${i}`,
-  //       'REQUEST STATUS': Math.random() < 0.5 ? 'Pending' : 'Completed',
-  //       'REQUEST BY EMP#': `EMPNO-${i}`,
-  //       'PRIORITY': Math.random() < 0.5 ? "High" : "Low",
-  //       'REQUEST DATE': new Date().toLocaleDateString(),
-  //       'WORK TYPE DESC': `work type desc-${i}`,
-  //       'WORK TRADE DESC': `work type desc-${i}`,
-  //       'ACTION': `Building ${i}`,
-  //     });
-  //   }
-  //   return rows;
-  // };
-
-  // const rows = generateRandomData();
-
   const [requestByEmployee, setrequestByEmployee] = useState('');
   const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
-
-  // const filterdata = getdata.filter((row) =>
-  //   // row['REQUEST BY EMP#'].toLowerCase().includes(requestByEmployee.toLowerCase()) &&
-  //   // row['REQUEST STATUS'].toLowerCase().includes(RequestStatusFilterValue.toLowerCase())
-  //   row => !RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue &&
-  //   !requestByEmployee || row.EmployeeID === requestByEmployee
-  // );
-  
+  const [filteredRowss, setFilteredRows] = useState([]);
 
   const filteredRows = getdata && getdata.filter(row => (
     (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-    (!requestByEmployee || row.EmployeeID === requestByEmployee)
+    (!requestByEmployee || row.EmployeeID === requestByEmployee) 
   )).map((row, indes) => ({
     ...row,
     id: indes + 1,
@@ -149,23 +124,43 @@ function WorkRequest() {
     WorkPriority: row.WorkPriority,
     RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
     WorkType: row.WorkType,
+    workTypeDesc: row.workTypeDesc
   }))
 
   useEffect(() => {
-    axios.get(`/api/WorkType_descri_LIST/WT03`)
-      .then((res) => {
-        const workTypeDescriptions = res.data; // Assuming the response contains the descriptions as an array
-        console.log(workTypeDescriptions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [])
-  
+    // Fetch work type descriptions for all unique work types
+    const uniqueWorkTypes = [...new Set(filteredRows.map(row => row.WorkType))];
+    uniqueWorkTypes.forEach(workType => {
+      axios
+        .get(`/api/WorkType_descri_LIST/${workType}`)
+        .then((res) => {
+          const descriptions = res.data.recordset[0].WorkTypeDesc// Assuming the response contains the descriptions as an array
+          const updatedRows = filteredRows.map(row => {
+            if (row.WorkType === workType) {
+              return {
+                ...row,
+                workTypeDesc: descriptions,
+              };
+            }
+            return row;
+          });
+          // Update the filteredRows state with the updated rows
+          // You might want to set the state using setFilteredRows(updatedRows)
+          console.log(updatedRows);
+          setFilteredRows(updatedRows);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    
+  }, [filteredRows]);
+   
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 25,
     page: 0,
   });
+
   return (
     <>
       <div className="bg">
