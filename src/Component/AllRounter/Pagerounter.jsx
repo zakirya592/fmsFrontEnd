@@ -39,6 +39,9 @@ import Updataworkstatus from '../../Pages/Setup&Configuration/Work Status/Updata
 import Updatworkpriority from '../../Pages/Setup&Configuration/Work Priority/Updatworkpriority'
 import Updataworkcategory from '../../Pages/Setup&Configuration/Work Category/Updataworkcategory'
 import Updatadepartment from './setup configuration/Department/Updatadepartment'
+import Gender from '../../Pages/Setup&Configuration/Gender/Gender'
+import Titless from '../../Pages/Setup&Configuration/Prm Title/Titless'
+import Maritalstatus from '../../Pages/Setup&Configuration/Marital Status/Maritalstatus'
 function Pagerounter() {
 
   return (
@@ -95,8 +98,12 @@ function Pagerounter() {
           <Route exact path='/Day' element={<Day />} />
           {/*Frequency*/}
           <Route exact path='/Frequency' element={<Frequency />} />
-          {/*Assecttypesmaintence*/}
-          <Route exact path='/Assecttypes' element={<Assecttypesmaintence />} />
+          {/*Gender*/}
+          <Route exact path='/Gender' element={<Gender />} />
+          {/*Titles*/}
+          <Route exact path='/Titles' element={<Titless />} />
+          {/*Maritalstatus*/}
+          <Route exact path='/Maritalstatus' element={<Maritalstatus />} />
           {/*Assectcategory*/}
           <Route exact path='/AssetCategory' element={<Assectcategory />} />
           {/*Assectsubcategory*/}

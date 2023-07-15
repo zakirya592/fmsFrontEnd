@@ -230,7 +230,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. Gender'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/Gender')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -242,7 +242,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. Title/Salutation'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/Titles')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -254,7 +254,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. Marital Status'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/Maritalstatus')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
