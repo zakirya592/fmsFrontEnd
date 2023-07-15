@@ -131,7 +131,7 @@ function WorkRequest() {
   useEffect(() => {
     const filteredRows = getdata && getdata.filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-      (!requestByEmployee || row.EmployeeID === requestByEmployee)
+      (!requestByEmployee || row.RequestNumber === requestByEmployee)
     )).map((row, indes) => ({
       ...row,
       id: indes + 1,
@@ -361,7 +361,7 @@ function WorkRequest() {
 
                   </div>
                   <div className="d-flex justify-content-between mt-3">
-                    <button type="button" class="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                    <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                   </div>
                 </div>
               </div>
