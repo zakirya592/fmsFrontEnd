@@ -131,13 +131,13 @@ function WorkRequest() {
   useEffect(() => {
     const filteredRows = getdata && getdata.filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-      (!requestByEmployee || row.RequestNumber === requestByEmployee)
+      (!requestByEmployee || row.EmployeeID[0] === requestByEmployee)
     )).map((row, indes) => ({
       ...row,
       id: indes + 1,
       RequestNumber: row.RequestNumber,
       RequestStatus: row.RequestStatus,
-      EmployeeID: row.EmployeeID,
+      EmployeeID: row.EmployeeID[0],
       WorkPriority: row.WorkPriority,
       RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
       WorkType: row.WorkType,
