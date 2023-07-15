@@ -3,7 +3,7 @@ import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import "./Viewmodify.css"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import excel from "../../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
@@ -23,6 +23,7 @@ import axios from 'axios'
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 function Viewwork() {
+    let { userId } = useParams();
     const navigate = useNavigate();
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
@@ -520,6 +521,43 @@ function Viewwork() {
         Update();
         WorkRequestNumber();
     }
+
+
+    // Get by Requst ID
+    const apicall = () => {
+        axios.get(`/api/WorkRequestItems_GET_BYID/${userId}`)
+            .then((res) => {
+                console.log('Work req',res.data);
+                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
+                const assetdascauto = res.data.recordset[0].AssetItemTagID
+                console.log(assetdascauto);
+                axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
+                    .then((res) => {
+                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
+                        const modellistmode = res.data.recordset[0].AssetItemDescription
+                        axios.get(`/api/AssetType_model_all_LIST/${modellistmode}`)
+                            .then((res) => {
+                                // console.log(res.data);
+                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
+                                setAssetCategory(res.data.recordset[0].AssetCategory)
+                                setModel(res.data.recordset[0].Model)
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    useEffect(() => {
+        apicall()
+    }, [])
+    
 
     return (
         <div>

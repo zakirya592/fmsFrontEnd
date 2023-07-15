@@ -54,6 +54,8 @@ function Pagerounter() {
           <Route exact path="/workrequest" element={<WorkRequest/>}/>       
              {/*===================== View workRequest Viewwork =====================  */}
           <Route exact path='/viewworkRequest' element={<Viewwork />} />
+          {/* TO anthoer  */}
+          <Route exact path='/viewworkRequest/:userId' element={<Viewwork />} />
           {/* create work Request */}
           <Route exact path="/createworkrequest" element={<CreateWorkRequest />} />
           {/*=====================  Word Order=====================   */}
