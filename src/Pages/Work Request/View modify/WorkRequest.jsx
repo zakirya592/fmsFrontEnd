@@ -90,7 +90,7 @@ function WorkRequest() {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem>
+          <MenuItem onClick={() => navigate(`/viewworkRequest/${params.row.RequestNumber}`)}>
             <span style={{ paddingRight: '18px' }}>View</span>
             <VisibilityIcon />
           </MenuItem>
