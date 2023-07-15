@@ -522,43 +522,6 @@ function Viewwork() {
         WorkRequestNumber();
     }
 
-
-    // Get by Requst ID
-    const apicall = () => {
-        axios.get(`/api/WorkRequestItems_GET_BYID/${userId}`)
-            .then((res) => {
-                console.log('Work req',res.data);
-                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                const assetdascauto = res.data.recordset[0].AssetItemTagID
-                console.log(assetdascauto);
-                axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
-                    .then((res) => {
-                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                        const modellistmode = res.data.recordset[0].AssetItemDescription
-                        axios.get(`/api/AssetType_model_all_LIST/${modellistmode}`)
-                            .then((res) => {
-                                // console.log(res.data);
-                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                                setAssetCategory(res.data.recordset[0].AssetCategory)
-                                setModel(res.data.recordset[0].Model)
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-    useEffect(() => {
-        apicall()
-    }, [])
-    
-
     return (
         <div>
             <div className='bg'>
