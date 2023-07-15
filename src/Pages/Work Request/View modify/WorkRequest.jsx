@@ -54,7 +54,7 @@ function WorkRequest() {
     { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
     { field: 'RequestDateTime', headerName: 'REQUEST DATE', width: 200 },
     { field: 'workTypeDesc', headerName: 'WORK TYPE DESC', width: 160 },
-    { field: 'WORK TRADE DESC', headerName: 'WORK TRADE DESC', width: 160 },
+    { field: 'worktradeDesc', headerName: 'WORK TRADE DESC', width: 160 },
     { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
   ];
 
@@ -110,51 +110,137 @@ function WorkRequest() {
   }
   const [requestByEmployee, setrequestByEmployee] = useState('');
   const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
-  const [filteredRowss, setFilteredRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
 
-  const filteredRows = getdata && getdata.filter(row => (
-    (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-    (!requestByEmployee || row.EmployeeID === requestByEmployee) 
-  )).map((row, indes) => ({
-    ...row,
-    id: indes + 1,
-    RequestNumber: row.RequestNumber,
-    RequestStatus: row.RequestStatus ,
-    EmployeeID: row.EmployeeID,
-    WorkPriority: row.WorkPriority,
-    RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
-    WorkType: row.WorkType,
-    workTypeDesc: row.workTypeDesc
-  }))
-
+  // const filteredRows = getdata && getdata.filter(row => (
+  //   (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
+  //   (!requestByEmployee || row.EmployeeID === requestByEmployee) 
+  // )).map((row, indes) => ({
+  //   ...row,
+  //   id: indes + 1,
+  //   RequestNumber: row.RequestNumber,
+  //   RequestStatus: row.RequestStatus ,
+  //   EmployeeID: row.EmployeeID,
+  //   WorkPriority: row.WorkPriority,
+  //   RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
+  //   WorkType: row.WorkType,
+  //   workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+  // }))
+  
+// workTypeDesc api 
   useEffect(() => {
+    const filteredRows = getdata && getdata.filter(row => (
+      (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
+      (!requestByEmployee || row.EmployeeID === requestByEmployee)
+    )).map((row, indes) => ({
+      ...row,
+      id: indes + 1,
+      RequestNumber: row.RequestNumber,
+      RequestStatus: row.RequestStatus,
+      EmployeeID: row.EmployeeID,
+      WorkPriority: row.WorkPriority,
+      RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
+      WorkType: row.WorkType,
+      workTypeDesc: row.workTypeDesc, //this Both id  is to display a work types desc //ok
+      WorkTrade: row.WorkTrade,
+      worktradeDesc: row.worktradeDesc,
+    }))
     // Fetch work type descriptions for all unique work types
     const uniqueWorkTypes = [...new Set(filteredRows.map(row => row.WorkType))];
-    uniqueWorkTypes.forEach(workType => {
-      axios
-        .get(`/api/WorkType_descri_LIST/${workType}`)
-        .then((res) => {
-          const descriptions = res.data.recordset[0].WorkTypeDesc// Assuming the response contains the descriptions as an array
-          const updatedRows = filteredRows.map(row => {
-            if (row.WorkType === workType) {
-              return {
-                ...row,
-                workTypeDesc: descriptions,
-              };
-            }
-            return row;
-          });
-          // Update the filteredRows state with the updated rows
-          // You might want to set the state using setFilteredRows(updatedRows)
-          console.log(updatedRows);
-          setFilteredRows(updatedRows);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    // uniqueWorkTypes.forEach(workType => {
+    //   // console.log(workType);
+    //   axios.get(`/api/WorkType_descri_LIST/${workType}`)
+    //     .then((res) => {
+    //       const descriptions = res.data.recordset[0].WorkTypeDesc// Assuming the response contains the descriptions as an array
+    //       const updatedRows = filteredRows.map(row => {
+    //         if (row.WorkType === workType) {
+    //           return {
+    //             ...row,
+    //             workTypeDesc: descriptions,
+    //           };
+    //         }
+    //         return row;
+    //       });
+    //       // Update the filteredRows state with the updated rows
+    //       // You might want to set the state using setFilteredRows(updatedRows)
+    //       console.log(updatedRows);
+    //       setFilteredRows(updatedRows);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // });
+
+    const uniqueWorkTrade = [...new Set(filteredRows.map(row => row.WorkTrade))];
+    // uniqueWorkTrade.forEach(workTrade => {
+    //   // console.log(workTrade);
+    //   axios.get(`/api/WorkTrade_descri_LIST/${workTrade}`)
+    //     .then((res) => {
+    //       const descriptionsTrade = res.data.recordset[0].WorkTradeDesc// Assuming the response contains the descriptions as an array
+    //       const updatedRows = filteredRows.map(row => {
+    //         if (row.WorkTrade === workTrade) {
+    //           return {
+    //             ...row,
+    //             worktradeDesc: descriptionsTrade,
+    //           };
+    //         }
+    //         return row;
+    //       });
+    //       // Update the filteredRows state with the updated rows
+    //       // You might want to set the state using setFilteredRows(updatedRows)
+    //       console.log('work trade desc',updatedRows);
+    //       setFilteredRows(updatedRows);
+    //     })
+    //     .catch((err) => {
+    //       // console.log(err);
+    //     });
+    // });
     
-  }, [filteredRows]);
+    const workTypePromises = uniqueWorkTypes.map(workType =>
+      axios.get(`/api/WorkType_descri_LIST/${workType}`)
+        .then(res => ({
+          workType,
+          descriptions: res.data.recordset[0].WorkTypeDesc,
+        }))
+        .catch(err => {
+          console.log(err);
+          return null;
+        })
+    );
+
+    // Fetch work trade descriptions for all unique work trades
+    const workTradePromises = uniqueWorkTrade.map(workTrade =>
+      axios.get(`/api/WorkTrade_descri_LIST/${workTrade}`)
+        .then(res => ({
+          workTrade,
+          descriptionsTrade: res.data.recordset[0].WorkTradeDesc,
+        }))
+        .catch(err => {
+          console.log(err);
+          return null;
+        })
+    );
+
+    Promise.all([...workTypePromises, ...workTradePromises])
+      .then(results => {
+        const updatedRows = filteredRows.map(row => {
+          let newRow = { ...row };
+          results.forEach(result => {
+            if (result && result.workType === row.WorkType) {
+              newRow = { ...newRow, workTypeDesc: result.descriptions };
+            }
+            if (result && result.workTrade === row.WorkTrade) {
+              newRow = { ...newRow, worktradeDesc: result.descriptionsTrade };
+            }
+          });
+          return newRow;
+        });
+        setFilteredRows(updatedRows);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [getdata, RequestStatusFilterValue, requestByEmployee]);
    
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 25,
