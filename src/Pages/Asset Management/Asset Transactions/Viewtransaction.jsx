@@ -12,8 +12,9 @@ import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
-
+import { useNavigate } from 'react-router-dom';
 function Viewtransaction() {
+    const navigate = useNavigate();
     const [assetCategory, setassetCategory] = useState("");
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
     const [assetSubCategory, setassetSubCategory] = useState("");
@@ -27,7 +28,14 @@ function Viewtransaction() {
 
     const [value, setvalue] = useState({
         Emailaddress: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-      
+        Vendorcode: '', Vendorname:'',
+        poUnite: '', poReference:'',
+        DepartmentCode: 'Select Dept Code', Departmentname: '',
+        BuildingCode: 'Select Building', 
+        Location: 'Select Location',
+        Unites: '', UnitesDescription:"",
+        OnhandQty: '', ReOrderQtyLevel: '', Minimumlevel: '', Maximumlevel:''
+
     })
 
     return (
@@ -43,8 +51,8 @@ function Viewtransaction() {
                                     noWrap
                                     component="div"
                                     className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
-                                    <p className="text-center my-auto ms-5">Asset Management - Master</p>
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => navigate('/AssetTransaction')} />
+                                    <p className="text-center my-auto ms-5">Asset Management</p>
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -63,6 +71,8 @@ function Viewtransaction() {
                                 <div className="row mx-auto formsection">
 
                                     <div className="printerPic col-sm-12 col-md-12 col-lg-4 col-xl-3 ">
+                                     <center>
+
                                         <div className="row">
                                             <div className="col">
                                                 <img src={Printer} alt="" className="printerpic" />
@@ -71,21 +81,22 @@ function Viewtransaction() {
                                                 <img src={Barcode} alt="" className="barcodepic" />
                                             </div>
                                         </div>
+                                     </center>
 
-                                        <div className="row ">
+                                        {/* <div className="row ">
                                             <div className="col camera1">
                                                 <img src={Camera1} alt="" />
                                             </div>
                                             <div className="col">
                                                 <img src={BrowserFolder} alt="" className="browserfolder" />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     {/*  Asset / Stock Number */}
                                     <div className="col-sm-12 col-md-7 col-lg-7 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                            Asset / Stock Number<span className='star'>*</span>
+                                                Asset / Stock Number<span className='star'>*</span>
                                             </label>
                                             <input
                                                 types='text'
@@ -105,7 +116,7 @@ function Viewtransaction() {
                                                 <SearchOutlined className=' serachicon' />
                                             </p>
                                         </div>
-                                        
+
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
                                                 Employee ID<span className='star'>*</span>
@@ -179,17 +190,15 @@ function Viewtransaction() {
                                                 className="lablesection color3 text-start mb-1">
                                                 Asset Item Discription<span className="star">*</span>
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='assetsubcategorydiscription'
-                                                value={assetItemDiscription}
-                                                onChange={e => {
-                                                    setassetItemDiscription(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Asset Item Discription'
-                                                required
-                                            ></input>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workCategoryDiscription" aria-label="Floating label select example" value={assetItemDiscription}
+                                                onChange={(event) => {
+                                                    setassetItemDiscription(event.target.value)
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Select Asset Condition</option>
+                                                <option value={"First"}>One</option>
+                                                <option value={"Second"}>Two</option>
+                                                <option value={"three"}>Three</option>
+                                            </select>
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
@@ -318,7 +327,7 @@ function Viewtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                               Asset Category Discription<span className="star">*</span>
+                                                Asset Category Discription<span className="star">*</span>
                                             </label>
                                             <input
                                                 types='text'
@@ -344,7 +353,7 @@ function Viewtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                               Asset Sub-Category <span className="star">*</span>
+                                                Asset Sub-Category <span className="star">*</span>
                                             </label>
                                             <input
                                                 types='text'
@@ -371,7 +380,7 @@ function Viewtransaction() {
                                                 types='text'
                                                 id='assetsubcategorydiscription'
                                                 value={assetTypeDiscription}
-                                                onChange={e => {
+                                               onChange ={e => {
                                                     setassetTypeDiscription(e.target.value)
                                                 }}
                                                 className='rounded inputsection py-2'
@@ -388,7 +397,255 @@ function Viewtransaction() {
                                 </div>
 
                                 {/* Break Line */}
-                                <hr className='color3 line' />
+                                <hr className="color3 line" />
+
+                                <div className="row mx-auto formsection">
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="OnhandQty"
+                                                className="lablesection color3 text-center mb-1">
+                                                On-hand Qty <span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='OnhandQty'
+                                                value={value.OnhandQty}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        OnhandQty: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded text-center inputsection py-2'
+                                                placeholder='999999'
+                                                required
+                                            ></input>
+
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="ReOrderQtyLevel "
+                                                className="lablesection color3 text-center mb-1">
+                                                Re-Order Qty Level <span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='ReOrderQtyLevel'
+                                                value={value.ReOrderQtyLevel}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        ReOrderQtyLevel: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded text-center inputsection py-2'
+                                                placeholder='999999'
+                                                required
+                                            ></input>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="Minimumlevel "
+                                                className="lablesection color3 text-center mb-1">
+                                               Minimum Level <span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='Minimumlevel'
+                                                value={value.Minimumlevel}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Minimumlevel: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded text-center inputsection py-2'
+                                                placeholder='999999'
+                                                required
+                                            ></input>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="Maximumlevel "
+                                                className="lablesection color3 text-center mb-1">
+                                                Maximum Level <span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='Maximumlevel'
+                                                value={value.Maximumlevel}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Maximumlevel: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded text-center inputsection py-2'
+                                                placeholder='999999'
+                                                required
+                                            ></input>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                  <div className="row mx-auto formsection">
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Unites' className='lablesection color3 text-start mb-1'>
+                                                Unites <span className="star">*</span>
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Unites" aria-label="Floating label select example" value={value.Vendorcode}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Unites: e.target.value
+                                                    }))
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Unites code</option>
+                                                <option value="Unites1">One</option>
+                                                <option value="Unites2">Two</option>
+                                                <option value="Unites3">Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="UnitesDescription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Unites Description<span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='UnitesDescription'
+                                                value={value.UnitesDescription}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        UnitesDescription: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Unites Description'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="row mx-auto formsection">
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
+                                                Department Code<span className='star'>*</span>
+                                            </label>
+                                            <select
+                                                className='rounded inputsectiondropdpwn color2 py-2'
+                                                id='DepartmentCode'
+                                                aria-label='Floating label select example'
+                                                value={value.DepartmentCode}
+                                                o
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        DepartmentCode: e.target.value
+                                                    }))
+                                                }}
+                                            >
+                                                <option value=''>Select Department code</option>
+                                                <option value='12'> Department 1</option>
+                                                <option value='qew'>Department 2</option>
+                                                      
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
+                                                Department Name<span className='star'>*</span>
+                                            </label>
+
+                                            <input
+                                                types='text'
+                                                id='Departmentname'
+                                                value={value.Departmentname}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Departmentname: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Department Name'
+                                                required
+                                            ></input>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
+                                                Building<span className='star'>*</span>
+                                            </label>
+                                            <select className='roundedinputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
+
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        BuildingCode: e.target.value
+                                                    }))
+                                                }}>
+                                                <option value=''>Select Building</option>
+                                                <option  value='wer'>BuildingCodess</option>
+                                                    
+                                             
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
+                                                Location<span className='star'>*</span>
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.LocationCode}
+
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        LocationCode: e.target.value
+                                                    }))
+                                                }}>
+                                                <option className='inputsectiondropdpwn' value=''>Select Location</option>
+                                              
+                                                 <option value='LocationCode12'> Location12</option>
+                                                <option value='LocationCode23'> 23</option>
+                                               
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className="emailsection position-relative d-grid my-2">
@@ -454,14 +711,40 @@ function Viewtransaction() {
                                         </div>
                                     </div>
                                 </div>
+
+                                <hr className='color3 line' />
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                                Purchase Date<span className="star">*</span>
+                                               Last Purchase Date<span className="star">*</span>
                                             </label>
                                             <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2' />
 
+
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="PO Reference"
+                                                className="lablesection color3 text-start mb-1">
+                                                PO Reference# <span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='poReference'
+                                                value={value.poReference}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        poReference: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='xxxxxxxxxxxxxxx'
+                                                required
+                                            ></input>
 
                                         </div>
                                     </div>
@@ -487,6 +770,30 @@ function Viewtransaction() {
                                         </div>
                                     </div>
                                     <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="PO Reference"
+                                                className="lablesection color3 text-start mb-1">
+                                                PO Qty./Unite <span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='poUnite'
+                                                value={value.poUnite}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        poUnite: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='999999'
+                                                required
+                                            ></input>
+
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                                 Warrenty Period <span className="star">*</span>
@@ -505,16 +812,6 @@ function Viewtransaction() {
                                     <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                                Warrenty Start Date<span className="star">*</span>
-                                            </label>
-                                            <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2' />
-
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                                 Warrenty End Date<span className="star">*</span>
                                             </label>
                                             <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2' />
@@ -524,8 +821,55 @@ function Viewtransaction() {
                                     </div>
                                 </div>
 
+                                <div className="row mx-auto formsection">
+                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Vendorcode' className='lablesection color3 text-start mb-1'>
+                                                Vendor Code <span className="star">*</span>
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Vendorcode" aria-label="Floating label select example" value={value.Vendorcode}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Vendorcode: e.target.value
+                                                    }))
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Vendor code</option>
+                                                <option value={"First"}>One</option>
+                                                <option value={"Second"}>Two</option>
+                                                <option value={"three"}>Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="Vendorname"
+                                                className="lablesection color3 text-start mb-1">
+                                                Vendor Name<span className="star">*</span>
+                                            </label>
+                                            <input
+                                                types='text'
+                                                id='Vendorname'
+                                                value={value.Vendorname}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Vendorname: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Vendor Name'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
 
-
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                                 {/* Row Two */}
                                 <div className="row mx-auto formsection">
 
@@ -671,7 +1015,7 @@ function Viewtransaction() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
+                                <div className="col-sm-12 formsection ms-3 col-md-8 col-lg-8 col-xl-8 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
                                             Remarks /  Notes<span className="star">*</span>
@@ -682,10 +1026,10 @@ function Viewtransaction() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="d-flex justify-content-end mt-3">
-                                    <button type="button" className="border-0 px-3 savebtn py-2">
-                                        <SaveIcon className="me-2" />
-                                        SAVE
+                                <div className="d-flex justify-content-start mt-3">
+                                    <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => navigate('/AssetTransaction')}>
+                                        <ArrowCircleLeftOutlinedIcon className="me-2" />
+                                        Back
                                     </button>
                                 </div>
                             </div>

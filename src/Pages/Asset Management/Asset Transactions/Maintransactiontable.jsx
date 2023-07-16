@@ -93,7 +93,7 @@ function Maintransactiontable() {
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
+                    <MenuItem onClick={() => navigate('/Updata/transaction')}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>

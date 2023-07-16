@@ -14,8 +14,9 @@ import Barcode from "../../../Image/barcode.png"
 import Camera1 from "../../../Image/camera 1.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
-
+import { useNavigate } from 'react-router-dom';
 function UpdataAssetmaster() {
+    const navigate = useNavigate();
     const [assetCategory, setassetCategory] = useState("");
     const [assetType, setassetType] = useState("");
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
@@ -42,8 +43,8 @@ function UpdataAssetmaster() {
                                     noWrap
                                     component="div"
                                     className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
-                                    <p className="text-center my-auto ms-5">Asset Management - Master</p>
+                                  <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => navigate('/AssetMasters')} />
+                                    <p className="text-center my-auto ms-5">Asset Management </p>
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -378,7 +379,11 @@ function UpdataAssetmaster() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="d-flex justify-content-end mt-3">
+                                <div className="d-flex justify-content-between mt-3">
+                                  <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => navigate('/AssetMasters')}>
+                                      <ArrowCircleLeftOutlinedIcon className="me-2" />
+                                      Back
+                                  </button>
         <button type="button" className="border-0 px-3 savebtn py-2">
           <SaveIcon className="me-2" />
           SAVE
