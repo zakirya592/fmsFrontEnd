@@ -1,21 +1,21 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Siderbar from "../../Component/Siderbar/Siderbar";
+import Siderbar from "../../../Component/Siderbar/Siderbar";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import PrintIcon from "@mui/icons-material/Print";
-import excel from "../../Image/excel.png";
-import WorkOrderCreate from "../../Component/View work/WorkOrderCreate";
+import excel from "../../../Image/excel.png";
+import WorkOrderCreate from "../../../Component/View work/WorkOrderCreate";
 import "./assetManagement.css"
-import Printer from "../../Image/printer.jpeg"
-import Barcode from "../../Image/barcode.png"
-import Camera1 from "../../Image/camera 1.png"
-import BrowserFolder from "../../Image/browsefolder 3.png"
+import Printer from "../../../Image/printer.jpeg"
+import Barcode from "../../../Image/barcode.png"
+import Camera1 from "../../../Image/camera 1.png"
+import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
 
-function AssetManagement() {
+function UpdataAssetmaster() {
     const [assetCategory, setassetCategory] = useState("");
     const [assetType, setassetType] = useState("");
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
@@ -52,23 +52,9 @@ function AssetManagement() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                    View/Modify Asset Management-Master
+                                    Asset Masterlist - Create
                                         <span className="star">*</span>
                                     </p>
-                                    <div className="d-flex">
-                                        <WorkOrderCreate />
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-primary mx-1 color2 btnwork">
-                                            <PrintIcon className="me-1" />
-                                            Print
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-primary color2">
-                                            <img src={excel} alt="excel" /> Export
-                                        </button>
-                                    </div>
                                 </div>
                                 <hr className="color3 line" />
 
@@ -407,4 +393,4 @@ function AssetManagement() {
   );
 }
 
-export default AssetManagement;
+export default UpdataAssetmaster;

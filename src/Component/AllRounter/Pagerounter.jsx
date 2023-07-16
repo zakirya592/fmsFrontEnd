@@ -8,7 +8,6 @@ import LocationManagement from '../../Pages/LocationManagement/LocationManagemen
 import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfiguration'
 import PreventiveView from '../../Pages/Preventive Maintenance/PreventiveView'
 import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
-import AssetManagement from '../../Pages/Asset Management/AssetManagement'
 import SystemModules from "../../Pages/UserManagement/SystemModules/SystemModules"
 import UserAuthority from '../../Pages/UserManagement/UserAuthority/UserAuthorityLevel'
 import UserCredentials from '../../Pages/UserManagement/UserCredentials/UserCredentials'
@@ -42,6 +41,12 @@ import Updatadepartment from './setup configuration/Department/Updatadepartment'
 import Gender from '../../Pages/Setup&Configuration/Gender/Gender'
 import Titless from '../../Pages/Setup&Configuration/Prm Title/Titless'
 import Maritalstatus from '../../Pages/Setup&Configuration/Marital Status/Maritalstatus'
+import Maintablemaster from '../../Pages/Asset Management/Asset Master/Maintablemaster'
+import UpdataAssetmaster from '../../Pages/Asset Management/Asset Master/UpdataAssetmaster'
+import ViewAssmaster from '../../Pages/Asset Management/Asset Master/ViewAssmaster'
+import Maintransactiontable from '../../Pages/Asset Management/Asset Transactions/Maintransactiontable'
+import Viewtransaction from '../../Pages/Asset Management/Asset Transactions/Viewtransaction'
+import Updatatransaction from '../../Pages/Asset Management/Asset Transactions/Updatatransaction'
 function Pagerounter() {
 
   return (
@@ -123,8 +128,15 @@ function Pagerounter() {
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
           {/* Asset Management */}
-          <Route exact path='/assetmanagement' element={<AssetManagement />} />
+          {/* Asset Management */}
+          <Route exact path='/AssetMasters' element={<Maintablemaster />} />
+          <Route exact path='/View/Assetmaster' element={<ViewAssmaster />} />
+          <Route exact path='/Updata/Assetmaster' element={<UpdataAssetmaster />} />
 
+          <Route exact path='AssetTransaction' element={<Maintransactiontable />} />
+          <Route exact path='/View/transaction' element={<Viewtransaction />} />
+          <Route exact path='/Updata/transaction' element={<Updatatransaction />} />
+          
           {/* System Modules */}
           <Route exact path="/systemmodules" element={<SystemModules />} />
 
@@ -137,7 +149,7 @@ function Pagerounter() {
           {/* userSystemAccess */}
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
           {/* ===================== Asset Management=====================  */}
-          <Route exact path='/assetmanagement' element={<AssetManagement />} />
+          {/* <Route exact path='/assetmanagement' element={<AssetManagement />} /> */}
         </Routes>
       </BrowserRouter>
     </>

@@ -30,18 +30,23 @@ import Preventive from "../../Image/Preventive Maintenance.png"
 import SetupSidebar from '../../Pages/Setup&Configuration/SetupSidebar';
 import "./Sidebar.css"
 import UserManagementSidebar from '../../Pages/UserManagement/UserManagementSidebar';
+import Assetmanagement from './Assetmanagement';
 const drawerWidth = 250;
 
 
 function Siderbar(props) {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showUserSidebar, setShowUserSidebar]=useState(false);
+    const [AssetmanagementSidebar, setAssetmanagementSidebar] = useState(false);
     const handleClick = () => {
         setShowSidebar(!showSidebar);
       };
      const  handleUserSidebar = ( ) => {
         setShowUserSidebar(!showUserSidebar)
      }
+    const handleAssetmanagementSidebar = () => {
+        setAssetmanagementSidebar(!AssetmanagementSidebar)
+    }
 
     const navigate = useNavigate();
     return (
@@ -157,9 +162,7 @@ function Siderbar(props) {
 
                     <List>
                         {['Asset Management'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/assetmanagement')
-                            })}>
+                            <ListItem key={text} disablePadding onClick={handleAssetmanagementSidebar}>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index % 2 === 0 ? <img src={Assetmanagemtn} className="sidebaricon my-auto" alt=''/> : <img src={Assetmanagemtn} className="sidebaricon my-auto"  alt/>}
@@ -169,7 +172,7 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
-
+                    {AssetmanagementSidebar && <Assetmanagement />}
                     {/* Setup & Configuration */}
                     <List>
         {['Setup & Configuration'].map((text, index) => (
