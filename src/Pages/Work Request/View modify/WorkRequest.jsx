@@ -90,8 +90,11 @@ function WorkRequest() {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={() => navigate(`/viewworkRequest/${params.row.RequestNumber}`)}>
-            <span style={{ paddingRight: '18px' }}>View</span>
+          <MenuItem onClick={(() => {
+            navigate(`/viewworkRequest/${params.row.RequestNumber}`)
+            localStorage.setItem('EMpID', params.row.EmployeeID)
+          })}>
+            <span style={{ paddingRight: '18px' }} >View</span>
             <VisibilityIcon />
           </MenuItem>
           <MenuItem onClick={handleUpdate}>

@@ -166,26 +166,6 @@ function CreateWorkRequest() {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
-            // axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-            //     console.log("Transactions_LIST", res.data);
-            //     setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-            //     setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-            //     const assetauto = res.data.recordset[0].AssetItemDescription
-            //     console.log(assetauto);
-            //     axios.get(`/api/AssetType_model_all_LIST/${assetauto}`)
-            //         .then((res) => {
-            //             // console.log('For auto selection', res.data);
-            //             setManufacturerdesc(res.data.recordset[0].Manufacturer)
-            //             setAssetCategory(res.data.recordset[0].AssetCategory)
-            //             setModel(res.data.recordset[0].Model)
-            //         })
-            //         .catch((err) => {
-            //             console.log(err);
-            //         });
-            // })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
       
         }
     }
@@ -1231,20 +1211,20 @@ function CreateWorkRequest() {
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description" 
-                                                //     value={value.ProblemDescription}
-                                                //      onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         ProblemDescription: e.target.value
-                                                //     }))
-                                                // }}
+                                                    value={value.ProblemDescription}
+                                                     onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        ProblemDescription: e.target.value
+                                                    }))
+                                                }}
                                                id={`ProblemDescription${index}`}
-                                                 value={section.ProblemDescription}
-              onChange={e => {
-                const updatedSections = [...codeSections];
-                updatedSections[index].ProblemDescription = e.target.value;
-                setCodeSections(updatedSections);
-              }}
+            //                                      value={section.ProblemDescription}
+            //   onChange={e => {
+            //     const updatedSections = [...codeSections];
+            //     updatedSections[index].ProblemDescription = e.target.value;
+            //     setCodeSections(updatedSections);
+            //   }}
             
                                                   ></textarea>
 

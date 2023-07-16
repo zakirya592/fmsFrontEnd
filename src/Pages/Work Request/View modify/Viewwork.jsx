@@ -22,6 +22,8 @@ import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import moment from 'moment';
+
 function Viewwork() {
     let { userId } = useParams();
     const navigate = useNavigate();
@@ -32,9 +34,9 @@ function Viewwork() {
         Location: 'Select Location',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
-        AssetCode: '',// AddAssetItemTagIDInworkRequestPOST api input
+        AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
-        RequestNumber: '', workTrade: '',// RequestNumber
+         RequestNumber: '', workTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
         AssetItemTag: '',
@@ -46,7 +48,7 @@ function Viewwork() {
     
     const [codeSections, setCodeSections] = useState
     ([{ // Initial code section
-        AssetCode: '',
+        AssetItemTagID: '',
         AssetDescription: '',
         AssetCategory: '',
         Manufacturer: '',
@@ -57,7 +59,7 @@ function Viewwork() {
       
       const addCodeSection = () => {
         setCodeSections(prevSections => [...prevSections, { // Add a new code section object
-          AssetCode: '',
+          AssetItemTagID: '',
           AssetDescription: '',
           AssetCategory: '',
           Manufacturer: '',
@@ -91,7 +93,7 @@ function Viewwork() {
         axios.post(`/api/getworkRequest`, {
                 EmployeeID,
             }).then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data.recordsets[0].length === 0) {
                         Swal.fire('Oops...!', 'Something went wrong!', 'error')
                     // setModelError(true);
@@ -124,12 +126,12 @@ function Viewwork() {
                             setDeptDesc(res.data.recordset[0].DepartmentDesc)
                         })
                         .catch((err) => {
-                            console.log(err);
+                            //// console.log(err);;
                         });
             }
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }
     const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
@@ -137,25 +139,6 @@ function Viewwork() {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
-            
-            // axios.get(`/api/Transactions_LIST/${value.EmployeeID}`).then((res) => {
-            //     console.log("Transactions_LIST", res.data);
-            //     setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-            //     setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-            //     axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
-            //         .then((res) => {
-            //             console.log('For auto selection', res.data);
-            //             setManufacturerdesc(res.data.recordset[0].Manufacturer)
-            //             setAssetCategory(res.data.recordset[0].AssetCategory)
-            //             setModel(res.data.recordset[0].Model)
-            //         })
-            //         .catch((err) => {
-            //             console.log(err);
-            //         });
-            // })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
         }
     }
 
@@ -182,7 +165,7 @@ function Viewwork() {
                 })
             })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     };
 
@@ -198,7 +181,7 @@ function Viewwork() {
             setRequestStatusLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+               // console.log(err);;
             });
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
@@ -206,7 +189,7 @@ function Viewwork() {
             setdropdownLocation(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+               // console.log(err);;
             });
         // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
@@ -214,7 +197,7 @@ function Viewwork() {
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }, [])
 
@@ -232,7 +215,7 @@ function Viewwork() {
             setdropdownBuildingLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
         // WorkType_LIST
         axios.get(`/api/WorkType_LIST`).then((res) => {
@@ -240,7 +223,7 @@ function Viewwork() {
             setdropdownworktypesLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
         // WorkPriority_LIST
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
@@ -248,7 +231,7 @@ function Viewwork() {
             setdropdownWorkPriorityLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
         // AssetType_LIST
         axios.get(`/api/AssetType_LIST`).then((res) => {
@@ -256,7 +239,7 @@ function Viewwork() {
             setdropdownAssetTypeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
         // ProblemCategory_LIST
         axios.get(`/api/ProblemCategory_LIST`).then((res) => {
@@ -264,7 +247,7 @@ function Viewwork() {
             setdropdownProblemCategoryLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
 
     }, [])
@@ -283,7 +266,7 @@ function Viewwork() {
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
             })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }
     // WorkTypedesc
@@ -300,7 +283,7 @@ function Viewwork() {
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
             })
             .catch((err) => {
-                console.log(err);
+               // console.log(err);;
             });
         // WorkTrade_LIST
         axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
@@ -308,7 +291,7 @@ function Viewwork() {
             setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
 
     }
@@ -327,7 +310,7 @@ function Viewwork() {
                 setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }
     // AssetType_descrip_LIST
@@ -340,7 +323,7 @@ function Viewwork() {
 
         setvalue(prevValue => ({
             ...prevValue,
-            AssetCode: e.target.value
+            AssetItemTagID: e.target.value
         }))
 
         axios.get(`/api/AssetType_descrip_LIST/${Deptnale}`)
@@ -356,11 +339,11 @@ function Viewwork() {
                         setModel(res.data.recordset[0].Model)
                     })
                     .catch((err) => {
-                        console.log(err);
+                       // console.log(err);;
                     });
             })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }
 
@@ -413,7 +396,7 @@ function Viewwork() {
                         setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
                     })
                     .catch((err) => {
-                        console.log(err);
+                       // console.log(err);;
                     });
                 axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
                     // console.log("WorkTrade_LIST", res.data.recordset);
@@ -425,11 +408,11 @@ function Viewwork() {
                             setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
                         })
                         .catch((err) => {
-                            console.log(err);
+                           // console.log(err);;
                         });
                 })
                     .catch((err) => {
-                        console.log(err);
+                       // console.log(err);;
                     });
                 const AssetItemTagIDauto = res.data.recordsets[0][0].AssetItemTagID
                 console.log(AssetItemTagIDauto);
@@ -445,16 +428,16 @@ function Viewwork() {
                                 setModel(res.data.recordset[0].Model)
                             })
                             .catch((err) => {
-                                console.log(err);
+                               // console.log(err);;
                             });
                     })
                     .catch((err) => {
-                        console.log(err);
+                       // console.log(err);;
                     });
             }
         })
             .catch((err) => {
-                console.log(err);
+               // console.log(err);;
             });
     }
 
@@ -480,20 +463,21 @@ function Viewwork() {
                                     setModel(res.data.recordset[0].Model)
                                 })
                                 .catch((err) => {
-                                    console.log(err);
+                                   // console.log(err);;
                                 });
                         })
                         .catch((err) => {
-                            console.log(err);
+                           // console.log(err);;
                         });
                 })
                 .catch((err) => {
-                    console.log(err);
+                   // console.log(err);;
                 });
+
         }
     }
 
-    // Putapi
+    // Updata the data api
     const WorkRequestNumber = async () => {
         await axios.put(`/api/updatesecondWorkRequest`, {
             RequestNumber: value.RequestNumber,
@@ -512,7 +496,7 @@ function Viewwork() {
                 })
             })
             .catch((err) => {
-                console.log(err);
+               // console.log(err);;
             });
     };
 
@@ -523,14 +507,118 @@ function Viewwork() {
     }
 
 
+    // To get the all Data Work Request Number
+// Emp ID
+    function GetgetworkRequest() {
+        axios.post(`/api/getworkRequest`, {
+            "EmployeeID": localStorage.getItem('EMpID')
+        }).then((res) => {
+            console.log('asdfaf',res);
+                const {
+                    EmployeeID,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    EmployeeID,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                }));
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
+    }
+    // Work Request
+    function Workrequestget() {
+        axios.post(`/api/getworkRequestsecond`, {
+            "RequestNumber": userId
+        }).then((res) => {
+            // const RequestDateTime = moment(res.data.recordsets[0][0].RequestDateTime).format('DD/MM/YYYY');
+            const {
+                RequestNumber,
+                WorkType,
+                WorkTrade,
+                WorkPriority,
+                ProblemDescription,
+                RequestStatus,
+                ProblemCategory,
+                RequestDateTime,
+                AssetItemTagID,
+                DepartmentCode,
+                LocationCode,
+                BuildingCode,
+            } = res.data.recordsets[0][0];
+            setvalue((prevValue) => ({
+                ...prevValue,
+                WorkType,
+                WorkTrade,
+                WorkPriority,
+                ProblemDescription,
+                RequestStatus,
+                ProblemCategory,
+                RequestDateTime,
+                AssetItemTagID,
+                RequestNumber,
+                DepartmentCode,
+                LocationCode,
+                BuildingCode
+            }));
+            console.log('Work Request Number', res.data.recordsets[0][0]);
+            const Depauto = res.data.recordsets[0][0].DepartmentCode
+            axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                .then((res) => {
+                    setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+            const workaout = res.data.recordsets[0][0].WorkType
+            axios.get(`/api/WorkType_descri_LIST/${workaout}`)
+                .then((res) => {
+                    // console.log(res.data);
+                    setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
+                })
+                .catch((err) => {
+                    // console.log(err);;
+                });
+            axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
+                // console.log("WorkTrade_LIST", res.data.recordset);
+                setdropdownWorkTradeLIST(res.data.recordsets[0])
+                const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
+                axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
+                    .then((res) => {
+                        // console.log('WorkTrade_descri_LIST', res.data);
+                        setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
+                    })
+                    .catch((err) => {
+                        // console.log(err);;
+                    });
+            })
+                .catch((err) => {
+                    // console.log(err);;
+                });
+
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
     // Get by Requst ID Now
     const apicall = () => {
         axios.get(`/api/WorkRequestItems_GET_BYID/${userId}`)
             .then((res) => {
-                console.log('Work req',res.data);
+                console.log('WorkRequestItems_GET_BYID',res.data);
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
                 const assetdascauto = res.data.recordset[0].AssetItemTagID
-                console.log(assetdascauto);
+                // console.log(assetdascauto);
                 axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
                     .then((res) => {
                         setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
@@ -543,19 +631,22 @@ function Viewwork() {
                                 setModel(res.data.recordset[0].Model)
                             })
                             .catch((err) => {
-                                console.log(err);
+                               // console.log(err);;
                             });
                     })
                     .catch((err) => {
-                        console.log(err);
+                       // console.log(err);;
                     });
             })
             .catch((err) => {
-                console.log(err);
+               // console.log(err);;
             });
     };
+    
     useEffect(() => {
         apicall()
+        GetgetworkRequest()
+        Workrequestget()
     }, [])
     
 
@@ -1050,11 +1141,11 @@ function Viewwork() {
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='AssetItemTagID' className='lablesection color3 text-start mb-1'>
                                                 Asset Code<span className='star'>*</span>
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example"
-                                                value={value.AssetCode}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemTagID" aria-label="Floating label select example"
+                                                value={value.AssetItemTagID}
                                                 onChange={AssetDesc}>
                                                 <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
                                                 {
