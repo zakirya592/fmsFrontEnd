@@ -125,7 +125,7 @@ function Maintransactiontable() {
     //   workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     // }))
 
-    const filteredRows = Array.from({ length: 10 }).map((_, index) => {
+    const filteredRows = Array.from({ length: 100 }).map((_, index) => {
         return {
             id: index + 1,
             ASSETITEMDESCRIPTION: `ASSET ITEM DESCRIPTION-${index + 1}`,
