@@ -326,7 +326,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. Warrenty Period'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/WarrantyPeriod')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />

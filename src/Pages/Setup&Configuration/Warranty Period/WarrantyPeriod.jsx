@@ -17,29 +17,46 @@ import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CSVLink } from "react-csv"
-import Newassetcondition from '../../../Component/AllRounter/setup configuration/Assect Condition/Newassetcondition';
+import NewwarrantyPeriod from '../../../Component/AllRounter/setup configuration/Warranty Period/NewwarrantyPeriod';
 
-function Assectcondition() {
+function WarrantyPeriod() {
     const ref = useRef(null)
     const [itemCode, setItemCode] = useState(null);
+    //    List of table
+    const navigate = useNavigate()
+    const [getdata, setgetdata] = useState([])
+    const getapi = () => {
+        axios.get(`/api/WarrantyPeriod_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 150 },
-        { field: 'AssetConditionCode', headerName: 'ASSET CONDITION CODE', width: 270 },
-        { field: 'AssetConditionDesc', headerName: 'DESCRIPTION', width: 270 },
+        { field: 'WarrantyPeriodCode', headerName: 'WARRANTY STATUS CODE', width: 270 },
+        { field: 'WarrantyPeriodDesc', headerName: 'DESCRIPTION', width: 270 },
         {
             field: 'action',
             headerName: 'ACTION',
             width: 170,
             renderCell: (params) => (
                 <div>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.AssetConditionCode)}>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.WarrantyPeriodCode)}>
                         <FlipCameraAndroidIcon />
                     </button>
                     {/* <!-- Button trigger modal --> */}
                     <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
                         <FlipCameraAndroidIcon />
                     </button>
-                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.AssetConditionCode)}>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.WarrantyPeriodCode)}>
                         <DeleteOutlineIcon />
                     </button>
 
@@ -47,19 +64,19 @@ function Assectcondition() {
             ),
         },
     ];
-    const [AssetConditionDesc, setAssetConditionDesc] = useState()
+    const [WarrantyPeriodDesc, setWarrantyPeriodDesc] = useState()
     const [open, setOpen] = useState(false)
     // GEt by id Api
-    function updata(AssetConditionCode) {
-        console.log(AssetConditionCode);
+    function updata(WarrantyPeriodCode) {
+        console.log(WarrantyPeriodCode);
         ref.current.click()
         // get api
-        axios.get(`/api/AssetCondition_GET_BYID/${AssetConditionCode}`, {
+        axios.get(`/api/WarrantyPeriod_GET_BYID/${WarrantyPeriodCode}`, {
         },)
             .then((res) => {
                 console.log('TO get the list hg', res.data);
-                setAssetConditionDesc(res.data.recordset[0].AssetConditionDesc)
-                setItemCode(AssetConditionCode); // Store the WorkTypeCode in state
+                setWarrantyPeriodDesc(res.data.recordset[0].WarrantyPeriodDesc)
+                setItemCode(WarrantyPeriodCode); // Store the WorkTypeCode in state
             })
             .catch((err) => {
                 console.log(err);
@@ -75,12 +92,12 @@ function Assectcondition() {
         e.preventDefault();
         // ref.current.click(SolutiontatusCode)
         console.log(itemCode);
-        axios.put(`/api/AssetCondition_Put/${itemCode}`, {
-            AssetConditionDesc: AssetConditionDesc,
+        axios.put(`/api/WarrantyPeriod_Put/${itemCode}`, {
+            WarrantyPeriodDesc: WarrantyPeriodDesc,
         },)
             .then((res) => {
                 console.log('Add', res.data);
-                setAssetConditionDesc('')
+                setWarrantyPeriodDesc('')
                 getapi()
                 Swal.fire(
                     'Updata!',
@@ -95,27 +112,11 @@ function Assectcondition() {
             });
     };
 
-    //    List of table
-    const navigate = useNavigate()
-    const [getdata, setgetdata] = useState([])
-    const getapi = () => {
-        axios.get(`/api/AssetCondition_GET_LIST`, {
-        },)
-            .then((res) => {
-                console.log('TO get the list', res);
-                setgetdata(res.data.recordset)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-    useEffect(() => {
-        getapi()
-    }, [])
+   
 
     // Deleted api section
-    const Deletedapi = (AssetConditionCode) => {
-        console.log(AssetConditionCode);
+    const Deletedapi = (WarrantyPeriodCode) => {
+        console.log(WarrantyPeriodCode);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -135,7 +136,7 @@ function Assectcondition() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/AssetCondition_DELETE_BYID/${AssetConditionCode}`)
+                axios.delete(`/api/WarrantyPeriod_DELETE_BYID/${WarrantyPeriodCode}`)
                     .then((res) => {
                         // Handle successful delete response
                         console.log('Deleted successfully', res);
@@ -164,8 +165,8 @@ function Assectcondition() {
     const filteredData = getdata && getdata.map((row, indes) => ({
         ...row,
         id: indes + 1,
-        AssetConditionCode: row.AssetConditionCode,
-        AssetConditionDesc: row.AssetConditionDesc
+        WarrantyPeriodCode: row.WarrantyPeriodCode,
+        WarrantyPeriodDesc: row.WarrantyPeriodDesc
 
     }))
 
@@ -185,11 +186,11 @@ function Assectcondition() {
                     <div className="topermaringpage  container">
                         <div className="py-3">
                             <div className="d-flex justify-content-between my-auto">
-                                <p className="color1 workitoppro my-auto">ASSET  CONDITION MAINTENANCE
+                                <p className="color1 workitoppro my-auto">WARRANTY PERIOD MAINTENANCE
                                     <span className='star'>*</span>
                                 </p>
                                 <div className="d-flex">
-                                    <Newassetcondition/>
+                                    <NewwarrantyPeriod />
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
@@ -233,24 +234,24 @@ function Assectcondition() {
                 <div className="modal-dialog" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
                     <div class="modal-content bgupdata">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel"> UPDATA ASSET CONDITION</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel"> UPDATA WARRANTY PERIOD</h5>
                         </div>
                         <div class="modal-body pt-0">
                             <form onSubmit={postapi}>
                                 <div className='emailsection position-relative d-grid'>
-                                    <label htmlFor='AssetConditionDesc' className='lablesection color3 text-start mb-1'>
-                                        AssetCondition Desc<span className='star'>*</span>
+                                    <label htmlFor='WarrantyPeriodDesc' className='lablesection color3 text-start mb-1'>
+                                        WarrantyPeriod Desc<span className='star'>*</span>
                                     </label>
 
                                     <input
                                         types='text'
-                                        id='AssetConditionDesc'
-                                        value={AssetConditionDesc}
+                                        id='WarrantyPeriodDesc'
+                                        value={WarrantyPeriodDesc}
                                         onChange={e => {
-                                            setAssetConditionDesc(e.target.value)
+                                            setWarrantyPeriodDesc(e.target.value)
                                         }}
                                         className='rounded inputsection py-2 borderfo'
-                                        placeholder='AssetCondition Desc'
+                                        placeholder='WarrantyPeriod Desc'
                                         required
                                     ></input>
                                 </div>
@@ -269,4 +270,4 @@ function Assectcondition() {
     )
 }
 
-export default Assectcondition
+export default WarrantyPeriod
