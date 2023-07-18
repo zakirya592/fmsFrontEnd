@@ -18,7 +18,6 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { CSVLink } from "react-csv";
-import Newtitle from '../../../Component/AllRounter/setup configuration/Prm Title/Newtitle';
 import NewNationality from '../../../Component/AllRounter/setup configuration/Nationality/NewNationality';
 function Maritalstatus() {
 
