@@ -130,8 +130,8 @@ function Pagerounter() {
           {/* Asset Management */}
           {/* Asset Management */}
           <Route exact path='/AssetMasters' element={<Maintablemaster />} />
-          <Route exact path='/View/Assetmaster' element={<ViewAssmaster />} />
-          <Route exact path='/Updata/Assetmaster' element={<UpdataAssetmaster />} />
+          <Route exact path='/View/Assetmaster/:userId' element={<ViewAssmaster />} />
+          <Route exact path='/Updata/Assetmaster/:userId' element={<UpdataAssetmaster />} />
 
           <Route exact path='AssetTransaction' element={<Maintransactiontable />} />
           <Route exact path='/View/transaction' element={<Viewtransaction />} />

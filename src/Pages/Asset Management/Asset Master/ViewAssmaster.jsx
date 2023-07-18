@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import Box from "@mui/material/Box";
 import Siderbar from "../../../Component/Siderbar/Siderbar";
 import AppBar from "@mui/material/AppBar";
@@ -10,8 +10,10 @@ import Printer from "../../../Image/printer.jpeg"
 import Barcode from "../../../Image/barcode.png"
 import Camera1 from "../../../Image/camera 1.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios'
 function ViewAssmaster() {
+    let { userId } = useParams();
     const navigate = useNavigate();
     const [assetCategory, setassetCategory] = useState("");
     const [assetType, setassetType] = useState("");
@@ -26,6 +28,26 @@ function ViewAssmaster() {
     const [purchaseAmount, setpurchaseAmount] = useState("");
     const [WarrentyPeriod, setWarrentyPeriod] = useState("");
 
+    const [getapibyID, setgetapibyID] = useState([])
+    const getapi = () => {
+        axios.get(`/api/AssetsMaster_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Assets Master By ID', res.data);
+                setgetapibyID(res.data)
+                setassetItemDiscription(res.data.recordset[0].AssetItemDescription)
+                setModel(res.data.recordset[0].Model)
+                setmanufacturer(res.data.recordset[0].Manufacturer)
+                setBrand(res.data.recordset[0].Brand)
+                setassetType(res.data.recordset[0].setassetType)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
     return (
         <>
             <div className="bg">
@@ -44,6 +66,7 @@ function ViewAssmaster() {
                                 </Typography>
                             </Toolbar>
                         </AppBar>
+
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
                                 {/* Top Section */}
@@ -67,7 +90,7 @@ function ViewAssmaster() {
                                                 <img src={Barcode} alt="" className="barcodepic" />
                                             </div>
                                         </div>
-
+                                       
                                         <div className="row ">
                                             <div className="col camera1">
                                                 <img src={Camera1} alt="" />
@@ -183,7 +206,6 @@ function ViewAssmaster() {
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
@@ -383,6 +405,7 @@ function ViewAssmaster() {
                                 </div>
                             </div>
                         </div>
+
                     </Box>
                 </div>
             </div>

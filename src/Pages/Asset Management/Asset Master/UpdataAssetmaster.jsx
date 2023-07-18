@@ -1,23 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Siderbar from "../../../Component/Siderbar/Siderbar";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import PrintIcon from "@mui/icons-material/Print";
-import excel from "../../../Image/excel.png";
-import WorkOrderCreate from "../../../Component/View work/WorkOrderCreate";
 import "./assetManagement.css"
 import Printer from "../../../Image/printer.jpeg"
 import Barcode from "../../../Image/barcode.png"
 import Camera1 from "../../../Image/camera 1.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios'
+import Swal from "sweetalert2";
+
 function UpdataAssetmaster() {
+    let { userId } = useParams();
     const navigate = useNavigate();
-    const [assetCategory, setassetCategory] = useState("");
+    const [assetCategory, setassetCategory] = useState('Asset Category');
     const [assetType, setassetType] = useState("");
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
     const [assetSubCategory, setassetSubCategory] = useState("");
@@ -29,7 +30,52 @@ function UpdataAssetmaster() {
     const [Brand, setBrand ] = useState("");
     const [purchaseAmount, setpurchaseAmount ] = useState("");
     const [WarrentyPeriod, setWarrentyPeriod ] = useState("");
+    const [AssetItemGroup, setAssetItemGroup] = useState("");
+const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
+    const getapi = () => {
+        axios.get(`/api/AssetsMaster_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Assets Master By ID', res.data);
+                setassetItemDiscription(res.data.recordset[0].AssetItemDescription)
+                setModel(res.data.recordset[0].Model)
+                setmanufacturer(res.data.recordset[0].Manufacturer)
+                setBrand(res.data.recordset[0].Brand)
+                setassetType(res.data.recordset[0].setassetType)
+                setassetCategory(res.data.recordset[0].AssetCategory)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
+    const postapi = (e) => {
+        axios.put(`/api/AssetsMaster_Put/${userId}`, {
+            AssetItemGroup: AssetItemGroup,
+            AssetType: assetType,
+            AssetCategory: assetCategory,
+            AssetSubCategory: assetSubCategory,
+            Manufacturer: manufacturer,
+            Model: Model,
+            Brand: Brand,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                Swal.fire(
+                    'Updata!',
+                    ' You have successfully updated.',
+                    'success'
+                ).then(() => {
+                    navigate(`/AssetMasters`);
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
   return (
     <>
     <div className="bg">
@@ -84,13 +130,13 @@ function UpdataAssetmaster() {
     <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                            Asset Category <span className="star">*</span>
+                                              Asset Category<span className="star">*</span>
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example" value={assetCategory}
                                             onChange={(event) => {
                                                 setassetCategory(event.target.value)
                                             }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Asset Category</option>
+                                              <option selected className='inputsectiondropdpwn'>{assetCategory}</option>
                                             <option value={"First"}>One</option>
                                             <option value={"Second"}>Two</option>
                                             <option value={"three"}>Three</option>
@@ -188,7 +234,49 @@ function UpdataAssetmaster() {
                                     </div>
                                         </div>
 
+                              <div className="row mx-auto formsection">
+                                  <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
+                                      <div className='emailsection position-relative d-grid my-2'>
+                                          <label htmlFor='AssetItemGroup' className='lablesection color3 text-start mb-1'>
+                                              Asset Item Group<span className="star">*</span>
+                                          </label>
+                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemGroup" aria-label="Floating label select example" value={AssetItemGroup}
+                                              onChange={(event) => {
+                                                  setAssetItemGroup(event.target.value)
+                                              }}>
+                                              <option selected className='inputsectiondropdpwn'>Select Asset type</option>
+                                              <option value={"First"}>One</option>
+                                              <option value={"Second"}>Two</option>
+                                              <option value={"three"}>Three</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div className="col-sm-6 col-md-6 col-lg-5 col-xl-5 ">
+                                      <div className="emailsection position-relative d-grid my-2">
+                                          <label
+                                              htmlFor="AssetitemGroupDescription"
+                                              className="lablesection color3 text-start mb-1">
+                                              Asset Item Group Description<span className="star">*</span>
+                                          </label>
+                                          <input
+                                              types='text'
+                                              id='AssetitemGroupDescription'
+                                              value={AssetitemGroupDescription}
+                                              onChange={e => {
+                                                  setAssetitemGroupDescription(e.target.value)
+                                              }}
+                                              className='rounded inputsection py-2'
+                                              placeholder='Enter Type Discription'
+                                              required
+                                          ></input>
+                                          <p
+                                              className='position-absolute text-end serachicon'
+                                          >
 
+                                          </p>
+                                      </div>
+                                  </div>
+                              </div>
                                     <div className="row mx-auto formsection">
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
@@ -384,7 +472,7 @@ function UpdataAssetmaster() {
                                       <ArrowCircleLeftOutlinedIcon className="me-2" />
                                       Back
                                   </button>
-        <button type="button" className="border-0 px-3 savebtn py-2">
+                                  <button type="button" className="border-0 px-3 savebtn py-2" onClick={postapi}>
           <SaveIcon className="me-2" />
           SAVE
         </button>
