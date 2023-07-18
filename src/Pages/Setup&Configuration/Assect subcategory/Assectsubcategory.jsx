@@ -89,7 +89,7 @@ function AssetSubCategory() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
-        { field: 'AssetSubCategoryCode', headerName: 'ASSET CATEGORY', width: 200 },
+        { field: 'AssetSubCategoryCode', headerName: 'ASSET-SUB CATEGORY', width: 200 },
         { field: 'AssetSubCategoryDesc', headerName: 'DESCRIPTION', width: 350 },
         {
             field: 'action',
@@ -243,7 +243,7 @@ function AssetSubCategory() {
                             <form onSubmit={postapi}>
                                 <div className='emailsection position-relative d-grid my-1'>
                                     <label htmlFor='AssetSubCategoryDesc' className='lablesection color3 text-start mb-1'>
-                                        Asset Type Desc<span className='star'>*</span>
+                                        Asset Sub-Category Desc<span className='star'>*</span>
                                     </label>
 
                                     <input
