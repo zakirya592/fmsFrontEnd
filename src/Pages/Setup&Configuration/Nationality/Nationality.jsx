@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { CSVLink } from "react-csv";
 import NewNationality from '../../../Component/AllRounter/setup configuration/Nationality/NewNationality';
-function Maritalstatus() {
+function Nationality() {
 
     const ref = useRef(null)
     const [itemCode, setItemCode] = useState(null);
@@ -236,14 +236,14 @@ function Maritalstatus() {
                 <div class="modal-dialog bgupdata" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
                     <div class="modal-content bgupdata">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Updata Title </h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">Update Title </h5>
                             {/* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
                         </div>
                         <div class="modal-body">
                             <form onSubmit={postapi}>
                                 <div className='emailsection position-relative d-grid my-1'>
                                     <label htmlFor='NationalityDesc' className='lablesection color3 text-start mb-1'>
-                                        Marital Desc<span className='star'>*</span>
+                                        Nationality Desc<span className='star'>*</span>
                                     </label>
 
                                     <input
@@ -273,4 +273,4 @@ function Maritalstatus() {
     )
 }
 
-export default Maritalstatus
+export default Nationality
