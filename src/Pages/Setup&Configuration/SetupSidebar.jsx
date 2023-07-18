@@ -274,18 +274,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
                             </ListItem>
                         ))}
         </List>
-        {/* Asset Master */}
-        <List className='setupsidebar'>
-                        {['. Asset Master'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
-                            })}>
-                                <ListItemButton>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-        </List>
         {/* Asset Type */}
         <List className='setupsidebar'>
                         {['. Asset Type'].map((text, index) => (
@@ -338,7 +326,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. Warrenty Period'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/WarrantyPeriod')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />

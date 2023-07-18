@@ -47,6 +47,7 @@ import ViewAssmaster from '../../Pages/Asset Management/Asset Master/ViewAssmast
 import Maintransactiontable from '../../Pages/Asset Management/Asset Transactions/Maintransactiontable'
 import Viewtransaction from '../../Pages/Asset Management/Asset Transactions/Viewtransaction'
 import Updatatransaction from '../../Pages/Asset Management/Asset Transactions/Updatatransaction'
+import WarrantyPeriod from '../../Pages/Setup&Configuration/Warranty Period/WarrantyPeriod'
 function Pagerounter() {
 
   return (
@@ -119,6 +120,8 @@ function Pagerounter() {
           <Route exact path='/Assectcondition' element={<Assectcondition />} />
           {/*Nationality*/}
           <Route exact path='/Nationality' element={<Nationality />} />
+          {/*WarrantyPeriod*/}
+          <Route exact path='/WarrantyPeriod' element={<WarrantyPeriod />} />
 
 
           {/* ================View/Modify Preventive Maintenance* ==================*/}
