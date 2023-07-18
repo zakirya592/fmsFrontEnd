@@ -19,14 +19,13 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
-import moment from 'moment';
-
+import Swal from "sweetalert2";
 function Maintablemaster() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/workRequest_GET_LIST`, {
+        axios.get(`/api/AssetsMaster_GET_LIST`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
@@ -46,10 +45,10 @@ function Maintablemaster() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'ASSETITEMDESCRIPTION', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
-        { field: 'ASSETITEMGROUP', headerName: 'ASSET ITEM GROUP', width: 160 },
-        { field: 'ASSETCATGORY', headerName: 'ASSET CATGORY', width: 180 },
-        { field: 'ASSETsbuCATGORY', headerName: 'ASSET SUB_CATGORY', width: 180 },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
+        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
+        { field: 'AssetCategory', headerName: 'ASSET CATGORY', width: 180 },
+        { field: 'AssetSubCategory', headerName: 'ASSET SUB_CATGORY', width: 180 },
         { field: 'RequestDateTime', headerName: 'ON-HAND QTY', width: 150 },
         { field: 'workTypeDesc', headerName: 'LAST PURCHASE DATE', width: 200 },
         { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
@@ -57,6 +56,49 @@ function Maintablemaster() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    // Deleted api section
+    const Deletedapi = (AssetItemDescription) => {
+        console.log(AssetItemDescription);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/AssetsMaster_DELETE_BYID/${AssetItemDescription}`)
+                    .then((res) => {
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        getapi()
+                        // Refresh the table data if needed
+                        // You can call the API again or remove the deleted row from the state
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                    });
+                swalWithBootstrapButtons.fire(
+                    'Deleted!',
+                    'User has been deleted.',
+                    'success'
+                )
+            }
+        })
+
+    };
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
 
@@ -66,17 +108,6 @@ function Maintablemaster() {
 
         const handleMenuClose = () => {
             setAnchorEl(null);
-        };
-
-        const handleUpdate = () => {
-            // Handle update action
-            navigate('/Updata/Assetmaster')
-            handleMenuClose();
-        };
-
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
         };
 
         return (
@@ -90,15 +121,15 @@ function Maintablemaster() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate('/View/Assetmaster')}> 
+                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}> 
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={handleUpdate}>
+                    <MenuItem onClick={() => navigate(`/Updata/Assetmaster/${params.row.AssetItemDescription}`)}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
+                    <MenuItem onClick={() => Deletedapi(params.row.AssetItemDescription)}  >
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -111,36 +142,21 @@ function Maintablemaster() {
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
-    // const filteredRows = getdata && getdata.filter(row => (
-    //   (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-    //   (!requestByEmployee || row.EmployeeID === requestByEmployee) 
-    // )).map((row, indes) => ({
-    //   ...row,
-    //   id: indes + 1,
-    //   RequestNumber: row.RequestNumber,
-    //   RequestStatus: row.RequestStatus ,
-    //   EmployeeID: row.EmployeeID,
-    //   WorkPriority: row.WorkPriority,
-    //   RequestDateTime:row.RequestDateTime,
-    //   WorkType: row.WorkType,
-    //   workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
-    // }))
+    const filteredRows = getdata && getdata.filter(row => (
+      (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
+      (!requestByEmployee || row.AssetItemDescription === requestByEmployee) 
+    )).map((row, indes) => ({
+      ...row,
+      id: indes + 1,
+      AssetItemDescription: row.AssetItemDescription,
+      AssetItemGroup: row.AssetItemGroup ,
+      AssetCategory: row.AssetCategory,
+      AssetSubCategory: row.AssetSubCategory,
+      RequestDateTime:row.RequestDateTime,
+      WorkType: row.WorkType,
+      workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+    }))
 
-    const filteredRows = Array.from({ length: 10 }).map((_, index) => {
-        return {
-            id: index + 1,
-            ASSETITEMDESCRIPTION: `ASSET ITEM DESCRIPTION-${index + 1}`,
-            ASSETITEMGROUP: `ASSET ITEM GROUP-${index + 1}`,
-            ASSETCATGORY: `ASSET CATGORY-${index + 1}`,
-            ASSETsbuCATGORY: `ASSET SUB-CATGORY-${index + 1}`,
-            RequestDateTime: `ASSET ITEM GROUP-${index + 1}`,
-            WorkType: `ASSET ITEM GROUP-${index + 1}`,
-            workTypeDesc: `Work Type Desc ${index + 1}`,
-            BUILDING: `BUILDING-${index + 1}`,
-            LOACTION: `LOACTION ${index + 1}`,
-        };
-    });
- 
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
