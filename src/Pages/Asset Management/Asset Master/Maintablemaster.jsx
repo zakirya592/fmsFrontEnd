@@ -110,12 +110,6 @@ function Maintablemaster() {
             setAnchorEl(null);
         };
 
-
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
                 <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
