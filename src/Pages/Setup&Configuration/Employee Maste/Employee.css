@@ -1,0 +1,11 @@
+select {
+    appearance: none;
+    background: white;
+    background-image: url("../../../Image/drop.png");
+    background-repeat: no-repeat;
+    background-position: right 0.2rem center;
+    border-radius: 2px;
+    background-size: 15px;
+    padding: 0px 2rem 1rem 1rem;
+
+}

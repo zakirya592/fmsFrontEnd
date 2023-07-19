@@ -48,6 +48,10 @@ import Maintransactiontable from '../../Pages/Asset Management/Asset Transaction
 import Viewtransaction from '../../Pages/Asset Management/Asset Transactions/Viewtransaction'
 import Updatatransaction from '../../Pages/Asset Management/Asset Transactions/Updatatransaction'
 import WarrantyPeriod from '../../Pages/Setup&Configuration/Warranty Period/WarrantyPeriod'
+import Employeemaster from '../../Pages/Setup&Configuration/Employee Maste/Employeemaster'
+import Viewemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Viewemployeemaster'
+import NewEmployeemaster from './setup configuration/Employee Master/NewEmployeemaster'
+import Updataemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Updataemployeemaster'
 function Pagerounter() {
 
   return (
@@ -112,9 +116,6 @@ function Pagerounter() {
           <Route exact path='/Titles' element={<Titless />} />
           {/*Maritalstatus*/}
           <Route exact path='/Maritalstatus' element={<Maritalstatus />} />
-          {/* asset type  */}
-          <Route exact path='/Assettype' element={<Assecttypesmaintence />} />
-
           {/*Assectcategory*/}
           <Route exact path='/AssetCategory' element={<Assectcategory />} />
           {/*Assectsubcategory*/}
@@ -123,6 +124,11 @@ function Pagerounter() {
           <Route exact path='/Assectcondition' element={<Assectcondition />} />
           {/*Nationality*/}
           <Route exact path='/Nationality' element={<Nationality />} />
+             {/*Employeemaster*/}
+          <Route exact path='/Employeemaster' element={<Employeemaster />} />
+          <Route exact path='/Create/Employeemaster' element={<NewEmployeemaster />} />
+          <Route exact path='/View/Employeemaster/:userId' element={<Viewemployeemaster />} />
+          <Route exact path='/Updata/Employeemaster/:userId' element={<Updataemployeemaster />} />
           {/*WarrantyPeriod*/}
           <Route exact path='/WarrantyPeriod' element={<WarrantyPeriod />} />
 
@@ -133,7 +139,6 @@ function Pagerounter() {
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
-          {/* Asset Management */}
           {/* Asset Management */}
           <Route exact path='/AssetMasters' element={<Maintablemaster />} />
           <Route exact path='/View/Assetmaster/:userId' element={<ViewAssmaster />} />

@@ -338,7 +338,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         <List className='setupsidebar'>
                         {['. Employee Master'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workRequest')
+                                navigate('/Employeemaster')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
