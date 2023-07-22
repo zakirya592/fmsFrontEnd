@@ -7,13 +7,12 @@ import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import Printer from "../../../Image/printer.jpeg"
 import Barcode from "../../../Image/barcode.png"
-import Camera1 from "../../../Image/camera 1.png"
-import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
+
 function Updatatransaction() {
     const navigate = useNavigate();
     const [assetCategory, setassetCategory] = useState("");

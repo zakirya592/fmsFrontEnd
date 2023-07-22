@@ -52,6 +52,10 @@ import Employeemaster from '../../Pages/Setup&Configuration/Employee Maste/Emplo
 import Viewemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Viewemployeemaster'
 import NewEmployeemaster from './setup configuration/Employee Master/NewEmployeemaster'
 import Updataemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Updataemployeemaster'
+import PurchaserequestView from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/PurchaserequestView'
+import Purachaseview from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Purachaseview'
+import Goodsreceiptsview from '../../Pages/Purchasing Management/Goods Receipts/Goods Receipts View/Goodsreceiptsview'
+import GoodsreturnView from '../../Pages/Purchasing Management/Goods Return/Goods Return View/GoodsreturnView'
 function Pagerounter() {
 
   return (
@@ -161,6 +165,18 @@ function Pagerounter() {
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
           {/* ===================== Asset Management=====================  */}
           {/* <Route exact path='/assetmanagement' element={<AssetManagement />} /> */}
+
+          {/* PurchaserequestView */}
+          <Route exact path="/PurchaserequestView" element={<PurchaserequestView />} />
+
+          {/* Purachaseview */}
+          <Route exact path="/Purachaseorderview" element={<Purachaseview />} />
+
+          {/* Purachaseview */}
+          <Route exact path="/Goodsreceiptsview" element={<Goodsreceiptsview />} />
+
+          {/* GoodsreturnView */}
+          <Route exact path="/GoodsreturnView" element={<GoodsreturnView />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -31,6 +31,7 @@ import SetupSidebar from '../../Pages/Setup&Configuration/SetupSidebar';
 import "./Sidebar.css"
 import UserManagementSidebar from '../../Pages/UserManagement/UserManagementSidebar';
 import Assetmanagement from './Assetmanagement';
+import Purchasingsidbard from './Purchasing siderbar/Purchasingsidbard';
 const drawerWidth = 250;
 
 
@@ -38,6 +39,7 @@ function Siderbar(props) {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showUserSidebar, setShowUserSidebar]=useState(false);
     const [AssetmanagementSidebar, setAssetmanagementSidebar] = useState(false);
+    const [Purchasingmanagment, setPurchasingmanagment] = useState(false)
     const handleClick = () => {
         setShowSidebar(!showSidebar);
       };
@@ -46,6 +48,10 @@ function Siderbar(props) {
      }
     const handleAssetmanagementSidebar = () => {
         setAssetmanagementSidebar(!AssetmanagementSidebar)
+    }
+
+    const handerPurchasingmanagmentsidebar = () => {
+        setPurchasingmanagment(!Purchasingmanagment)
     }
 
     const navigate = useNavigate();
@@ -194,7 +200,7 @@ function Siderbar(props) {
 
                     <List>
                         {['User Management'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={handleUserSidebar}>
+                            <ListItem key={text} disablePadding onClick={handerPurchasingmanagmentsidebar}>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index % 2 === 0 ? <img src={usermanagment} className="sidebaricon my-auto" alt=''/> : <img src={usermanagment} className="sidebaricon my-auto" alt=''/>}
@@ -204,12 +210,11 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
-                    {showUserSidebar && <UserManagementSidebar/>}
+                    {Purchasingmanagment && <UserManagementSidebar/>}
+
                     <List>
                         {['Purchasing  Management'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
-                            })}>
+                            <ListItem key={text} disablePadding onClick={handleUserSidebar}>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index % 2 === 0 ? <img src={PurchasingManagement} className="sidebaricon my-auto" /> : <img src={PurchasingManagement} className="sidebaricon my-auto" />}
@@ -219,6 +224,7 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
+                    {showUserSidebar && <Purchasingsidbard />}
 
                     <List>
                         {['Warehouse Management'].map((text, index) => (
