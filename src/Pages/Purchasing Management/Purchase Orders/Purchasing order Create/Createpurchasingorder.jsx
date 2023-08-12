@@ -164,8 +164,7 @@ function Createpurchasingorder() {
 
                 <div className="row mx-auto formsection">
 
-                   
-
+                
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <div className='emailsection  d-grid my-2'>
                             <label htmlFor='MobileNumber' className='lablesection color3 text-start mb-1'>

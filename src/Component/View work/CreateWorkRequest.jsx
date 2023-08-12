@@ -11,16 +11,21 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { DataGrid } from '@mui/x-data-grid';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 function CreateWorkRequest() {
     const navigate = useNavigate();
     const [value, setvalue] = useState({
@@ -530,53 +535,141 @@ function CreateWorkRequest() {
         navigate(-1); // Navigate back one step in the browser history
     };
 
-    const [activePage, setActivePage] = useState(0);
+//   Table section 
+    const [getdata, setgetdata] = useState([])
+    // List a data thougth api 
+    const getapi = () => {
+        axios.get(`/api/AssetsMaster_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
-    const [codeSections, setCodeSections] = useState
-        ([{ // Initial code section
-            AssetCode: '',
-            AssetDescription: '',
-            AssetCategory: '',
-            Manufacturer: '',
-            Model: '',
-            ProblemCategory: '',
-            ProblemDescription: ''
-        }]);
+    const columns = [
+        { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
+        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
+        { field: 'AssetCategory', headerName: 'ASSET CATGORY', width: 180 },
+        { field: 'AssetSubCategory', headerName: 'ASSET SUB_CATGORY', width: 180 },
+        { field: 'RequestDateTime', headerName: 'ON-HAND QTY', width: 150 },
+        { field: 'workTypeDesc', headerName: 'LAST PURCHASE DATE', width: 200 },
+        { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
+        { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+    ];
 
-    const addCodeSection = () => {
-        setCodeSections(prevSections => [...prevSections, { // Add a new code section object
-            AssetCode: '',
-            AssetDescription: '',
-            AssetCategory: '',
-            Manufacturer: '',
-            Model: '',
-            ProblemCategory: '',
-            ProblemDescription: ''
-        }]);
+    function ActionButtons(params) {
+        const [anchorEl, setAnchorEl] = useState(null);
+
+        const handleMenuOpen = (event) => {
+            setAnchorEl(event.currentTarget);
+        };
+
+        const handleMenuClose = () => {
+            setAnchorEl(null);
+        };
+
+        return (
+            <div>
+                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
+                    <span style={{ paddingRight: '10px' }}>Action</span>
+                    <ArrowDropDownIcon />
+                </Button>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}>
+                        <span style={{ paddingRight: '18px' }} >View</span>
+                        <VisibilityIcon />
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate(`/Updata/Assetmaster/${params.row.AssetItemDescription}`)}>
+                        <span style={{ paddingRight: '3px' }}>Update</span>
+                        <EditIcon />
+                    </MenuItem>
+                    <MenuItem onClick={() => Deletedapi(params.row.AssetItemDescription)}  >
+                        <span style={{ paddingRight: '10px' }}>Delete</span>
+                        <DeleteIcon />
+                    </MenuItem>
+                </Menu>
+            </div>
+
+
+        );
+    }
+
+    const filteredRows = getdata && getdata.map((row, indes) => ({
+        ...row,
+        id: indes + 1,
+        AssetItemDescription: row.AssetItemDescription,
+        AssetItemGroup: row.AssetItemGroup,
+        AssetCategory: row.AssetCategory,
+        AssetSubCategory: row.AssetSubCategory,
+        RequestDateTime: row.RequestDateTime,
+        WorkType: row.WorkType,
+        workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+    }))
+
+ 
+
+    // Deleted api section
+    const Deletedapi = (AssetItemDescription) => {
+        console.log(AssetItemDescription);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/AssetsMaster_DELETE_BYID/${AssetItemDescription}`)
+                    .then((res) => {
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        getapi()
+                        // Refresh the table data if needed
+                        // You can call the API again or remove the deleted row from the state
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                    });
+                swalWithBootstrapButtons.fire(
+                    'Deleted!',
+                    'User has been deleted.',
+                    'success'
+                )
+            }
+        })
+
     };
 
-    const handleInputChange = (e, index) => {
-        const { id, value } = e.target;
-        setCodeSections((prevSections) => {
-            const updatedSections = [...prevSections];
-            updatedSections[index][id] = value;
-            return updatedSections;
-        });
-    };
 
-
-
-    const deleteCodeSection = (index) => {
-        if (codeSections.length === 1) {
-            return; // Prevent deleting the only section
-        }
-        setCodeSections((prevSections) => {
-            const updatedSections = [...prevSections];
-            updatedSections.splice(index, 1);
-            return updatedSections;
-        });
-        setActivePage(0);
-    };
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
    
     return (
         <div>
@@ -1047,207 +1140,38 @@ function CreateWorkRequest() {
                                         </div>
                                     </div>
 
+                                    <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={(() => {
+                                            navigate('/AssetMasters')
+                                        })}> <AddCircleOutlineIcon className='me-1' />Asset Code</button>
+
+                                    </div>
+
                                 </div>
 
                                 <hr className='color3 line' />
-                                {/* 5th row */}
-                                {codeSections.slice(activePage, activePage + 1).map((section, index) => (
-                                    <div key={index} >
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='AssetItemTagID' className='lablesection color3 text-start mb-1'>
-                                                Asset Code<span className='star'>*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemTagID" aria-label="Floating label select example"
-                                                value={value.AssetItemTagID}
-                                                onChange={AssetDesc}
-                                            >
-                                                <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
-                                                {
-                                                    dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.AssetItemTagID}>{itme.AssetItemTagID}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                                Asset Description<span className='star'>*</span>
-                                            </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder=" tblAssetTransaction.[AssetItemDescription]" id="AssetDescription"
-                                                 value={AssetTypedesc}
-                                                   ></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Icons section */}
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                        <div className="d-flex align-items-center justify-content-center mt-4">
-                                                    <button type="button" className="btn color2 btnwork" onClick={addCodeSection}>
-                                                <AddCircleOutlineIcon />
-                                            </button>
-                                                    <button type="button" className="btn  color2 btnwork" onClick={() => deleteCodeSection(index)}>
-                                                <DeleteIcon />
-                                            </button>
-                                            <button type="button" className="btn color2 btnwork">
-                                                <FlipCameraAndroidIcon />
-                                            </button>
-                                        </div>
-                                    </div>
+                                {/* Table section */}
+                                <div style={{ height: 250, width: '100%' }}>
+                                    <DataGrid
+                                        rows={filteredRows}
+                                        columns={columns}
+                                        pagination
+                                        rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                        paginationModel={paginationModel}
+                                        onPaginationModelChange={setPaginationModel}
+                                        checkboxSelection
+                                        disableRowSelectionOnClick
+                                        disableMultipleSelection
+                                    />
 
                                 </div>
-
-                                {/* 6th */}
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='AssetCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Category<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='AssetCategory'
-                                                value={AssetCategory}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         AssetCategory: e.target.value
-                                                //     }))
-                                                // }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Asset Category '
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Manufacturer' className='lablesection color3 text-start mb-1'>
-                                                Manufacturer<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Manufacturer'
-                                                value={Manufacturerdesc}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         Manufacturer: e.target.value
-                                                //     }))
-                                                // }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Manufacturer'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Model' className='lablesection color3 text-start mb-1'>
-                                                Model<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Model'
-                                                value={Model}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         Model: e.target.value
-                                                //     }))
-                                                // }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Model'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* 7th  */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor={`ProblemCategory-${index}`} className='lablesection color3 text-start mb-1'>
-                                                Problem Category<span className='star'>*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id={`ProblemCategory-${index}`} aria-label="Floating label select example"
-                                                value={value.ProblemCategory}
-                                                        onChange={e => {
-                                                            setvalue(prevValue => ({
-                                                                ...prevValue,
-                                                                ProblemCategory: e.target.value
-                                                            })
-                                                            )
-                                                }}>
-                                                <option className='inputsectiondropdpwn'>Select Problem Category</option>
-                                                {
-                                                    dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.ProblemCategoryCode}>{itme.ProblemCategoryCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor={`ProblemDescription${index}`} className='lablesection color3 text-start mb-1'>
-                                                Problem Description<span className='star'>*</span>
-                                            </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description" 
-                                                    value={value.ProblemDescription}
-                                                     onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        ProblemDescription: e.target.value
-                                                    }))
-                                                }}
-                                               id={`ProblemDescription${index}`}
-            //                                      value={section.ProblemDescription}
-            //   onChange={e => {
-            //     const updatedSections = [...codeSections];
-            //     updatedSections[index].ProblemDescription = e.target.value;
-            //     setCodeSections(updatedSections);
-            //   }}
-            
-                                                  ></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                    </div>
-                                ))}
-
+                                {/*Button section*/}
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className='d-flex'>
-                                        <Stack spacing={2}>
-                                            <Pagination
-                                                count={codeSections.length}
-                                                page={activePage + 1}
-                                                onChange={(event, page) => setActivePage(page - 1)}
-                                            />
-                                        </Stack>
+                                       
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>
                                     </div>
                                 </div>
