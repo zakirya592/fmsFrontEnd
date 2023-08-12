@@ -88,6 +88,7 @@ function Createpurchasingorder() {
 
 
                 </div>
+                
                 <div className="row mx-auto formsection">
 
                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
