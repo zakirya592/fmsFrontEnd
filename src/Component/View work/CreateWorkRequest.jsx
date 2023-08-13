@@ -555,57 +555,15 @@ function CreateWorkRequest() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
+        { field: 'AssetNumber', headerName: 'ASSET/STOCK NUMBER', width: 220 },
         { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
-        { field: 'AssetCategory', headerName: 'ASSET CATGORY', width: 180 },
-        { field: 'AssetSubCategory', headerName: 'ASSET SUB_CATGORY', width: 180 },
-        { field: 'RequestDateTime', headerName: 'ON-HAND QTY', width: 150 },
-        { field: 'workTypeDesc', headerName: 'LAST PURCHASE DATE', width: 200 },
-        { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
-        { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
-        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
+        { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
+        { field: 'Model', headerName: 'MODEL', width: 200 },
+        { field: 'Monifacturer', headerName: 'MONIFACTURER', width: 200 },
     ];
 
-    function ActionButtons(params) {
-        const [anchorEl, setAnchorEl] = useState(null);
 
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
-        const handleMenuClose = () => {
-            setAnchorEl(null);
-        };
-
-        return (
-            <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate(`/Updata/Assetmaster/${params.row.AssetItemDescription}`)}>
-                        <span style={{ paddingRight: '3px' }}>Update</span>
-                        <EditIcon />
-                    </MenuItem>
-                    <MenuItem onClick={() => Deletedapi(params.row.AssetItemDescription)}  >
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
-            </div>
-
-
-        );
-    }
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
         ...row,
@@ -689,8 +647,8 @@ function CreateWorkRequest() {
                             <div className="py-3">
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Work Request</p>
-                                    <div className="d-flex">
+                                    <p className='color1 workitoppro my-auto'>Create Work  Request</p>
+                                    <div className="d-flex"> 
 
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
