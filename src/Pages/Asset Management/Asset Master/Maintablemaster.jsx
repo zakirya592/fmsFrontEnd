@@ -100,6 +100,49 @@ function Maintablemaster() {
         })
 
     };
+
+
+    const putapi = (AssetItemDescription) => {
+        console.log(AssetItemDescription);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't to Add !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Add it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.put(`/api/AssetsMaster_Put_status/${AssetItemDescription}`)
+                    .then((res) => {
+                        console.log('Add  successfully', res);
+                        getapi()
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                    });
+                swalWithBootstrapButtons.fire(
+                    'Add!',
+                    'The AssetCode is successfully Add to the Work request.',
+                    'success'
+                )
+            }
+        })
+
+    };
+
+
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
 
@@ -130,9 +173,19 @@ function Maintablemaster() {
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => Deletedapi(params.row.AssetItemDescription)}  >
+                    <MenuItem onClick={() => {
+                        Deletedapi(params.row.AssetItemDescription)
+                        handleMenuClose();
+                         }}  >
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
+                    </MenuItem>
+
+                    <MenuItem onClick={(e) => {
+                        putapi(params.row.AssetItemDescription);
+                        handleMenuClose();
+                    }}>
+                        <span style={{ paddingRight: '10px' }}>ADD TO WORK REQUEST</span>
                     </MenuItem>
                 </Menu>
             </div>
@@ -157,7 +210,6 @@ function Maintablemaster() {
       WorkType: row.WorkType,
       workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     }))
-
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,

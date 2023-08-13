@@ -543,7 +543,25 @@ function CreateWorkRequest() {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
-                setgetdata(res.data.recordset)
+                console.log(res.data.recordset.status);
+                const recordset = res.data.recordset;
+                const filteredData = recordset.filter(item => item.status === 1);
+                if (filteredData.length > 0) {
+                    console.log('Data with status 1:', filteredData);
+                    setgetdata(filteredData); // Set the array of data with status 1
+                }
+                console.log("filter", filteredData);
+                // Assuming res.data.recordset is an array
+                // res.data.recordset.forEach((item) => {
+                //     console.log(item.status); // Print the 'status' property of each item
+
+                //     if (item.status == 1) { 
+                //         console.log('status is i',item);
+                //         setgetdata(res.data.recordset); // Set the data when the status is 1
+                //     } else {
+                //         console.log('No data');
+                //     }
+                // });
             })
             .catch((err) => {
                 console.log(err);
