@@ -18,9 +18,40 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DataGrid } from '@mui/x-data-grid';
-
+import { v4 as uuidv4 } from 'uuid';
 function CreateWorkRequest() {
     const navigate = useNavigate();
+
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
+    let counter = 0;
+
+    function generateUuidStartingWith1() {
+        const uuid = uuidv4();
+        return `${uuid.substring(5, 10)}`;
+    }
+    function generateCustomId() {
+        const paddedCounter = counter.toString().padStart(2, '0');// Pad counter with leading zeros
+        counter++;
+        return `0000${paddedCounter}-${generateUuidStartingWith1()}`;
+    }
+    const Requesnumberss = (e) => {
+        const { value } = e.target;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            RequestNumber: value,
+        }));
+    };
+
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
@@ -31,8 +62,9 @@ function CreateWorkRequest() {
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         ProblemCategory: '', ProblemDescription: '',
-        RequestDateTime: '',
-        RequestNumber:"",
+        // RequestDateTime: '',
+        RequestNumber: generateCustomId(),
+        // RequestNumber:"",
         RequestStatus: '',
         workTrade: '',
         WorkOrder: '',
@@ -40,6 +72,7 @@ function CreateWorkRequest() {
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
+        RequestDateTime: getCurrentDateTimeString(), // Initialize with current date and time
 
     })
 
@@ -51,22 +84,22 @@ function CreateWorkRequest() {
             Lastname: value.Lastname,
             MobileNumber: value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
-            BuildingCode:value.BuildingCode,
-            DepartmentCode:value.DepartmentCode,
-            LocationCode:value.LocationCode,
+            BuildingCode: value.BuildingCode,
+            DepartmentCode: value.DepartmentCode,
+            LocationCode: value.LocationCode,
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);
                 // setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
-                if (res.status==201){
-                Swal.fire({
-                    title: "Success",
-                    text: "Work Request is created !!!",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                })
-                
-            }
+                if (res.status == 201) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Work Request is created !!!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    })
+
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -150,8 +183,8 @@ function CreateWorkRequest() {
                     .catch((err) => {
                         console.log(err);
                     });
-                    console.log(res.data);
-                    
+                console.log(res.data);
+
             }
         })
             .catch((err) => {
@@ -164,12 +197,12 @@ function CreateWorkRequest() {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
-      
+
         }
     }
-     // Dropdown list
+    // Dropdown list
 
-     const [RequestStatusLIST, setRequestStatusLIST] = useState([])
+    const [RequestStatusLIST, setRequestStatusLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     useEffect(() => {
@@ -180,14 +213,14 @@ function CreateWorkRequest() {
             .catch((err) => {
                 console.log(err);
             });
-            // Location
+        // Location
         axios.get(`/api/Location_LIST`).then((res) => {
-                setdropdownLocation(res.data.recordsets[0])
-            })
+            setdropdownLocation(res.data.recordsets[0])
+        })
             .catch((err) => {
                 console.log(err);
             });
-            // dropdownDepartmentLIST
+        // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
@@ -362,7 +395,7 @@ function CreateWorkRequest() {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
             } else {
-               console.log(res.data);
+                console.log(res.data);
                 const {
                     WorkType,
                     WorkTrade,
@@ -373,7 +406,7 @@ function CreateWorkRequest() {
                     RequestDateTime,
                     AssetItemTagID
                 } = res.data.recordsets[0][0];
-                
+
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
@@ -444,7 +477,7 @@ function CreateWorkRequest() {
                         .catch((err) => {
                             console.log(err);
                         });
-            })
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -459,11 +492,11 @@ function CreateWorkRequest() {
             AssetItemTagID: value.AssetItemTagID,
             WorkPriority: value.WorkPriority,
             RequestStatus: value.RequestStatus,
-            DepartmentCode:value.DepartmentCode,
-            BuildingCode:value.BuildingCode,
-            LocationCode:value.LocationCode,
-            EmployeeID:value.EmployeeID,
-            ProblemCategory:value.ProblemCategory,
+            DepartmentCode: value.DepartmentCode,
+            BuildingCode: value.BuildingCode,
+            LocationCode: value.LocationCode,
+            EmployeeID: value.EmployeeID,
+            ProblemCategory: value.ProblemCategory,
             ProblemDescription: value.ProblemDescription,
             RequestDateTime: value.RequestDateTime,
         },)
@@ -473,7 +506,7 @@ function CreateWorkRequest() {
             })
             .catch((err) => {
                 console.log(err);
-            });  
+            });
 
     };
 
@@ -483,10 +516,10 @@ function CreateWorkRequest() {
             AssetItemTagID: value.AssetItemTagID,
             AssetItemQty: '1',
             AssetItemQtyUsed: '1',
-          
+
         },)
             .then((res) => {
-                console.log('3rd api',res.data);
+                console.log('3rd api', res.data);
                 // setvalue(prevState => ({ ...prevState, RequestNumber: '', ProblemDescription:'', WorkType: '', WorkTrade: '', AssetItemTagID: "", WorkPriority: "", ProblemCategory: "", EmployeeID: '', RequestStatus :''}));
             })
             .catch((err) => {
@@ -505,14 +538,14 @@ function CreateWorkRequest() {
         },)
             .then((res) => {
                 setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
-             })
+            })
             .catch((err) => {
                 console.log(err);
             });
     };
 
     // All Createapi function
-    const allCreateapi=()=>{
+    const allCreateapi = () => {
         Createapi();
         workrequsrpostapi()
         AssetItemTagIDpost()
@@ -528,7 +561,7 @@ function CreateWorkRequest() {
         navigate(-1); // Navigate back one step in the browser history
     };
 
-//   Table section 
+    //   Table section 
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
@@ -588,7 +621,7 @@ function CreateWorkRequest() {
         workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     }))
 
- 
+
 
     // Deleted api section
     const Deletedapi = (AssetItemDescription) => {
@@ -639,7 +672,18 @@ function CreateWorkRequest() {
         pageSize: 25,
         page: 0,
     });
-   
+
+
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            [name]: value,
+        }));
+    };
+
+
     return (
         <div>
             <div className='bg'>
@@ -659,7 +703,7 @@ function CreateWorkRequest() {
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Create Work  Request</p>
-                                    <div className="d-flex"> 
+                                    <div className="d-flex">
 
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
@@ -713,12 +757,7 @@ function CreateWorkRequest() {
                                                 types='text'
                                                 id='WorkRequest'
                                                 value={value.RequestNumber}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        RequestNumber: e.target.value
-                                                    }))
-                                                }}
+                                                onChange={handleInputChange}
                                                 onKeyDown={handleKeyPressworkrequest}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Request Number'
@@ -737,16 +776,14 @@ function CreateWorkRequest() {
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                                 Request Date/Time<span className='star'>*</span>
                                             </label>
-                                            <input type="datetime-local" id="Employdata"
-
+                                            <input
+                                                type="datetime-local"
+                                                id="Employdata"
                                                 value={value.RequestDateTime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        RequestDateTime: e.target.value
-                                                    }))
-                                                }}
-                                                name="birthdaytime" className='rounded inputsection py-2' />
+                                                onChange={handleInputChange}
+                                                name="RequestDateTime"
+                                                className='rounded inputsection py-2'
+                                            />
                                         </div>
 
                                     </div>
@@ -754,7 +791,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
-                                               Request Status<span className='star'>*</span>
+                                                Request Status<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {
@@ -764,7 +801,7 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
 
-                                                <option className='inputsectiondropdpwn'>Request Status</option>
+                                                <option className='inputsectiondropdpwn'>Open</option>
                                                 {
                                                     RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
                                                         return (
@@ -981,7 +1018,7 @@ function CreateWorkRequest() {
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location<span className='star'>*</span>
                                             </label>
-                                            
+
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
                                                 value={value.LocationCode}
                                                 onChange={e => {
@@ -990,7 +1027,7 @@ function CreateWorkRequest() {
                                                         LocationCode: e.target.value
                                                     }))
                                                 }}
-                                                >
+                                            >
                                                 <option className='inputsectiondropdpwn'>Select Location</option>
                                                 {
                                                     dropdownLocation && dropdownLocation.map((itme, index) => {
@@ -1140,8 +1177,8 @@ function CreateWorkRequest() {
                                         navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className='d-flex'>
-                                       
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>
+
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>
                                     </div>
                                 </div>
                             </div>

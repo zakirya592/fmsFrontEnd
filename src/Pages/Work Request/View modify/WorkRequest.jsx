@@ -68,23 +68,29 @@ function WorkRequest() {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/api/deletesecondWorkRequest/${RequestNumber}`)
+        axios.delete(`/api/deleteWorkRequest/${RequestNumber}`)
           .then((res) => {
-            // Handle successful delete response
-            console.log('Deleted successfully', res);
             getapi()
+              // Handle successful delete response
+              console.log('Deleted successfully', res);
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'User has been deleted.',
+                'success'
+              )
             // Refresh the table data if needed
             // You can call the API again or remove the deleted row from the state
           })
           .catch((err) => {
             // Handle delete error
             console.log('Error deleting', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
           });
-        swalWithBootstrapButtons.fire(
-          'Deleted!',
-          'User has been deleted.',
-          'success'
-        )
+       
       }
     })
 
@@ -178,8 +184,8 @@ function WorkRequest() {
   //   WorkType: row.WorkType,
   //   workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
   // }))
-  
-// workTypeDesc api 
+
+  // workTypeDesc api 
   useEffect(() => {
     const filteredRows = getdata && getdata.filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
@@ -247,7 +253,7 @@ function WorkRequest() {
     //       // console.log(err);
     //     });
     // });
-    
+
     const workTypePromises = uniqueWorkTypes.map(workType =>
       axios.get(`/api/WorkType_descri_LIST/${workType}`)
         .then(res => ({
@@ -293,7 +299,7 @@ function WorkRequest() {
         console.log(err);
       });
   }, [getdata, RequestStatusFilterValue, requestByEmployee]);
-   
+
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 25,
     page: 0,
@@ -333,7 +339,7 @@ function WorkRequest() {
                       </button>
                     </div>
                   </div>
-                 
+
                   <hr className="color3 line" />
                   {/* Search Fields */}
                   <div className="row mx-auto formsection">

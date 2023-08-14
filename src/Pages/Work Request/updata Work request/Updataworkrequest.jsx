@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid';
+import moment from 'moment';
 
 function Updataworkrequest() {
     let { userId } = useParams();
@@ -36,7 +37,7 @@ function Updataworkrequest() {
         FeedbackEmp: '',
         Feedback_Remarks: '',
     })
- 
+
 
     // post api for the data 
     function postapi(EmployeeID) {
@@ -113,7 +114,7 @@ function Updataworkrequest() {
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(
-                        navigate('/workRequest')
+                    navigate('/workRequest')
                 )
             })
             .catch((err) => {
@@ -643,11 +644,11 @@ function Updataworkrequest() {
         AssetItemGroup: row.AssetItemGroup,
         AssetCategory: row.AssetCategory,
         AssetSubCategory: row.AssetSubCategory,
-        RequestDateTime: row.RequestDateTime,
+        RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
         WorkType: row.WorkType,
         workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     }))
-    
+
     // Deleted api section
     const Deletedapi = (AssetItemDescription) => {
         console.log(AssetItemDescription);
@@ -724,7 +725,7 @@ function Updataworkrequest() {
                                     <div className="d-flex">
                                         {/* pagepin  */}
                                         <Create />
-                                      </div>
+                                    </div>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -795,8 +796,8 @@ function Updataworkrequest() {
                                                 Request Date/Time<span className='star'>*</span>
                                             </label>
                                             <input type="datetime-local" id="Employdata"
-
                                                 value={value.RequestDateTime}
+                                                // value={getdata ? getdata.RequestDateTime : ""}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -1196,7 +1197,7 @@ function Updataworkrequest() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    
+
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>

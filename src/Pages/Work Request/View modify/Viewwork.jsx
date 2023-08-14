@@ -20,8 +20,7 @@ import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import moment from 'moment';
 
 function Viewwork() {
     let { userId } = useParams();
@@ -376,6 +375,7 @@ function Viewwork() {
                     RequestDateTime,
                     AssetItemTagID
                 } = res.data.recordsets[0][0];
+                
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
@@ -512,7 +512,7 @@ function Viewwork() {
         axios.post(`/api/getworkRequest`, {
             "EmployeeID": localStorage.getItem('EMpID')
         }).then((res) => {
-            console.log('asdfaf',res);
+            console.log('asdfaf', res.data); 
                 const {
                     EmployeeID,
                     Firstname,
@@ -520,7 +520,9 @@ function Viewwork() {
                     Middlename,
                     MobileNumber,
                     LandlineNumber,
+                    RequestDateTime
                 } = res.data.recordsets[0][0];
+                
                 setvalue((prevValue) => ({
                     ...prevValue,
                     EmployeeID,
@@ -529,6 +531,7 @@ function Viewwork() {
                     Middlename,
                     MobileNumber,
                     LandlineNumber,
+                    RequestDateTime
                 }));
         })
             .catch((err) => {
@@ -555,6 +558,10 @@ function Viewwork() {
                 LocationCode,
                 BuildingCode,
             } = res.data.recordsets[0][0];
+
+            const formattedRequestDateTime = moment(RequestDateTime, 'DD/MM/YYYY')
+               
+            console.log('sdddfsd', formattedRequestDateTime);
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
@@ -563,7 +570,7 @@ function Viewwork() {
                 ProblemDescription,
                 RequestStatus,
                 ProblemCategory,
-                RequestDateTime,
+                RequestDateTime: formattedRequestDateTime,
                 AssetItemTagID,
                 RequestNumber,
                 DepartmentCode,
@@ -754,8 +761,7 @@ function Viewwork() {
                                                 Request Date/Time<span className='star'>*</span>
                                             </label>
                                             <input type="datetime-local" id="Employdata"
-
-                                                value={value.RequestDateTime}
+                                             value={value.RequestDateTime}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
