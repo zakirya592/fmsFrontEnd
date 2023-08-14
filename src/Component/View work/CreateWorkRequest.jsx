@@ -566,17 +566,19 @@ function CreateWorkRequest() {
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/assetworkrequest_GET_BYID/100`)
+        axios.get(`/api/assetworkrequest_GET_BYID/1010`)
             .then((res) => {
                 console.log('TO get the list', res);
-                const recordset = res.data.recordset;
-               
-                const filteredData = recordset.filter(item => item.status === 1);
-                if (filteredData.length > 0) {
-                    console.log('Data with status 1:', filteredData);
-                    setgetdata(filteredData); // Set the array of data with status 1
-                }
-                console.log("filter", filteredData);
+                const AssetItemDescriptionsss = res.data.recordset[0].AssetItemDescription
+                console.log(AssetItemDescriptionsss);
+                axios.get(`/api/tblAssetsMaster_GET_BYID/${AssetItemDescriptionsss}`)
+                    .then((res) => {
+                        console.log('TO get the list tblAssetsMaster_GET_BYID', res.data.recordset[0]);
+                        setgetdata(res.data.recordset);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             })
             .catch((err) => {
                 console.log(err);
