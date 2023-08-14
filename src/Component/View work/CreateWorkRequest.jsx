@@ -570,11 +570,11 @@ function CreateWorkRequest() {
             .then((res) => {
                 console.log('TO get the list', res);
                 const recordset = res.data.recordset;
-                setgetdata(recordset);
+               
                 const filteredData = recordset.filter(item => item.status === 1);
                 if (filteredData.length > 0) {
                     console.log('Data with status 1:', filteredData);
-                    // setgetdata(filteredData); // Set the array of data with status 1
+                    setgetdata(filteredData); // Set the array of data with status 1
                 }
                 console.log("filter", filteredData);
             })
