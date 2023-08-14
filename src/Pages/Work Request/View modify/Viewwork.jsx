@@ -34,7 +34,7 @@ function Viewwork() {
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
-         RequestNumber: '', workTrade: '',// RequestNumber
+        RequestNumber: '', workTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
         AssetItemTag: '',
@@ -43,59 +43,59 @@ function Viewwork() {
         Feedback_Remarks: '',
     })
     const [activePage, setActivePage] = useState(0);
-    
+
     const [codeSections, setCodeSections] = useState
-    ([{ // Initial code section
-        AssetItemTagID: '',
-        AssetDescription: '',
-        AssetCategory: '',
-        Manufacturer: '',
-        Model: '',
-        ProblemCategory: '',
-        ProblemDescription: ''
-      }]);
-      
-      const addCodeSection = () => {
-        setCodeSections(prevSections => [...prevSections, { // Add a new code section object
-          AssetItemTagID: '',
-          AssetDescription: '',
-          AssetCategory: '',
-          Manufacturer: '',
-          Model: '',
-          ProblemCategory: '',
-          ProblemDescription: ''
+        ([{ // Initial code section
+            AssetItemTagID: '',
+            AssetDescription: '',
+            AssetCategory: '',
+            Manufacturer: '',
+            Model: '',
+            ProblemCategory: '',
+            ProblemDescription: ''
         }]);
-      };
-    
-      const handleInputChange = (e, index) => {
+
+    const addCodeSection = () => {
+        setCodeSections(prevSections => [...prevSections, { // Add a new code section object
+            AssetItemTagID: '',
+            AssetDescription: '',
+            AssetCategory: '',
+            Manufacturer: '',
+            Model: '',
+            ProblemCategory: '',
+            ProblemDescription: ''
+        }]);
+    };
+
+    const handleInputChange = (e, index) => {
         const { id, value } = e.target;
         setCodeSections((prevSections) => {
-          const updatedSections = [...prevSections];
-          updatedSections[index][id] = value;
-          return updatedSections;
+            const updatedSections = [...prevSections];
+            updatedSections[index][id] = value;
+            return updatedSections;
         });
-      };
-      
-    
-      const deleteCodeSection = (index) => {
+    };
+
+
+    const deleteCodeSection = (index) => {
         setCodeSections((prevSections) => {
-          const updatedSections = [...prevSections];
-          updatedSections.splice(index, 1);
-          return updatedSections;
+            const updatedSections = [...prevSections];
+            updatedSections.splice(index, 1);
+            return updatedSections;
         });
-      };
-      
+    };
+
 
     // post api for the data 
     function postapi(EmployeeID) {
         axios.post(`/api/getworkRequest`, {
-                EmployeeID,
-            }).then((res) => {
-                // console.log(res.data)
-                if (res.data.recordsets[0].length === 0) {
-                        Swal.fire('Oops...!', 'Something went wrong!', 'error')
-                    // setModelError(true);
-                } else {
+            EmployeeID,
+        }).then((res) => {
+            // console.log(res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                // setModelError(true);
+            } else {
 
                 const {
                     Firstname,
@@ -118,14 +118,14 @@ function Viewwork() {
                     BuildingCode,
                     LocationCode,
                 }));
-                const Depauto=res.data.recordsets[0][0].DepartmentCode
-                    axios.get(`/api/Department_desc_LIST/${Depauto}`)
-                        .then((res) => {
-                            setDeptDesc(res.data.recordset[0].DepartmentDesc)
-                        })
-                        .catch((err) => {
-                            //// console.log(err);;
-                        });
+                const Depauto = res.data.recordsets[0][0].DepartmentCode
+                axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                    .then((res) => {
+                        setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                    })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
             }
         })
             .catch((err) => {
@@ -179,7 +179,7 @@ function Viewwork() {
             setRequestStatusLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-               // console.log(err);;
+                // console.log(err);;
             });
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
@@ -187,7 +187,7 @@ function Viewwork() {
             setdropdownLocation(res.data.recordsets[0])
         })
             .catch((err) => {
-               // console.log(err);;
+                // console.log(err);;
             });
         // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
@@ -281,7 +281,7 @@ function Viewwork() {
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
             })
             .catch((err) => {
-               // console.log(err);;
+                // console.log(err);;
             });
         // WorkTrade_LIST
         axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
@@ -337,7 +337,7 @@ function Viewwork() {
                         setModel(res.data.recordset[0].Model)
                     })
                     .catch((err) => {
-                       // console.log(err);;
+                        // console.log(err);;
                     });
             })
             .catch((err) => {
@@ -375,7 +375,7 @@ function Viewwork() {
                     RequestDateTime,
                     AssetItemTagID
                 } = res.data.recordsets[0][0];
-                
+
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
@@ -395,23 +395,23 @@ function Viewwork() {
                         setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
                     })
                     .catch((err) => {
-                       // console.log(err);;
+                        // console.log(err);;
                     });
                 axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
                     // console.log("WorkTrade_LIST", res.data.recordset);
                     setdropdownWorkTradeLIST(res.data.recordsets[0])
-                    const worktradauto= res.data.recordsets[0][0].WorkTradeCode;
+                    const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
                     axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
                         .then((res) => {
-                            console.log('WorkTrade_descri_LIST',res.data);
+                            console.log('WorkTrade_descri_LIST', res.data);
                             setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
                         })
                         .catch((err) => {
-                           // console.log(err);;
+                            // console.log(err);;
                         });
                 })
                     .catch((err) => {
-                       // console.log(err);;
+                        // console.log(err);;
                     });
                 const AssetItemTagIDauto = res.data.recordsets[0][0].AssetItemTagID
                 console.log(AssetItemTagIDauto);
@@ -427,16 +427,16 @@ function Viewwork() {
                                 setModel(res.data.recordset[0].Model)
                             })
                             .catch((err) => {
-                               // console.log(err);;
+                                // console.log(err);;
                             });
                     })
                     .catch((err) => {
-                       // console.log(err);;
+                        // console.log(err);;
                     });
             }
         })
             .catch((err) => {
-               // console.log(err);;
+                // console.log(err);;
             });
     }
 
@@ -462,15 +462,15 @@ function Viewwork() {
                                     setModel(res.data.recordset[0].Model)
                                 })
                                 .catch((err) => {
-                                   // console.log(err);;
+                                    // console.log(err);;
                                 });
                         })
                         .catch((err) => {
-                           // console.log(err);;
+                            // console.log(err);;
                         });
                 })
                 .catch((err) => {
-                   // console.log(err);;
+                    // console.log(err);;
                 });
 
         }
@@ -495,7 +495,7 @@ function Viewwork() {
                 })
             })
             .catch((err) => {
-               // console.log(err);;
+                // console.log(err);;
             });
     };
 
@@ -507,32 +507,32 @@ function Viewwork() {
 
 
     // To get the all Data Work Request Number
-// Emp ID
+    // Emp ID
     function GetgetworkRequest() {
         axios.post(`/api/getworkRequest`, {
             "EmployeeID": localStorage.getItem('EMpID')
         }).then((res) => {
-            console.log('asdfaf', res.data); 
-                const {
-                    EmployeeID,
-                    Firstname,
-                    Lastname,
-                    Middlename,
-                    MobileNumber,
-                    LandlineNumber,
-                    RequestDateTime
-                } = res.data.recordsets[0][0];
-                
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    EmployeeID,
-                    Firstname,
-                    Lastname,
-                    Middlename,
-                    MobileNumber,
-                    LandlineNumber,
-                    RequestDateTime
-                }));
+            console.log('asdfaf', res.data);
+            const {
+                EmployeeID,
+                Firstname,
+                Lastname,
+                Middlename,
+                MobileNumber,
+                LandlineNumber,
+                RequestDateTime
+            } = res.data.recordsets[0][0];
+
+            setvalue((prevValue) => ({
+                ...prevValue,
+                EmployeeID,
+                Firstname,
+                Lastname,
+                Middlename,
+                MobileNumber,
+                LandlineNumber,
+                RequestDateTime
+            }));
         })
             .catch((err) => {
                 //// console.log(err);;
@@ -560,7 +560,7 @@ function Viewwork() {
             } = res.data.recordsets[0][0];
 
             const formattedRequestDateTime = moment(RequestDateTime, 'DD/MM/YYYY')
-               
+
             console.log('sdddfsd', formattedRequestDateTime);
             setvalue((prevValue) => ({
                 ...prevValue,
@@ -621,7 +621,7 @@ function Viewwork() {
     const apicall = () => {
         axios.get(`/api/WorkRequestItems_GET_BYID/${userId}`)
             .then((res) => {
-                console.log('WorkRequestItems_GET_BYID',res.data);
+                console.log('WorkRequestItems_GET_BYID', res.data);
                 setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
                 const assetdascauto = res.data.recordset[0].AssetItemTagID
                 // console.log(assetdascauto);
@@ -637,24 +637,24 @@ function Viewwork() {
                                 setModel(res.data.recordset[0].Model)
                             })
                             .catch((err) => {
-                               // console.log(err);;
+                                // console.log(err);;
                             });
                     })
                     .catch((err) => {
-                       // console.log(err);;
+                        // console.log(err);;
                     });
             })
             .catch((err) => {
-               // console.log(err);;
+                // console.log(err);;
             });
     };
-    
+
     useEffect(() => {
         apicall()
         GetgetworkRequest()
         Workrequestget()
     }, [])
-    
+
 
     return (
         <div>
@@ -761,7 +761,7 @@ function Viewwork() {
                                                 Request Date/Time<span className='star'>*</span>
                                             </label>
                                             <input type="datetime-local" id="Employdata"
-                                             value={value.RequestDateTime}
+                                                value={value.RequestDateTime}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -1144,173 +1144,173 @@ function Viewwork() {
                                 <hr className='color3 line' />
                                 {/* 6th row */}
                                 {codeSections.slice(activePage, activePage + 1).map((section, index) => (
-                                            <div key={index}>
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='AssetItemTagID' className='lablesection color3 text-start mb-1'>
-                                                Asset Code<span className='star'>*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemTagID" aria-label="Floating label select example"
-                                                value={value.AssetItemTagID}
-                                                onChange={AssetDesc}>
-                                                <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
-                                                {
-                                                    dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.AssetItemTagID}>{itme.AssetItemTagID}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                                Asset Description<span className='star'>*</span>
-                                            </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="tblAssetTransaction.[AssetItemDescription]" id="AssetDescription"
-                                                    value={AssetTypedesc}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         AssetItemDescription: e.target.value
-                                                //     }))
-                                                // }}
-                                                ></textarea>
+                                    <div key={index}>
+                                        <div className="row mx-auto formsection">
+                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                                <div className='emailsection position-relative d-grid my-2'>
+                                                    <label htmlFor='AssetItemTagID' className='lablesection color3 text-start mb-1'>
+                                                        Asset Code<span className='star'>*</span>
+                                                    </label>
+                                                    <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemTagID" aria-label="Floating label select example"
+                                                        value={value.AssetItemTagID}
+                                                        onChange={AssetDesc}>
+                                                        <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
+                                                        {
+                                                            dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
+                                                                return (
+                                                                    <option key={index} value={itme.AssetItemTagID}>{itme.AssetItemTagID}</option>
+                                                                )
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
+                                                <div className='emailsection d-grid my-2'>
+                                                    <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
+                                                        Asset Description<span className='star'>*</span>
+                                                    </label>
+                                                    <div className="form-floating inputsectiondropdpwn">
+                                                        <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="tblAssetTransaction.[AssetItemDescription]" id="AssetDescription"
+                                                            value={AssetTypedesc}
+                                                        // onChange={e => {
+                                                        //     setvalue(prevValue => ({
+                                                        //         ...prevValue,
+                                                        //         AssetItemDescription: e.target.value
+                                                        //     }))
+                                                        // }}
+                                                        ></textarea>
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                <div className="d-flex align-items-center justify-content-center mt-4">
+                                                    <button type="button" className="btn color2 btnwork" onClick={addCodeSection}>
+                                                        <AddCircleOutlineIcon />
+                                                    </button>
+                                                    <button type="button" className="btn  color2 btnwork" onClick={() => deleteCodeSection(index)}>
+                                                        <DeleteIcon />
+                                                    </button>
+                                                    <button type="button" className="btn color2 btnwork">
+                                                        <FlipCameraAndroidIcon />
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        {/* 7th */}
+                                        <div className="row mx-auto formsection">
+
+                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                <div className='emailsection  d-grid my-2'>
+                                                    <label htmlFor='AssetCategory' className='lablesection color3 text-start mb-1'>
+                                                        Asset Category<span className='star'>*</span>
+                                                    </label>
+
+                                                    <input
+                                                        types='text'
+                                                        id='AssetCategory'
+                                                        value={AssetCategory}
+                                                        className='rounded inputsection py-2'
+                                                        placeholder='Asset Category '
+                                                        required
+                                                    ></input>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                <div className='emailsection  d-grid my-2'>
+                                                    <label htmlFor='Manufacturer' className='lablesection color3 text-start mb-1'>
+                                                        Manufacturer<span className='star'>*</span>
+                                                    </label>
+
+                                                    <input
+                                                        types='text'
+                                                        id='Manufacturer'
+                                                        value={Manufacturerdesc}
+                                                        // onChange={e => {
+                                                        //     setvalue(prevValue => ({
+                                                        //         ...prevValue,
+                                                        //         Manufacturer: e.target.value
+                                                        //     }))
+                                                        // }}
+                                                        className='rounded inputsection py-2'
+                                                        placeholder='Manufacturer'
+                                                        required
+                                                    ></input>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                <div className='emailsection  d-grid my-2'>
+                                                    <label htmlFor='Model' className='lablesection color3 text-start mb-1'>
+                                                        Model<span className='star'>*</span>
+                                                    </label>
+
+                                                    <input
+                                                        types='text'
+                                                        id='Model'
+                                                        value={Model}
+                                                        className='rounded inputsection py-2'
+                                                        placeholder='Model'
+                                                        required
+                                                    ></input>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                        <div className="d-flex align-items-center justify-content-center mt-4">
-                                            <button type="button" className="btn color2 btnwork" onClick={addCodeSection}>
-                                                <AddCircleOutlineIcon />
-                                            </button>
-                                            <button type="button" className="btn  color2 btnwork" onClick={() => deleteCodeSection(index)}>
-                                                <DeleteIcon />
-                                            </button>
-                                            <button type="button" className="btn color2 btnwork">
-                                                <FlipCameraAndroidIcon />
-                                            </button>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                {/* 7th */}
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='AssetCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Category<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='AssetCategory'
-                                                value={AssetCategory}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Asset Category '
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Manufacturer' className='lablesection color3 text-start mb-1'>
-                                                Manufacturer<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Manufacturer'
-                                                value={Manufacturerdesc}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         Manufacturer: e.target.value
-                                                //     }))
-                                                // }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Manufacturer'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Model' className='lablesection color3 text-start mb-1'>
-                                                Model<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Model'
-                                                value={Model}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Model'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* 8th  */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='ProblemCategory' className='lablesection color3 text-start mb-1'>
-                                                Problem Category<span className='star'>*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example"
-                                                value={value.ProblemCategory}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         ProblemCategory: e.target.value
-                                                //     }))
-                                                // }}
-                                                onChange={ProblemDesc}>
-                                                <option className='inputsectiondropdpwn'>Select Problem Category</option>
-                                                {
-                                                    dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.ProblemCategoryCode}>{itme.ProblemCategoryCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                                Problem Description<span className='star'>*</span>
-                                            </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description " id="ProblemDescription"
-                                                    value={value.ProblemDescription}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        ProblemDescription: e.target.value
-                                                    }))
-                                                }}
-                                                ></textarea>
-
+                                        {/* 8th  */}
+                                        <div className="row mx-auto formsection">
+                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                                <div className='emailsection position-relative d-grid my-2'>
+                                                    <label htmlFor='ProblemCategory' className='lablesection color3 text-start mb-1'>
+                                                        Problem Category<span className='star'>*</span>
+                                                    </label>
+                                                    <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example"
+                                                        value={value.ProblemCategory}
+                                                        // onChange={e => {
+                                                        //     setvalue(prevValue => ({
+                                                        //         ...prevValue,
+                                                        //         ProblemCategory: e.target.value
+                                                        //     }))
+                                                        // }}
+                                                        onChange={ProblemDesc}>
+                                                        <option className='inputsectiondropdpwn'>Select Problem Category</option>
+                                                        {
+                                                            dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {
+                                                                return (
+                                                                    <option key={index} value={itme.ProblemCategoryCode}>{itme.ProblemCategoryCode}</option>
+                                                                )
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
                                             </div>
+
+                                            <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
+                                                <div className='emailsection d-grid my-2'>
+                                                    <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
+                                                        Problem Description<span className='star'>*</span>
+                                                    </label>
+                                                    <div className="form-floating inputsectiondropdpwn">
+                                                        <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description " id="ProblemDescription"
+                                                            value={value.ProblemDescription}
+                                                            onChange={e => {
+                                                                setvalue(prevValue => ({
+                                                                    ...prevValue,
+                                                                    ProblemDescription: e.target.value
+                                                                }))
+                                                            }}
+                                                        ></textarea>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
-
-                                </div>
-                                </div>
                                 ))}
 
 
