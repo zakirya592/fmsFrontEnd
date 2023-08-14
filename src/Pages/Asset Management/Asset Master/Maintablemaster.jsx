@@ -123,9 +123,12 @@ function Maintablemaster() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.put(`/api/AssetsMaster_Put_status/${AssetItemDescription}`)
+                axios.post(`/api/assetworkrequest_post`,{
+                    EmployeeID: localStorage.getItem('EmployeeIDset'),
+                    AssetItemDescription: AssetItemDescription
+                })
                     .then((res) => {
-                        console.log('Add  successfully', res);
+                        console.log('Asset desc Add  successfully', res);
                         getapi()
                     })
                     .catch((err) => {

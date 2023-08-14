@@ -4,23 +4,18 @@ import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import "./Viewmodify.css"
 import { useNavigate, useParams } from "react-router-dom";
-import excel from "../../../Image/excel.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
 import moment from 'moment';
+import { DataGrid } from '@mui/x-data-grid';
 
 function Viewwork() {
     let { userId } = useParams();
@@ -42,49 +37,6 @@ function Viewwork() {
         FeedbackEmp: '',
         Feedback_Remarks: '',
     })
-    const [activePage, setActivePage] = useState(0);
-
-    const [codeSections, setCodeSections] = useState
-        ([{ // Initial code section
-            AssetItemTagID: '',
-            AssetDescription: '',
-            AssetCategory: '',
-            Manufacturer: '',
-            Model: '',
-            ProblemCategory: '',
-            ProblemDescription: ''
-        }]);
-
-    const addCodeSection = () => {
-        setCodeSections(prevSections => [...prevSections, { // Add a new code section object
-            AssetItemTagID: '',
-            AssetDescription: '',
-            AssetCategory: '',
-            Manufacturer: '',
-            Model: '',
-            ProblemCategory: '',
-            ProblemDescription: ''
-        }]);
-    };
-
-    const handleInputChange = (e, index) => {
-        const { id, value } = e.target;
-        setCodeSections((prevSections) => {
-            const updatedSections = [...prevSections];
-            updatedSections[index][id] = value;
-            return updatedSections;
-        });
-    };
-
-
-    const deleteCodeSection = (index) => {
-        setCodeSections((prevSections) => {
-            const updatedSections = [...prevSections];
-            updatedSections.splice(index, 1);
-            return updatedSections;
-        });
-    };
-
 
     // post api for the data 
     function postapi(EmployeeID) {
@@ -384,10 +336,9 @@ function Viewwork() {
                     ProblemDescription,
                     RequestStatus,
                     ProblemCategory,
-                    RequestDateTime,
+                    RequestDateTime: moment(RequestDateTime).format('DD/MM/YYYY'),
                     AssetItemTagID
                 }));
-                // console.log('Work Request Number', res.data.recordsets[0][0]);
                 const workaout = res.data.recordsets[0][0].WorkType
                 axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                     .then((res) => {
@@ -559,9 +510,6 @@ function Viewwork() {
                 BuildingCode,
             } = res.data.recordsets[0][0];
 
-            const formattedRequestDateTime = moment(RequestDateTime, 'DD/MM/YYYY')
-
-            console.log('sdddfsd', formattedRequestDateTime);
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
@@ -570,14 +518,33 @@ function Viewwork() {
                 ProblemDescription,
                 RequestStatus,
                 ProblemCategory,
-                RequestDateTime: formattedRequestDateTime,
+                RequestDateTime,
                 AssetItemTagID,
                 RequestNumber,
                 DepartmentCode,
                 LocationCode,
                 BuildingCode
             }));
+            console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
             console.log('Work Request Number', res.data.recordsets[0][0]);
+            const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
+            axios.get(`/api/assetworkrequest_GET_BYID/${EmployeeIDss}`)
+                .then((res) => {
+                    console.log('TO get the list', res);
+                    const AssetItemDescriptionsss = res.data.recordset[0].AssetItemDescription
+                    console.log(AssetItemDescriptionsss);
+                    axios.get(`/api/tblAssetsMaster_GET_BYID/${AssetItemDescriptionsss}`)
+                        .then((res) => {
+                            console.log('TO get the list tblAssetsMaster_GET_BYID', res.data.recordset[0]);
+                            setgetdata(res.data.recordset);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
             const Depauto = res.data.recordsets[0][0].DepartmentCode
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
@@ -655,7 +622,36 @@ function Viewwork() {
         Workrequestget()
     }, [])
 
+    //   Table section 
+    const [getdata, setgetdata] = useState([])
 
+    const columns = [
+        { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'AssetNumber', headerName: 'ASSET/STOCK NUMBER', width: 220 },
+        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
+        { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
+        { field: 'Model', headerName: 'MODEL', width: 200 },
+        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
+    ];
+
+    const filteredRows = getdata && getdata.map((row, indes) => ({
+        ...row,
+        id: indes + 1,
+        AssetItemDescription: row.AssetItemDescription,
+        AssetItemGroup: row.AssetItemGroup,
+        AssetCategory: row.AssetCategory,
+        AssetSubCategory: row.AssetSubCategory,
+        RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
+        WorkType: row.WorkType,
+        Manufacturer: row.Manufacturer //this Both id  is to display a work types desc //ok
+    }))
+
+
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 5,
+        page: 0,
+    });
     return (
         <div>
             <div className='bg'>
@@ -1143,191 +1139,27 @@ function Viewwork() {
 
                                 <hr className='color3 line' />
                                 {/* 6th row */}
-                                {codeSections.slice(activePage, activePage + 1).map((section, index) => (
-                                    <div key={index}>
-                                        <div className="row mx-auto formsection">
-                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                                <div className='emailsection position-relative d-grid my-2'>
-                                                    <label htmlFor='AssetItemTagID' className='lablesection color3 text-start mb-1'>
-                                                        Asset Code<span className='star'>*</span>
-                                                    </label>
-                                                    <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemTagID" aria-label="Floating label select example"
-                                                        value={value.AssetItemTagID}
-                                                        onChange={AssetDesc}>
-                                                        <option className='inputsectiondropdpwn'>{AssetItemTagautom}</option>
-                                                        {
-                                                            dropdownAssetTypeLIST && dropdownAssetTypeLIST.map((itme, index) => {
-                                                                return (
-                                                                    <option key={index} value={itme.AssetItemTagID}>{itme.AssetItemTagID}</option>
-                                                                )
-                                                            })
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                                <div className='emailsection d-grid my-2'>
-                                                    <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                                        Asset Description<span className='star'>*</span>
-                                                    </label>
-                                                    <div className="form-floating inputsectiondropdpwn">
-                                                        <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="tblAssetTransaction.[AssetItemDescription]" id="AssetDescription"
-                                                            value={AssetTypedesc}
-                                                        // onChange={e => {
-                                                        //     setvalue(prevValue => ({
-                                                        //         ...prevValue,
-                                                        //         AssetItemDescription: e.target.value
-                                                        //     }))
-                                                        // }}
-                                                        ></textarea>
+                                <div style={{ height: 200, width: '100%' }}>
+                                    <DataGrid
+                                        rows={filteredRows}
+                                        columns={columns}
+                                        pagination
+                                        rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                        paginationModel={paginationModel}
+                                        onPaginationModelChange={setPaginationModel}
+                                        checkboxSelection
+                                        disableRowSelectionOnClick
+                                        disableMultipleSelection
+                                    />
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                <div className="d-flex align-items-center justify-content-center mt-4">
-                                                    <button type="button" className="btn color2 btnwork" onClick={addCodeSection}>
-                                                        <AddCircleOutlineIcon />
-                                                    </button>
-                                                    <button type="button" className="btn  color2 btnwork" onClick={() => deleteCodeSection(index)}>
-                                                        <DeleteIcon />
-                                                    </button>
-                                                    <button type="button" className="btn color2 btnwork">
-                                                        <FlipCameraAndroidIcon />
-                                                    </button>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-                                        {/* 7th */}
-                                        <div className="row mx-auto formsection">
-
-                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                <div className='emailsection  d-grid my-2'>
-                                                    <label htmlFor='AssetCategory' className='lablesection color3 text-start mb-1'>
-                                                        Asset Category<span className='star'>*</span>
-                                                    </label>
-
-                                                    <input
-                                                        types='text'
-                                                        id='AssetCategory'
-                                                        value={AssetCategory}
-                                                        className='rounded inputsection py-2'
-                                                        placeholder='Asset Category '
-                                                        required
-                                                    ></input>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                <div className='emailsection  d-grid my-2'>
-                                                    <label htmlFor='Manufacturer' className='lablesection color3 text-start mb-1'>
-                                                        Manufacturer<span className='star'>*</span>
-                                                    </label>
-
-                                                    <input
-                                                        types='text'
-                                                        id='Manufacturer'
-                                                        value={Manufacturerdesc}
-                                                        // onChange={e => {
-                                                        //     setvalue(prevValue => ({
-                                                        //         ...prevValue,
-                                                        //         Manufacturer: e.target.value
-                                                        //     }))
-                                                        // }}
-                                                        className='rounded inputsection py-2'
-                                                        placeholder='Manufacturer'
-                                                        required
-                                                    ></input>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                <div className='emailsection  d-grid my-2'>
-                                                    <label htmlFor='Model' className='lablesection color3 text-start mb-1'>
-                                                        Model<span className='star'>*</span>
-                                                    </label>
-
-                                                    <input
-                                                        types='text'
-                                                        id='Model'
-                                                        value={Model}
-                                                        className='rounded inputsection py-2'
-                                                        placeholder='Model'
-                                                        required
-                                                    ></input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* 8th  */}
-                                        <div className="row mx-auto formsection">
-                                            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                                <div className='emailsection position-relative d-grid my-2'>
-                                                    <label htmlFor='ProblemCategory' className='lablesection color3 text-start mb-1'>
-                                                        Problem Category<span className='star'>*</span>
-                                                    </label>
-                                                    <select className='rounded inputsectiondropdpwn color2 py-2' id="ProblemCategory" aria-label="Floating label select example"
-                                                        value={value.ProblemCategory}
-                                                        // onChange={e => {
-                                                        //     setvalue(prevValue => ({
-                                                        //         ...prevValue,
-                                                        //         ProblemCategory: e.target.value
-                                                        //     }))
-                                                        // }}
-                                                        onChange={ProblemDesc}>
-                                                        <option className='inputsectiondropdpwn'>Select Problem Category</option>
-                                                        {
-                                                            dropdownProblemCategoryLIST && dropdownProblemCategoryLIST.map((itme, index) => {
-                                                                return (
-                                                                    <option key={index} value={itme.ProblemCategoryCode}>{itme.ProblemCategoryCode}</option>
-                                                                )
-                                                            })
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                                <div className='emailsection d-grid my-2'>
-                                                    <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                                        Problem Description<span className='star'>*</span>
-                                                    </label>
-                                                    <div className="form-floating inputsectiondropdpwn">
-                                                        <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Problem Description " id="ProblemDescription"
-                                                            value={value.ProblemDescription}
-                                                            onChange={e => {
-                                                                setvalue(prevValue => ({
-                                                                    ...prevValue,
-                                                                    ProblemDescription: e.target.value
-                                                                }))
-                                                            }}
-                                                        ></textarea>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                ))}
-
+                                </div>
 
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    {/* <Stack spacing={2}>
-                                    <Pagination
-                                      count={codeSections.length}
-                                          page={activePage + 1}
-                                       onChange={(event, page) => setActivePage(page - 1)}
-                                      />
-                                        </Stack> */}
-                                    {/* <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button> */}
-                                </div>
+                               </div>
                             </div>
                         </div>
                     </Box>

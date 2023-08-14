@@ -36,6 +36,7 @@ function Updataworkrequest() {
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
+        EmployeeIDget:"",
     })
 
 
@@ -508,6 +509,7 @@ function Updataworkrequest() {
                 DepartmentCode,
                 LocationCode,
                 BuildingCode,
+                EmployeeIDget
             } = res.data.recordsets[0][0];
             setvalue((prevValue) => ({
                 ...prevValue,
@@ -522,9 +524,29 @@ function Updataworkrequest() {
                 RequestNumber,
                 DepartmentCode,
                 LocationCode,
-                BuildingCode
+                BuildingCode,
+                EmployeeIDget
             }));
             console.log('Work Request Number', res.data.recordsets[0][0]);
+            const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
+            axios.get(`/api/assetworkrequest_GET_BYID/${EmployeeIDss}`)
+                .then((res) => {
+                    console.log('TO get the list', res);
+                    const AssetItemDescriptionsss = res.data.recordset[0].AssetItemDescription
+                    console.log(AssetItemDescriptionsss);
+                    axios.get(`/api/tblAssetsMaster_GET_BYID/${AssetItemDescriptionsss}`)
+                        .then((res) => {
+                            console.log('TO get the list tblAssetsMaster_GET_BYID', res.data.recordset[0]);
+                            setgetdata(res.data.recordset);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            console.log(EmployeeIDss);
             const Depauto = res.data.recordsets[0][0].DepartmentCode
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
@@ -604,28 +626,6 @@ function Updataworkrequest() {
 
     //   Table section 
     const [getdata, setgetdata] = useState([])
-    // List a data thougth api 
-    const getapi = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`, {
-        },)
-            .then((res) => {
-                console.log('TO get the list', res);
-                console.log(res.data.recordset.status);
-                const recordset = res.data.recordset;
-                const filteredData = recordset.filter(item => item.status === 1);
-                if (filteredData.length > 0) {
-                    console.log('Data with status 1:', filteredData);
-                    setgetdata(filteredData); // Set the array of data with status 1
-                }
-                console.log("filter", filteredData);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-    useEffect(() => {
-        getapi()
-    }, [])
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
@@ -634,7 +634,7 @@ function Updataworkrequest() {
         { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
         { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
-        { field: 'Monifacturer', headerName: 'MONIFACTURER', width: 200 },
+        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
     ];
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
@@ -646,7 +646,7 @@ function Updataworkrequest() {
         AssetSubCategory: row.AssetSubCategory,
         RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
         WorkType: row.WorkType,
-        workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+        Manufacturer: row.Manufacturer //this Both id  is to display a work types desc //ok
     }))
 
     // Deleted api section
@@ -675,7 +675,7 @@ function Updataworkrequest() {
                     .then((res) => {
                         // Handle successful delete response
                         console.log('Deleted successfully', res);
-                        getapi()
+                        // getapi()
                         // Refresh the table data if needed
                         // You can call the API again or remove the deleted row from the state
                     })
@@ -695,7 +695,7 @@ function Updataworkrequest() {
 
 
     const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 25,
+        pageSize: 5,
         page: 0,
     });
 
@@ -1178,7 +1178,7 @@ function Updataworkrequest() {
                                 </div>
 
                                 <hr className='color3 line' />
-                                <div style={{ height: 350, width: '100%' }}>
+                                <div style={{ height: 200, width: '100%' }}>
                                     <DataGrid
                                         rows={filteredRows}
                                         columns={columns}

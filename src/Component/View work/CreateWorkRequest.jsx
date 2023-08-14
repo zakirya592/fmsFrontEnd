@@ -37,13 +37,15 @@ function CreateWorkRequest() {
 
     function generateUuidStartingWith1() {
         const uuid = uuidv4();
-        return `${uuid.substring(5, 10)}`;
+        return `${uuid.substring(4, 10)}`;
     }
+
     function generateCustomId() {
-        const paddedCounter = counter.toString().padStart(2, '0');// Pad counter with leading zeros
+        const paddedCounter = counter.toString().padStart(3, '0');// Pad counter with leading zeros
         counter++;
-        return `0000${paddedCounter}-${generateUuidStartingWith1()}`;
+        return `0${paddedCounter}-${generateUuidStartingWith1()}`;
     }
+
     const Requesnumberss = (e) => {
         const { value } = e.target;
         setvalue((prevValue) => ({
@@ -560,34 +562,21 @@ function CreateWorkRequest() {
     const Goback = () => {
         navigate(-1); // Navigate back one step in the browser history
     };
-
     //   Table section 
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`, {
-        },)
+        axios.get(`/api/assetworkrequest_GET_BYID/100`)
             .then((res) => {
                 console.log('TO get the list', res);
-                console.log(res.data.recordset.status);
                 const recordset = res.data.recordset;
+                setgetdata(recordset);
                 const filteredData = recordset.filter(item => item.status === 1);
                 if (filteredData.length > 0) {
                     console.log('Data with status 1:', filteredData);
-                    setgetdata(filteredData); // Set the array of data with status 1
+                    // setgetdata(filteredData); // Set the array of data with status 1
                 }
                 console.log("filter", filteredData);
-                // Assuming res.data.recordset is an array
-                // res.data.recordset.forEach((item) => {
-                //     console.log(item.status); // Print the 'status' property of each item
-
-                //     if (item.status == 1) { 
-                //         console.log('status is i',item);
-                //         setgetdata(res.data.recordset); // Set the data when the status is 1
-                //     } else {
-                //         console.log('No data');
-                //     }
-                // });
             })
             .catch((err) => {
                 console.log(err);
@@ -607,8 +596,6 @@ function CreateWorkRequest() {
         { field: 'Monifacturer', headerName: 'MONIFACTURER', width: 200 },
     ];
 
-
-
     const filteredRows = getdata && getdata.map((row, indes) => ({
         ...row,
         id: indes + 1,
@@ -620,8 +607,6 @@ function CreateWorkRequest() {
         WorkType: row.WorkType,
         workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     }))
-
-
 
     // Deleted api section
     const Deletedapi = (AssetItemDescription) => {
@@ -667,13 +652,10 @@ function CreateWorkRequest() {
 
     };
 
-
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
-
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -683,7 +665,13 @@ function CreateWorkRequest() {
         }));
     };
 
-
+    const employeeIDonchange=(e)=>{
+        setvalue(prevValue => ({
+            ...prevValue,
+            EmployeeID: e.target.value
+        }))
+        localStorage.setItem('EmployeeIDset', e.target.value)
+    }
     return (
         <div>
             <div className='bg'>
@@ -728,12 +716,7 @@ function CreateWorkRequest() {
                                                 types='text'
                                                 id='EmployeeID'
                                                 value={value.EmployeeID}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeID: e.target.value
-                                                    }))
-                                                }}
+                                                onChange={employeeIDonchange}
                                                 onKeyDown={handleKeyPress}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Employee Number'
@@ -1149,6 +1132,8 @@ function CreateWorkRequest() {
                                     <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={(() => {
                                             navigate('/AssetMasters')
+                                            console.log(localStorage.getItem('EmployeeIDset'));
+                                            
                                         })}> <AddCircleOutlineIcon className='me-1' />Asset Code</button>
 
                                     </div>
