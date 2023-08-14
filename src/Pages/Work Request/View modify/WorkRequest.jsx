@@ -19,13 +19,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
+import Swal from "sweetalert2";
 import moment from 'moment';
 
 function WorkRequest() {
   const navigate = useNavigate();
   const [getdata, setgetdata] = useState([])
-  const [WorkTypes, setWorkTypes] = useState()
-  const [wordecss, setwordecss] = useState()
   // List a data thougth api 
   const getapi = () => {
     axios.get(`/api/workRequest_GET_LIST`, {
@@ -45,6 +44,51 @@ function WorkRequest() {
   useEffect(() => {
     getapi()
   }, [])
+
+  // Deleted api section
+  // Deleted api section
+  const Deletedapi = (RequestNumber) => {
+    console.log(RequestNumber);
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success mx-2',
+        cancelButton: 'btn btn-danger mx-2',
+        // actions: 'mx-3'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`/api/deletesecondWorkRequest/${RequestNumber}`)
+          .then((res) => {
+            // Handle successful delete response
+            console.log('Deleted successfully', res);
+            getapi()
+            // Refresh the table data if needed
+            // You can call the API again or remove the deleted row from the state
+          })
+          .catch((err) => {
+            // Handle delete error
+            console.log('Error deleting', err);
+          });
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'User has been deleted.',
+          'success'
+        )
+      }
+    })
+
+  };
 
   const columns = [
     { field: 'id', headerName: 'SEQ.', width: 90 },
@@ -97,11 +141,16 @@ function WorkRequest() {
             <span style={{ paddingRight: '18px' }} >View</span>
             <VisibilityIcon />
           </MenuItem>
-          <MenuItem onClick={handleUpdate}>
+          <MenuItem onClick={(() => {
+            navigate(`/WorkRequest/Updata/${params.row.RequestNumber}`)
+          })}>
             <span style={{ paddingRight: '3px' }}>Update</span>
             <EditIcon />
           </MenuItem>
-          <MenuItem onClick={handleDeleteButtonClick}>
+          <MenuItem onClick={() => {
+            Deletedapi(params.row.RequestNumber)
+            handleMenuClose();
+          }}>
             <span style={{ paddingRight: '10px' }}>Delete</span>
             <DeleteIcon />
           </MenuItem>

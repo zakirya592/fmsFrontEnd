@@ -56,6 +56,7 @@ import PurchaserequestView from '../../Pages/Purchasing Management/Purchase Requ
 import Purachaseview from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Purachaseview'
 import Goodsreceiptsview from '../../Pages/Purchasing Management/Goods Receipts/Goods Receipts View/Goodsreceiptsview'
 import GoodsreturnView from '../../Pages/Purchasing Management/Goods Return/Goods Return View/GoodsreturnView'
+import Updataworkrequest from '../../Pages/Work Request/updata Work request/Updataworkrequest'
 function Pagerounter() {
 
   return (
@@ -70,6 +71,7 @@ function Pagerounter() {
           <Route exact path='/viewworkRequest' element={<Viewwork />} />
           {/* TO anthoer  */}
           <Route exact path='/viewworkRequest/:userId' element={<Viewwork />} />
+          <Route exact path='/WorkRequest/Updata/:userId' element={<Updataworkrequest />} />
           {/* create work Request */}
           <Route exact path="/createworkrequest" element={<CreateWorkRequest />} />
           {/*=====================  Word Order=====================   */}
