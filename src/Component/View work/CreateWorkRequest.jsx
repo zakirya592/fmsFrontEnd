@@ -590,45 +590,44 @@ function CreateWorkRequest() {
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
                 console.log(AssetItemDescriptionsssss);
 
-                // const promises = res.data.recordset.map((item) => {
-                //     const itid = item.AssetItemDescription;
-                //     console.log(itid);
-                    
-                //     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
-                //         .then((res) => {
-                //             console.log(res.data.recordset);
-                //             return {
-                //                 item,
-                //                 data: res.data.recordset ,// Store API response data here
-                //             };
+                const promises = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
+
+                    return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                        .then((res) => {
+                            console.log(res.data.recordset);
+                            return {
+                                item,
+                                data: res.data.recordset ,// Store API response data here
+                            };
                             
-                //         })
-                //         .catch((err) => {
-                //             console.log(err);
-                //             return {
-                //                 item,
-                //                 data: null // Handle error case here
-                //             };
-                //         });
-                // });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
+                });
                 
-
-                // Promise.all(promises)
-                //     .then((results) => {
+                Promise.all(promises)
+                    .then((results) => {
                        
-                //         // console.log('dfrfdf',results);
-                //         results.forEach((itemRecords, index) => {
-                //             console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords);
-                //             // setgetdata(results);
-                //             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
-                //                 description: description,
-                //                 records: results[index]
-                //             }));
-
-                //             setgetdata(recordsWithDescriptions);
-                //         });
+                        // console.log('dfrfdf',results);
+                        results.forEach((itemRecords, index) => {
+                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
+                             // setgetdata(results);
+                            const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                description: description,
+                                records: results[index],
+                            }));
+                            console.log(recordsWithDescriptions);
+                            setgetdata(recordsWithDescriptions);
+                        });
                 
-                //     });
+                    });
                     
 
                 // {
@@ -647,16 +646,21 @@ function CreateWorkRequest() {
                 // }
                 
                 const assetDescriptionsString = AssetItemDescriptionsss.join(',');
-                console.log(assetDescriptionsString);
-                axios.get(`/api/tblAssetsMaster_GET_BYID/${AssetItemDescriptionsss}`)
-                    .then((res) => {
-                        console.log('TO get the list Asset Item Description', res.data.recordset);
-                        console.log('Asser item desc', AssetItemDescriptionsss);
-                        setgetdata(res.data.recordset);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+
+                // axios.get(`/api/tblAssetsMaster_GET_BYID`, null,{
+                //     params: {
+                //         AssetItemDescriptionsss: AssetItemDescriptionsss,
+                //     }
+                // })
+                //     .then((res) => {
+                //         console.log('TO get the list Asset Item Description', res.data.recordset);
+                //         console.log('Asser item desc', AssetItemDescriptionsss);
+                //         setgetdata(res.data.recordset);
+                //     })
+                //     .catch((err) => {
+                //         console.log(err);
+                //     });
+            
             })
             .catch((err) => {
                 console.log(err);
@@ -675,17 +679,17 @@ function CreateWorkRequest() {
         { field: 'Model', headerName: 'MODEL', width: 200 },
         { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
     ];
-
+ 
     const filteredRows = getdata && getdata.map((row, indes) => ({
-        ...row,
+        ...row.records,
         id: indes + 1,
-        AssetItemDescription: row.AssetItemDescription,
-        AssetItemGroup: row.AssetItemGroup,
-        AssetCategory: row.AssetCategory,
-        AssetSubCategory: row.AssetSubCategory,
-        RequestDateTime: row.RequestDateTime,
-        WorkType: row.WorkType,
-        Manufacturer: row.Manufacturer //this Both id  is to display a work types desc //ok
+        AssetItemDescription: row.description,
+        AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
+        AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
+        AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
+        RequestDateTime: row.records ? row.records.data[0].RequestDateTime : '',
+        Model: row.records ? row.records.data[0].Model : '',
+        Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
     }))
 
     // Deleted api section
@@ -1226,7 +1230,7 @@ function CreateWorkRequest() {
 
                                 <hr className='color3 line' />
                                 {/* Table section */}
-                                <div style={{ height: 250, width: '100%' }}>
+                                <div style={{ height: 300, width: '100%' }}>
                                     <DataGrid
                                         rows={filteredRows}
                                         columns={columns}

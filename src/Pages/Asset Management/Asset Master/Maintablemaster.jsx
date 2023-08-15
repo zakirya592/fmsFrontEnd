@@ -131,12 +131,6 @@ const [getemplodata, setgetemplodata] = useState([])
                         console.log('Asset desc Add  successfully', res);
                         setgetemplodata(res.data.recordset)
                         console.log();
-                        // console.log('ID GET',res.data.recordset.map((item)=>{
-                        //    return(
-                        //        <p> ${item.EmployeeID}</p>
-                        //    )
-                        // }));
-                        // localStorage.setItem('postemployid', res.data.recordset[0].EmployeeID)
                         getapi()
                     })
                     .catch((err) => {
