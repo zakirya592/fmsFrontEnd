@@ -78,8 +78,7 @@ function WorkRequest() {
                 'User has been deleted.',
                 'success'
               )
-            // Refresh the table data if needed
-            // You can call the API again or remove the deleted row from the state
+            getapi()
           })
           .catch((err) => {
             // Handle delete error

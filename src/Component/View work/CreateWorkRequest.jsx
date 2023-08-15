@@ -81,7 +81,7 @@ function CreateWorkRequest() {
         // RequestDateTime: '',
         // RequestNumber: generateCustomId(),
         RequestNumber: generateCustomId(),
-        RequestStatus: '',
+        RequestStatus: 'Open',
         workTrade: '',
         WorkOrder: '',
         AssetItemTag: '',
@@ -806,7 +806,7 @@ function CreateWorkRequest() {
                                                     }))
                                                 }}>
 
-                                                <option className='inputsectiondropdpwn'>Open</option>
+                                                <option className='inputsectiondropdpwn' value='Open'>Open</option>
                                                 {
                                                     RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
                                                         return (
