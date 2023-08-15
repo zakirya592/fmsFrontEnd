@@ -54,6 +54,20 @@ function CreateWorkRequest() {
         }));
     };
 
+   
+
+    function generateCustomId() {
+        const randomNumber = Math.floor(Math.random() * 100); // Generate a random number between 0 and 999999999
+        const formattedId = randomNumber.toString().padStart(9, '0'); // Pad with leading zeros
+
+        const sections = [];
+        for (let i = 0; i < formattedId.length; i += 3) {
+            sections.push(formattedId.substr(i, 3));
+        }
+
+        return sections.join('-');
+    }
+
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
@@ -65,8 +79,8 @@ function CreateWorkRequest() {
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         ProblemCategory: '', ProblemDescription: '',
         // RequestDateTime: '',
+        // RequestNumber: generateCustomId(),
         RequestNumber: generateCustomId(),
-        // RequestNumber:"",
         RequestStatus: '',
         workTrade: '',
         WorkOrder: '',
@@ -77,6 +91,7 @@ function CreateWorkRequest() {
         RequestDateTime: getCurrentDateTimeString(), // Initialize with current date and time
 
     })
+
 
     const Createapi = async () => {
         await axios.post(`/api/AddworkRequestPOST`, {
@@ -675,6 +690,8 @@ function CreateWorkRequest() {
         }))
         localStorage.setItem('EmployeeIDset', e.target.value)
     }
+
+   
     return (
         <div>
             <div className='bg'>
@@ -743,6 +760,8 @@ function CreateWorkRequest() {
                                                 types='text'
                                                 id='WorkRequest'
                                                 value={value.RequestNumber}
+                                                readOnly
+                                                // value={value.RequestNumber}
                                                 onChange={handleInputChange}
                                                 onKeyDown={handleKeyPressworkrequest}
                                                 className='rounded inputsection py-2'
