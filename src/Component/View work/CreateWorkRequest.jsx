@@ -584,12 +584,74 @@ function CreateWorkRequest() {
         const empid = localStorage.getItem('postemployid',)
         axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
             .then((res) => {
-                console.log('TO get the list', res);
-                const AssetItemDescriptionsss = res.data.recordset[0].AssetItemDescription
-                console.log(AssetItemDescriptionsss);
+                console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                const AssetItemDescriptionsssss = res.data.recordset
+                // setgetdata(res.data.recordset);
+                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                console.log(AssetItemDescriptionsssss);
+
+                // const promises = res.data.recordset.map((item) => {
+                //     const itid = item.AssetItemDescription;
+                //     console.log(itid);
+                    
+                //     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                //         .then((res) => {
+                //             console.log(res.data.recordset);
+                //             return {
+                //                 item,
+                //                 data: res.data.recordset ,// Store API response data here
+                //             };
+                            
+                //         })
+                //         .catch((err) => {
+                //             console.log(err);
+                //             return {
+                //                 item,
+                //                 data: null // Handle error case here
+                //             };
+                //         });
+                // });
+                
+
+                // Promise.all(promises)
+                //     .then((results) => {
+                       
+                //         // console.log('dfrfdf',results);
+                //         results.forEach((itemRecords, index) => {
+                //             console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords);
+                //             // setgetdata(results);
+                //             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                //                 description: description,
+                //                 records: results[index]
+                //             }));
+
+                //             setgetdata(recordsWithDescriptions);
+                //         });
+                
+                //     });
+                    
+
+                // {
+                //     AssetItemDescriptionsss.map((item,indi)=>{
+                      
+                //         axios.get(`/api/tblAssetsMaster_GET_BYID/${item}`)
+                //             .then((res) => {
+                //                 // console.log('Asset Item Descriptionsss', item);
+                //                 // console.log('tblAssetsMaster _GET_BYID', res.data.recordset[0]);
+                //                 setgetdata(res.data.recordset);
+                //             })
+                //             .catch((err) => {
+                //                 console.log(err);
+                //             });
+                //     })
+                // }
+                
+                const assetDescriptionsString = AssetItemDescriptionsss.join(',');
+                console.log(assetDescriptionsString);
                 axios.get(`/api/tblAssetsMaster_GET_BYID/${AssetItemDescriptionsss}`)
                     .then((res) => {
-                        console.log('TO get the list tblAssetsMaster_GET_BYID', res.data.recordset[0]);
+                        console.log('TO get the list Asset Item Description', res.data.recordset);
+                        console.log('Asser item desc', AssetItemDescriptionsss);
                         setgetdata(res.data.recordset);
                     })
                     .catch((err) => {

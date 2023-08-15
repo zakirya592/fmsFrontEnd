@@ -101,7 +101,7 @@ function Maintablemaster() {
 
     };
 
-
+const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
         console.log(AssetItemDescription);
         const swalWithBootstrapButtons = Swal.mixin({
@@ -129,8 +129,14 @@ function Maintablemaster() {
                 })
                     .then((res) => {
                         console.log('Asset desc Add  successfully', res);
-                        console.log(res.data.recordset[0].EmployeeID);
-                        localStorage.setItem('postemployid', res.data.recordset[0].EmployeeID)
+                        setgetemplodata(res.data.recordset)
+                        console.log();
+                        // console.log('ID GET',res.data.recordset.map((item)=>{
+                        //    return(
+                        //        <p> ${item.EmployeeID}</p>
+                        //    )
+                        // }));
+                        // localStorage.setItem('postemployid', res.data.recordset[0].EmployeeID)
                         getapi()
                     })
                     .catch((err) => {
@@ -257,6 +263,12 @@ function Maintablemaster() {
                                     </div>
 
                                     <hr className="color3 line" />
+                                    {
+                                        getemplodata && getemplodata.map((item, index) => (
+                                            <p key={index}>{localStorage.setItem('postemployid', item.EmployeeID)}</p>
+                                            
+                                        ))
+                                    }
                                     {/* Search Fields */}
                                     <div className="row mx-auto formsection">
                                         <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
@@ -317,7 +329,7 @@ function Maintablemaster() {
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
                                         <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                        <button type="button" className="border-0 px-3  savebtn py-2"   ><AddCircleIcon className='me-2' />Add To Work Request</button>
+                                        <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button>
                                     </div>
                                 </div>
                             </div>
