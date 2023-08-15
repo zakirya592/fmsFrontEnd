@@ -566,7 +566,8 @@ function CreateWorkRequest() {
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/assetworkrequest_GET_BYID/1010`)
+        const empid = localStorage.getItem('postemployid',)
+        axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
             .then((res) => {
                 console.log('TO get the list', res);
                 const AssetItemDescriptionsss = res.data.recordset[0].AssetItemDescription
@@ -595,7 +596,7 @@ function CreateWorkRequest() {
         { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
         { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
-        { field: 'Monifacturer', headerName: 'MONIFACTURER', width: 200 },
+        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
     ];
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
@@ -607,7 +608,7 @@ function CreateWorkRequest() {
         AssetSubCategory: row.AssetSubCategory,
         RequestDateTime: row.RequestDateTime,
         WorkType: row.WorkType,
-        workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+        Manufacturer: row.Manufacturer //this Both id  is to display a work types desc //ok
     }))
 
     // Deleted api section

@@ -129,6 +129,8 @@ function Maintablemaster() {
                 })
                     .then((res) => {
                         console.log('Asset desc Add  successfully', res);
+                        console.log(res.data.recordset[0].EmployeeID);
+                        localStorage.setItem('postemployid', res.data.recordset[0].EmployeeID)
                         getapi()
                     })
                     .catch((err) => {
