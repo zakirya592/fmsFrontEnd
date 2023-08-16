@@ -65,7 +65,8 @@ function CreateWorkRequest() {
 
         return sections.join('-');
     }
-    const initialEmployeeID = localStorage.getItem('postemployid') || ""; // Use empty string if null
+    // const initialEmployeeID = localStorage.getItem('postemployid') || ""; // Use empty string if null
+    const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
     const initialMiddlename = localStorage.getItem('Middlename') || ""; // Use empty string if null
@@ -618,7 +619,8 @@ function CreateWorkRequest() {
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        const empid = localStorage.getItem('postemployid',)
+        // const empid = localStorage.getItem('postemployid',)
+        const empid = localStorage.getItem('EmployeeIDset',)
         axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
             .then((res) => {
                 console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
