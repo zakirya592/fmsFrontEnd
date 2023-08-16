@@ -530,21 +530,54 @@ function Viewwork() {
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
             axios.get(`/api/assetworkrequest_GET_BYID/${EmployeeIDss}`)
                 .then((res) => {
-                    console.log('TO get the list', res);
-                    const AssetItemDescriptionsss = res.data.recordset[0].AssetItemDescription
-                    console.log(AssetItemDescriptionsss);
-                    axios.get(`/api/tblAssetsMaster_GET_BYID/${AssetItemDescriptionsss}`)
-                        .then((res) => {
-                            console.log('TO get the list tblAssetsMaster_GET_BYID', res.data.recordset[0]);
-                            setgetdata(res.data.recordset);
-                        })
-                        .catch((err) => {
-                            console.log(err);
+                    console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                    const AssetItemDescriptionsssss = res.data.recordset
+                    // setgetdata(res.data.recordset);
+                    const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                    console.log(AssetItemDescriptionsssss);
+
+                    const promises = res.data.recordset.map((item) => {
+                        const itid = item.AssetItemDescription;
+                        console.log(itid);
+
+                        return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                            .then((res) => {
+                                console.log(res.data.recordset);
+                                return {
+                                    item,
+                                    data: res.data.recordset,// Store API response data here
+                                };
+
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                return {
+                                    item,
+                                    data: null // Handle error case here
+                                };
+                            });
+                    });
+
+                    Promise.all(promises)
+                        .then((results) => {
+                            results.forEach((itemRecords, index) => {
+                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
+                                // setgetdata(results);
+                                const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                    description: description,
+                                    records: results[index],
+                                }));
+                                console.log(recordsWithDescriptions);
+                                setgetdata(recordsWithDescriptions);
+                            });
+
                         });
+
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+
             const Depauto = res.data.recordsets[0][0].DepartmentCode
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
@@ -636,16 +669,16 @@ function Viewwork() {
     ];
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
-        ...row,
+        ...row.records,
         id: indes + 1,
-        AssetItemDescription: row.AssetItemDescription,
-        AssetItemGroup: row.AssetItemGroup,
-        AssetCategory: row.AssetCategory,
-        AssetSubCategory: row.AssetSubCategory,
-        RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
-        WorkType: row.WorkType,
-        Manufacturer: row.Manufacturer //this Both id  is to display a work types desc //ok
-    }))
+        AssetItemDescription: row.description,
+        AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
+        AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
+        AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
+        RequestDateTime: row.records ? row.records.data[0].RequestDateTime : '',
+        Model: row.records ? row.records.data[0].Model : '',
+        Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
+     }))
 
 
     const [paginationModel, setPaginationModel] = React.useState({
@@ -1139,7 +1172,7 @@ function Viewwork() {
 
                                 <hr className='color3 line' />
                                 {/* 6th row */}
-                                <div style={{ height: 200, width: '100%' }}>
+                                <div style={{ height: 300, width: '100%' }}>
                                     <DataGrid
                                         rows={filteredRows}
                                         columns={columns}
