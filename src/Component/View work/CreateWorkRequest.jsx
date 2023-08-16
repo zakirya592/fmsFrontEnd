@@ -54,8 +54,6 @@ function CreateWorkRequest() {
         }));
     };
 
-   
-
     function generateCustomId() {
         const randomNumber = Math.floor(Math.random() * 100); // Generate a random number between 0 and 999999999
         const formattedId = randomNumber.toString().padStart(9, '0'); // Pad with leading zeros
@@ -67,22 +65,39 @@ function CreateWorkRequest() {
 
         return sections.join('-');
     }
+    const initialEmployeeID = localStorage.getItem('postemployid') || ""; // Use empty string if null
+    const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
+    const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
+    const initialMiddlename = localStorage.getItem('Middlename') || ""; // Use empty string if null
+    const initialLastname = localStorage.getItem('Lastname') || ""; // Use empty string if null
+    const initialMobileNumber = localStorage.getItem('MobileNumber') || ""; // Use empty string if null
+    const initialLandlineNumber = localStorage.getItem('LandlineNumber') || ""; // Use empty string if null
+    const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code"; 
+    const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code"; 
+    const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code"; 
+    const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code"; 
+    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code"; 
+    const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code"; 
+    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc"; 
+    const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname"; 
+    const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
 
     const [value, setvalue] = useState({
-        EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-        DepartmentCode: '', Departmentname: '',//Department api input 
-        BuildingCode: '', //AddBuildingInworkRequestPOST api input
-        LocationCode: '',// //AddLocationInworkRequestPOST api input
-        WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
-        WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
+        EmployeeID: initialEmployeeID, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
+        MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
+        DepartmentCode: initialDepartmentCode, Departmentname: initialDepartmentname,//Department api input 
+        BuildingCode: initialBuildingCode, //AddBuildingInworkRequestPOST api input
+        LocationCode: initialLocationCode,// //AddLocationInworkRequestPOST api input
+        WorkType: initialWorkType, WorkTypeDesc:initialWorkTypeDesc,//AddWorkTypeInworkRequestPOST api input
+        WorkPriority: initialWorkPriority,//AddWorkPriorityInworkRequestPOST api input
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         ProblemCategory: '', ProblemDescription: '',
         // RequestDateTime: '',
         // RequestNumber: generateCustomId(),
         RequestNumber: generateCustomId(),
-        RequestStatus: 'Open',
-        workTrade: '',
+        RequestStatus: initialRequestStatus,
+        workTrade: initialWorkTradeCode,
         WorkOrder: '',
         AssetItemTag: '',
         CompletedByEmp: '',
@@ -108,15 +123,15 @@ function CreateWorkRequest() {
             .then((res) => {
                 // console.log('Add work api first api', res.data);
                 // setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
-                if (res.status == 201) {
-                    Swal.fire({
-                        title: "Success",
-                        text: "Work Request is created !!!",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    })
+                // if (res.status == 201) {
+                //     Swal.fire({
+                //         title: "Success",
+                //         text: "Work Request is created !!!",
+                //         icon: "success",
+                //         confirmButtonText: "OK",
+                //     })
 
-                }
+                // }
             })
             .catch((err) => {
                 console.log(err);
@@ -253,6 +268,7 @@ function CreateWorkRequest() {
     const [dropdownWorkTradeLIST, setdropdownWorkTradeLIST] = useState([])
     const [dropdownAssetTypeLIST, setdropdownAssetTypeLIST] = useState([])
     const [dropdownProblemCategoryLIST, setdropdownProblemCategoryLIST] = useState([])
+    
     useEffect(() => {
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
@@ -293,9 +309,11 @@ function CreateWorkRequest() {
     }, [])
 
     // Department
-    const [DeptDesc, setDeptDesc] = useState([])
+    const [DeptDesc, setDeptDesc] = useState(initialDepartmentname)
     const handleProvinceChange = (e) => {
-        const Deptnale = e.target.value;
+        localStorage.setItem('Departmentcode',e.target.value);
+
+        const Deptnale =  e.target.value; 
         setvalue((prevValue) => ({
             ...prevValue,
             DepartmentCode: e.target.value,
@@ -303,16 +321,16 @@ function CreateWorkRequest() {
         axios.get(`/api/Department_desc_LIST/${Deptnale}`)
             .then((res) => {
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
-
-
+                localStorage.setItem('Departmentname', res.data.recordset[0].DepartmentDesc)
             })
             .catch((err) => {
                 console.log(err);
             });
     }
     // WorkTypedesc
-    const [WorkTypedesc, setWorkTypedesc] = useState([])
+    const [WorkTypedesc, setWorkTypedesc] = useState(initialWorkTypeDesc)
     const Workypesdesc = (e) => {
+        localStorage.setItem('WorkType', e.target.value)
         const Deptnale = e.target.value;
         setvalue(prevValue => ({
             ...prevValue,
@@ -321,8 +339,7 @@ function CreateWorkRequest() {
         axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
             .then((res) => {
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
-
-
+                localStorage.setItem('WorkTypeDesc', res.data.recordset[0].WorkTypeDesc)
             })
             .catch((err) => {
                 console.log(err);
@@ -337,9 +354,10 @@ function CreateWorkRequest() {
     }
 
     // prmWorkTrade
-    const [WorkTradedesc, setWorkTradedesc] = useState([])
+    const [WorkTradedesc, setWorkTradedesc] = useState(initialWorkTradedesc)
     const Worktrandedesc = (e) => {
         const Deptnale = e.target.value;
+        localStorage.setItem('WorkTradeCode', e.target.value);
         setvalue(prevValue => ({
             ...prevValue,
             WorkTrade: e.target.value
@@ -347,11 +365,13 @@ function CreateWorkRequest() {
         axios.get(`/api/WorkTrade_descri_LIST/${Deptnale}`)
             .then((res) => {
                 setWorkTradedesc(res.data.recordset[0].WorkTradeDesc)
+                localStorage.setItem('WorkTradedesc', res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
                 console.log(err);
             });
     }
+
     // AssetType_descrip_LIST
     const [AssetTypedesc, setAssetTypedesc] = useState([])
     const [Manufacturerdesc, setManufacturerdesc] = useState([])
@@ -380,26 +400,6 @@ function CreateWorkRequest() {
             .catch((err) => {
                 console.log(err);
             });
-    }
-
-    // ProblemCategory_descrip
-    const ProblemDesc = (e) => {
-        const Deptnale = e.target.value;
-        setvalue(prevValue => ({
-            ...prevValue,
-            ProblemCategory: e.target.value
-        }))
-        // axios.get(`/api/ProblemCategory_descrip_LIST/${Deptnale}`)
-        //     .then((res) => {
-        //         // setProblemdesctext(res.data.recordset[0].ProblemCategoryDesc)
-        //         setvalue(prevValue => ({
-        //             ...prevValue,
-        //             ProblemDescription: res.data.recordset[0].ProblemCategoryDesc
-        //         }))
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
     }
 
     // Work Request Number
@@ -563,9 +563,46 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi = () => {
+        // Createapi();
+        // workrequsrpostapi()
+        // AssetItemTagIDpost()
+        
+        localStorage.removeItem('postemployid');
+        localStorage.removeItem('EmployeeIDset');
+        localStorage.removeItem('MobileNumber');
+        localStorage.removeItem('RequestStatus');
+        localStorage.removeItem('Firstname');
+        localStorage.removeItem('Middlename');
+        localStorage.removeItem('Lastname');
+        localStorage.removeItem('phoneNumber');
+        localStorage.removeItem('LandlineNumber');
+        localStorage.removeItem('Departmentcode');
+        localStorage.removeItem('BuildingCode');
+        localStorage.removeItem('LocationCode');
+        localStorage.removeItem('WorkType');
+        localStorage.removeItem('WorkTradeCode');
+        localStorage.removeItem('WorkPriority');
+        localStorage.removeItem('WorkTypeDesc');
+        localStorage.removeItem('Departmentname');
+        localStorage.removeItem('WorkTradedesc');
+
+                    Swal.fire({
+                        title: "Success",
+                        text: "Work Request is created !!!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    })
+
+
+    }
+    const Assetcodebtn = () => {
+
         Createapi();
         workrequsrpostapi()
         AssetItemTagIDpost()
+        navigate('/AssetMasters') 
+        setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '', WorkPriority: '', LocationCode: '', BuildingCode:'',}));
+
     }
 
     // All Updata api  function 
@@ -870,6 +907,7 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         RequestStatus: e.target.value
                                                     }))
+                                                    localStorage.setItem('RequestStatus', e.target.value);
                                                 }}>
 
                                                 <option className='inputsectiondropdpwn' value='Open'>Open</option>
@@ -903,6 +941,7 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         Firstname: e.target.value
                                                     }))
+                                                    localStorage.setItem('Firstname', e.target.value);
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter First Name'
@@ -926,6 +965,7 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         Middlename: e.target.value
                                                     }))
+                                                    localStorage.setItem('Middlename', e.target.value);
                                                 }}
 
                                                 className='rounded inputsection py-2'
@@ -951,6 +991,7 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         Lastname: e.target.value
                                                     }))
+                                                    localStorage.setItem('Lastname', e.target.value);
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Last Name'
@@ -974,12 +1015,13 @@ function CreateWorkRequest() {
                                                 placeholder="+966   500000000"
                                                 id='MobileNumber'
                                                 value={value.MobileNumber}
-                                                onChange={(phoneNumber) =>
+                                                onChange={(phoneNumber) =>{
                                                     setvalue((prevValue) => ({
                                                         ...prevValue,
                                                         MobileNumber: phoneNumber,
                                                     }))
-                                                }
+                                                    localStorage.setItem('MobileNumber', phoneNumber);
+                                                }}
                                                 className='rounded inputsection custom-phone-input py-2'
                                                 defaultCountry="SA"
                                                 dropdownClass='custom-phone-dropdown'
@@ -998,12 +1040,13 @@ function CreateWorkRequest() {
                                                 placeholder="+966  0100000000"
                                                 id='Landlinenumber'
                                                 value={value.LandlineNumber}
-                                                onChange={(LandlineNumber) =>
+                                                onChange={(LandlineNumber) =>{
                                                     setvalue((prevValue) => ({
                                                         ...prevValue,
                                                         LandlineNumber: LandlineNumber,
                                                     }))
-                                                }
+                                                    localStorage.setItem('LandlineNumber', LandlineNumber)
+                                                }}
                                                 className='rounded inputsection py-2'
                                                 defaultCountry="SA" />
 
@@ -1071,6 +1114,7 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         BuildingCode: e.target.value
                                                     }))
+                                                    localStorage.setItem('BuildingCode', e.target.value)
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Dept Code</option>
                                                 {
@@ -1097,6 +1141,8 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         LocationCode: e.target.value
                                                     }))
+                                                    localStorage.setItem('LocationCode', e.target.value)
+
                                                 }}
                                             >
                                                 <option className='inputsectiondropdpwn'>Select Location</option>
@@ -1163,6 +1209,7 @@ function CreateWorkRequest() {
                                                         ...prevValue,
                                                         WorkPriority: e.target.value
                                                     }))
+                                                    localStorage.setItem('WorkPriority', e.target.value);
                                                 }}>
                                                 <option className='inputsectiondropdpwn'>Select Work Priority</option>
                                                 {
@@ -1188,7 +1235,7 @@ function CreateWorkRequest() {
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
                                                 value={value.WorkTrade}
                                                 onChange={Worktrandedesc}>
-                                                <option className='inputsectiondropdpwn'>Select Work Trade</option>
+                                                <option className='inputsectiondropdpwn'>{localStorage.getItem('WorkTradeCode') || 'Select Work Trade'}</option>
                                                 {
                                                     dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
                                                         return (
@@ -1218,11 +1265,7 @@ function CreateWorkRequest() {
                                     </div>
 
                                     <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={(() => {
-                                            navigate('/AssetMasters')
-                                            console.log(localStorage.getItem('EmployeeIDset'));
-                                            
-                                        })}> <AddCircleOutlineIcon className='me-1' />Asset Code</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={Assetcodebtn}> <AddCircleOutlineIcon className='me-1' />Asset Code</button>
 
                                     </div>
 
