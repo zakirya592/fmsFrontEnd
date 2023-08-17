@@ -19,7 +19,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
 function Maintablemaster() {
     const navigate = useNavigate();
@@ -221,6 +221,9 @@ const [getemplodata, setgetemplodata] = useState([])
         page: 0,
     });
 
+    const handlePrint = () => {
+        window.print(); // This triggers the browser's print dialog
+    };
     return (
         <>
             <div className="bg">
@@ -243,16 +246,18 @@ const [getemplodata, setgetemplodata] = useState([])
                                         <p className="color1 workitoppro my-auto">
                                             Asset Master List<span className='star'>*</span></p>
                                         <div className="d-flex">
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
+                                            {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/createworkrequest')
-                                            })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                            })}>
+                                          <AddCircleOutlineIcon className='me-1' />Create
+                                          </button> */}
+
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}>
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
-                                            <button type="button" className="btn btn-outline-primary color2">
-                                                <img src={excel} alt="export" /> Export
-                                            </button>
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export 
+                                            </CSVLink>
                                         </div>
                                     </div>
 

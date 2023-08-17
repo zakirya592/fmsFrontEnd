@@ -118,16 +118,6 @@ function WorkRequest() {
       setAnchorEl(null);
     };
 
-    const handleUpdate = () => {
-      // Handle update action
-      handleMenuClose();
-    };
-
-    const handleDeleteButtonClick = () => {
-      // Handle delete action
-      handleMenuClose();
-    };
-
     return (
       <div>
         <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
@@ -185,6 +175,7 @@ function WorkRequest() {
   // }))
 
   // workTypeDesc api 
+  
   useEffect(() => {
     const filteredRows = getdata && getdata.filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&

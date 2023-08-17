@@ -82,7 +82,7 @@ function CreateWorkRequest() {
     const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc"; 
     const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname"; 
     const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
-
+    const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
     const [value, setvalue] = useState({
         EmployeeID: initialEmployeeID, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
         MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
@@ -95,8 +95,8 @@ function CreateWorkRequest() {
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         ProblemCategory: '', ProblemDescription: '',
         // RequestDateTime: '',
+        RequestNumber:'',
         // RequestNumber: generateCustomId(),
-        RequestNumber: generateCustomId(),
         RequestStatus: initialRequestStatus,
         workTrade: initialWorkTradeCode,
         WorkOrder: '',
@@ -108,6 +108,40 @@ function CreateWorkRequest() {
 
     })
 
+    // Work Request Number Api
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
+                const reqput = res.data.recordset[0].RequestNumber + 1;
+                localStorage.setItem('Requestnumbers', reqput)
+                setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-'+ '0'+`${reqput}` }));
+                console.log(reqput);
+                axios.put(`/api/workRequestCount_Put/1`, {
+                    RequestNumber: reqput
+                })
+                    .then((res) => {
+                        console.log('Work Request Number put Api', res.data);
+                        axios.get(`/api/workRequestCount_GET_BYID/${reqput}`).then((res) => {
+                            console.log('Work request country second api',res);
+                        })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        Requestnumberapi()
+    }, [])
 
     const Createapi = async () => {
         await axios.post(`/api/AddworkRequestPOST`, {
@@ -564,10 +598,9 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi = () => {
-        // Createapi();
-        // workrequsrpostapi()
-        // AssetItemTagIDpost()
-        
+        Createapi();
+        workrequsrpostapi()
+        AssetItemTagIDpost()
         localStorage.removeItem('postemployid');
         localStorage.removeItem('EmployeeIDset');
         localStorage.removeItem('MobileNumber');
@@ -597,13 +630,10 @@ function CreateWorkRequest() {
 
     }
     const Assetcodebtn = () => {
-
-        Createapi();
-        workrequsrpostapi()
-        AssetItemTagIDpost()
+        // Createapi();
+        // workrequsrpostapi()
+        // AssetItemTagIDpost()
         navigate('/AssetMasters') 
-        setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '', WorkPriority: '', LocationCode: '', BuildingCode:'',}));
-
     }
 
     // All Updata api  function 

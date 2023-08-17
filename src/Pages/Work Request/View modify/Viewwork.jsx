@@ -15,6 +15,8 @@ import Swal from "sweetalert2";
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
 import moment from 'moment';
+import MenuItem from '@mui/material/MenuItem';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
 
 function Viewwork() {
@@ -456,7 +458,6 @@ function Viewwork() {
         WorkRequestNumber();
     }
 
-
     // To get the all Data Work Request Number
     // Emp ID
     function GetgetworkRequest() {
@@ -534,12 +535,11 @@ function Viewwork() {
                     const AssetItemDescriptionsssss = res.data.recordset
                     // setgetdata(res.data.recordset);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                    console.log(AssetItemDescriptionsssss);
-
-                    const promises = res.data.recordset.map((item) => {
+                   console.log(AssetItemDescriptionsssss);
+                   const promises = res.data.recordset.map((item) => {
+                        
                         const itid = item.AssetItemDescription;
                         console.log(itid);
-
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
                                 console.log(res.data.recordset);
@@ -562,13 +562,16 @@ function Viewwork() {
                         .then((results) => {
                             results.forEach((itemRecords, index) => {
                                 console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
-                                // setgetdata(results);
+                               // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
                                     records: results[index],
                                 }));
+
                                 console.log(recordsWithDescriptions);
+                                console.log('SEQ section',itemRecords.item.seq);
                                 setgetdata(recordsWithDescriptions);
+                              
                             });
 
                         });
@@ -657,7 +660,6 @@ function Viewwork() {
 
     //   Table section 
     const [getdata, setgetdata] = useState([])
-
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'AssetNumber', headerName: 'ASSET/STOCK NUMBER', width: 220 },
@@ -665,26 +667,91 @@ function Viewwork() {
         { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
         { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
-        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
+        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 , },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
+
+    //  Deleting the assetworkrequest DELETE_BYID
+    // Deleted api section
+    const Deletedapi = (seq) => {
+        console.log(seq);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/assetworkrequest_DELETE_BYID/${seq}`)
+                    .then((res) => {
+                        console.log('Deleted successfully', res);
+                        apicall()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'User has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+
+    // Button section
+    function ActionButtons(params) {
+        const [anchorEl, setAnchorEl] = useState(null);
+        const handleMenuClose = () => {
+            setAnchorEl(null);
+        };
+
+        return (
+            <div>
+                    <MenuItem onClick={() => {
+                    Deletedapi(params.row.seq)
+                        handleMenuClose();
+                    }}>
+                        <span style={{ paddingRight: '10px' }}>Delete</span>
+                        <DeleteIcon />
+                    </MenuItem>
+            </div>
+        );
+    }
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
         ...row.records,
         id: indes + 1,
+        // seq: row.records ? row.records.data[0].seq : '',
         AssetItemDescription: row.description,
+        seq: row.seq,
         AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
         AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
         AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
-        RequestDateTime: row.records ? row.records.data[0].RequestDateTime : '',
+        AssetQty: row.records ? row.records.data[0].AssetQty : '',
         Model: row.records ? row.records.data[0].Model : '',
         Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
      }))
-
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 5,
         page: 0,
     });
+
     return (
         <div>
             <div className='bg'>
