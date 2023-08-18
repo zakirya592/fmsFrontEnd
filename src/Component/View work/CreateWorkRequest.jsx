@@ -113,17 +113,31 @@ function CreateWorkRequest() {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
                 console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
-                const reqput = res.data.recordset[0].RequestNumber + 1;
-                localStorage.setItem('Requestnumbers', reqput)
+                // const reqput = res.data.recordset[0].RequestNumber + 1;
+                const reqput = res.data.recordset[0].RequestNumber ;
+                // localStorage.setItem('Requestnumbers', reqput)
                 setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-'+ '0'+`${reqput}` }));
-                console.log(reqput);
+             })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const requestincreas=()=>{
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
+                const reqput = res.data.recordset[0].RequestNumber + 1;
+                // localStorage.setItem('Requestnumbers', reqput)
+                setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-' + '0' + `${reqput}` }));
+
                 axios.put(`/api/workRequestCount_Put/1`, {
                     RequestNumber: reqput
                 })
                     .then((res) => {
                         console.log('Work Request Number put Api', res.data);
                         axios.get(`/api/workRequestCount_GET_BYID/${reqput}`).then((res) => {
-                            console.log('Work request country second api',res);
+                            console.log('Work request country second api', res);
                         })
                             .catch((err) => {
                                 console.log(err);
@@ -132,7 +146,6 @@ function CreateWorkRequest() {
                     .catch((err) => {
                         console.log(err);
                     });
-
             })
             .catch((err) => {
                 console.log(err);
@@ -157,16 +170,16 @@ function CreateWorkRequest() {
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);
-                // setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
-                // if (res.status == 201) {
-                //     Swal.fire({
-                //         title: "Success",
-                //         text: "Work Request is created !!!",
-                //         icon: "success",
-                //         confirmButtonText: "OK",
-                //     })
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
+                if (res.status == 201) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Work Request is created !!!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    })
 
-                // }
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -598,6 +611,7 @@ function CreateWorkRequest() {
 
     // All Createapi function
     const allCreateapi = () => {
+        requestincreas()
         Createapi();
         workrequsrpostapi()
         AssetItemTagIDpost()
@@ -620,12 +634,12 @@ function CreateWorkRequest() {
         localStorage.removeItem('Departmentname');
         localStorage.removeItem('WorkTradedesc');
 
-                    Swal.fire({
-                        title: "Success",
-                        text: "Work Request is created !!!",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    })
+                    // Swal.fire({
+                    //     title: "Success",
+                    //     text: "Work Request is created !!!",
+                    //     icon: "success",
+                    //     confirmButtonText: "OK",
+                    // })
 
 
     }
