@@ -26,7 +26,7 @@ function Updataworkrequest() {
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: 'Select Dept Code', Departmentname: '',//Department api input 
         BuildingCode: 'Select Building', //AddBuildingInworkRequestPOST api input
-        Location: 'Select Location',// //AddLocationInworkRequestPOST api input
+        Location: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
