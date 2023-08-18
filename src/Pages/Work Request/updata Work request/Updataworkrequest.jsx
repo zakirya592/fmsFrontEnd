@@ -16,6 +16,8 @@ import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
+import MenuItem from '@mui/material/MenuItem';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Updataworkrequest() {
     let { userId } = useParams();
@@ -533,6 +535,7 @@ function Updataworkrequest() {
                 .then((res) => {
                     console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
+                    const SAQ = res.data.recordset.map((item) => item.seq);
                     // setgetdata(res.data.recordset);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
                     console.log(AssetItemDescriptionsssss);
@@ -569,9 +572,13 @@ function Updataworkrequest() {
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
                                     records: results[index],
+                                    saq: SAQ[index],
                                 }));
-                                console.log(recordsWithDescriptions);
-                                setgetdata(recordsWithDescriptions);
+                                const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                    saq: SAQ[index],
+                                    records: results[index],
+                                }));
+                                setgetdata(recordsWithDescriptions, recordsWithSAQ);
                             });
 
                         });
@@ -670,23 +677,13 @@ function Updataworkrequest() {
         { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
         { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
-    const filteredRows = getdata && getdata.map((row, indes) => ({
-        ...row.records,
-        id: indes + 1,
-        AssetItemDescription: row.description,
-        AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
-        AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
-        AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
-        RequestDateTime: row.records ? row.records.data[0].RequestDateTime : '',
-        Model: row.records ? row.records.data[0].Model : '',
-        Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
-     }))
-
+    //  Deleting the assetworkrequest DELETE_BYID
     // Deleted api section
-    const Deletedapi = (AssetItemDescription) => {
-        console.log(AssetItemDescription);
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -706,27 +703,59 @@ function Updataworkrequest() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/AssetsMaster_DELETE_BYID/${AssetItemDescription}`)
+                axios.delete(`/api/assetworkrequest_DELETE_BYID/${ASQS}`)
                     .then((res) => {
-                        // Handle successful delete response
                         console.log('Deleted successfully', res);
-                        // getapi()
-                        // Refresh the table data if needed
-                        // You can call the API again or remove the deleted row from the state
+                        apicall()
+                        Workrequestget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'User has been deleted.',
+                            'success'
+                        )
                     })
                     .catch((err) => {
-                        // Handle delete error
                         console.log('Error deleting', err);
                     });
-                swalWithBootstrapButtons.fire(
-                    'Deleted!',
-                    'User has been deleted.',
-                    'success'
-                )
+
             }
         })
 
     };
+
+    // Button section
+    function ActionButtons(params) {
+        const [anchorEl, setAnchorEl] = useState(null);
+        const handleMenuClose = () => {
+            setAnchorEl(null);
+        };
+
+        return (
+            <div>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
+            </div>
+        );
+    }
+
+    const filteredRows = getdata && getdata.map((row, indes) => ({
+        ...row.records,
+        id: indes + 1,
+        AssetItemDescription: row.description,
+         ASQS: row.saq,
+        AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
+        AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
+        AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
+        RequestDateTime: row.records ? row.records.data[0].RequestDateTime : '',
+        Model: row.records ? row.records.data[0].Model : '',
+        Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
+     }))
+
 
 
     const [paginationModel, setPaginationModel] = React.useState({

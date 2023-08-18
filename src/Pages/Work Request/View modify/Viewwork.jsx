@@ -534,8 +534,10 @@ function Viewwork() {
                     console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
                     // setgetdata(res.data.recordset);
+                    const SAQ = res.data.recordset.map((item) => item.seq);
+                    // console.log('SASASSSS',SAQ);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                   console.log(AssetItemDescriptionsssss);
+                //    console.log(AssetItemDescriptionsssss);
                    const promises = res.data.recordset.map((item) => {
                         
                         const itid = item.AssetItemDescription;
@@ -566,11 +568,16 @@ function Viewwork() {
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
                                     records: results[index],
+                                    saq: SAQ[index],
                                 }));
 
-                                console.log(recordsWithDescriptions);
-                                console.log('SEQ section',itemRecords.item.seq);
-                                setgetdata(recordsWithDescriptions);
+                                const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                    saq: SAQ[index],
+                                    records: results[index],
+                                }));
+                                setgetdata(recordsWithDescriptions,recordsWithSAQ);
+                                // console.log(recordsWithDescriptions);
+                                // console.log('SEQ section',itemRecords.item.seq);
                               
                             });
 
@@ -673,8 +680,8 @@ function Viewwork() {
 
     //  Deleting the assetworkrequest DELETE_BYID
     // Deleted api section
-    const Deletedapi = (seq) => {
-        console.log(seq);
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -694,10 +701,11 @@ function Viewwork() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/assetworkrequest_DELETE_BYID/${seq}`)
+                axios.delete(`/api/assetworkrequest_DELETE_BYID/${ASQS}`)
                     .then((res) => {
                         console.log('Deleted successfully', res);
                         apicall()
+                        Workrequestget()
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'User has been deleted.',
@@ -723,7 +731,7 @@ function Viewwork() {
         return (
             <div>
                     <MenuItem onClick={() => {
-                    Deletedapi(params.row.seq)
+                    Deletedapi(params.row.ASQS)
                         handleMenuClose();
                     }}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
@@ -738,7 +746,7 @@ function Viewwork() {
         id: indes + 1,
         // seq: row.records ? row.records.data[0].seq : '',
         AssetItemDescription: row.description,
-        seq: row.seq,
+        ASQS: row.saq,
         AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
         AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
         AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
