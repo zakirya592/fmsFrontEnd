@@ -21,10 +21,77 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import moment from 'moment';
+import { Row } from 'jspdf-autotable';
 
 function WorkRequest() {
   const navigate = useNavigate();
   const [getdata, setgetdata] = useState([])
+  // print button
+  const handlePrintTable = (tableData) => {
+    const printWindow = window.open('', '_blank');
+    const selectedData = tableData.map((row, index) => ({
+      'SEQ': index + 1,
+      'Request Number': row.RequestNumber,
+      'Request Status': row.RequestStatus,
+      'Employee ID': row.EmployeeID,
+      'Work Priority': row.WorkPriority,
+      'Request Date': row.RequestDateTime,
+      'Work Type Desc': row.workTypeDesc,
+      'Work Trade Desc': row.worktradeDesc,
+    }));
+
+    // Create a bold style for header cells
+    const headerStyle = 'font-weight: bold;';
+
+    const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">Request Number</th>
+          <th style="${headerStyle}">Request Status</th>
+          <th style="${headerStyle}">Employee ID</th>
+          <th style="${headerStyle}">Work Priority</th>
+          <th style="${headerStyle}">Request Date</th>
+          <th style="${headerStyle}">Work Type Desc</th>
+          <th style="${headerStyle}">Work Trade Desc</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['Request Number']}</td>
+            <td>${row['Request Status']}</td>
+            <td>${row['Employee ID']}</td>
+            <td>${row['Work Priority']}</td>
+            <td>${row['Request Date']}</td>
+            <td>${row['Work Type Desc']}</td>
+            <td>${row['Work Trade Desc']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+    const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.print();
+  };
   // List a data thougth api 
   const getapi = () => {
     axios.get(`/api/workRequest_GET_LIST`, {
@@ -320,7 +387,7 @@ function WorkRequest() {
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"onClick={() => handlePrintTable(filteredRows)}>
                         <PrintIcon className="me-1" />
                         Print
                       </button>
