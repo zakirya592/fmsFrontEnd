@@ -310,6 +310,7 @@ function Viewwork() {
 
     // Work Request Number
     // post api for the data 
+    const [imtedata, setimtedata] = useState('')
     function Workrequestpost(RequestNumber) {
         axios.post(`/api/getworkRequestsecond`, {
             RequestNumber,
@@ -329,7 +330,6 @@ function Viewwork() {
                     RequestDateTime,
                     AssetItemTagID
                 } = res.data.recordsets[0][0];
-
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
@@ -338,7 +338,7 @@ function Viewwork() {
                     ProblemDescription,
                     RequestStatus,
                     ProblemCategory,
-                    RequestDateTime: moment(RequestDateTime).format('DD/MM/YYYY'),
+                    RequestDateTime,
                     AssetItemTagID
                 }));
                 const workaout = res.data.recordsets[0][0].WorkType
@@ -510,7 +510,9 @@ function Viewwork() {
                 LocationCode,
                 BuildingCode,
             } = res.data.recordsets[0][0];
-
+            const timeanddate = moment(value.RequestDateTime).format('DD/MM/YYYY')
+            setimtedata(timeanddate)
+            console.log('---------------', timeanddate);
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
@@ -760,6 +762,7 @@ function Viewwork() {
         page: 0,
     });
 
+
     return (
         <div>
             <div className='bg'>
@@ -829,7 +832,7 @@ function Viewwork() {
                                             </p>
                                         </div>
                                     </div>
-
+                                   
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
@@ -864,7 +867,7 @@ function Viewwork() {
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                                 Request Date/Time<span className='star'>*</span>
                                             </label>
-                                            <input type="datetime-local" id="Employdata"
+                                            <input type={`${value.RequestDateTime}:'datetime-local'`} id="Employdata"
                                                 value={value.RequestDateTime}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -872,6 +875,7 @@ function Viewwork() {
                                                         RequestDateTime: e.target.value
                                                     }))
                                                 }}
+                                                readOnly
                                                 name="birthdaytime" className='rounded inputsection py-2' />
                                         </div>
 

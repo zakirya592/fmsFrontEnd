@@ -21,6 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import moment from 'moment';
+import { CSVLink } from "react-csv";
 import { Row } from 'jspdf-autotable';
 
 function WorkRequest() {
@@ -205,6 +206,7 @@ function WorkRequest() {
           </MenuItem>
           <MenuItem onClick={(() => {
             navigate(`/WorkRequest/Updata/${params.row.RequestNumber}`)
+            localStorage.setItem('EMpIDUpdata', params.row.EmployeeID)
           })}>
             <span style={{ paddingRight: '3px' }}>Update</span>
             <EditIcon />
@@ -387,13 +389,12 @@ function WorkRequest() {
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"onClick={() => handlePrintTable(filteredRows)}>
+                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
                         <PrintIcon className="me-1" />
                         Print
                       </button>
-                      <button type="button" className="btn btn-outline-primary color2">
-                        <img src={excel} alt="export" /> Export
-                      </button>
+                      <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                      </CSVLink>
                     </div>
                   </div>
 

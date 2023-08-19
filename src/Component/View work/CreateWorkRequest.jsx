@@ -636,6 +636,12 @@ function CreateWorkRequest() {
         localStorage.removeItem('Departmentname');
         localStorage.removeItem('WorkTradedesc');
 
+        if (value.EmployeeID.trim() === '') {
+            console.error('EmployeeID is required.');
+            alert('EmployeeID is required.')
+            return;
+        }
+
                     // Swal.fire({
                     //     title: "Success",
                     //     text: "Work Request is created !!!",
@@ -868,7 +874,7 @@ function CreateWorkRequest() {
         localStorage.setItem('EmployeeIDset', e.target.value)
     }
 
-   
+    const isEmployeeIDValid = value.EmployeeID.trim() !== '';
     return (
         <div>
             <div className='bg'>
@@ -925,6 +931,9 @@ function CreateWorkRequest() {
                                                 <SearchOutlined className=' serachicon' />
                                             </p>
                                         </div>
+                                        {/* {!isEmployeeIDValid && (
+                                            <p style={{ color: 'red' }}>Employee ID is required</p>
+                                        )} */}
                                     </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
