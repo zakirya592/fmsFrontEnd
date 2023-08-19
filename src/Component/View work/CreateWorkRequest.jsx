@@ -618,6 +618,7 @@ function CreateWorkRequest() {
     };
 
     const [lenght, setlenght] = useState('')
+    const [empreq, setempreq] = useState(false)
     // All Createapi function
     const allCreateapi = () => {
         if (lenght==0) {
@@ -649,11 +650,7 @@ function CreateWorkRequest() {
             localStorage.removeItem('WorkTradedesc');
        }
 
-        if (value.EmployeeID.trim() === '') {
-            console.error('EmployeeID is required.');
-            alert('EmployeeID is required.')
-            return;
-        }
+     
 
                     // Swal.fire({
                     //     title: "Success",
@@ -668,7 +665,14 @@ function CreateWorkRequest() {
         // Createapi();
         // workrequsrpostapi()
         // AssetItemTagIDpost()
-        navigate('/AssetMasters') 
+        if (value.EmployeeID.trim() === '') {
+            console.error('EmployeeID is required.');
+            alert('EmployeeID is required.')
+            return;
+        }
+        else{
+            navigate('/AssetMasters')   
+        }
     }
 
     // All Updata api  function 
