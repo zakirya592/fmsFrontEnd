@@ -21,6 +21,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
+import { CSVLink } from "react-csv";
+
 function CreateWorkRequest() {
     const navigate = useNavigate();
 
@@ -232,7 +234,7 @@ function CreateWorkRequest() {
         }).then((res) => {
             // console.log(res.data)
             if (res.data.recordsets[0].length === 0) {
-                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                Swal.fire('Oops...!', 'Employee ID not found...', 'error')
                 // setModelError(true);
             } else {
 
@@ -281,6 +283,10 @@ function CreateWorkRequest() {
             postapi(value.EmployeeID);
 
         }
+    }
+    function searchbtn(e) {
+        e.preventDefault();
+        postapi(value.EmployeeID);
     }
     // Dropdown list
 
@@ -874,7 +880,9 @@ function CreateWorkRequest() {
         localStorage.setItem('EmployeeIDset', e.target.value)
     }
 
-    const isEmployeeIDValid = value.EmployeeID.trim() !== '';
+    const handlePrint = () => {
+        window.print(); // This triggers the browser's print dialog
+    };
     return (
         <div>
             <div className='bg'>
@@ -899,10 +907,11 @@ function CreateWorkRequest() {
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
                                         {/* print  */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" ><PrintIcon className='me-1' />Print</button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}><PrintIcon className='me-1' />Print</button>
                                         {/* excel  */}
-                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel} alt='' /> Export</button>
-                                    </div>
+                                        <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                        </CSVLink>
+                                          </div>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -928,7 +937,7 @@ function CreateWorkRequest() {
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
-                                                <SearchOutlined className=' serachicon' />
+                                                <SearchOutlined className=' serachicon' onClick={searchbtn}/>
                                             </p>
                                         </div>
                                         {/* {!isEmployeeIDValid && (
