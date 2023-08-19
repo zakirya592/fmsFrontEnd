@@ -226,6 +226,16 @@ function Addassetcode() {
     const handlePrint = () => {
         window.print(); // This triggers the browser's print dialog
     };
+
+    const Navigatepage = () => {
+        const employeeIDss = localStorage.getItem('EmployeeIDsetss');
+
+        if (employeeIDss) {
+            navigate(-1);
+        } else {
+            navigate('/createworkrequest');
+        }
+    };
     return (
         <>
             <div className="bg">
@@ -236,9 +246,7 @@ function Addassetcode() {
                             <AppBar className="fortrans locationfortrans" position="fixed">
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                        <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                            navigate('/createworkrequest')
-                                        })} />
+                                        <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={Navigatepage} />
                                         <p className="text-center my-auto ms-5">Asset Management</p>
                                     </Typography>
                                 </Toolbar>
@@ -331,9 +339,7 @@ function Addassetcode() {
 
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
-                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                            navigate('/createworkrequest')
-                                        })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={Navigatepage}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                         {/* <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button> */}
                                     </div>
                                 </div>
