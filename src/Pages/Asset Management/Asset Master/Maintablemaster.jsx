@@ -236,7 +236,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
                                         <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                            navigate('/workrequest')
+                                            navigate('/createworkrequest')
                                         })} />
                                         <p className="text-center my-auto ms-5">Asset Management</p>
                                     </Typography>
@@ -331,7 +331,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
                                         <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                            navigate('/workrequest')
+                                            navigate('/createworkrequest')
                                         })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                         {/* <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button> */}
                                     </div>
