@@ -622,6 +622,7 @@ function CreateWorkRequest() {
     const allCreateapi = () => {
         if (lenght==0) {
             console.log("You selected the asset code");
+            Swal.fire('Oops...!', 'please choose the asset code.', 'error')
         }
         else{
             requestincreas()
