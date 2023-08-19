@@ -36,6 +36,7 @@ function Updataworkrequest() {
         RequestDateTime: '',
         RequestStatus: '',
         AssetItemTag: '',
+        
         CompletedByEmp: '',
         FeedbackEmp: '',
         Feedback_Remarks: '',
@@ -109,10 +110,11 @@ function Updataworkrequest() {
             BuildingCode: value.BuildingCode,
             DepartmentCode: value.DepartmentCode,
             LocationCode: value.LocationCode,
+            RequestDateTime:value.RequestDateTime
         },)
             .then((res) => {
                 // console.log('Updata the api data ', res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '' }));
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '',RequestDateTime:"" }));
                 Swal.fire({
                     title: "Success",
                     text: "you have Success Updata the Data",
@@ -480,6 +482,7 @@ function Updataworkrequest() {
                 Middlename,
                 MobileNumber,
                 LandlineNumber,
+                RequestDateTime
             } = res.data.recordsets[0][0];
             setvalue((prevValue) => ({
                 ...prevValue,
@@ -489,6 +492,7 @@ function Updataworkrequest() {
                 Middlename,
                 MobileNumber,
                 LandlineNumber,
+                RequestDateTime
             }));
         })
             .catch((err) => {
@@ -871,16 +875,16 @@ function Updataworkrequest() {
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                                 Request Date/Time<span className='star'>*</span>
                                             </label>
-                                            <input type="datetime-local" id="Employdata"
+                                            <input
+                                                types='text'
+                                                id='EmployeeID'
                                                 value={value.RequestDateTime}
-                                                // value={getdata ? getdata.RequestDateTime : ""}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        RequestDateTime: e.target.value
+                                                        EmployeeID: e.target.value
                                                     }))
                                                 }}
-                                                placeholder='{imtedata}'
                                                 name="birthdaytime" className='rounded inputsection py-2' />
                                         </div>
 
