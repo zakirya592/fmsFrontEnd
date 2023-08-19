@@ -115,8 +115,8 @@ function WorkRequest() {
 
   // Deleted api section
   // Deleted api section
-  const Deletedapi = (RequestNumber) => {
-    console.log(RequestNumber);
+  const Deletedapi = (EmployeeID) => {
+    console.log(EmployeeID);
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success mx-2',
@@ -136,7 +136,7 @@ function WorkRequest() {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/api/deleteWorkRequest/${RequestNumber}`)
+        axios.delete(`/api/all_work_request_DELETE_BYID/${EmployeeID}`)
           .then((res) => {
             getapi()
               // Handle successful delete response
@@ -212,7 +212,7 @@ function WorkRequest() {
             <EditIcon />
           </MenuItem>
           <MenuItem onClick={() => {
-            Deletedapi(params.row.RequestNumber)
+            Deletedapi(params.row.EmployeeID)
             handleMenuClose();
           }}>
             <span style={{ paddingRight: '10px' }}>Delete</span>
