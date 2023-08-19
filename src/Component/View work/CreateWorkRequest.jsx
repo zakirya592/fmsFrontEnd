@@ -650,16 +650,6 @@ function CreateWorkRequest() {
             localStorage.removeItem('WorkTradedesc');
        }
 
-     
-
-                    // Swal.fire({
-                    //     title: "Success",
-                    //     text: "Work Request is created !!!",
-                    //     icon: "success",
-                    //     confirmButtonText: "OK",
-                    // })
-
-
     }
     const Assetcodebtn = () => {
         // Createapi();
