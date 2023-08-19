@@ -737,7 +737,7 @@ function Updataworkrequest() {
     const Assetcodebtn = () => {
         const empid = localStorage.getItem('EMpIDUpdata')
         localStorage.setItem('EmployeeIDsetss', empid)
-        navigate('/AssetMasters')
+        navigate('/Addassetcode')
     }
     // Button section
     function ActionButtons(params) {
@@ -1281,7 +1281,7 @@ function Updataworkrequest() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                        navigate('/workRequest')
+                                        navigate('/Addassetcode')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
