@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import Typography from '@mui/material/Typography';
@@ -21,10 +21,32 @@ import Cleaning from "../../Image/Cleaning Works.png"
 import Preventive from "../../Image/Preventive Maintenance.png"
 import mainlog from "../../Image/centerlog.png"
 import { useNavigate } from "react-router-dom";
+import Assetmanagement from '../../Component/Siderbar/Assetmanagement';
+import SetupSidebar from '../Setup&Configuration/SetupSidebar';
+import UserManagementSidebar from '../UserManagement/UserManagementSidebar';
+import Purchasingsidbard from '../../Component/Siderbar/Purchasing siderbar/Purchasingsidbard';
 
 function Fmsmain() {
     const navigate = useNavigate();
+    const [showSidebar, setShowSidebar] = useState(false);
+    const [showUserSidebar, setShowUserSidebar] = useState(false);
+    const [AssetmanagementSidebar, setAssetmanagementSidebar] = useState(false);
+    const [Purchasingmanagment, setPurchasingmanagment] = useState(false)
 
+    const handleClick = () => {
+        setShowSidebar(!showSidebar);
+    };
+    const handleUserSidebar = () => {
+        setShowUserSidebar(!showUserSidebar)
+    }
+    const handleAssetmanagementSidebar = () => {
+        setAssetmanagementSidebar(!AssetmanagementSidebar)
+    }
+
+    const handerPurchasingmanagmentsidebar = () => {
+        setPurchasingmanagment(!Purchasingmanagment)
+    }
+  
     return (
         <div>
             <div className='bg'>
@@ -71,36 +93,49 @@ function Fmsmain() {
                                             </div>
 
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside" onClick={(()=>{
-                                                    navigate('/assetmanagement')
-                                                })}>
+                                                <div className="w-secCircleindside" onClick={handleAssetmanagementSidebar}>
                                                     <img src={Assetmanagemtn} alt="upwork" width='100%' />
                                                 </div>
-                                                <p className='textstyle'>Asset Management </p>
-                                            </div>
+                                                <div className="d-flex">
 
+                                                <p className='textstyle'>Asset Management </p>
+                                                {AssetmanagementSidebar && <Assetmanagement />}
+                                                </div>
+                                            </div>
+                                           
                                             {/* setupconfiguration */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside" onClick={(() => {
-                                                    navigate('/setupconfiguration')
-                                                })}>
+                                                <div className="w-secCircleindside" onClick={handleClick}>
                                                     <img src={setupcon} alt="upwork" width='100%' />
                                                 </div>
-                                                <p className='textstyle'>Setup & Configuration</p>
+                                                <div className="d-flex">
+                                                    <p className='textstyle'>Setup & Configuration</p>
+                                                    {showSidebar && <SetupSidebar />}
+                                                </div>
+                                                
                                             </div>
 
+                                            {/* UserManagementSidebar */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={handerPurchasingmanagmentsidebar}>
                                                     <img src={usermanagment} alt="upwork" width='100%' />
                                                 </div>
+                                                <div className="d-flex">
                                                 <p className='textstyle'>User Management</p>
+                                                    {Purchasingmanagment && <UserManagementSidebar />}
+                                                </div>
                                             </div>
 
+                                            {/* PurchasingManagement */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={handleUserSidebar}>
                                                     <img src={PurchasingManagement} alt="upwork" width='100%' />
                                                 </div>
+                                                <div className="d-flex">
                                                 <p className='textstyle'>Purchasing<br></br> Management</p>
+                                                
+                                                    {showUserSidebar && <Purchasingsidbard />}
+                                                </div>
                                             </div>
 
                                             <div className="w-secCircle">

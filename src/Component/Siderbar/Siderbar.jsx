@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -198,6 +197,7 @@ function Siderbar(props) {
       </List>
       {showSidebar && <SetupSidebar />}
 
+                    {/* Usergmanagment */}
                     <List>
                         {['User Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={handerPurchasingmanagmentsidebar}>
@@ -211,7 +211,8 @@ function Siderbar(props) {
                         ))}
                     </List>
                     {Purchasingmanagment && <UserManagementSidebar/>}
-
+                    
+                    {/* PurchasingManagement */}
                     <List>
                         {['Purchasing  Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={handleUserSidebar}>

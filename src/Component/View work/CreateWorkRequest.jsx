@@ -617,30 +617,36 @@ function CreateWorkRequest() {
             });
     };
 
+    const [lenght, setlenght] = useState('')
     // All Createapi function
     const allCreateapi = () => {
-        requestincreas()
-        Createapi();
-        workrequsrpostapi()
-        AssetItemTagIDpost()
-        localStorage.removeItem('postemployid');
-        localStorage.removeItem('EmployeeIDset');
-        localStorage.removeItem('MobileNumber');
-        localStorage.removeItem('RequestStatus');
-        localStorage.removeItem('Firstname');
-        localStorage.removeItem('Middlename');
-        localStorage.removeItem('Lastname');
-        localStorage.removeItem('phoneNumber');
-        localStorage.removeItem('LandlineNumber');
-        localStorage.removeItem('Departmentcode');
-        localStorage.removeItem('BuildingCode');
-        localStorage.removeItem('LocationCode');
-        localStorage.removeItem('WorkType');
-        localStorage.removeItem('WorkTradeCode');
-        localStorage.removeItem('WorkPriority');
-        localStorage.removeItem('WorkTypeDesc');
-        localStorage.removeItem('Departmentname');
-        localStorage.removeItem('WorkTradedesc');
+        if (lenght==0) {
+            console.log("You selected the asset code");
+        }
+        else{
+            requestincreas()
+            Createapi();
+            workrequsrpostapi()
+            AssetItemTagIDpost()
+            localStorage.removeItem('postemployid');
+            localStorage.removeItem('EmployeeIDset');
+            localStorage.removeItem('MobileNumber');
+            localStorage.removeItem('RequestStatus');
+            localStorage.removeItem('Firstname');
+            localStorage.removeItem('Middlename');
+            localStorage.removeItem('Lastname');
+            localStorage.removeItem('phoneNumber');
+            localStorage.removeItem('LandlineNumber');
+            localStorage.removeItem('Departmentcode');
+            localStorage.removeItem('BuildingCode');
+            localStorage.removeItem('LocationCode');
+            localStorage.removeItem('WorkType');
+            localStorage.removeItem('WorkTradeCode');
+            localStorage.removeItem('WorkPriority');
+            localStorage.removeItem('WorkTypeDesc');
+            localStorage.removeItem('Departmentname');
+            localStorage.removeItem('WorkTradedesc');
+       }
 
         if (value.EmployeeID.trim() === '') {
             console.error('EmployeeID is required.');
@@ -682,6 +688,8 @@ function CreateWorkRequest() {
         axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
             .then((res) => {
                 console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                console.log('length', res.data.recordset.length);
+                setlenght(res.data.recordset.length)
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
