@@ -661,7 +661,7 @@ function CreateWorkRequest() {
             return;
         }
         else{
-            navigate('/AssetMasters')   
+            navigate('/Addassetcode')   
         }
     }
 
@@ -1040,7 +1040,7 @@ function CreateWorkRequest() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter First Name'
-                                                required
+                                                required={true}
                                             ></input>
                                         </div>
                                     </div>

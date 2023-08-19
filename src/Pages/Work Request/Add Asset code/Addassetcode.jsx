@@ -21,7 +21,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
-function Maintablemaster() {
+
+function Addassetcode() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
@@ -101,7 +102,7 @@ function Maintablemaster() {
 
     };
 
-const [getemplodata, setgetemplodata] = useState([])
+    const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
         const assetcodeid = localStorage.getItem('EmployeeIDset') || localStorage.getItem('EmployeeIDsetss');
         console.log(AssetItemDescription);
@@ -124,7 +125,7 @@ const [getemplodata, setgetemplodata] = useState([])
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.post(`/api/assetworkrequest_post`,{
+                axios.post(`/api/assetworkrequest_post`, {
                     EmployeeID: assetcodeid,
                     AssetItemDescription: AssetItemDescription
                 })
@@ -171,7 +172,7 @@ const [getemplodata, setgetemplodata] = useState([])
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}> 
+                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
@@ -182,7 +183,7 @@ const [getemplodata, setgetemplodata] = useState([])
                     <MenuItem onClick={() => {
                         Deletedapi(params.row.AssetItemDescription)
                         handleMenuClose();
-                         }}  >
+                    }}  >
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -203,18 +204,18 @@ const [getemplodata, setgetemplodata] = useState([])
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
     const filteredRows = getdata && getdata.filter(row => (
-      (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-      (!requestByEmployee || row.AssetItemDescription === requestByEmployee) 
+        (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
+        (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
     )).map((row, indes) => ({
-      ...row,
-      id: indes + 1,
-      AssetItemDescription: row.AssetItemDescription,
-      AssetItemGroup: row.AssetItemGroup ,
-      AssetCategory: row.AssetCategory,
-      AssetSubCategory: row.AssetSubCategory,
-      RequestDateTime:row.RequestDateTime,
-      WorkType: row.WorkType,
-      workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+        ...row,
+        id: indes + 1,
+        AssetItemDescription: row.AssetItemDescription,
+        AssetItemGroup: row.AssetItemGroup,
+        AssetCategory: row.AssetCategory,
+        AssetSubCategory: row.AssetSubCategory,
+        RequestDateTime: row.RequestDateTime,
+        WorkType: row.WorkType,
+        workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     }))
 
     const [paginationModel, setPaginationModel] = React.useState({
@@ -236,7 +237,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
                                         <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                            navigate('/workrequest')
+                                            navigate('/createworkrequest')
                                         })} />
                                         <p className="text-center my-auto ms-5">Asset Management</p>
                                     </Typography>
@@ -259,7 +260,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
-                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export 
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                             </CSVLink>
                                         </div>
                                     </div>
@@ -268,7 +269,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                     {
                                         getemplodata && getemplodata.map((item, index) => (
                                             <p key={index}>{localStorage.setItem('postemployid', item.EmployeeID)}</p>
-                                            
+
                                         ))
                                     }
                                     {/* Search Fields */}
@@ -276,7 +277,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                         <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                   Asset Item Description<span className='star'>*</span>                                        </label>
+                                                    Asset Item Description<span className='star'>*</span>                                        </label>
 
                                                 <input
                                                     types='text'
@@ -331,7 +332,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
                                         <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                            navigate('/workrequest')
+                                            navigate('/createworkrequest')
                                         })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                         {/* <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button> */}
                                     </div>
@@ -345,4 +346,4 @@ const [getemplodata, setgetemplodata] = useState([])
     );
 }
 
-export default Maintablemaster;
+export default Addassetcode;

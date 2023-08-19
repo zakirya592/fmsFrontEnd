@@ -57,6 +57,7 @@ import Purachaseview from '../../Pages/Purchasing Management/Purchase Orders/Pur
 import Goodsreceiptsview from '../../Pages/Purchasing Management/Goods Receipts/Goods Receipts View/Goodsreceiptsview'
 import GoodsreturnView from '../../Pages/Purchasing Management/Goods Return/Goods Return View/GoodsreturnView'
 import Updataworkrequest from '../../Pages/Work Request/updata Work request/Updataworkrequest'
+import Addassetcode from '../../Pages/Work Request/Add Asset code/Addassetcode'
 function Pagerounter() {
 
   return (
@@ -74,6 +75,8 @@ function Pagerounter() {
           <Route exact path='/WorkRequest/Updata/:userId' element={<Updataworkrequest />} />
           {/* create work Request */}
           <Route exact path="/createworkrequest" element={<CreateWorkRequest />} />
+          {/* Addassetcode */}
+          <Route exact path='/Addassetcode' element={<Addassetcode />} />
           {/*=====================  Word Order=====================   */}
           <Route exact path='/workorder' element={<WorkOrder />} />
 
