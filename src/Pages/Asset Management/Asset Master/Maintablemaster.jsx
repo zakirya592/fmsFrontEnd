@@ -103,6 +103,7 @@ function Maintablemaster() {
 
 const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
+        const assetcodeid = localStorage.getItem('EmployeeIDset') || localStorage.getItem('EmployeeIDsetss');
         console.log(AssetItemDescription);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
@@ -124,7 +125,7 @@ const [getemplodata, setgetemplodata] = useState([])
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.post(`/api/assetworkrequest_post`,{
-                    EmployeeID: localStorage.getItem('EmployeeIDset'),
+                    EmployeeID: assetcodeid,
                     AssetItemDescription: AssetItemDescription
                 })
                     .then((res) => {
@@ -234,7 +235,9 @@ const [getemplodata, setgetemplodata] = useState([])
                             <AppBar className="fortrans locationfortrans" position="fixed">
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                        <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                                        <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                                            navigate('/workrequest')
+                                        })} />
                                         <p className="text-center my-auto ms-5">Asset Management</p>
                                     </Typography>
                                 </Toolbar>
@@ -327,7 +330,9 @@ const [getemplodata, setgetemplodata] = useState([])
 
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
-                                        <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                                            navigate('/workrequest')
+                                        })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                         {/* <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button> */}
                                     </div>
                                 </div>

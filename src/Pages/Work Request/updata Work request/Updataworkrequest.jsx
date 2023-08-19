@@ -12,6 +12,7 @@ import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Swal from "sweetalert2";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import 'react-phone-input-2/lib/style.css'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid';
@@ -41,6 +42,7 @@ function Updataworkrequest() {
         Feedback_Remarks: '',
         EmployeeIDget:"",
     })
+    const [imtedata, setimtedata] = useState('')
 
 
     // post api for the data 
@@ -333,7 +335,7 @@ function Updataworkrequest() {
                     RequestStatus,
                     ProblemCategory,
                     RequestDateTime,
-                    AssetItemTagID
+                    AssetItemTagID,
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -346,7 +348,7 @@ function Updataworkrequest() {
                     RequestDateTime,
                     AssetItemTagID
                 }));
-                // console.log('Work Request Number', res.data.recordsets[0][0]);
+                console.log('Work Request Number 232323', RequestDateTime);
                 const workaout = res.data.recordsets[0][0].WorkType
                 axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                     .then((res) => {
@@ -462,6 +464,7 @@ function Updataworkrequest() {
     const Updatealldata = () => {
         Update();
         WorkRequestNumber();
+        localStorage.removeItem('EmployeeIDsetss');
     }
 
 
@@ -469,7 +472,7 @@ function Updataworkrequest() {
     // Emp ID
     function GetgetworkRequest() {
         axios.post(`/api/getworkRequest`, {
-            "EmployeeID": localStorage.getItem('EMpID')
+            "EmployeeID": localStorage.getItem('EMpIDUpdata')
         }).then((res) => {
             console.log('asdfaf', res);
             const {
@@ -517,6 +520,8 @@ function Updataworkrequest() {
                 BuildingCode,
                 EmployeeIDget
             } = res.data.recordsets[0][0];
+            const timeanddate = moment(RequestDateTime).format('MM/DD/YYYY')
+            setimtedata(timeanddate)
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
@@ -534,6 +539,8 @@ function Updataworkrequest() {
                 EmployeeIDget
             }));
             console.log('Work Request Number', res.data.recordsets[0][0]);
+            console.log('Work Request Number', moment(RequestDateTime).format('DD/MM/YYYY'));
+          
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
             axios.get(`/api/assetworkrequest_GET_BYID/${EmployeeIDss}`)
                 .then((res) => {
@@ -727,6 +734,11 @@ function Updataworkrequest() {
 
     };
 
+    const Assetcodebtn = () => {
+        const empid = localStorage.getItem('EMpIDUpdata')
+        localStorage.setItem('EmployeeIDsetss', empid)
+        navigate('/AssetMasters')
+    }
     // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
@@ -873,11 +885,7 @@ function Updataworkrequest() {
                                                         EmployeeID: e.target.value
                                                     }))
                                                 }}
-                                                onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
+                                                name="birthdaytime" className='rounded inputsection py-2' />
                                         </div>
 
                                     </div>
@@ -1246,6 +1254,11 @@ function Updataworkrequest() {
                                                 required
                                             ></input>
                                         </div>
+                                    </div>
+
+                                    <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={Assetcodebtn}> <AddCircleOutlineIcon className='me-1' />Asset Code</button>
+
                                     </div>
 
                                 </div>
