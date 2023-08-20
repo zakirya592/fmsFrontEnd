@@ -63,16 +63,6 @@ function CreateWorkRequest() {
     const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
     const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
 
-    const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code";
-    const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code";
-    const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code";
-    const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code";
-    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code";
-    const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code";
-    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
-    const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname";
-    const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc";
-    const initialrequestnumber = localStorage.getItem('Requestnumbers') || "";
     const [value, setvalue] = useState({
         EmployeeID: initialEmployeeID, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
         MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
