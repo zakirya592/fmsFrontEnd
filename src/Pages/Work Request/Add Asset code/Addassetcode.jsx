@@ -238,6 +238,17 @@ function Addassetcode() {
             navigate('/createworkrequest');
         }
     };
+
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    const handleAddToWorkRequest = () => {
+        const selectedData = selectedRows.map((rowId) => {
+            return filteredRows[rowId];
+        });
+
+        console.log("Selected rows data:", selectedData);
+    };    
+
     return (
         <>
             <div className="bg">
@@ -326,7 +337,7 @@ function Addassetcode() {
                                         </div>
                                         <div className="col-sm-2 col-md-3 col-lg-3 col-xl-3 my-auto">
                                             <p></p>
-                                        <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add To Work Request</button>
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}><AddCircleOutlineIcon className='me-2' />Add To Work Request</button>
                                         </div>
 
                                     </div>
@@ -341,6 +352,8 @@ function Addassetcode() {
                                             checkboxSelection
                                             disableRowSelectionOnClick
                                             disableMultipleSelection
+                                            selectionModel={selectedRows}
+                                            onSelectionModelChange={(newSelection) => setSelectedRows(newSelection)}
                                         />
 
                                     </div>

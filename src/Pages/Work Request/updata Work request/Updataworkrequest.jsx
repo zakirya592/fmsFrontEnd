@@ -25,14 +25,14 @@ function Updataworkrequest() {
     const navigate = useNavigate();
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-        DepartmentCode: 'Select Dept Code', Departmentname: '',//Department api input 
-        BuildingCode: 'Select Building', //AddBuildingInworkRequestPOST api input
+        DepartmentCode: '', Departmentname: '',//Department api input 
+        BuildingCode: '', //AddBuildingInworkRequestPOST api input
         LocationCode: '',// //AddLocationInworkRequestPOST api input
         WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
-        RequestNumber: '', workTrade: '',// RequestNumber
+        RequestNumber: '', WorkTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
         AssetItemTag: '',
@@ -64,6 +64,7 @@ function Updataworkrequest() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
+                    WorkTrade
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -75,8 +76,10 @@ function Updataworkrequest() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
+                    WorkTrade
                 }));
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
+                console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -483,8 +486,12 @@ function Updataworkrequest() {
                 Middlename,
                 MobileNumber,
                 LandlineNumber,
-                RequestDateTime
+                RequestDateTime,
+                DepartmentCode,
+                BuildingCode,
+                LocationCode,
             } = res.data.recordsets[0][0];
+          
             setvalue((prevValue) => ({
                 ...prevValue,
                 EmployeeID,
@@ -493,8 +500,21 @@ function Updataworkrequest() {
                 Middlename,
                 MobileNumber,
                 LandlineNumber,
-                RequestDateTime
+                RequestDateTime,
+                DepartmentCode,
+                BuildingCode,
+                LocationCode,
             }));
+            
+            console.log('DepartmentCodeDepartmentCodeDepartmentCodeDepartmentCode', DepartmentCode);
+            const Depauto = res.data.recordsets[0][0].DepartmentCode
+            axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                .then((res) => {
+                    setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
         })
             .catch((err) => {
                 //// console.log(err);;
@@ -516,11 +536,12 @@ function Updataworkrequest() {
                 ProblemCategory,
                 RequestDateTime,
                 AssetItemTagID,
-                DepartmentCode,
-                LocationCode,
-                BuildingCode,
+                // DepartmentCode,
+                // LocationCode,
+                // BuildingCode,
                 EmployeeIDget
             } = res.data.recordsets[0][0];
+            console.log('------------------------------', res.data.recordsets[0][0]);
             const timeanddate = moment(RequestDateTime).format('MM/DD/YYYY')
             setimtedata(timeanddate)
             setvalue((prevValue) => ({
@@ -534,31 +555,44 @@ function Updataworkrequest() {
                 RequestDateTime,
                 AssetItemTagID,
                 RequestNumber,
-                DepartmentCode,
-                LocationCode,
-                BuildingCode,
+                // DepartmentCode,
+                // LocationCode,
+                // BuildingCode,
                 EmployeeIDget
             }));
-            console.log('Work Request Number', res.data.recordsets[0][0]);
-            console.log('Work Request Number', moment(RequestDateTime).format('DD/MM/YYYY'));
-          
+            // console.log('++++++++++++++++++++++++', res.data.recordsets[0][0].WorkTrade);
+            // console.log('Work Request Number', moment(RequestDateTime).format('DD/MM/YYYY'));
+            const workaoutss = res.data.recordsets[0][0].WorkType
+            axios.get(`/api/WorkTrade_LIST/${workaoutss}`).then((res) => {
+                // console.log("WorkTrade_LIST", res.data.recordset);
+                setdropdownWorkTradeLIST(res.data.recordsets[0])
+                const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
+                axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
+                    .then((res) => {
+                        console.log('WorkTrade_descri_LIST', res.data);
+                        setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
+                    })
+                    .catch((err) => {
+                        // console.log(err);;
+                    });
+            })
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
-                    console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                    // console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
                     const SAQ = res.data.recordset.map((item) => item.seq);
                     // setgetdata(res.data.recordset);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                    console.log(AssetItemDescriptionsssss);
+                    // console.log(AssetItemDescriptionsssss);
 
                     const promises = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
-                        console.log(itid);
+                        // console.log(itid);
 
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
-                                console.log(res.data.recordset);
+                                // console.log(res.data.recordset);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -579,7 +613,7 @@ function Updataworkrequest() {
 
                             // console.log('dfrfdf',results);
                             results.forEach((itemRecords, index) => {
-                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
+                                // console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
                                 // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
@@ -772,8 +806,6 @@ function Updataworkrequest() {
         Model: row.records ? row.records.data[0].Model : '',
         Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
      }))
-
-
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 5,
