@@ -462,7 +462,7 @@ function Viewwork() {
     // Emp ID
     function GetgetworkRequest() {
         axios.post(`/api/getworkRequest`, {
-            "EmployeeID": localStorage.getItem('EMpID')
+            "RequestNumber": userId
         }).then((res) => {
             console.log('asdfaf', res.data);
             const {

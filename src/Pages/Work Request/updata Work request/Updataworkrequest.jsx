@@ -92,6 +92,7 @@ function Updataworkrequest() {
             });
     }
     const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
+
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -102,6 +103,7 @@ function Updataworkrequest() {
     const Update = async () => {
         await axios.put(`/api/updateWorkRequest`, {
             EmployeeID: value.EmployeeID,
+            RequestNumber: value.RequestNumber,
             Firstname: value.Firstname,
             Middlename: value.Middlename,
             Lastname: value.Lastname,
@@ -472,9 +474,9 @@ function Updataworkrequest() {
     // Emp ID
     function GetgetworkRequest() {
         axios.post(`/api/getworkRequest`, {
-            "EmployeeID": localStorage.getItem('EMpIDUpdata')
+            "RequestNumber": userId
         }).then((res) => {
-            console.log('asdfaf', res);
+            console.log('asdfaf=====================================', res);
             const {
                 EmployeeID,
                 Firstname,
@@ -736,7 +738,7 @@ function Updataworkrequest() {
 
     const Assetcodebtn = () => {
         const empid = localStorage.getItem('EMpIDUpdata')
-        localStorage.setItem('EmployeeIDsetss', empid)
+        localStorage.setItem('EmployeeIDsetss', userId)
         navigate('/Addassetcode')
     }
     // Button section

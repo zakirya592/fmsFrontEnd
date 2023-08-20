@@ -88,6 +88,8 @@ function CreateWorkRequest() {
 
     })
 
+    const [renum, setrenum] = useState('')
+
     // Work Request Number Api
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
@@ -95,6 +97,7 @@ function CreateWorkRequest() {
                 console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
                 // const reqput = res.data.recordset[0].RequestNumber + 1;
                 const reqput = res.data.recordset[0].RequestNumber;
+                setrenum(reqput)
                 // localStorage.setItem('Requestnumbers', reqput)
                 setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-' + '0' + `${reqput}` }));
                 const reqnumber = `000-000-0${reqput}`
@@ -607,29 +610,29 @@ function CreateWorkRequest() {
         //     alert('Asset details is required.')
         // }
         // else{
-        requestincreas()
-        Createapi();
-        workrequsrpostapi()
-        AssetItemTagIDpost()
-        localStorage.removeItem('postemployid');
-        localStorage.removeItem('EmployeeIDset');
-        localStorage.removeItem('MobileNumber');
-        localStorage.removeItem('RequestStatus');
-        localStorage.removeItem('Firstname');
-        localStorage.removeItem('Middlename');
-        localStorage.removeItem('Lastname');
-        localStorage.removeItem('phoneNumber');
-        localStorage.removeItem('LandlineNumber');
-        localStorage.removeItem('Departmentcode');
-        localStorage.removeItem('BuildingCode');
-        localStorage.removeItem('LocationCode');
-        localStorage.removeItem('WorkType');
-        localStorage.removeItem('WorkTradeCode');
-        localStorage.removeItem('WorkPriority');
-        localStorage.removeItem('WorkTypeDesc');
-        localStorage.removeItem('Departmentname');
-        localStorage.removeItem('WorkTradedesc');
-        //    }
+            requestincreas()
+            Createapi();
+            workrequsrpostapi()
+            AssetItemTagIDpost()
+            localStorage.removeItem('postemployid');
+            localStorage.removeItem('EmployeeIDset');
+            localStorage.removeItem('MobileNumber');
+            localStorage.removeItem('RequestStatus');
+            localStorage.removeItem('Firstname');
+            localStorage.removeItem('Middlename');
+            localStorage.removeItem('Lastname');
+            localStorage.removeItem('phoneNumber');
+            localStorage.removeItem('LandlineNumber');
+            localStorage.removeItem('Departmentcode');
+            localStorage.removeItem('BuildingCode');
+            localStorage.removeItem('LocationCode');
+            localStorage.removeItem('WorkType');
+            localStorage.removeItem('WorkTradeCode');
+            localStorage.removeItem('WorkPriority');
+            localStorage.removeItem('WorkTypeDesc');
+            localStorage.removeItem('Departmentname');
+            localStorage.removeItem('WorkTradedesc');
+    //    }
 
     }
     const Assetcodebtn = (e) => {
