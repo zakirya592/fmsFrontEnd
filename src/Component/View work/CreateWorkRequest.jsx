@@ -37,39 +37,14 @@ function CreateWorkRequest() {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-    let counter = 0;
+    // const initialEmployeeID = () => {
+    //     const storedEmployeeID = localStorage.getItem('EmployeeIDset');
+    //     if (storedEmployeeID ) {
+    //         return "";
+    //     }
+    //     return storedEmployeeID;
+    // };
 
-    function generateUuidStartingWith1() {
-        const uuid = uuidv4();
-        return `${uuid.substring(4, 10)}`;
-    }
-
-    function generateCustomId() {
-        const paddedCounter = counter.toString().padStart(3, '0');// Pad counter with leading zeros
-        counter++;
-        return `0${paddedCounter}-${generateUuidStartingWith1()}`;
-    }
-
-    const Requesnumberss = (e) => {
-        const { value } = e.target;
-        setvalue((prevValue) => ({
-            ...prevValue,
-            RequestNumber: value,
-        }));
-    };
-
-    function generateCustomId() {
-        const randomNumber = Math.floor(Math.random() * 100); // Generate a random number between 0 and 999999999
-        const formattedId = randomNumber.toString().padStart(9, '0'); // Pad with leading zeros
-
-        const sections = [];
-        for (let i = 0; i < formattedId.length; i += 3) {
-            sections.push(formattedId.substr(i, 3));
-        }
-
-        return sections.join('-');
-    }
-    // const initialEmployeeID = localStorage.getItem('postemployid') || ""; // Use empty string if null
     const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
@@ -121,6 +96,8 @@ function CreateWorkRequest() {
                 const reqput = res.data.recordset[0].RequestNumber ;
                 // localStorage.setItem('Requestnumbers', reqput)
                 setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-'+ '0'+`${reqput}` }));
+                const reqnumber = `000-000-0${reqput}`
+                localStorage.setItem('requestnumber', reqnumber)
              })
             .catch((err) => {
                 console.log(err);
@@ -187,7 +164,7 @@ function CreateWorkRequest() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`The ID is  duplicate Give unique`, {
+                toast.error(`${err.message}`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -616,18 +593,18 @@ function CreateWorkRequest() {
                 console.log(err);
             });
     };
-    
+
 
     const [lenght, setlenght] = useState('')
     const [empreq, setempreq] = useState(false)
     // All Createapi function
     const allCreateapi = () => {
-        if (lenght==0) {
-            console.log("You selected the asset code");
-            // Swal.fire('Oops...!', 'please choose the asset code.', 'error')
-            alert('Asset details is required.')
-        }
-        else{
+        // if (lenght==0) {
+        //     console.log("You selected the asset code");
+        //     // Swal.fire('Oops...!', 'please choose the asset code.', 'error')
+        //     alert('Asset details is required.')
+        // }
+        // else{
             requestincreas()
             Createapi();
             workrequsrpostapi()
@@ -650,20 +627,24 @@ function CreateWorkRequest() {
             localStorage.removeItem('WorkTypeDesc');
             localStorage.removeItem('Departmentname');
             localStorage.removeItem('WorkTradedesc');
-       }
+    //    }
 
     }
-    const Assetcodebtn = () => {
+    const Assetcodebtn = (e) => {
         // Createapi();
         // workrequsrpostapi()
         // AssetItemTagIDpost()
-        if (value.EmployeeID.trim() === '') {
-            console.error('EmployeeID is required.');
-            return;
-        }
-        else{
-            navigate('/Addassetcode')   
-        }
+        // if (value.EmployeeID.trim() === '') {
+        //     console.error('EmployeeID is required.');
+        //     return;
+        // }
+        // else{
+        // }
+        setvalue(prevValue => ({
+            ...prevValue,
+            EmployeeID: e.target.value
+        }))
+        navigate('/Addassetcode')   
     }
 
     // All Updata api  function 
@@ -680,10 +661,10 @@ function CreateWorkRequest() {
     // List a data thougth api 
     const getapi = () => {
         // const empid = localStorage.getItem('postemployid',)
-        const empid = localStorage.getItem('EmployeeIDset',)
+        const empid = localStorage.getItem('requestnumber',)
         axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
             .then((res) => {
-                console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                console.log('assetworkrequest  GET  BYID', res.data.recordset);
                 console.log('length', res.data.recordset.length);
                 setlenght(res.data.recordset.length)
                 const AssetItemDescriptionsssss = res.data.recordset

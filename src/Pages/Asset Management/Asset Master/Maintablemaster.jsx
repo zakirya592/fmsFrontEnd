@@ -103,7 +103,8 @@ function Maintablemaster() {
 
 const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
-        const assetcodeid = localStorage.getItem('EmployeeIDset') || localStorage.getItem('EmployeeIDsetss');
+        const assetcodeid = localStorage.getItem('requestnumber') || localStorage.getItem('EmployeeIDsetss');
+        console.log(localStorage.getItem('requestnumber'));
         console.log(AssetItemDescription);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
@@ -133,16 +134,18 @@ const [getemplodata, setgetemplodata] = useState([])
                         setgetemplodata(res.data.recordset)
                         console.log();
                         getapi()
+                        
+                        swalWithBootstrapButtons.fire(
+                            'Add!',
+                            'The AssetCode is successfully Add to the Work request.',
+                            'success'
+                        )
                     })
                     .catch((err) => {
                         // Handle delete error
-                        console.log('Error deleting', err);
+                        console.log('Add Asset work Request Error :', err);
                     });
-                swalWithBootstrapButtons.fire(
-                    'Add!',
-                    'The AssetCode is successfully Add to the Work request.',
-                    'success'
-                )
+               
             }
         })
 
