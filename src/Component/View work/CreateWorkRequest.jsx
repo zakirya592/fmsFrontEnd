@@ -64,7 +64,7 @@ function CreateWorkRequest() {
     const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
 
     const [value, setvalue] = useState({
-        EmployeeID: initialEmployeeID, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
+        EmployeeID:'' , Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
         MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
         DepartmentCode: initialDepartmentCode, Departmentname: initialDepartmentname,//Department api input 
         BuildingCode: initialBuildingCode, //AddBuildingInworkRequestPOST api input
