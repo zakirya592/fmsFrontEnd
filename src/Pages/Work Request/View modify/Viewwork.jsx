@@ -31,7 +31,7 @@ function Viewwork() {
         WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
-        RequestNumber: '', workTrade: '',// RequestNumber
+        RequestNumber: '', WorkTrade: '',// RequestNumber
         RequestDateTime: '',
         RequestStatus: '',
         AssetItemTag: '',
@@ -472,7 +472,10 @@ function Viewwork() {
                 Middlename,
                 MobileNumber,
                 LandlineNumber,
-                RequestDateTime
+                RequestDateTime,
+                DepartmentCode,
+                BuildingCode,
+                LocationCode,
             } = res.data.recordsets[0][0];
 
             setvalue((prevValue) => ({
@@ -483,7 +486,10 @@ function Viewwork() {
                 Middlename,
                 MobileNumber,
                 LandlineNumber,
-                RequestDateTime
+                RequestDateTime,
+                DepartmentCode,
+                BuildingCode,
+                LocationCode,
             }));
         })
             .catch((err) => {
@@ -506,9 +512,9 @@ function Viewwork() {
                 ProblemCategory,
                 RequestDateTime,
                 AssetItemTagID,
-                DepartmentCode,
-                LocationCode,
-                BuildingCode,
+                // DepartmentCode,
+                // LocationCode,
+                // BuildingCode,
             } = res.data.recordsets[0][0];
             const timeanddate = moment(value.RequestDateTime).format('DD/MM/YYYY')
             setimtedata(timeanddate)
@@ -524,9 +530,9 @@ function Viewwork() {
                 RequestDateTime,
                 AssetItemTagID,
                 RequestNumber,
-                DepartmentCode,
-                LocationCode,
-                BuildingCode
+                // DepartmentCode,
+                // LocationCode,
+                // BuildingCode
             }));
             console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
             console.log('Work Request Number', res.data.recordsets[0][0]);
