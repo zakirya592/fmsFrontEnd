@@ -88,6 +88,8 @@ function CreateWorkRequest() {
 
     })
 
+    const [renum, setrenum] = useState('')
+
     // Work Request Number Api
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
@@ -95,6 +97,7 @@ function CreateWorkRequest() {
                 console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
                 // const reqput = res.data.recordset[0].RequestNumber + 1;
                 const reqput = res.data.recordset[0].RequestNumber ;
+                setrenum(reqput)
                 // localStorage.setItem('Requestnumbers', reqput)
                 setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-'+ '0'+`${reqput}` }));
                 const reqnumber = `000-000-0${reqput}`
@@ -611,6 +614,7 @@ function CreateWorkRequest() {
             Createapi();
             workrequsrpostapi()
             AssetItemTagIDpost()
+             localStorage.removeItem('requestnumber');
             localStorage.removeItem('postemployid');
             localStorage.removeItem('EmployeeIDset');
             localStorage.removeItem('MobileNumber');

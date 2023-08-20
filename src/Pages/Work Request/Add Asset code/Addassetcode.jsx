@@ -104,7 +104,7 @@ function Addassetcode() {
 
     const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
-        const assetcodeid = localStorage.getItem('requestnumber') || localStorage.getItem('EmployeeIDsetss');
+        const assetcodeid = localStorage.getItem('EmployeeIDsetss') || localStorage.getItem('requestnumber');
         console.log(AssetItemDescription);
         console.log(assetcodeid);
         const swalWithBootstrapButtons = Swal.mixin({
