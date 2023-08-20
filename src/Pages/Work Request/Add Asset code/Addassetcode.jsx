@@ -284,7 +284,7 @@ function Addassetcode() {
                                     }
                                     {/* Search Fields */}
                                     <div className="row mx-auto formsection">
-                                        <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
+                                        <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                     Asset Item Description<span className='star'>*</span>                                        </label>
@@ -324,6 +324,9 @@ function Addassetcode() {
 
                                             </div>
                                         </div>
+                                        <div className="col-sm-2 col-md-3 col-lg-3 col-xl-3  my-auto">
+                                        <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add To Work Request</button>
+                                        </div>
 
                                     </div>
                                     <div style={{ height: 420, width: '100%' }}>
@@ -342,8 +345,7 @@ function Addassetcode() {
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
                                         <button type="button" className="border-0 px-3  savebtn py-2" onClick={Navigatepage}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                        {/* <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button> */}
-                                    </div>
+                                     </div>
                                 </div>
                             </div>
                         </Box>
