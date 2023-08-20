@@ -58,14 +58,21 @@ function Maintablemaster() {
             }
         }
     };
+    const handleAddToWorkRequest = () => {
+        // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
 
-    const handleButtonAddToWorkRequest = (rowId) => {
-        const selectedData = filteredRows.filter((row) => row.id === rowId);
-        console.log("Selected rows data:", selectedData);
+        const selectedRowData = getdata.filter(row => selectedRowIds).map((row) => row.AssetItemDescription);
+        
+        // const selectedRowData = getdata.map((row, index) => ({
+        //     ...row,
+        //     id: index,
+        //     AssetItemDescription: row.AssetItemDescription,
+        // }))
+        console.log('Selected Row Data for Work Request:', selectedRowData);
+        setSelectedRowIds(selectedRowData)
+        // Perform your logic to add to work request using selectedRowData
+        // Example: sendToWorkRequest(selectedRowData);
     };
-    
-    
-
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
@@ -86,7 +93,7 @@ function Maintablemaster() {
                 <button
                     type="button"
                     className="border-0 px-3 savebtn py-2"
-                    onClick={() => handleButtonAddToWorkRequest(params.id)}
+                    // onClick={() => handleButtonAddToWorkRequest(params.id)}
                 >
                     Add To Work Request
                 </button>
@@ -357,6 +364,13 @@ const [getemplodata, setgetemplodata] = useState([])
                                         </div>
 
                                     </div>
+                                    <button
+                                        type="button"
+                                        className="border-0 px-3 savebtn py-2"
+                                        onClick={handleAddToWorkRequest} // Call the function when the button is clicked
+                                    >
+                                        Add Selected To Work Request
+                                    </button>
                                     <div style={{ height: 420, width: '100%' }}>
                                     <div style={{ height: 420, width: '100%' }}>
                                     <DataGrid
@@ -370,11 +384,8 @@ const [getemplodata, setgetemplodata] = useState([])
                     checkboxSelection
                     disableRowSelectionOnClick
                     disableMultipleSelection
-                    selectionModel={selectedRowIds}
-                    onSelectionModelChange={(newSelection) => {
-                        setSelectedRowIds(newSelection);
-                        console.log("Selected rows:", newSelection);
-                    }}
+                     selectionModel={selectedRowIds}
+                onSelectionModelChange={(newSelectionModel) => setSelectedRowIds(newSelectionModel)}
                 />
 
                                     </div>
