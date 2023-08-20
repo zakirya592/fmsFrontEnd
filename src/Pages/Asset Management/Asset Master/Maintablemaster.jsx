@@ -24,6 +24,9 @@ import Swal from "sweetalert2";
 function Maintablemaster() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
+
+
     // List a data thougth api 
     const getapi = () => {
         axios.get(`/api/AssetsMaster_GET_LIST`, {
@@ -44,6 +47,26 @@ function Maintablemaster() {
         getapi()
     }, [])
 
+    const handleCellClick = (params, event) => {
+        const columnField = params.field;
+        if (columnField === '__check__') {
+            // This condition checks if the clicked cell is a checkbox cell
+            // Retrieve the entire data of the clicked row using its ID
+            const clickedRow = filteredRows.find((row) => row.id === params.id);
+            if (clickedRow) {
+                console.log("Selected row data:", clickedRow);
+            }
+        }
+    };
+
+    const handleButtonAddToWorkRequest = (rowId) => {
+        const selectedData = filteredRows.filter((row) => row.id === rowId);
+        console.log("Selected rows data:", selectedData);
+    };
+    
+    
+
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
@@ -55,6 +78,21 @@ function Maintablemaster() {
         { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
         { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        {
+            field: 'addToWorkRequest',
+            headerName: 'Add To Work Request',
+            width: 180,
+            renderCell: (params) => (
+                <button
+                    type="button"
+                    className="border-0 px-3 savebtn py-2"
+                    onClick={() => handleButtonAddToWorkRequest(params.id)}
+                >
+                    Add To Work Request
+                </button>
+            ),
+        }
+        
     ];
 
     // Deleted api section
@@ -205,12 +243,13 @@ const [getemplodata, setgetemplodata] = useState([])
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
+
     const filteredRows = getdata && getdata.filter(row => (
-      (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-      (!requestByEmployee || row.AssetItemDescription === requestByEmployee) 
-    )).map((row, indes) => ({
-      ...row,
-      id: indes + 1,
+        (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
+        (!requestByEmployee || row.AssetItemDescription === requestByEmployee) 
+      )).map((row, index) => ({
+        ...row,
+        id: index + 1,
       AssetItemDescription: row.AssetItemDescription,
       AssetItemGroup: row.AssetItemGroup ,
       AssetCategory: row.AssetCategory,
@@ -319,24 +358,32 @@ const [getemplodata, setgetemplodata] = useState([])
 
                                     </div>
                                     <div style={{ height: 420, width: '100%' }}>
-                                        <DataGrid
-                                            rows={filteredRows}
-                                            columns={columns}
-                                            pagination
-                                            rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
-                                            paginationModel={paginationModel}
-                                            onPaginationModelChange={setPaginationModel}
-                                            checkboxSelection
-                                            disableRowSelectionOnClick
-                                            disableMultipleSelection
-                                        />
+                                    <div style={{ height: 420, width: '100%' }}>
+                                    <DataGrid
+                    rows={filteredRows}
+                    columns={columns}
+                    pagination
+                    rowsPerPageOptions={[10, 25, 50]}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    onCellClick={handleCellClick}
+                    checkboxSelection
+                    disableRowSelectionOnClick
+                    disableMultipleSelection
+                    selectionModel={selectedRowIds}
+                    onSelectionModelChange={(newSelection) => {
+                        setSelectedRowIds(newSelection);
+                        console.log("Selected rows:", newSelection);
+                    }}
+                />
 
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">
                                         <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                             navigate('/workrequest')
                                         })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                        {/* <button type="button" className="border-0 px-3  savebtn py-2" ><AddCircleIcon className='me-2' />Add To Work Request</button> */}
+                                             
+                                    </div>
                                     </div>
                                 </div>
                             </div>
