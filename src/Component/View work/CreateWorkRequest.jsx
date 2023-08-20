@@ -44,14 +44,25 @@ function CreateWorkRequest() {
     //     }
     //     return storedEmployeeID;
     // };
-
-    const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
+// const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
+    const initialEmployeeID = ''; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
     const initialMiddlename = localStorage.getItem('Middlename') || ""; // Use empty string if null
     const initialLastname = localStorage.getItem('Lastname') || ""; // Use empty string if null
     const initialMobileNumber = localStorage.getItem('MobileNumber') || ""; // Use empty string if null
     const initialLandlineNumber = localStorage.getItem('LandlineNumber') || ""; // Use empty string if null
+    const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code"; 
+    const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code"; 
+    const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code"; 
+    const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code"; 
+    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code"; 
+    const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code"; 
+    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc"; 
+    const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname"; 
+    const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
+    const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
+
     const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code";
     const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code";
     const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code";
@@ -148,6 +159,7 @@ function CreateWorkRequest() {
             BuildingCode: value.BuildingCode,
             DepartmentCode: value.DepartmentCode,
             LocationCode: value.LocationCode,
+            RequestNumber: value.RequestNumber,
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);

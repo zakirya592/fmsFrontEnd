@@ -542,7 +542,7 @@ function Updataworkrequest() {
             console.log('Work Request Number', moment(RequestDateTime).format('DD/MM/YYYY'));
           
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
-            axios.get(`/api/assetworkrequest_GET_BYID/${EmployeeIDss}`)
+            axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
                     console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset

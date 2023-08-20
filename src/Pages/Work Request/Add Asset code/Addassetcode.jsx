@@ -127,7 +127,7 @@ function Addassetcode() {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.post(`/api/assetworkrequest_post`, {
-                    EmployeeID: assetcodeid,
+                    RequestNumber: assetcodeid,
                     AssetItemDescription: AssetItemDescription
                 })
                     .then((res) => {
