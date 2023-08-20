@@ -623,7 +623,8 @@ function CreateWorkRequest() {
     const allCreateapi = () => {
         if (lenght==0) {
             console.log("You selected the asset code");
-            Swal.fire('Oops...!', 'please choose the asset code.', 'error')
+            // Swal.fire('Oops...!', 'please choose the asset code.', 'error')
+            alert('Asset details is required.')
         }
         else{
             requestincreas()
@@ -657,7 +658,6 @@ function CreateWorkRequest() {
         // AssetItemTagIDpost()
         if (value.EmployeeID.trim() === '') {
             console.error('EmployeeID is required.');
-            alert('EmployeeID is required.')
             return;
         }
         else{
