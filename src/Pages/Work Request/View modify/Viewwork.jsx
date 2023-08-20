@@ -531,7 +531,7 @@ function Viewwork() {
             console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
             console.log('Work Request Number', res.data.recordsets[0][0]);
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
-            axios.get(`/api/assetworkrequest_GET_BYID/${EmployeeIDss}`)
+            axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
                     console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset

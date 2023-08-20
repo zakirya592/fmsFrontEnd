@@ -115,8 +115,8 @@ function WorkRequest() {
 
   // Deleted api section
   // Deleted api section
-  const Deletedapi = (EmployeeID) => {
-    console.log(EmployeeID);
+  const Deletedapi = (RequestNumber) => {
+    console.log(RequestNumber);
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success mx-2',
@@ -136,7 +136,7 @@ function WorkRequest() {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/api/all_work_request_DELETE_BYID/${EmployeeID}`)
+        axios.delete(`/api/all_work_request_DELETE_BYID/${RequestNumber}`)
           .then((res) => {
             getapi()
               // Handle successful delete response
@@ -212,7 +212,7 @@ function WorkRequest() {
             <EditIcon />
           </MenuItem>
           <MenuItem onClick={() => {
-            Deletedapi(params.row.EmployeeID)
+            Deletedapi(params.row.RequestNumber)
             handleMenuClose();
           }}>
             <span style={{ paddingRight: '10px' }}>Delete</span>
@@ -249,10 +249,10 @@ function WorkRequest() {
     const filteredRows = getdata && getdata.filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
       (!requestByEmployee || row.EmployeeID[0] === requestByEmployee)
-    )).map((row, indes) => ({
+    )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, indes) => ({
       ...row,
       id: indes + 1,
-      RequestNumber: row.RequestNumber,
+      RequestNumber: row.RequestNumber[0],
       RequestStatus: row.RequestStatus,
       EmployeeID: row.EmployeeID[0],
       WorkPriority: row.WorkPriority,

@@ -44,8 +44,8 @@ function CreateWorkRequest() {
     //     }
     //     return storedEmployeeID;
     // };
-
-    const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
+// const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
+    const initialEmployeeID = ''; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
     const initialMiddlename = localStorage.getItem('Middlename') || ""; // Use empty string if null
@@ -62,6 +62,7 @@ function CreateWorkRequest() {
     const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname"; 
     const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
     const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
+
     const [value, setvalue] = useState({
         EmployeeID: initialEmployeeID, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
         MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
@@ -148,6 +149,7 @@ function CreateWorkRequest() {
             BuildingCode: value.BuildingCode,
             DepartmentCode: value.DepartmentCode,
             LocationCode: value.LocationCode,
+            RequestNumber: value.RequestNumber,
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);
