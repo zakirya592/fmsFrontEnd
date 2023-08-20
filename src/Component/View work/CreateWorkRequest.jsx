@@ -37,120 +37,102 @@ function CreateWorkRequest() {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
+    // const initialEmployeeID = () => {
+    //     const storedEmployeeID = localStorage.getItem('EmployeeIDset');
+    //     if (storedEmployeeID ) {
+    //         return "";
+    //     }
+    //     return storedEmployeeID;
+    // };
   let counter = 0;
 
-  function generateUuidStartingWith1() {
-    const uuid = uuidv4();
-    return `${uuid.substring(4, 10)}`;
-  }
-
-  function generateCustomId() {
-    const paddedCounter = counter.toString().padStart(3, "0"); // Pad counter with leading zeros
-    counter++;
-    return `0${paddedCounter}-${generateUuidStartingWith1()}`;
-  }
-
-  const Requesnumberss = (e) => {
-    const { value } = e.target;
-    setvalue((prevValue) => ({
-      ...prevValue,
-      RequestNumber: value,
-    }));
-  };
-
-  function generateCustomId() {
-    const randomNumber = Math.floor(Math.random() * 100); // Generate a random number between 0 and 999999999
-    const formattedId = randomNumber.toString().padStart(9, "0"); // Pad with leading zeros
-
-    const sections = [];
-    for (let i = 0; i < formattedId.length; i += 3) {
-      sections.push(formattedId.substr(i, 3));
+    function generateUuidStartingWith1() {
+        const uuid = uuidv4();
+        return `${uuid.substring(4, 10)}`;
     }
 
-    return sections.join("-");
-  }
-  // const initialEmployeeID = localStorage.getItem('postemployid') || ""; // Use empty string if null
-  const initialEmployeeID = localStorage.getItem("EmployeeIDset") || ""; // Use empty string if null
-  const initialRequestStatus = localStorage.getItem("RequestStatus") || "Open"; // Use empty string if null
-  const initialFirstName = localStorage.getItem("Firstname") || ""; // Use empty string if null
-  const initialMiddlename = localStorage.getItem("Middlename") || ""; // Use empty string if null
-  const initialLastname = localStorage.getItem("Lastname") || ""; // Use empty string if null
-  const initialMobileNumber = localStorage.getItem("MobileNumber") || ""; // Use empty string if null
-  const initialLandlineNumber = localStorage.getItem("LandlineNumber") || ""; // Use empty string if null
-  const initialDepartmentCode =
-    localStorage.getItem("Departmentcode") || "Select Dept Code";
-  const initialBuildingCode =
-    localStorage.getItem("BuildingCode") || "Select Dept Code";
-  const initialLocationCode =
-    localStorage.getItem("LocationCode") || "Select Location Code";
-  const initialWorkType =
-    localStorage.getItem("WorkType") || "Select WorkType Code";
-  const initialWorkPriority =
-    localStorage.getItem("WorkPriority") || "Select Work Priority Code";
-  const initialWorkTradeCode =
-    localStorage.getItem("WorkTradeCode") || "Select Work Trade Code Code";
-  const initialWorkTypeDesc =
-    localStorage.getItem("WorkTypeDesc") || "Select Work Trade Desc";
-  const initialDepartmentname =
-    localStorage.getItem("Departmentname") || "Select Departmentname";
-  const initialWorkTradedesc =
-    localStorage.getItem("WorkTradedesc") || "Select Work Trade desc";
-  const initialrequestnumber = localStorage.getItem("Requestnumbers") || "";
-  const [value, setvalue] = useState({
-    EmployeeID: initialEmployeeID,
-    Firstname: initialFirstName,
-    Middlename: initialMiddlename,
-    Lastname: initialLastname,
-    MobileNumber: initialMobileNumber,
-    LandlineNumber: initialLandlineNumber, //AddworkRequestPOST api input
-    DepartmentCode: initialDepartmentCode,
-    Departmentname: initialDepartmentname, //Department api input
-    BuildingCode: initialBuildingCode, //AddBuildingInworkRequestPOST api input
-    LocationCode: initialLocationCode, // //AddLocationInworkRequestPOST api input
-    WorkType: initialWorkType,
-    WorkTypeDesc: initialWorkTypeDesc, //AddWorkTypeInworkRequestPOST api input
-    WorkPriority: initialWorkPriority, //AddWorkPriorityInworkRequestPOST api input
-    AssetItemTagID: "", // AddAssetItemTagIDInworkRequestPOST api input
-    AssetItemDescription: "",
-    AssetCategory: "",
-    Manufacturer: "",
-    Model: "", //AddassetItemInworkRequestPOST api input
-    ProblemCategory: "",
-    ProblemDescription: "",
-    // RequestDateTime: '',
-    RequestNumber: "",
-    // RequestNumber: generateCustomId(),
-    RequestStatus: initialRequestStatus,
-    workTrade: initialWorkTradeCode,
-    WorkOrder: "",
-    AssetItemTag: "",
-    CompletedByEmp: "",
-    FeedbackEmp: "",
-    Feedback_Remarks: "",
-    RequestDateTime: getCurrentDateTimeString(), // Initialize with current date and time
-  });
+    function generateCustomId() {
+        const paddedCounter = counter.toString().padStart(3, '0');// Pad counter with leading zeros
+        counter++;
+        return `0${paddedCounter}-${generateUuidStartingWith1()}`;
+    }
 
-  // Work Request Number Api
-  const Requestnumberapi = () => {
-    axios
-      .get(`/api/workRequestCount_GET_BYID/1`)
-      .then((res) => {
-        console.log(
-          "Work Request Number Api",
-          res.data.recordset[0].RequestNumber
-        );
-        // const reqput = res.data.recordset[0].RequestNumber + 1;
-        const reqput = res.data.recordset[0].RequestNumber;
-        // localStorage.setItem('Requestnumbers', reqput)
-        setvalue((prevState) => ({
-          ...prevState,
-          RequestNumber: "000-000-" + "0" + `${reqput}`,
+    const Requesnumberss = (e) => {
+        const { value } = e.target;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            RequestNumber: value,
         }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    };
+
+    function generateCustomId() {
+        const randomNumber = Math.floor(Math.random() * 100); // Generate a random number between 0 and 999999999
+        const formattedId = randomNumber.toString().padStart(9, '0'); // Pad with leading zeros
+
+        const sections = [];
+        for (let i = 0; i < formattedId.length; i += 3) {
+            sections.push(formattedId.substr(i, 3));
+        }
+
+        return sections.join('-');
+    }
+    // const initialEmployeeID = localStorage.getItem('postemployid') || ""; // Use empty string if null
+    const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
+    const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
+    const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
+    const initialMiddlename = localStorage.getItem('Middlename') || ""; // Use empty string if null
+    const initialLastname = localStorage.getItem('Lastname') || ""; // Use empty string if null
+    const initialMobileNumber = localStorage.getItem('MobileNumber') || ""; // Use empty string if null
+    const initialLandlineNumber = localStorage.getItem('LandlineNumber') || ""; // Use empty string if null
+    const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code"; 
+    const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code"; 
+    const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code"; 
+    const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code"; 
+    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code"; 
+    const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code"; 
+    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc"; 
+    const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname"; 
+    const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
+    const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
+    const [value, setvalue] = useState({
+        EmployeeID: initialEmployeeID, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
+        MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
+        DepartmentCode: initialDepartmentCode, Departmentname: initialDepartmentname,//Department api input 
+        BuildingCode: initialBuildingCode, //AddBuildingInworkRequestPOST api input
+        LocationCode: initialLocationCode,// //AddLocationInworkRequestPOST api input
+        WorkType: initialWorkType, WorkTypeDesc:initialWorkTypeDesc,//AddWorkTypeInworkRequestPOST api input
+        WorkPriority: initialWorkPriority,//AddWorkPriorityInworkRequestPOST api input
+        AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
+        AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
+        ProblemCategory: '', ProblemDescription: '',
+        // RequestDateTime: '',
+        RequestNumber:'',
+        // RequestNumber: generateCustomId(),
+        RequestStatus: initialRequestStatus,
+        workTrade: initialWorkTradeCode,
+        WorkOrder: '',
+        AssetItemTag: '',
+        CompletedByEmp: '',
+        FeedbackEmp: '',
+        Feedback_Remarks: '',
+        RequestDateTime: getCurrentDateTimeString(), // Initialize with current date and time
+
+    })
+
+    // Work Request Number Api
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
+                // const reqput = res.data.recordset[0].RequestNumber + 1;
+                const reqput = res.data.recordset[0].RequestNumber ;
+                // localStorage.setItem('Requestnumbers', reqput)
+                setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-'+ '0'+`${reqput}` }));
+             })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
   const requestincreas = () => {
     axios
@@ -195,57 +177,45 @@ function CreateWorkRequest() {
     Requestnumberapi();
   }, []);
 
-  const Createapi = async () => {
-    await axios
-      .post(`/api/AddworkRequestPOST`, {
-        EmployeeID: value.EmployeeID,
-        Firstname: value.Firstname,
-        Middlename: value.Middlename,
-        Lastname: value.Lastname,
-        MobileNumber: value.MobileNumber,
-        LandlineNumber: value.LandlineNumber,
-        BuildingCode: value.BuildingCode,
-        DepartmentCode: value.DepartmentCode,
-        LocationCode: value.LocationCode,
-      })
-      .then((res) => {
-        // console.log('Add work api first api', res.data);
-        setvalue((prevState) => ({
-          ...prevState,
-          EmployeeID: "",
-          Firstname: "",
-          Middlename: "",
-          Lastname: "",
-          WorkRequest: "",
-          MobileNumber: "",
-          LandlineNumber: "",
-          DepartmentCode: "",
-          LocationCode: "",
-          BuildingCode: "",
-        }));
-        if (res.status == 201) {
-          Swal.fire({
-            title: "Success",
-            text: "Work Request is created !!!",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(`The ID is  duplicate Give unique`, {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      });
-  };
+    const Createapi = async () => {
+        await axios.post(`/api/AddworkRequestPOST`, {
+            EmployeeID: value.EmployeeID,
+            Firstname: value.Firstname,
+            Middlename: value.Middlename,
+            Lastname: value.Lastname,
+            MobileNumber: value.MobileNumber,
+            LandlineNumber: value.LandlineNumber,
+            BuildingCode: value.BuildingCode,
+            DepartmentCode: value.DepartmentCode,
+            LocationCode: value.LocationCode,
+        },)
+            .then((res) => {
+                // console.log('Add work api first api', res.data);
+                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '',DepartmentCode:"",LocationCode:"",BuildingCode:"" }));
+                if (res.status == 201) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Work Request is created !!!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    })
+
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.error(`The ID is  duplicate Give unique`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            });
+    };
 
   const Updated = async () => {
     await axios
@@ -703,73 +673,69 @@ function CreateWorkRequest() {
       });
   };
 
-  // Putapi
-  const WorkRequestNumber = async () => {
-    await axios
-      .put(`/api/updatesecondWorkRequest`, {
-        RequestNumber: value.RequestNumber,
-        WorkType: value.WorkType,
-        WorkTrade: value.WorkTrade,
-        WorkPriority: value.WorkPriority,
-      })
-      .then((res) => {
-        setvalue((prevState) => ({
-          ...prevState,
-          RequestNumber: "",
-          WorkPriority: "",
-          WorkTrade: "",
-          WorkType: "",
-        }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    // Putapi
+    const WorkRequestNumber = async () => {
+        await axios.put(`/api/updatesecondWorkRequest`, {
+            RequestNumber: value.RequestNumber,
+            WorkType: value.WorkType,
+            WorkTrade: value.WorkTrade,
+            WorkPriority: value.WorkPriority,
+        },)
+            .then((res) => {
+                setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
-  const [lenght, setlenght] = useState("");
-  const [empreq, setempreq] = useState(false);
-  // All Createapi function
-  const allCreateapi = () => {
-    if (lenght == 0) {
-      console.log("You selected the asset code");
-      Swal.fire("Oops...!", "please choose the asset code.", "error");
-    } else {
-      requestincreas();
-      Createapi();
-      workrequsrpostapi();
-      AssetItemTagIDpost();
-      localStorage.removeItem("postemployid");
-      localStorage.removeItem("EmployeeIDset");
-      localStorage.removeItem("MobileNumber");
-      localStorage.removeItem("RequestStatus");
-      localStorage.removeItem("Firstname");
-      localStorage.removeItem("Middlename");
-      localStorage.removeItem("Lastname");
-      localStorage.removeItem("phoneNumber");
-      localStorage.removeItem("LandlineNumber");
-      localStorage.removeItem("Departmentcode");
-      localStorage.removeItem("BuildingCode");
-      localStorage.removeItem("LocationCode");
-      localStorage.removeItem("WorkType");
-      localStorage.removeItem("WorkTradeCode");
-      localStorage.removeItem("WorkPriority");
-      localStorage.removeItem("WorkTypeDesc");
-      localStorage.removeItem("Departmentname");
-      localStorage.removeItem("WorkTradedesc");
+    const [lenght, setlenght] = useState('')
+    const [empreq, setempreq] = useState(false)
+    // All Createapi function
+    const allCreateapi = () => {
+        if (lenght==0) {
+            console.log("You selected the asset code");
+            Swal.fire('Oops...!', 'please choose the asset code.', 'error')
+        }
+        else{
+            requestincreas()
+            Createapi();
+            workrequsrpostapi()
+            AssetItemTagIDpost()
+            localStorage.removeItem('postemployid');
+            localStorage.removeItem('EmployeeIDset');
+            localStorage.removeItem('MobileNumber');
+            localStorage.removeItem('RequestStatus');
+            localStorage.removeItem('Firstname');
+            localStorage.removeItem('Middlename');
+            localStorage.removeItem('Lastname');
+            localStorage.removeItem('phoneNumber');
+            localStorage.removeItem('LandlineNumber');
+            localStorage.removeItem('Departmentcode');
+            localStorage.removeItem('BuildingCode');
+            localStorage.removeItem('LocationCode');
+            localStorage.removeItem('WorkType');
+            localStorage.removeItem('WorkTradeCode');
+            localStorage.removeItem('WorkPriority');
+            localStorage.removeItem('WorkTypeDesc');
+            localStorage.removeItem('Departmentname');
+            localStorage.removeItem('WorkTradedesc');
+       }
+
     }
-  };
-  const Assetcodebtn = () => {
-    // Createapi();
-    // workrequsrpostapi()
-    // AssetItemTagIDpost()
-    if (value.EmployeeID.trim() === "" || value.Firstname.trim() === "" || value.Middlename.trim() === "" || value.Lastname.trim() ==="") {
-      console.error("fill all the required fire");
-      alert("Fill all the required Fields.");
-      return;
-    } else {
-      navigate("/Addassetcode");
+    const Assetcodebtn = () => {
+        // Createapi();
+        // workrequsrpostapi()
+        // AssetItemTagIDpost()
+        if (value.EmployeeID.trim() === '') {
+            console.error('EmployeeID is required.');
+            alert('EmployeeID is required.')
+            return;
+        }
+        else{
+            navigate('/Addassetcode')   
+        }
     }
-  };
 
   // All Updata api  function
   const Updatealldata = () => {
@@ -777,28 +743,25 @@ function CreateWorkRequest() {
     WorkRequestNumber();
   };
 
-  const Goback = () => {
-    navigate(-1); // Navigate back one step in the browser history
-  };
-  //   Table section
-  const [getdata, setgetdata] = useState([]);
-  // List a data thougth api
-  const getapi = () => {
-    // const empid = localStorage.getItem('postemployid',)
-    const empid = localStorage.getItem("EmployeeIDset");
-    axios
-      .get(`/api/assetworkrequest_GET_BYID/${empid}`)
-      .then((res) => {
-        console.log("assetworkrequest _ GET _ BYID", res.data.recordset);
-        console.log("length", res.data.recordset.length);
-        setlenght(res.data.recordset.length);
-        const AssetItemDescriptionsssss = res.data.recordset;
-        // setgetdata(res.data.recordset);
-        const SAQ = res.data.recordset.map((item) => item.seq);
-        const AssetItemDescriptionsss = res.data.recordset.map(
-          (item) => item.AssetItemDescription
-        );
-        console.log(AssetItemDescriptionsssss);
+    const Goback = () => {
+        navigate(-1); // Navigate back one step in the browser history
+    };
+    //   Table section 
+    const [getdata, setgetdata] = useState([])
+    // List a data thougth api 
+    const getapi = () => {
+        // const empid = localStorage.getItem('postemployid',)
+        const empid = localStorage.getItem('EmployeeIDset',)
+        axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
+            .then((res) => {
+                console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                console.log('length', res.data.recordset.length);
+                setlenght(res.data.recordset.length)
+                const AssetItemDescriptionsssss = res.data.recordset
+                // setgetdata(res.data.recordset);
+                const SAQ = res.data.recordset.map((item) => item.seq);
+                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                console.log(AssetItemDescriptionsssss);
 
         const promises = res.data.recordset.map((item) => {
           const itid = item.AssetItemDescription;

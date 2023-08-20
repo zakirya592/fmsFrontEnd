@@ -104,8 +104,9 @@ function Addassetcode() {
 
     const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
-        const assetcodeid = localStorage.getItem('EmployeeIDset') || localStorage.getItem('EmployeeIDsetss');
+        const assetcodeid = localStorage.getItem('requestnumber') || localStorage.getItem('EmployeeIDsetss');
         console.log(AssetItemDescription);
+        console.log(assetcodeid);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -134,16 +135,17 @@ function Addassetcode() {
                         setgetemplodata(res.data.recordset)
                         console.log();
                         getapi()
+                        swalWithBootstrapButtons.fire(
+                            'Add!',
+                            'The AssetCode is successfully Add to the Work request.',
+                            'success'
+                        )
                     })
                     .catch((err) => {
                         // Handle delete error
-                        console.log('Error deleting', err);
+                        console.log('Add Asset Code Error:', err);
                     });
-                swalWithBootstrapButtons.fire(
-                    'Add!',
-                    'The AssetCode is successfully Add to the Work request.',
-                    'success'
-                )
+               
             }
         })
 
