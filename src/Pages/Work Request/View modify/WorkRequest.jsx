@@ -476,7 +476,6 @@ function WorkRequest() {
                       disableRowSelectionOnClick
                       disableMultipleSelection
                     />
-
                   </div>
                   <div className="d-flex justify-content-between mt-3">
                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
