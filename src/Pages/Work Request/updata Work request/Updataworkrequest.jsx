@@ -106,6 +106,11 @@ function Updataworkrequest() {
         }
     }
 
+    function searchbtn(e) {
+        e.preventDefault();
+        postapi(value.EmployeeID);
+    }
+
     const Update = async () => {
         await axios.put(`/api/updateWorkRequest`, {
             EmployeeID: value.EmployeeID,
@@ -874,7 +879,7 @@ function Updataworkrequest() {
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
-                                                <SearchOutlined className=' serachicon' />
+                                                <SearchOutlined className=' serachicon' onClick={searchbtn}/>
                                             </p>
                                         </div>
                                     </div>

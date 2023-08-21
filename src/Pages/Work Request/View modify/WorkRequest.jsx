@@ -143,7 +143,7 @@ function WorkRequest() {
               console.log('Deleted successfully', res);
               swalWithBootstrapButtons.fire(
                 'Deleted!',
-                'User has been deleted.',
+                'workrequest has been deleted.',
                 'success'
               )
             getapi()
