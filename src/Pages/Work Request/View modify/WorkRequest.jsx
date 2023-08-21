@@ -365,28 +365,63 @@ function WorkRequest() {
   });
 
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+  useEffect(() => {
+    console.log("Testing.....")
+    console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
+    console.log(rowSelectionModel)  // ....clear....???
+  }, [])
 
   const handleCellClick = (params, event) => {
     const columnField = params.field;
     if (columnField === '__check__') {
+      // This condition checks if the clicked cell is a checkbox cell
+      // Retrieve the entire data of the clicked row using its ID
       const clickedRow = filteredRows.find((row) => row.id === params.id);
       console.log(params.id);
       if (clickedRow) {
         console.log("Selected row data:", clickedRow);
-        setSelectedRowIds(clickedRow)
+        // setSelectedRowIds([params.id])
+        setSelectedRowIds(clickedRow) 
       }
-      else{
-        console.log("No Data you selected");
+      //    =======
+      if (clickedRow) {
+        setSelectedRowIds((prevSelected) => ({
+          ...prevSelected,
+          [params.id]: !prevSelected[params.id] // Toggle the selection
+        }));
       }
     }
   };
   const handleAddToWorkRequest = () => {
-    const selectedRowData = getdata.filter(row => selectedRowIds).map((row) => row.RequestNumber[0]);
-    console.log(selectedRowData);
+    // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
+
+    const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
+    console.log("selectedRowData")
+    console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
+    // const selectedRowData = getdata.map((row, index) => ({
+    //     ...row,
+    //     id: index,
+    //     AssetItemDescription: row.AssetItemDescription,
+    // }))
     console.log('Selected Row Data for Work Request:', selectedRowIds);
     setSelectedRowIds(selectedRowData)
-    // navigate(`/WorkRequest/Updata/${selectedRowData}`)
+
+    // TO GET ONLY ONE DESCRIPTION
+    let oneDesc = selectedRowData
+    // putapi(oneDesc)
+    console.log('Post the Data', selectedRowIds.RequestNumber);
+    navigate(`/WorkRequest/Updata/${selectedRowIds.RequestNumber}`)
+
+    // Perform your logic to add to work request using selectedRowData
+    // Example: sendToWorkRequest(selectedRowData);
   };
+
+    // const handleRowClick = (selectedRows) => {
+    //     console.log(selectedRow)
+    // }
   return (
     <>
       <div className="bg">
@@ -411,13 +446,8 @@ function WorkRequest() {
                     <p className="color1 workitoppro my-auto">
                       Work Request Transactions<span className='star'>*</span></p>
                     <div className="d-flex">
-                      <button
-                        type="button"
-                        className="border-0 px-3 savebtn py-2"
-                        onClick={handleAddToWorkRequest} // Call the function when the button is clicked
-                      >
-                        Updata
-                      </button>
+                      <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}>UpData</button>
+
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
@@ -499,15 +529,25 @@ function WorkRequest() {
                       rows={filteredRows}
                       columns={columns}
                       pagination
-                      rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                      rowsPerPageOptions={[10, 25, 50]}
                       paginationModel={paginationModel}
                       onPaginationModelChange={setPaginationModel}
+                      onCellClick={handleCellClick}
                       checkboxSelection
                       disableRowSelectionOnClick
                       disableMultipleSelection
-                      onCellClick={handleCellClick}
                       selectionModel={selectedRowIds}
-                      onSelectionModelChange={(newSelectionModel) => setSelectedRowIds(newSelectionModel)}
+                      onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                      rowSelectionModel={rowSelectionModel}
+                      onRowSelectionModelChange={(newRowSelectionModel) => {
+                        setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                        // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                        const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                        console.log(selectedRows)
+                        setSelectedRow(selectedRows); // Set the state with selected row data objects
+                        // handleRowClick(selectedRows);
+
+                      }}
                     />
                   </div>
                   <div className="d-flex justify-content-between mt-3">

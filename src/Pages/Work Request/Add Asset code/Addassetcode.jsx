@@ -90,7 +90,8 @@ function Addassetcode() {
         console.log('Selected Row Data for Work Request:', selectedRowIds);
         setSelectedRowIds(selectedRowData)
         // TO GET ONLY ONE DESCRIPTION
-        let oneDesc = selectedRowData[selectedRowData.length - 1]
+        // let oneDesc = selectedRowData[selectedRowData.length - 1]
+        let oneDesc = selectedRowData[selectedRowData]
         putapi(oneDesc)
 
         // Perform your logic to add to work request using selectedRowData

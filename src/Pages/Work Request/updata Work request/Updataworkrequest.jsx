@@ -80,7 +80,7 @@ function Updataworkrequest() {
                     WorkTrade,
                     RequestNumber
                 }));
-                console.log('-------------------', res.data.recordsets[0][0].RequestNumber);
+                console.log('-------------------', res.data.recordsets[0][0]);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
                 console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
