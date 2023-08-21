@@ -65,7 +65,7 @@ function Updataworkrequest() {
                     BuildingCode,
                     LocationCode,
                     WorkTrade,
-                    RequestNumber
+                    // RequestNumber
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -78,7 +78,7 @@ function Updataworkrequest() {
                     BuildingCode,
                     LocationCode,
                     WorkTrade,
-                    RequestNumber
+                    // RequestNumber
                 }));
                 console.log('-------------------', res.data.recordsets[0][0]);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
