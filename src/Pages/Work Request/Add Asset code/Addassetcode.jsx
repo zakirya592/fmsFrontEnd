@@ -25,6 +25,15 @@ import Swal from "sweetalert2";
 function Addassetcode() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const [selectedRow, setSelectedRow] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+    useEffect(() => {
+        console.log("Testing.....")
+        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
+        console.log(rowSelectionModel)  // ....clear....???
+    }, [])
     // List a data thougth api 
     const getapi = () => {
         axios.get(`/api/AssetsMaster_GET_LIST`, {
@@ -44,6 +53,53 @@ function Addassetcode() {
     useEffect(() => {
         getapi()
     }, [])
+
+
+    const handleCellClick = (params, event) => {
+        const columnField = params.field;
+        if (columnField === '__check__') {
+            // This condition checks if the clicked cell is a checkbox cell
+            // Retrieve the entire data of the clicked row using its ID
+            const clickedRow = filteredRows.find((row) => row.id === params.id);
+            console.log(params.id);
+            if (clickedRow) {
+                console.log("Selected row data:", clickedRow);
+                // setSelectedRowIds([params.id])
+                // setSelectedRowIds(clickedRow) 
+            }
+            //    =======
+            if (clickedRow) {
+                setSelectedRowIds((prevSelected) => ({
+                    ...prevSelected,
+                    [params.id]: !prevSelected[params.id] // Toggle the selection
+                }));
+            }
+        }
+    };
+    const handleAddToWorkRequest = () => {
+        // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
+
+        const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
+        console.log("selectedRowData")
+        console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
+        // const selectedRowData = getdata.map((row, index) => ({
+        //     ...row,
+        //     id: index,
+        //     AssetItemDescription: row.AssetItemDescription,
+        // }))
+        console.log('Selected Row Data for Work Request:', selectedRowIds);
+        setSelectedRowIds(selectedRowData)
+        // TO GET ONLY ONE DESCRIPTION
+        let oneDesc = selectedRowData[selectedRowData.length - 1]
+        putapi(oneDesc)
+
+        // Perform your logic to add to work request using selectedRowData
+        // Example: sendToWorkRequest(selectedRowData);
+    };
+
+    // const handleRowClick = (selectedRows) => {
+    //     console.log(selectedRow)
+    // }
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
@@ -237,17 +293,7 @@ function Addassetcode() {
         } else {
             navigate('/createworkrequest');
         }
-    };
-
-    const [selectedRows, setSelectedRows] = useState([]);
-
-    const handleAddToWorkRequest = () => {
-        const selectedData = selectedRows.map((rowId) => {
-            return filteredRows[rowId];
-        });
-
-        console.log("Selected rows data:", selectedData);
-    };    
+    };  
 
     return (
         <>
@@ -346,15 +392,26 @@ function Addassetcode() {
                                             rows={filteredRows}
                                             columns={columns}
                                             pagination
-                                            rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                            rowsPerPageOptions={[10, 25, 50]}
                                             paginationModel={paginationModel}
                                             onPaginationModelChange={setPaginationModel}
+                                            onCellClick={handleCellClick}
                                             checkboxSelection
                                             disableRowSelectionOnClick
                                             disableMultipleSelection
-                                            selectionModel={selectedRows}
-                                            onSelectionModelChange={(newSelection) => setSelectedRows(newSelection)}
-                                        />
+                                            selectionModel={selectedRowIds}
+                                            onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                            rowSelectionModel={rowSelectionModel}
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                                // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                                const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                                                console.log(selectedRows)
+                                                setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                                // handleRowClick(selectedRows);
+
+                                            }}
+                                            />
 
                                     </div>
                                     <div className="d-flex justify-content-between mt-3">

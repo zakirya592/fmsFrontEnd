@@ -25,7 +25,14 @@ function Maintablemaster() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
     const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const [selectedRow, setSelectedRow] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
+    useEffect(() => {
+        console.log("Testing.....")
+        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
+        console.log(rowSelectionModel)  // ....clear....???
+    }, [])
 
     // List a data thougth api 
     const getapi = () => {
@@ -59,33 +66,39 @@ function Maintablemaster() {
                 // setSelectedRowIds([params.id])
                 // setSelectedRowIds(clickedRow) 
             }
-        //    =======
+            //    =======
             if (clickedRow) {
                 setSelectedRowIds((prevSelected) => ({
                     ...prevSelected,
                     [params.id]: !prevSelected[params.id] // Toggle the selection
                 }));
             }
-
-            
         }
     };
     const handleAddToWorkRequest = () => {
         // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
 
-        const selectedRowData = getdata.filter(row => selectedRowIds).map((row) => row.AssetItemDescription);
-        
+        const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
+        console.log("selectedRowData")
+        console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
         // const selectedRowData = getdata.map((row, index) => ({
         //     ...row,
         //     id: index,
         //     AssetItemDescription: row.AssetItemDescription,
         // }))
         console.log('Selected Row Data for Work Request:', selectedRowIds);
-        // setSelectedRowIds(selectedRowData)
+        setSelectedRowIds(selectedRowData)
+        // TO GET ONLY ONE DESCRIPTION
+        let oneDesc=selectedRowData[selectedRowData.length-1]
+        putapi(oneDesc)
 
         // Perform your logic to add to work request using selectedRowData
         // Example: sendToWorkRequest(selectedRowData);
     };
+
+    // const handleRowClick = (selectedRows) => {
+    //     console.log(selectedRow)
+    // }
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
@@ -106,13 +119,13 @@ function Maintablemaster() {
                 <button
                     type="button"
                     className="border-0 px-3 savebtn py-2"
-                    // onClick={() => handleButtonAddToWorkRequest(params.id)}
+                // onClick={() => handleButtonAddToWorkRequest(params.id)}
                 >
                     Add To Work Request
                 </button>
             ),
         }
-        
+
     ];
 
     // Deleted api section
@@ -159,9 +172,9 @@ function Maintablemaster() {
 
     };
 
-const [getemplodata, setgetemplodata] = useState([])
+    const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
-        const assetcodeid = localStorage.getItem('requestnumber') || localStorage.getItem('EmployeeIDsetss');
+        const assetcodeid = localStorage.getItem('EmployeeIDsetss') || localStorage.getItem('requestnumber');
         console.log(localStorage.getItem('requestnumber'));
         console.log(AssetItemDescription);
         const swalWithBootstrapButtons = Swal.mixin({
@@ -183,8 +196,8 @@ const [getemplodata, setgetemplodata] = useState([])
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.post(`/api/assetworkrequest_post`,{
-                    EmployeeID: assetcodeid,
+                axios.post(`/api/assetworkrequest_post`, {
+                    RequestNumber: assetcodeid,
                     AssetItemDescription: AssetItemDescription
                 })
                     .then((res) => {
@@ -192,7 +205,7 @@ const [getemplodata, setgetemplodata] = useState([])
                         setgetemplodata(res.data.recordset)
                         console.log();
                         getapi()
-                        
+
                         swalWithBootstrapButtons.fire(
                             'Add!',
                             'The AssetCode is successfully Add to the Work request.',
@@ -203,7 +216,7 @@ const [getemplodata, setgetemplodata] = useState([])
                         // Handle delete error
                         console.log('Add Asset work Request Error :', err);
                     });
-               
+
             }
         })
 
@@ -232,7 +245,7 @@ const [getemplodata, setgetemplodata] = useState([])
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}> 
+                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
@@ -243,7 +256,7 @@ const [getemplodata, setgetemplodata] = useState([])
                     <MenuItem onClick={() => {
                         Deletedapi(params.row.AssetItemDescription)
                         handleMenuClose();
-                         }}  >
+                    }}  >
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -266,17 +279,17 @@ const [getemplodata, setgetemplodata] = useState([])
 
     const filteredRows = getdata && getdata.filter(row => (
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-        (!requestByEmployee || row.AssetItemDescription === requestByEmployee) 
-      )).map((row, index) => ({
+        (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
+    )).map((row, index) => ({
         ...row,
         id: index + 1,
-      AssetItemDescription: row.AssetItemDescription,
-      AssetItemGroup: row.AssetItemGroup ,
-      AssetCategory: row.AssetCategory,
-      AssetSubCategory: row.AssetSubCategory,
-      RequestDateTime:row.RequestDateTime,
-      WorkType: row.WorkType,
-      workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+        AssetItemDescription: row.AssetItemDescription,
+        AssetItemGroup: row.AssetItemGroup,
+        AssetCategory: row.AssetCategory,
+        AssetSubCategory: row.AssetSubCategory,
+        RequestDateTime: row.RequestDateTime,
+        WorkType: row.WorkType,
+        workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
     }))
 
     const [paginationModel, setPaginationModel] = React.useState({
@@ -321,7 +334,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
-                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export 
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                             </CSVLink>
                                         </div>
                                     </div>
@@ -330,7 +343,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                     {
                                         getemplodata && getemplodata.map((item, index) => (
                                             <p key={index}>{localStorage.setItem('postemployid', item.EmployeeID)}</p>
-                                            
+
                                         ))
                                     }
                                     {/* Search Fields */}
@@ -338,7 +351,7 @@ const [getemplodata, setgetemplodata] = useState([])
                                         <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                   Asset Item Description<span className='star'>*</span>                                        </label>
+                                                    Asset Item Description<span className='star'>*</span>                                        </label>
 
                                                 <input
                                                     types='text'
@@ -385,29 +398,39 @@ const [getemplodata, setgetemplodata] = useState([])
                                         Add Selected To Work Request
                                     </button>
                                     <div style={{ height: 420, width: '100%' }}>
-                                    <div style={{ height: 420, width: '100%' }}>
-                                    <DataGrid
-                    rows={filteredRows}
-                    columns={columns}
-                    pagination
-                    rowsPerPageOptions={[10, 25, 50]}
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
-                    onCellClick={handleCellClick}
-                    checkboxSelection
-                    disableRowSelectionOnClick
-                    disableMultipleSelection
-                     selectionModel={selectedRowIds}
-                onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
-                />
+                                        <div style={{ height: 420, width: '100%' }}>
+                                            <DataGrid
+                                                rows={filteredRows}
+                                                columns={columns}
+                                                pagination
+                                                rowsPerPageOptions={[10, 25, 50]}
+                                                paginationModel={paginationModel}
+                                                onPaginationModelChange={setPaginationModel}
+                                                onCellClick={handleCellClick}
+                                                checkboxSelection
+                                                disableRowSelectionOnClick
+                                                disableMultipleSelection
+                                                selectionModel={selectedRowIds}
+                                                onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                                rowSelectionModel={rowSelectionModel}
+                                                onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                    setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                                    // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                                    const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                                                    console.log(selectedRows)
+                                                    setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                                    // handleRowClick(selectedRows);
 
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-3">
-                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                            navigate('/workrequest')
-                                        })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                             
-                                    </div>
+                                                }}
+                                            />
+
+                                        </div>
+                                        <div className="d-flex justify-content-between mt-3">
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                                                navigate('/workrequest')
+                                            })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
