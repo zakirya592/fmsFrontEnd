@@ -364,6 +364,29 @@ function WorkRequest() {
     page: 0,
   });
 
+  const [selectedRowIds, setSelectedRowIds] = useState([]);
+
+  const handleCellClick = (params, event) => {
+    const columnField = params.field;
+    if (columnField === '__check__') {
+      const clickedRow = filteredRows.find((row) => row.id === params.id);
+      console.log(params.id);
+      if (clickedRow) {
+        console.log("Selected row data:", clickedRow);
+        setSelectedRowIds(clickedRow)
+      }
+      else{
+        console.log("No Data you selected");
+      }
+    }
+  };
+  const handleAddToWorkRequest = () => {
+    const selectedRowData = getdata.filter(row => selectedRowIds).map((row) => row.RequestNumber[0]);
+    console.log(selectedRowData);
+    console.log('Selected Row Data for Work Request:', selectedRowIds);
+    setSelectedRowIds(selectedRowData)
+    // navigate(`/WorkRequest/Updata/${selectedRowData}`)
+  };
   return (
     <>
       <div className="bg">
@@ -388,6 +411,13 @@ function WorkRequest() {
                     <p className="color1 workitoppro my-auto">
                       Work Request Transactions<span className='star'>*</span></p>
                     <div className="d-flex">
+                      <button
+                        type="button"
+                        className="border-0 px-3 savebtn py-2"
+                        onClick={handleAddToWorkRequest} // Call the function when the button is clicked
+                      >
+                        Updata
+                      </button>
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
@@ -475,6 +505,9 @@ function WorkRequest() {
                       checkboxSelection
                       disableRowSelectionOnClick
                       disableMultipleSelection
+                      onCellClick={handleCellClick}
+                      selectionModel={selectedRowIds}
+                      onSelectionModelChange={(newSelectionModel) => setSelectedRowIds(newSelectionModel)}
                     />
                   </div>
                   <div className="d-flex justify-content-between mt-3">

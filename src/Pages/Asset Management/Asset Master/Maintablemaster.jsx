@@ -56,9 +56,17 @@ function Maintablemaster() {
             console.log(params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
-                // setSelectedRowIds(clickedRow)
+                // setSelectedRowIds([params.id])
+                // setSelectedRowIds(clickedRow) 
             }
-           
+        //    =======
+            if (clickedRow) {
+                setSelectedRowIds((prevSelected) => ({
+                    ...prevSelected,
+                    [params.id]: !prevSelected[params.id] // Toggle the selection
+                }));
+            }
+
             
         }
     };
@@ -72,8 +80,9 @@ function Maintablemaster() {
         //     id: index,
         //     AssetItemDescription: row.AssetItemDescription,
         // }))
-        console.log('Selected Row Data for Work Request:', selectedRowData);
-        setSelectedRowIds(selectedRowData)
+        console.log('Selected Row Data for Work Request:', selectedRowIds);
+        // setSelectedRowIds(selectedRowData)
+
         // Perform your logic to add to work request using selectedRowData
         // Example: sendToWorkRequest(selectedRowData);
     };
@@ -389,7 +398,7 @@ const [getemplodata, setgetemplodata] = useState([])
                     disableRowSelectionOnClick
                     disableMultipleSelection
                      selectionModel={selectedRowIds}
-                onSelectionModelChange={(newSelectionModel) => setSelectedRowIds(newSelectionModel)}
+                onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
                 />
 
                                     </div>
