@@ -160,7 +160,7 @@ function CreateWorkRequest() {
                 if (res.status == 201) {
                     Swal.fire({
                         title: "Success",
-                        text: "Work Request is created !!!",
+                        text: "Successfully Saved...",
                         icon: "success",
                         confirmButtonText: "OK",
                     })

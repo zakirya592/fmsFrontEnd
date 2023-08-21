@@ -53,9 +53,13 @@ function Maintablemaster() {
             // This condition checks if the clicked cell is a checkbox cell
             // Retrieve the entire data of the clicked row using its ID
             const clickedRow = filteredRows.find((row) => row.id === params.id);
+            console.log(params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
+                // setSelectedRowIds(clickedRow)
             }
+           
+            
         }
     };
     const handleAddToWorkRequest = () => {

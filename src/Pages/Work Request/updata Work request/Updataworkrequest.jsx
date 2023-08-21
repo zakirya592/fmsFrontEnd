@@ -46,12 +46,12 @@ function Updataworkrequest() {
 
     // post api for the data 
     function postapi(EmployeeID) {
-        axios.post(`/api/getworkRequest`, {
+        axios.post(`/api/getworkRequest_by_EPID`, {
             EmployeeID,
         }).then((res) => {
             // console.log(res.data)
             if (res.data.recordsets[0].length === 0) {
-                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                Swal.fire('Oops...!', 'Employee ID not found!', 'error')
                 // setModelError(true);
             } else {
 
@@ -64,7 +64,8 @@ function Updataworkrequest() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTrade
+                    WorkTrade,
+                    RequestNumber
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -76,8 +77,10 @@ function Updataworkrequest() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTrade
+                    WorkTrade,
+                    RequestNumber
                 }));
+                console.log('-------------------', res.data.recordsets[0][0].RequestNumber);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
                 console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
@@ -87,6 +90,7 @@ function Updataworkrequest() {
                     .catch((err) => {
                         //// console.log(err);;
                     });
+                    
             }
         })
             .catch((err) => {
@@ -121,7 +125,7 @@ function Updataworkrequest() {
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '',RequestDateTime:"" }));
                 Swal.fire({
                     title: "Success",
-                    text: "you have Success Updata the Data",
+                    text: "Successfully Updata the AssetCode",
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(
@@ -328,7 +332,7 @@ function Updataworkrequest() {
         }).then((res) => {
             // console.log('you have post a work requset',res.data)
             if (res.data.recordsets[0].length === 0) {
-                Swal.fire('Oops...!', 'Something went wrong!', 'error')
+                Swal.fire('Oops...!', 'Employee ID not found!', 'error')
                 // setModelError(true);
             } else {
                 const {
@@ -405,6 +409,7 @@ function Updataworkrequest() {
             });
     }
 
+
     function handleKeyPressworkrequest(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -454,7 +459,7 @@ function Updataworkrequest() {
                 // setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
                 Swal.fire({
                     title: "Success",
-                    text: "you have Success Updata the Data",
+                    text: "Successfully Updata the AssetCode",
                     icon: "success",
                     confirmButtonText: "OK",
                 })
@@ -566,15 +571,15 @@ function Updataworkrequest() {
             axios.get(`/api/WorkTrade_LIST/${workaoutss}`).then((res) => {
                 // console.log("WorkTrade_LIST", res.data.recordset);
                 setdropdownWorkTradeLIST(res.data.recordsets[0])
-                const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
-                axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
-                    .then((res) => {
-                        console.log('WorkTrade_descri_LIST', res.data);
-                        setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
-                    })
-                    .catch((err) => {
-                        // console.log(err);;
-                    });
+                // const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
+                // axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
+                //     .then((res) => {
+                //         console.log('WorkTrade_descri_LIST', res.data);
+                //         setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
+                //     })
+                //     .catch((err) => {
+                //         // console.log(err);;
+                //     });
             })
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
