@@ -802,7 +802,7 @@ function CreateWorkRequest() {
                         console.log('Deleted successfully', res);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            'User has been deleted.',
+                            'AssetCode has been deleted.',
                             'success'
                         )
                     })

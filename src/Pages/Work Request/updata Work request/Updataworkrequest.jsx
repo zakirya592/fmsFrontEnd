@@ -766,7 +766,7 @@ function Updataworkrequest() {
                         Workrequestget()
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            'User has been deleted.',
+                            'AssetCode has been deleted.',
                             'success'
                         )
                     })
