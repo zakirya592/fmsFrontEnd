@@ -455,6 +455,7 @@ function Updataworkrequest() {
     const WorkRequestNumber = async () => {
         await axios.put(`/api/updatesecondWorkRequest`, {
             RequestNumber: value.RequestNumber,
+            RequestStatus: value.RequestStatus,
             WorkType: value.WorkType,
             WorkTrade: value.WorkTrade,
             WorkPriority: value.WorkPriority,

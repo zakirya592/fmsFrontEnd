@@ -175,7 +175,7 @@ function Addassetcode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't to Add !",
+            text: "You want to Add ",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, Add it!',

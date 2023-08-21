@@ -446,7 +446,7 @@ function WorkRequest() {
                     <p className="color1 workitoppro my-auto">
                       Work Request Transactions<span className='star'>*</span></p>
                     <div className="d-flex">
-                      <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}>UpData</button>
+                      <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}>UPDATE</button>
 
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
