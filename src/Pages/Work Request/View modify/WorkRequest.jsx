@@ -466,7 +466,7 @@ function WorkRequest() {
                     <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Employee Number<span className='star'>*</span>                                        </label>
+                          Employee Number</label>
 
                         <input
                           types='text'
@@ -486,7 +486,7 @@ function WorkRequest() {
                     <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Request Status<span className='star'>*</span>
+                          Request Status
                         </label>
 
                         <select
