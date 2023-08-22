@@ -1001,19 +1001,6 @@ function CreateWorkRequest() {
                                                     console.log("cleared", value);
                                                     // searchbtn(value)
                                                     // postapi(value)
-                                                <Autocomplete
-                                                    id="zone"
-                                                    options={unitCode}
-                                                    getOptionLabel={(option) => option}
-                                                    onChange={handleUnitCodeChange}
-                                                    // value={selectedUnitCode}
-                                                    // onClick={}
-                                                    onInputChange={(event, value) => {
-                                                        if (value) {
-                                                            // perform operation when input is cleared
-                                                            console.log("cleared", value);
-                                                            // searchbtn(value)
-                                                            postapi(value)
 
                                                     // if (event.key === 'Enter') {
                                                     //     event.preventDefault();
