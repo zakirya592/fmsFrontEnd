@@ -61,7 +61,7 @@ function Addassetcode() {
             // This condition checks if the clicked cell is a checkbox cell
             // Retrieve the entire data of the clicked row using its ID
             const clickedRow = filteredRows.find((row) => row.id === params.id);
-            console.log(params.id);
+            console.log('ID', params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
                 // setSelectedRowIds([params.id])
@@ -80,6 +80,7 @@ function Addassetcode() {
         // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
 
         const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
+       
         console.log("selectedRowData")
         console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
         // const selectedRowData = getdata.map((row, index) => ({
