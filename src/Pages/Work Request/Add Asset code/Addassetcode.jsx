@@ -200,6 +200,11 @@ function Addassetcode() {
                     .catch((err) => {
                         // Handle delete error
                         console.log('Add Asset Code Error:', err);
+                        swalWithBootstrapButtons.fire(
+                            'Error!',
+                            `This Asset already exist`,
+                            'error'
+                        )
                     });
                
             }
