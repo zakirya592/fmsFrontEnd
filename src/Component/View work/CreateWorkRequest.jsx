@@ -982,7 +982,7 @@ const handleOnBlurCall = () => {
                                                     onChange={handleUnitCodeChange}
                                                     // value={selectedUnitCode}
                                                     // onClick={}
-                                                    onClick={(event, value) => {
+                                                    onInputChange={(event, value) => {
                                                         if (value) {
                                                             // perform operation when input is cleared
                                                             console.log("cleared", value);
