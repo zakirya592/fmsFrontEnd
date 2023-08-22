@@ -204,7 +204,7 @@ function WorkRequest() {
             <span style={{ paddingRight: '18px' }} >View</span>
             <VisibilityIcon />
           </MenuItem>
-          <MenuItem onClick={(() => {
+          <MenuItem disabled={params.row.RequestStatus === 'Closed'} onClick={(() => {
             navigate(`/WorkRequest/Updata/${params.row.RequestNumber}`)
             localStorage.setItem('EMpIDUpdata', params.row.EmployeeID)
           })}>
@@ -374,6 +374,7 @@ function WorkRequest() {
     console.log(rowSelectionModel)  // ....clear....???
   }, [])
 
+  const [statuscheck, setstatuscheck] = useState()
   const handleCellClick = (params, event) => {
     const columnField = params.field;
     if (columnField === '__check__') {
@@ -383,6 +384,8 @@ function WorkRequest() {
       console.log(params.id);
       if (clickedRow) {
         console.log("Selected row data:", clickedRow);
+        console.log(clickedRow.RequestStatus);
+        setstatuscheck(clickedRow.RequestStatus)
         // setSelectedRowIds([params.id])
         setSelectedRowIds(clickedRow) 
       }
@@ -410,11 +413,11 @@ function WorkRequest() {
     setSelectedRowIds(selectedRowData)
 
     // TO GET ONLY ONE DESCRIPTION
+    console.log(selectedRowIds.RequestStatus);
     let oneDesc = selectedRowData
     // putapi(oneDesc)
     console.log('Post the Data', selectedRowIds.RequestNumber);
     navigate(`/WorkRequest/Updata/${selectedRowIds.RequestNumber}`)
-
     // Perform your logic to add to work request using selectedRowData
     // Example: sendToWorkRequest(selectedRowData);
   };
@@ -446,7 +449,7 @@ function WorkRequest() {
                     <p className="color1 workitoppro my-auto">
                       Work Request Transactions<span className='star'>*</span></p>
                     <div className="d-flex">
-                      <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}>UPDATE</button>
+                      <button type="button" className="border-0 px-3  savebtn py-2" disabled={statuscheck === 'Closed' || selectedRowIds.length === 0}  onClick={handleAddToWorkRequest}>UPDATE</button>
 
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')

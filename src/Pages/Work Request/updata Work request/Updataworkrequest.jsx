@@ -130,14 +130,14 @@ function Updataworkrequest() {
             .then((res) => {
                 // console.log('Updata the api data ', res.data);
                 setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '',RequestDateTime:"" }));
-                Swal.fire({
-                    title: "Success",
-                    text: "Successfully Updata the AssetCode",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                }).then(
-                    navigate('/workRequest')
-                )
+                // Swal.fire({
+                //     title: "Success",
+                //     text: "Successfully Updata the AssetCode",
+                //     icon: "success",
+                //     confirmButtonText: "OK",
+                // }).then(
+                //     navigate('/workRequest')
+                // )
             })
             .catch((err) => {
                 //// console.log(err);;
@@ -463,14 +463,16 @@ function Updataworkrequest() {
             WorkPriority: value.WorkPriority,
         },)
             .then((res) => {
-                // console.log('Updata the api data ', res.data);
+                console.log('Updata the api data ', res.data);
                 // setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
-                Swal.fire({
+             Swal.fire({
                     title: "Success",
-                    text: "Successfully Updata the AssetCode",
+                    text: `${res.data.message}`,
                     icon: "success",
                     confirmButtonText: "OK",
-                })
+                }).then(
+                    navigate('/workRequest')
+                )
             })
             .catch((err) => {
                 // console.log(err);;
@@ -857,6 +859,7 @@ function Updataworkrequest() {
         // }
 
     }, [])
+    
     return (
         <div>
             <div className='bg'>
