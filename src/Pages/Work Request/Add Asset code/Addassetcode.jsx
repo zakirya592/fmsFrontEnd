@@ -64,8 +64,6 @@ function Addassetcode() {
             console.log('ID', params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
-                // setSelectedRowIds([params.id])
-                // setSelectedRowIds(clickedRow) 
             }
             //    =======
             if (clickedRow) {
@@ -89,9 +87,10 @@ function Addassetcode() {
         //     AssetItemDescription: row.AssetItemDescription,
         // }))
         console.log('Selected Row Data for Work Request:', selectedRowIds);
+       
         setSelectedRowIds(selectedRowData)
         // TO GET ONLY ONE DESCRIPTION
-        let oneDesc = selectedRowData[selectedRowData.length - 1]
+        let oneDesc = selectedRowData[selectedRowData.length - 1];
         putapi(oneDesc)
         // selectedRowData.forEach(oneDesc => {
         //     putapi(oneDesc); // Perform API request for each selected row description
@@ -162,6 +161,7 @@ function Addassetcode() {
     const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
         const assetcodeid = localStorage.getItem('EmployeeIDsetss') || localStorage.getItem('requestnumber');
+        
         console.log(AssetItemDescription);
         console.log(assetcodeid);
         const swalWithBootstrapButtons = Swal.mixin({
