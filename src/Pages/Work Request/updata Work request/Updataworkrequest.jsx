@@ -19,6 +19,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 function Updataworkrequest() {
     let { userId } = useParams();
@@ -823,6 +825,38 @@ function Updataworkrequest() {
         page: 0,
     });
 
+    const [unitCode, setUnitCode] = useState([]);
+
+    const handleUnitCodeChange = (e) => {
+        // console.log(value);
+        setvalue(prevValue => ({
+            ...prevValue,
+            EmployeeID: e.target.value
+        }))
+        localStorage.setItem('EmployeeIDset', e.target.value)
+        // setSelectedUnitCode(value);
+    };
+
+    useEffect(() => {
+
+        // const handleOnBlurCall = () => {
+
+        axios.get('/api/EmployeeID_GET_LIST')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                setUnitCode(unitNameList)
+
+            })
+            .catch((error) => {
+                console.log('-----', error);
+
+            }
+            );
+        // }
+
+    }, [])
     return (
         <div>
             <div className='bg'>
@@ -862,7 +896,7 @@ function Updataworkrequest() {
                                                 Employee Number<span className='star'>*</span>
                                             </label>
 
-                                            <input
+                                            {/* <input
                                                 types='text'
                                                 id='EmployeeID'
                                                 value={value.EmployeeID}
@@ -881,7 +915,57 @@ function Updataworkrequest() {
                                                 className='position-absolute text-end serachicon'
                                             >
                                                 <SearchOutlined className=' serachicon' onClick={searchbtn}/>
-                                            </p>
+                                            </p> */}
+
+                                            <Autocomplete
+                                                id="zone"
+                                                options={unitCode}
+                                                getOptionLabel={(option) => option}
+                                                onChange={handleUnitCodeChange}
+                                                // value={selectedUnitCode}
+                                                // onInputChange
+                                                onInputChange={(event, value) => {
+                                                    if (value) {
+                                                        // perform operation when input is cleared
+                                                        console.log("cleared", value);
+                                                        // searchbtn(value)
+                                                        postapi(value)
+
+                                                        // if (event.key === 'Enter') {
+                                                        //     event.preventDefault();
+                                                        //     postapi(value);
+                                                        // }
+                                                    }
+                                                }}
+                                                // onBlur={handleOnBlurCall}
+                                                //  onKeyDown={handleKeyPress}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            className: "text-black",
+                                                        }}
+                                                        InputLabelProps={{
+                                                            ...params.InputLabelProps,
+                                                            style: { color: "white" },
+                                                        }}
+                                                        className='rounded inputsection py-0'
+                                                        placeholder='Enter Employee Number'
+                                                        required
+                                                        // onClick={searchbtn}
+                                                    />
+                                                )}
+                                                className='rounded inputsection'
+                                                classes={{
+                                                    endAdornment: "text-white",
+                                                }}
+                                                sx={{
+                                                    '& .MuiAutocomplete-endAdornment': {
+                                                        color: 'white',
+                                                    },
+                                                }}
+                                            />
                                         </div>
                                     </div>
 

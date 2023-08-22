@@ -21,6 +21,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import { CSVLink } from "react-csv";
 
 function CreateWorkRequest() {
@@ -211,12 +213,12 @@ function CreateWorkRequest() {
 
     // post api for the data 
     function postapi(EmployeeID) {
-        axios.post(`/api/getworkRequest`, {
+        axios.post(`/api/getworkRequest_by_EPID`, {
             EmployeeID,
         }).then((res) => {
             // console.log(res.data)
             if (res.data.recordsets[0].length === 0) {
-                Swal.fire('Oops...!', 'Employee ID not found...', 'error')
+                Swal.fire('Oops...!', 'Employee ID not found!', 'error')
                 // setModelError(true);
             } else {
 
@@ -229,6 +231,8 @@ function CreateWorkRequest() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
+                    WorkTrade,
+                    // RequestNumber
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -240,34 +244,38 @@ function CreateWorkRequest() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
+                    WorkTrade,
+                    // RequestNumber
                 }));
+                console.log('-------------------', res.data.recordsets[0][0]);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
+                console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
                     })
                     .catch((err) => {
-                        console.log(err);
+                        //// console.log(err);;
                     });
-                console.log(res.data);
 
             }
         })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }
 
-    const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
-
         }
     }
+
+    const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
+   
     function searchbtn(e) {
-        e.preventDefault();
+        // e.preventDefault();
         postapi(value.EmployeeID);
     }
     // Dropdown list
@@ -848,7 +856,6 @@ function CreateWorkRequest() {
         Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
     }))
 
-
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
@@ -873,6 +880,42 @@ function CreateWorkRequest() {
     const handlePrint = () => {
         window.print(); // This triggers the browser's print dialog
     };
+
+    const [unitCode, setUnitCode] = useState([]);
+
+    const handleUnitCodeChange = (e) => {
+        // console.log(value);
+        setvalue(prevValue => ({
+            ...prevValue,
+            EmployeeID: e.target.value
+        }))
+        localStorage.setItem('EmployeeIDset', e.target.value)
+        // setSelectedUnitCode(value);
+    };
+
+// useEffect(() => {
+
+const handleOnBlurCall = () => {
+
+    axios.get('/api/EmployeeID_GET_LIST')
+    .then((response) => {
+        console.log('Dropdown me', response.data.recordset)
+            const data = response?.data?.recordset;
+            const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+            setUnitCode(unitNameList)
+
+        })
+        .catch((error) => {
+            console.log('-----',error);
+            
+        }
+        );
+    }
+
+// }, [])
+
+   
+
     return (
         <div>
             <div className='bg'>
@@ -911,12 +954,12 @@ function CreateWorkRequest() {
                                 <div className="row mx-auto formsection">
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
+                                        <div className='emailsection position-relative d-grid my-1'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
                                                 Employee
                                             </label>
 
-                                            <input
+                                            {/* <input
                                                 types='text'
                                                 id='EmployeeID'
                                                 value={value.EmployeeID}
@@ -930,11 +973,53 @@ function CreateWorkRequest() {
                                                 className='position-absolute text-end serachicon'
                                             >
                                                 <SearchOutlined className=' serachicon' onClick={searchbtn} />
-                                            </p>
+                                            </p> */}
                                         </div>
-                                        {/* {!isEmployeeIDValid && (
-                                            <p style={{ color: 'red' }}>Employee ID is required</p>
-                                        )} */}
+                                                <Autocomplete
+                                                    id="zone"
+                                                    options={unitCode}
+                                                    getOptionLabel={(option) => option}
+                                                    onChange={handleUnitCodeChange}
+                                                    // value={selectedUnitCode}
+                                                    // onClick={}
+                                                    onClick={(event, value) => {
+                                                        if (value) {
+                                                            // perform operation when input is cleared
+                                                            console.log("cleared", value);
+                                                            // searchbtn(value)
+                                                            postapi(value)
+
+                                                        }
+                                                    }}
+                                                    onBlur={handleOnBlurCall}
+                                                     onKeyDown={handleKeyPress}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            InputProps={{
+                                                                ...params.InputProps,
+                                                                className: "text-black",
+                                                            }}
+                                                            InputLabelProps={{
+                                                                ...params.InputLabelProps,
+                                                                style: { color: "white" },
+                                                            }}
+                                                            className='rounded inputsection py-0'
+                                                           placeholder='Enter Employee Number'
+                                                            required
+                                                            // onClick={searchbtn}
+                                                        />
+                                                    )}
+                                                     className='rounded inputsection'
+                                                    classes={{
+                                                        endAdornment: "text-white",
+                                                    }}
+                                                    sx={{
+                                                        '& .MuiAutocomplete-endAdornment': {
+                                                            color: 'white',
+                                                        },
+                                                    }}
+                                                />
                                     </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
