@@ -911,7 +911,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee Number<span className='star'>*</span>
+                                                Employee
                                             </label>
 
                                             <input
@@ -1010,7 +1010,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
-                                                First Name<span className='star'>*</span>
+                                                First Name
                                             </label>
 
                                             <input
@@ -1035,7 +1035,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
-                                                Middle Name<span className='star'>*</span>
+                                                Middle Name
                                             </label>
 
                                             <input
@@ -1060,7 +1060,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Last Name<span className='star'>*</span>
+                                                Last Name
                                             </label>
 
                                             <input
@@ -1090,7 +1090,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Mobile Number<span className='star'>*</span>
+                                                Mobile Number
                                             </label>
 
                                             <PhoneInput
@@ -1115,7 +1115,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Landline Number<span className='star'>*</span>
+                                                Landline Number
                                             </label>
 
                                             <PhoneInput
@@ -1142,7 +1142,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
-                                                Department Code<span className='star'>*</span>
+                                                Department Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
                                                 value={value.DepartmentCode}
@@ -1164,7 +1164,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                                Department Name<span className='star'>*</span>
+                                                Department Name
                                             </label>
 
                                             <input
@@ -1187,7 +1187,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                Building<span className='star'>*</span>
+                                                Building
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
 
@@ -1213,7 +1213,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                Location<span className='star'>*</span>
+                                                Location
                                             </label>
 
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
@@ -1245,7 +1245,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkType' className='lablesection color3 text-start mb-1'>
-                                                Work Type<span className='star'>*</span>
+                                                Work Type
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example"
                                                 value={value.WorkType}
@@ -1265,7 +1265,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='WorkTypeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Type Description <span className='star'>*</span>
+                                                Work Type Description 
                                             </label>
 
                                             <input
@@ -1282,7 +1282,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkPriority' className='lablesection color3 text-start mb-1'>
-                                                Work Priority<span className='star'>*</span>
+                                                Work Priority
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkPriority" aria-label="Floating label select example"
                                                 value={value.WorkPriority}
@@ -1312,7 +1312,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
-                                                Work Trade<span className='star'>*</span>
+                                                Work Trade
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
                                                 value={value.WorkTrade}
@@ -1332,7 +1332,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='workTradeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Trade Description  <span className='star'>*</span>
+                                                Work Trade Description  
                                             </label>
 
                                             <input
