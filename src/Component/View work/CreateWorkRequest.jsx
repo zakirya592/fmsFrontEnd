@@ -893,26 +893,26 @@ function CreateWorkRequest() {
         // setSelectedUnitCode(value);
     };
 
-// useEffect(() => {
+    useEffect(() => {
 
-const handleOnBlurCall = () => {
+        // const handleOnBlurCall = () => {
 
-    axios.get('/api/EmployeeID_GET_LIST')
-    .then((response) => {
-        console.log('Dropdown me', response.data.recordset)
-            const data = response?.data?.recordset;
-            const unitNameList = data.map((unitData) => unitData?.EmployeeID);
-            setUnitCode(unitNameList)
+        axios.get('/api/EmployeeID_GET_LIST')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                setUnitCode(unitNameList)
 
-        })
-        .catch((error) => {
-            console.log('-----',error);
-            
-        }
-        );
-    }
+            })
+            .catch((error) => {
+                console.log('-----', error);
 
-// }, [])
+            }
+            );
+        // }
+
+    }, [])
 
    
 
@@ -975,51 +975,69 @@ const handleOnBlurCall = () => {
                                                 <SearchOutlined className=' serachicon' onClick={searchbtn} />
                                             </p> */}
                                         </div>
-                                                <Autocomplete
-                                                    id="zone"
-                                                    options={unitCode}
-                                                    getOptionLabel={(option) => option}
-                                                    onChange={handleUnitCodeChange}
-                                                    // value={selectedUnitCode}
-                                                    // onClick={}
-                                                    onClick={(event, value) => {
-                                                        if (value) {
-                                                            // perform operation when input is cleared
-                                                            console.log("cleared", value);
-                                                            // searchbtn(value)
-                                                            postapi(value)
+                                        <Autocomplete
+                                            id="zone"
+                                            options={unitCode}
+                                            getOptionLabel={(option) => option}
+                                            // onChange={handleUnitCodeChange}
+                                            value={value.EmployeeID}
+                                            // onBlur={handleAutocompleteChange} 
+                                            onBlur={() => {
+                                                if (value.EmployeeID) {
+                                                    postapi(value.EmployeeID);
 
-                                                        }
+                                                }
+                                            }}
+                                            // onInputChange
+                                            defaultValue={value.EmployeeID}
+                                            onInputChange={(event, value) => {
+                                                setvalue(prevValue => ({
+                                                    ...prevValue,
+                                                    EmployeeID: value
+                                                }))
+                                                localStorage.setItem('EmployeeIDset', value)
+                                                if (value) {
+                                                    // perform operation when input is cleared
+                                                    console.log("cleared", value);
+                                                    // searchbtn(value)
+                                                    // postapi(value)
+
+                                                    // if (event.key === 'Enter') {
+                                                    //     event.preventDefault();
+                                                    //     postapi(value);
+                                                    // }
+                                                }
+                                            }}
+                                            // onBlur={handleOnBlurCall}
+                                            //  onKeyDown={handleKeyPress}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        type: 'search',
+                                                        className: "text-black",
                                                     }}
-                                                    onBlur={handleOnBlurCall}
-                                                     onKeyDown={handleKeyPress}
-                                                    renderInput={(params) => (
-                                                        <TextField
-                                                            {...params}
-                                                            InputProps={{
-                                                                ...params.InputProps,
-                                                                className: "text-black",
-                                                            }}
-                                                            InputLabelProps={{
-                                                                ...params.InputLabelProps,
-                                                                style: { color: "white" },
-                                                            }}
-                                                            className='rounded inputsection py-0'
-                                                           placeholder='Enter Employee Number'
-                                                            required
-                                                            // onClick={searchbtn}
-                                                        />
-                                                    )}
-                                                     className='rounded inputsection'
-                                                    classes={{
-                                                        endAdornment: "text-white",
+                                                    InputLabelProps={{
+                                                        ...params.InputLabelProps,
+                                                        style: { color: "white" },
                                                     }}
-                                                    sx={{
-                                                        '& .MuiAutocomplete-endAdornment': {
-                                                            color: 'white',
-                                                        },
-                                                    }}
+                                                    className='rounded inputsection py-0'
+                                                    placeholder='Enter Employee Number'
+                                                    required
+                                                // onClick={searchbtn}
                                                 />
+                                            )}
+                                            className='rounded inputsection'
+                                            classes={{
+                                                endAdornment: "text-white",
+                                            }}
+                                            sx={{
+                                                '& .MuiAutocomplete-endAdornment': {
+                                                    color: 'white',
+                                                },
+                                            }}
+                                        />
                                     </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
