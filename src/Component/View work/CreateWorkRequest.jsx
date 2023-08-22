@@ -882,7 +882,9 @@ function CreateWorkRequest() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={Goback} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={(() => {
+                                        navigate('/workRequest')
+                                    })} />
                                     <p className="text-center my-auto mx-auto">Work Request</p>
                                 </Typography>
                             </Toolbar>
