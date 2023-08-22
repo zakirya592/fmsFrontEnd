@@ -21,6 +21,12 @@
 }
 .css-zq2xpb-MuiAutocomplete-root .MuiOutlinedInput-root .MuiAutocomplete-input {
     padding: 0px 4px 0px 5px !important;
+    color: #323131;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
 }
 .css-zq2xpb-MuiAutocomplete-root .MuiOutlinedInput-root{
     padding: 8px !important;

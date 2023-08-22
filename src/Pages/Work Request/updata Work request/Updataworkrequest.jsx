@@ -860,6 +860,7 @@ function Updataworkrequest() {
 
     }, [])
     
+    
     return (
         <div>
             <div className='bg'>
@@ -924,15 +925,28 @@ function Updataworkrequest() {
                                                 id="zone"
                                                 options={unitCode}
                                                 getOptionLabel={(option) => option}
-                                                onChange={handleUnitCodeChange}
-                                                // value={selectedUnitCode}
+                                                // onChange={handleUnitCodeChange}
+                                                value={value.EmployeeID}
+                                                // onBlur={handleAutocompleteChange} 
+                                                onBlur={() => {
+                                                    if (value.EmployeeID) {
+                                                        postapi(value.EmployeeID);
+
+                                                    }
+                                                }}
                                                 // onInputChange
+                                                defaultValue={value.EmployeeID} 
                                                 onInputChange={(event, value) => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        EmployeeID: value
+                                                    }))
+                                                    localStorage.setItem('EmployeeIDset',value)
                                                     if (value) {
                                                         // perform operation when input is cleared
                                                         console.log("cleared", value);
                                                         // searchbtn(value)
-                                                        postapi(value)
+                                                        // postapi(value)
 
                                                         // if (event.key === 'Enter') {
                                                         //     event.preventDefault();
@@ -947,6 +961,7 @@ function Updataworkrequest() {
                                                         {...params}
                                                         InputProps={{
                                                             ...params.InputProps,
+                                                            type: 'search',
                                                             className: "text-black",
                                                         }}
                                                         InputLabelProps={{
