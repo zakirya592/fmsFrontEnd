@@ -813,7 +813,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee
+                                                Employee Number
                                             </label>
 
                                             <input
@@ -842,7 +842,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
-                                                Work Request Number<span className='star'>*</span>
+                                                Work Request Number <span className='star'>*</span>
                                             </label>
 
                                             <input
@@ -871,7 +871,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time<span className='star'>*</span>
+                                                Request Date/Time <span className='star'>*</span>
                                             </label>
                                             <input type={`${value.RequestDateTime}:'datetime-local'`} id="Employdata"
                                                 value={value.RequestDateTime}
@@ -890,7 +890,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
-                                                Request Status<span className='star'>*</span>
+                                                Request Status <span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {

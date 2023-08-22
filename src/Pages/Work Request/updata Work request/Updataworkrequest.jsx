@@ -883,7 +883,7 @@ function Updataworkrequest() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Work Request - Update<span className='star'>*</span></p>
+                                    <p className='color1 workitoppro my-auto'>Work Request - Update</p>
                                     <div className="d-flex">
                                         {/* pagepin  */}
                                         <Create />
@@ -897,7 +897,7 @@ function Updataworkrequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee
+                                                Employee Number
                                             </label>
 
                                             {/* <input
@@ -990,7 +990,7 @@ function Updataworkrequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
-                                                Work Request Number<span className='star'>*</span>
+                                                Work Request Number <span className='star'>*</span>
                                             </label>
 
                                             <input
@@ -1019,7 +1019,7 @@ function Updataworkrequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time<span className='star'>*</span>
+                                                Request Date/Time <span className='star'>*</span>
                                             </label>
                                             <input
                                                 types='text'
@@ -1039,7 +1039,7 @@ function Updataworkrequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
-                                                Request Status<span className='star'>*</span>
+                                                Request Status <span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {
