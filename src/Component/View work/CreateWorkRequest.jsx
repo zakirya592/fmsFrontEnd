@@ -877,9 +877,59 @@ function CreateWorkRequest() {
         localStorage.setItem('EmployeeIDset', e.target.value)
     }
 
-    const handlePrint = () => {
-        window.print(); // This triggers the browser's print dialog
-    };
+const handlePrintAssetTable = (tableData) => {
+  const printWindow = window.open('', '_blank');
+
+  // Create a bold style for header cells
+  const headerStyle = 'font-weight: bold;';
+
+  const tableHtml = `
+    <table border="1">
+      <tr>
+        <th style="${headerStyle}">SEQ</th>
+        <th style="${headerStyle}">ASSET/STOCK NUMBER</th>
+        <th style="${headerStyle}">ASSET ITEM GROUP</th>
+        <th style="${headerStyle}">ASSET ITEM DESCRIPTION</th>
+        <th style="${headerStyle}">ASSET QTY</th>
+        <th style="${headerStyle}">MODEL</th>
+        <th style="${headerStyle}">MANUFACTURER</th>
+      </tr>
+      ${tableData.map(row => `
+        <tr>
+          <td>${row['id']}</td>
+          <td>${row['AssetNumber']}</td>
+          <td>${row['AssetItemGroup']}</td>
+          <td>${row['AssetItemDescription']}</td>
+          <td>${row['AssetQty']}</td>
+          <td>${row['Model']}</td>
+          <td>${row['Manufacturer']}</td>
+        </tr>`).join('')}
+    </table>`;
+
+  const printContent = `
+    <html>
+      <head>
+        <title>Asset Table</title>
+        <style>
+          @media print {
+            body {
+              padding: 0;
+              margin: 0;
+            }
+            th {
+              ${headerStyle}
+            }
+          }
+        </style>
+      </head>
+      <body>${tableHtml}</body>
+    </html>
+  `;
+
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+  printWindow.print();
+};
 
     const [unitCode, setUnitCode] = useState([]);
 
@@ -942,7 +992,10 @@ function CreateWorkRequest() {
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
                                         {/* print  */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}><PrintIcon className='me-1' />Print</button>
+                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintAssetTable(filteredRows)}>
+                        <PrintIcon className="me-1" />
+                        Print
+                      </button>
                                         {/* excel  */}
                                         <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                         </CSVLink>
