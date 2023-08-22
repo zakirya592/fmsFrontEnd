@@ -463,7 +463,7 @@ function WorkRequest() {
                   <hr className="color3 line" />
                   {/* Search Fields */}
                   <div className="row mx-auto formsection">
-                    <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3 ">
+                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
                           Employee Number<span className='star'>*</span>                                        </label>
@@ -483,26 +483,7 @@ function WorkRequest() {
                         </p>
                       </div>
                     </div>
-                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-4 ">
-                      <div className='emailsection position-relative d-grid my-2'>
-                        <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Employee Name<span className='star'>*</span>                                        </label>
-
-                        <input
-                          types='text'
-                          id='Employeenumber'
-                          placeholder="Firstname Middlename Lastname"
-                          // value={locationFilterValue}
-                          className='rounded inputsection py-2'
-                        ></input>
-                        <p
-                          className='position-absolute text-end serachicon'
-                        >
-                          <SearchOutlined className=' serachicon' />
-                        </p>
-                      </div>
-                    </div>
-                    <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
+                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
                           Request Status<span className='star'>*</span>
