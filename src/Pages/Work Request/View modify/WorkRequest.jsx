@@ -248,7 +248,7 @@ function WorkRequest() {
   useEffect(() => {
     const filteredRows = getdata && getdata.filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-      (!requestByEmployee || row.EmployeeID[0] === requestByEmployee)
+      (!requestByEmployee || row.EmployeeID[0].includes(requestByEmployee))
     )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, indes) => ({
       ...row,
       id: indes + 1,
