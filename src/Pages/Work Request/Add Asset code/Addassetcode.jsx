@@ -91,11 +91,10 @@ function Addassetcode() {
         setSelectedRowIds(selectedRowData)
         // TO GET ONLY ONE DESCRIPTION
         let oneDesc = selectedRowData[selectedRowData.length - 1]
-        // let oneDesc = selectedRowData[selectedRowData]
         putapi(oneDesc)
-
-        // Perform your logic to add to work request using selectedRowData
-        // Example: sendToWorkRequest(selectedRowData);
+        // selectedRowData.forEach(oneDesc => {
+        //     putapi(oneDesc); // Perform API request for each selected row description
+        // });
     };
 
     // const handleRowClick = (selectedRows) => {
@@ -264,7 +263,8 @@ function Addassetcode() {
 
     const filteredRows = getdata && getdata.filter(row => (
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-        (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
+        // (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
+        (!requestByEmployee || row.AssetItemDescription.includes(requestByEmployee))
     )).map((row, indes) => ({
         ...row,
         id: indes + 1,
@@ -345,7 +345,7 @@ function Addassetcode() {
                                         <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                    Asset Item Description<span className='star'>*</span>                                        </label>
+                                                    Asset Item Description</label>
 
                                                 <input
                                                     types='text'
@@ -362,7 +362,7 @@ function Addassetcode() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
+                                        {/* <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                     Asset Item Group<span className='star'>*</span>
@@ -381,7 +381,7 @@ function Addassetcode() {
                                                 </select>
 
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="col-sm-2 col-md-3 col-lg-3 col-xl-3 my-auto">
                                             <p></p>
                                             <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}><AddCircleOutlineIcon className='me-2' />Add To Work Request</button>
