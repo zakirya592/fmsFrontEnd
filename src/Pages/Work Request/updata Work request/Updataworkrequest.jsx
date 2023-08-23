@@ -928,6 +928,7 @@ function Updataworkrequest() {
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
                                     <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={(() => {
                                         navigate('/workRequest')
+                                        localStorage.removeItem('EmployeeIDsetss');
                                     })} />
                                     <p className="text-center my-auto mx-auto">Work Request</p>
                                 </Typography>
@@ -1484,6 +1485,7 @@ function Updataworkrequest() {
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/Addassetcode')
+                                        localStorage.removeItem('EmployeeIDsetss');
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>

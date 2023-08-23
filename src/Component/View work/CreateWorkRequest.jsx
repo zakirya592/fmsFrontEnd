@@ -989,28 +989,12 @@ const handlePrintAssetTable = (tableData) => {
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
                                                 Employee Number
                                             </label>
-
-                                            {/* <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={value.EmployeeID}
-                                                onChange={employeeIDonchange}
-                                                onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' onClick={searchbtn} />
-                                            </p> */}
                                         </div>
                                         <Autocomplete
                                             id="zone"
                                             options={unitCode}
                                             getOptionLabel={(option) => option}
-                                           // onChange={handleUnitCodeChange}
+                                            // onChange={handleUnitCodeChange}
                                             value={value.EmployeeID}
                                             // onBlur={handleAutocompleteChange} 
                                             onBlur={() => {
@@ -1030,17 +1014,8 @@ const handlePrintAssetTable = (tableData) => {
                                                 if (value) {
                                                     // perform operation when input is cleared
                                                     console.log("cleared", value);
-                                                    // searchbtn(value)
-                                                    // postapi(value)
-
-                                                    // if (event.key === 'Enter') {
-                                                    //     event.preventDefault();
-                                                    //     postapi(value);
-                                                    // }
                                                 }
                                             }}
-                                            // onBlur={handleOnBlurCall}
-                                            //  onKeyDown={handleKeyPress}
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
@@ -1056,7 +1031,6 @@ const handlePrintAssetTable = (tableData) => {
                                                     className='rounded inputsection py-0'
                                                     placeholder='Enter Employee Number'
                                                     required
-                                                // onClick={searchbtn}
                                                 />
                                             )}
                                             className='rounded inputsection'
