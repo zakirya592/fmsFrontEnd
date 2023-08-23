@@ -461,6 +461,7 @@ function Updataworkrequest() {
             WorkType: value.WorkType,
             WorkTrade: value.WorkTrade,
             WorkPriority: value.WorkPriority,
+            EmployeeID: value.EmployeeID
         },)
             .then((res) => {
                 console.log('Updata the api data ', res.data);
