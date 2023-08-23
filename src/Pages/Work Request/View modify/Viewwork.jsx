@@ -459,19 +459,15 @@ function Viewwork() {
         WorkRequestNumber();
     }
 
-    // To get the all Data Work Request Number
+    // To get the all Data Work Request Number 
     // Emp ID
-   const [employeeid, setemployeeid] = useState()
-    function GetgetworkRequest(EmployeeID) {
-      
-        console.log('value.EmployeeID------------------------------', employeeid);
+    function GetgetworkRequest() {
         axios.post(`/api/getworkRequest`, {
-            EmployeeID: "12"
+            "EmployeeID": userId
         }).then((res) => {
-            console.log('asdfaf', res.data);
-            
+            console.log('asdfaf=====================================', res);
             const {
-                // EmployeeID,
+                EmployeeID,
                 Firstname,
                 Lastname,
                 Middlename,
@@ -485,7 +481,7 @@ function Viewwork() {
 
             setvalue((prevValue) => ({
                 ...prevValue,
-                // EmployeeID,
+                EmployeeID,
                 Firstname,
                 Lastname,
                 Middlename,
@@ -496,6 +492,16 @@ function Viewwork() {
                 BuildingCode,
                 LocationCode,
             }));
+
+            console.log('DepartmentCodeDepartmentCodeDepartmentCodeDepartmentCode', DepartmentCode);
+            const Depauto = res.data.recordsets[0][0].DepartmentCode
+            axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                .then((res) => {
+                    setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
         })
             .catch((err) => {
                 //// console.log(err);;
@@ -544,7 +550,6 @@ function Viewwork() {
             console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
             console.log('Work Request Number', res.data.recordsets[0][0]);
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
-            setemployeeid(EmployeeIDss)
             axios.post(`/api/getworkRequest`, {
                 EmployeeID: EmployeeIDss
             }).then((res) => {
@@ -585,17 +590,17 @@ function Viewwork() {
 
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
-                    console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                    console.log('assetworkrequest  GET  BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
                     // setgetdata(res.data.recordset);
                     const SAQ = res.data.recordset.map((item) => item.seq);
-                    // console.log('SASASSSS',SAQ);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                //    console.log(AssetItemDescriptionsssss);
-                   const promises = res.data.recordset.map((item) => {
-                        
+                    console.log(AssetItemDescriptionsssss);
+
+                    const promises = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
                         console.log(itid);
+
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
                                 console.log(res.data.recordset);
@@ -616,9 +621,11 @@ function Viewwork() {
 
                     Promise.all(promises)
                         .then((results) => {
+
+                            // console.log('dfrfdf',results);
                             results.forEach((itemRecords, index) => {
-                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
-                               // setgetdata(results);
+                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                                // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
                                     records: results[index],
@@ -629,13 +636,42 @@ function Viewwork() {
                                     saq: SAQ[index],
                                     records: results[index],
                                 }));
-                                setgetdata(recordsWithDescriptions,recordsWithSAQ);
-                                // console.log(recordsWithDescriptions);
-                                // console.log('SEQ section',itemRecords.item.seq);
-                              
+                                setgetdata(recordsWithDescriptions, recordsWithSAQ);
                             });
 
                         });
+
+
+                    // {
+                    //     AssetItemDescriptionsss.map((item,indi)=>{
+
+                    //         axios.get(`/api/tblAssetsMaster_GET_BYID/${item}`)
+                    //             .then((res) => {
+                    //                 // console.log('Asset Item Descriptionsss', item);
+                    //                 // console.log('tblAssetsMaster _GET_BYID', res.data.recordset[0]);
+                    //                 setgetdata(res.data.recordset);
+                    //             })
+                    //             .catch((err) => {
+                    //                 console.log(err);
+                    //             });
+                    //     })
+                    // }
+
+                    const assetDescriptionsString = AssetItemDescriptionsss.join(',');
+
+                    // axios.get(`/api/tblAssetsMaster_GET_BYID`, null,{
+                    //     params: {
+                    //         AssetItemDescriptionsss: AssetItemDescriptionsss,
+                    //     }
+                    // })
+                    //     .then((res) => {
+                    //         console.log('TO get the list Asset Item Description', res.data.recordset);
+                    //         console.log('Asser item desc', AssetItemDescriptionsss);
+                    //         setgetdata(res.data.recordset);
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err);
+                    //     });
 
                 })
                 .catch((err) => {
@@ -681,6 +717,8 @@ function Viewwork() {
                 // console.log(err);;
             });
     }
+
+
     // Get by Requst ID Now
     const apicall = () => {
         axios.get(`/api/WorkRequestItems_GET_BYID/${userId}`)

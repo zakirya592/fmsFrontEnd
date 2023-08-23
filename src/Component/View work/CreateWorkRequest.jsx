@@ -908,7 +908,7 @@ const handlePrintAssetTable = (tableData) => {
 };
 
     const [unitCode, setUnitCode] = useState([]);
-
+    const [dropname, setdropname] = useState([])
     const handleUnitCodeChange = (e) => {
         // console.log(value);
         setvalue(prevValue => ({
@@ -928,6 +928,8 @@ const handlePrintAssetTable = (tableData) => {
                 console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                const NAmese = data.map((namedata) => namedata?.Firstname);
+                setdropname(NAmese)
                 setUnitCode(unitNameList)
 
             })
@@ -1008,7 +1010,7 @@ const handlePrintAssetTable = (tableData) => {
                                             id="zone"
                                             options={unitCode}
                                             getOptionLabel={(option) => option}
-                                            // onChange={handleUnitCodeChange}
+                                           // onChange={handleUnitCodeChange}
                                             value={value.EmployeeID}
                                             // onBlur={handleAutocompleteChange} 
                                             onBlur={() => {
