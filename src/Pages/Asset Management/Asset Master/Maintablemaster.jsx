@@ -279,7 +279,7 @@ function Maintablemaster() {
 
     const filteredRows = getdata && getdata.filter(row => (
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-        (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
+        (!requestByEmployee || row.AssetItemDescription.includes(requestByEmployee))
     )).map((row, index) => ({
         ...row,
         id: index + 1,
@@ -311,7 +311,7 @@ function Maintablemaster() {
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
                                         <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                            navigate('/workrequest')
+                                            navigate('/')
                                         })} />
                                         <p className="text-center my-auto ms-5">Asset Management</p>
                                     </Typography>
@@ -322,7 +322,7 @@ function Maintablemaster() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                            Asset Master List<span className='star'>*</span></p>
+                                            Asset Master List</p>
                                         <div className="d-flex">
                                             {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/createworkrequest')
@@ -351,7 +351,7 @@ function Maintablemaster() {
                                         <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                    Asset Item Description<span className='star'>*</span>                                        </label>
+                                                    Asset Item Description                                       </label>
 
                                                 <input
                                                     types='text'
@@ -368,7 +368,7 @@ function Maintablemaster() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
+                                        {/* <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                     Asset Item Group<span className='star'>*</span>
@@ -387,16 +387,16 @@ function Maintablemaster() {
                                                 </select>
 
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                     </div>
-                                    <button
+                                    {/* <button
                                         type="button"
                                         className="border-0 px-3 savebtn py-2"
                                         onClick={handleAddToWorkRequest} // Call the function when the button is clicked
                                     >
                                         Add Selected To Work Request
-                                    </button>
+                                    </button> */}
                                     <div style={{ height: 420, width: '100%' }}>
                                         <div style={{ height: 420, width: '100%' }}>
                                             <DataGrid
@@ -427,7 +427,7 @@ function Maintablemaster() {
                                         </div>
                                         <div className="d-flex justify-content-between mt-3">
                                             <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                                navigate('/workrequest')
+                                                navigate('/')
                                             })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                         </div>

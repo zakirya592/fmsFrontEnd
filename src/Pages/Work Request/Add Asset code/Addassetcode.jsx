@@ -90,7 +90,8 @@ function Addassetcode() {
        
         setSelectedRowIds(selectedRowData)
         // TO GET ONLY ONE DESCRIPTION
-        let oneDesc = selectedRowData[selectedRowData.length - 1];
+        // let oneDesc = selectedRowData[selectedRowData.length - 1];
+        let oneDesc = selectedRowData;
         putapi(oneDesc)
         // selectedRowData.forEach(oneDesc => {
         //     putapi(oneDesc); // Perform API request for each selected row description
@@ -185,7 +186,7 @@ function Addassetcode() {
             if (result.isConfirmed) {
                 axios.post(`/api/assetworkrequest_post`, {
                     RequestNumber: assetcodeid,
-                    AssetItemDescription: AssetItemDescription
+                    AssetItemDescriptions: AssetItemDescription
                 })
                     .then((res) => {
                         console.log('Asset desc Add  successfully', res);
