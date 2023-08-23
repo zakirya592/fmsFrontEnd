@@ -83,7 +83,7 @@ function NewEmployeemaster() {
     }
 
     const postapi = (e) => {
-        e.preventDefault();
+        // e.preventDefault(); http://gs1ksa.org:3021 http://gs1ksa.org:3021
         axios.post(`/api/EmployeeMaster_post`, {
             EmployeeID: value.EmployeeID,
             EmployeeStatus: value.EmployeeStatus,
