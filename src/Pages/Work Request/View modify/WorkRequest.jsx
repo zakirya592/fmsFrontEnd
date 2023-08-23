@@ -447,7 +447,7 @@ function WorkRequest() {
                 <div className="py-3">
                   <div className="d-flex justify-content-between my-auto">
                     <p className="color1 workitoppro my-auto">
-                      Work Request Transactions<span className='star'>*</span></p>
+                      Work Request Transactions
                     <div className="d-flex">
                       <button type="button" className="border-0 px-3  savebtn py-2" disabled={statuscheck === 'Closed' || selectedRowIds.length === 0}  onClick={handleAddToWorkRequest}>UPDATE</button>
 
