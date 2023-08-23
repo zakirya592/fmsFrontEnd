@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 import SaveIcon from '@mui/icons-material/Save';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import moment from 'moment';
 
 function Updataemployeemaster() {
 
@@ -35,13 +36,13 @@ function Updataemployeemaster() {
         NationalityCode: '', MaritalStatus: '', NationalityDescription: '',
         NationalIQAMANumber: '', PassportNumber: '',
         DesignationCode: '', DesignationName: '', Email: '',
-        JoiningDate: '',
+        JoiningDate: ''
     })
 
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
-
+    const [ddata, setdata] = useState([])
     const getapi = () => {
         axios.get(`/api/EmployeeMaster_GET_BYID/${userId}`, {
         },)
@@ -64,7 +65,8 @@ function Updataemployeemaster() {
                     DesignationCode,
                     Title,
                     Gender,
-                    Age
+                    Age,
+                    JoiningDate
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -84,8 +86,12 @@ function Updataemployeemaster() {
                     DesignationCode,
                     Title,
                     Gender,
-                    Age
+                    Age,
+                    JoiningDate
                 }));
+                const data = moment(JoiningDate).format('YYYY-MM-DD')
+                setdata(data)
+                console.log(data);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
@@ -174,7 +180,7 @@ function Updataemployeemaster() {
                 console.log('Add', res.data);
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    ' Employee Master has been updated',
                     'success'
                 ).then(() => {
                     navigate(`/Employeemaster`);
@@ -351,9 +357,8 @@ function Updataemployeemaster() {
                                                     <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
                                                         Birth Date
                                                     </label>
-                                                    <input type="date" id="JoiningDate"
-
-                                                        value={value.JoiningDate}
+                                                    <input type={ddata} id="JoiningDate"
+                                                        value={ddata}
                                                         onChange={e => {
                                                             setvalue(prevValue => ({
                                                                 ...prevValue,
@@ -831,9 +836,8 @@ function Updataemployeemaster() {
                                             <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
                                                 Joining Date
                                             </label>
-                                            <input type="date" id="JoiningDate"
-
-                                                value={value.JoiningDate}
+                                            <input type={ddata} id="JoiningDate"
+                                                value={ddata}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,

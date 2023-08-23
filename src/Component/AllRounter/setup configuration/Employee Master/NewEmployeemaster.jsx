@@ -110,8 +110,8 @@ function NewEmployeemaster() {
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
-                    'Updata!',
-                    ' You have successfully updated.',
+                    'Created!',
+                    ' Employee Master has been created',
                     'success'
                 )
             }).then(
