@@ -197,7 +197,11 @@ function Addassetcode() {
                             'Add!',
                             'The AssetCode is successfully Add to the Work request.',
                             'success'
-                        )
+                        ).then((result) => {
+                            if (result.isConfirmed || result.isDismissed) {
+                                Navigatepage(); // Call the navigation function after the alert is confirmed or dismissed
+                            }
+                        });
                     })
                     .catch((err) => {
                         // Handle delete error
