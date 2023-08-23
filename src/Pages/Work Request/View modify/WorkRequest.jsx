@@ -251,10 +251,10 @@ function WorkRequest() {
       (!requestByEmployee || row.EmployeeID[0].includes(requestByEmployee))
     )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, indes) => ({
       ...row,
-      id: indes + 1,
-      RequestNumber: row.RequestNumber[0],
+      id: indes,
+      RequestNumber: row.RequestNumber,
       RequestStatus: row.RequestStatus,
-      EmployeeID: row.EmployeeID[0],
+      EmployeeID: row.EmployeeID,
       WorkPriority: row.WorkPriority,
       RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
       WorkType: row.WorkType,
