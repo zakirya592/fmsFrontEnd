@@ -43,6 +43,8 @@ function Updataemployeemaster() {
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     const [ddata, setdata] = useState([])
+    const [bdata, setbata] = useState([])
+
     const getapi = () => {
         axios.get(`/api/EmployeeMaster_GET_BYID/${userId}`, {
         },)
@@ -66,7 +68,8 @@ function Updataemployeemaster() {
                     Title,
                     Gender,
                     Age,
-                    JoiningDate
+                    JoiningDate,
+                    BirthDate
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -87,11 +90,14 @@ function Updataemployeemaster() {
                     Title,
                     Gender,
                     Age,
-                    JoiningDate
+                    JoiningDate,
+                    BirthDate
                 }));
                 const data = moment(JoiningDate).format('YYYY-MM-DD')
+                const birthDate = moment(BirthDate).format('YYYY-MM-DD')
+                setbata(birthDate)
                 setdata(data)
-                console.log(data);
+                console.log(data, birthDate);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
@@ -357,8 +363,8 @@ function Updataemployeemaster() {
                                                     <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
                                                         Birth Date
                                                     </label>
-                                                    <input type={ddata} id="JoiningDate"
-                                                        value={ddata}
+                                                    <input type={bdata} id="JoiningDate"
+                                                        value={bdata}
                                                         onChange={e => {
                                                             setvalue(prevValue => ({
                                                                 ...prevValue,

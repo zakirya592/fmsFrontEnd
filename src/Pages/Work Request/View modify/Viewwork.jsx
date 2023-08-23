@@ -507,7 +507,7 @@ function Viewwork() {
                 //// console.log(err);;
             });
     }
-   
+   const [RequestDateTimeform, setRequestDateTimeform] = useState([])
     // Work Request
     function Workrequestget() {
         axios.post(`/api/getworkRequestsecond`, {
@@ -548,6 +548,8 @@ function Viewwork() {
                 // BuildingCode
             }));
             console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
+            const data = moment(RequestDateTime).format('YYYY-MM-DD')
+            setRequestDateTimeform(data)
             console.log('Work Request Number', res.data.recordsets[0][0]);
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
             axios.post(`/api/getworkRequest`, {
@@ -957,8 +959,8 @@ function Viewwork() {
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                                 Request Date/Time <span className='star'>*</span>
                                             </label>
-                                            <input type={`${value.RequestDateTime}:'datetime-local'`} id="Employdata"
-                                                value={value.RequestDateTime}
+                                            <input type={RequestDateTimeform} id="Employdata"
+                                                value={RequestDateTimeform}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
