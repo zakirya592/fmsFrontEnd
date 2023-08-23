@@ -154,7 +154,7 @@ function CreateWorkRequest() {
             BuildingCode: value.BuildingCode,
             DepartmentCode: value.DepartmentCode,
             LocationCode: value.LocationCode,
-            RequestNumber: value.RequestNumber,
+            // RequestNumber: value.RequestNumber,
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);
@@ -619,9 +619,16 @@ function CreateWorkRequest() {
         // }
         // else{
             requestincreas()
-            Createapi();
+            // Createapi();
             workrequsrpostapi()
             AssetItemTagIDpost()
+            Swal.fire({
+                title: "Success",
+                text: "Work request has been created successfully",
+                icon: "success",
+                confirmButtonText: "OK",
+            })
+
             localStorage.removeItem('postemployid');
             localStorage.removeItem('EmployeeIDset');
             localStorage.removeItem('MobileNumber');
@@ -713,7 +720,7 @@ function CreateWorkRequest() {
 
                         // console.log('dfrfdf',results);
                         results.forEach((itemRecords, index) => {
-                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
+                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                             // setgetdata(results);
                             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                 description: description,
@@ -730,37 +737,6 @@ function CreateWorkRequest() {
 
                     });
 
-
-                // {
-                //     AssetItemDescriptionsss.map((item,indi)=>{
-
-                //         axios.get(`/api/tblAssetsMaster_GET_BYID/${item}`)
-                //             .then((res) => {
-                //                 // console.log('Asset Item Descriptionsss', item);
-                //                 // console.log('tblAssetsMaster _GET_BYID', res.data.recordset[0]);
-                //                 setgetdata(res.data.recordset);
-                //             })
-                //             .catch((err) => {
-                //                 console.log(err);
-                //             });
-                //     })
-                // }
-
-                const assetDescriptionsString = AssetItemDescriptionsss.join(',');
-
-                // axios.get(`/api/tblAssetsMaster_GET_BYID`, null,{
-                //     params: {
-                //         AssetItemDescriptionsss: AssetItemDescriptionsss,
-                //     }
-                // })
-                //     .then((res) => {
-                //         console.log('TO get the list Asset Item Description', res.data.recordset);
-                //         console.log('Asser item desc', AssetItemDescriptionsss);
-                //         setgetdata(res.data.recordset);
-                //     })
-                //     .catch((err) => {
-                //         console.log(err);
-                //     });
 
             })
             .catch((err) => {
@@ -845,7 +821,7 @@ function CreateWorkRequest() {
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
         ...row.records,
-        id: indes + 1,
+        id: indes + 1 ,
         AssetItemDescription: row.description,
         ASQS: row.saq,
         AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',

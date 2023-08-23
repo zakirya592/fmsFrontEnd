@@ -552,17 +552,17 @@ function Updataworkrequest() {
                 ProblemCategory,
                 RequestDateTime,
                 AssetItemTagID,
+                EmployeeID,
                 // DepartmentCode,
                 // LocationCode,
                 // BuildingCode,
-                EmployeeIDget
             } = res.data.recordsets[0][0];
-            console.log('------------------------------', res.data.recordsets[0][0]);
-            const timeanddate = moment(RequestDateTime).format('MM/DD/YYYY')
+            const timeanddate = moment(value.RequestDateTime).format('DD/MM/YYYY')
             setimtedata(timeanddate)
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
+                EmployeeID,
                 WorkTrade,
                 WorkPriority,
                 ProblemDescription,
@@ -573,42 +573,65 @@ function Updataworkrequest() {
                 RequestNumber,
                 // DepartmentCode,
                 // LocationCode,
-                // BuildingCode,
-                EmployeeIDget
+                // BuildingCode
             }));
-            // console.log('++++++++++++++++++++++++', res.data.recordsets[0][0].WorkTrade);
-            // console.log('Work Request Number', moment(RequestDateTime).format('DD/MM/YYYY'));
-            const workaoutss = res.data.recordsets[0][0].WorkType
-            axios.get(`/api/WorkTrade_LIST/${workaoutss}`).then((res) => {
-                // console.log("WorkTrade_LIST", res.data.recordset);
-                setdropdownWorkTradeLIST(res.data.recordsets[0])
-                // const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
-                // axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
-                //     .then((res) => {
-                //         console.log('WorkTrade_descri_LIST', res.data);
-                //         setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
-                //     })
-                //     .catch((err) => {
-                //         // console.log(err);;
-                //     });
-            })
+            console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
+            console.log('Work Request Number', res.data.recordsets[0][0]);
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
+            axios.post(`/api/getworkRequest`, {
+                EmployeeID: EmployeeIDss
+            }).then((res) => {
+                console.log('asdfaf', res.data);
+
+                const {
+                    // EmployeeID,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    RequestDateTime,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                } = res.data.recordsets[0][0];
+
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    // EmployeeID,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    RequestDateTime,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+
+
+
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
-                    // console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
+                    console.log('assetworkrequest  GET  BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
-                    const SAQ = res.data.recordset.map((item) => item.seq);
                     // setgetdata(res.data.recordset);
+                    const SAQ = res.data.recordset.map((item) => item.seq);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                    // console.log(AssetItemDescriptionsssss);
+                    console.log(AssetItemDescriptionsssss);
 
                     const promises = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
-                        // console.log(itid);
+                        console.log(itid);
 
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
-                                // console.log(res.data.recordset);
+                                console.log(res.data.recordset);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -629,13 +652,14 @@ function Updataworkrequest() {
 
                             // console.log('dfrfdf',results);
                             results.forEach((itemRecords, index) => {
-                                // console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
+                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                                 // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
                                     records: results[index],
                                     saq: SAQ[index],
                                 }));
+
                                 const recordsWithSAQ = SAQ.map((saq, index) => ({
                                     saq: SAQ[index],
                                     records: results[index],
@@ -645,12 +669,43 @@ function Updataworkrequest() {
 
                         });
 
+
+                    // {
+                    //     AssetItemDescriptionsss.map((item,indi)=>{
+
+                    //         axios.get(`/api/tblAssetsMaster_GET_BYID/${item}`)
+                    //             .then((res) => {
+                    //                 // console.log('Asset Item Descriptionsss', item);
+                    //                 // console.log('tblAssetsMaster _GET_BYID', res.data.recordset[0]);
+                    //                 setgetdata(res.data.recordset);
+                    //             })
+                    //             .catch((err) => {
+                    //                 console.log(err);
+                    //             });
+                    //     })
+                    // }
+
+                    const assetDescriptionsString = AssetItemDescriptionsss.join(',');
+
+                    // axios.get(`/api/tblAssetsMaster_GET_BYID`, null,{
+                    //     params: {
+                    //         AssetItemDescriptionsss: AssetItemDescriptionsss,
+                    //     }
+                    // })
+                    //     .then((res) => {
+                    //         console.log('TO get the list Asset Item Description', res.data.recordset);
+                    //         console.log('Asser item desc', AssetItemDescriptionsss);
+                    //         setgetdata(res.data.recordset);
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err);
+                    //     });
+
                 })
                 .catch((err) => {
                     console.log(err);
                 });
 
-            console.log(EmployeeIDss);
             const Depauto = res.data.recordsets[0][0].DepartmentCode
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
@@ -814,14 +869,14 @@ function Updataworkrequest() {
         ...row.records,
         id: indes + 1,
         AssetItemDescription: row.description,
-         ASQS: row.saq,
+        ASQS: row.saq,
         AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
         AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
         AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
-        RequestDateTime: row.records ? row.records.data[0].RequestDateTime : '',
+        AssetQty: row.records ? row.records.data[0].AssetQty : '',
         Model: row.records ? row.records.data[0].Model : '',
         Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
-     }))
+    }))
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 5,

@@ -251,7 +251,7 @@ function WorkRequest() {
       (!requestByEmployee || row.EmployeeID[0].includes(requestByEmployee))
     )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, indes) => ({
       ...row,
-      id: indes,
+      id: indes+1,
       RequestNumber: row.RequestNumber,
       RequestStatus: row.RequestStatus,
       EmployeeID: row.EmployeeID,

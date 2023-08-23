@@ -149,7 +149,7 @@ function Updataemployeemaster() {
 
     const postapi = (e) => {
         axios.put(`/api/EmployeeMaster_Put/${userId}`, {
-            EmployeeStatus: value.EmployeeStatus,
+            // EmployeeStatus: value.EmployeeStatus,
             Gender: value.Gender,
             Title: value.Title,
             BirthDate: value.BirthDate,
@@ -220,7 +220,7 @@ function Updataemployeemaster() {
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
                                        Updata Set-Up-Employee Master
-                                        <span className="star">*</span>
+                                        
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -253,7 +253,7 @@ function Updataemployeemaster() {
                                             <div className="col-12">
                                                 <div className='emailsection position-relative d-grid my-2'>
                                                     <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                        Employee Number<span className='star'>*</span>
+                                                        Employee Number
                                                     </label>
 
                                                     <input
@@ -282,7 +282,7 @@ function Updataemployeemaster() {
                                             <div className="d-flex">
                                                 <div className='emailsection position-relative d-grid mx-2 my-2'>
                                                     <label htmlFor='Gender' className='lablesection color3 text-start mb-1'>
-                                                        Gender<span className='star'>*</span>
+                                                        Gender
                                                     </label>
                                                     <select className='rounded inputsectiondropdpwn color2 py-2' id="Gender" aria-label="Floating label select example" value={value.Gender}
                                                         onChange={e => {
@@ -305,7 +305,7 @@ function Updataemployeemaster() {
 
                                                 <div className='emailsection position-relative mx-2 d-grid my-2'>
                                                     <label htmlFor='Title' className='lablesection color3 text-start mb-1'>
-                                                        Title<span className='star'>*</span>
+                                                        Title
                                                     </label>
                                                     <select className='rounded inputsectiondropdpwn color2 py-2' id="Title" aria-label="Floating label select example" value={value.Title}
                                                         onChange={e => {
@@ -320,7 +320,7 @@ function Updataemployeemaster() {
                                                         <option className='px-4 mx-4' value={value.Title}>{value.Title}</option>
 
                                                         <option className='px-4 mx-4' value='ms'>MS</option>
-                                                        <option className='px-4 mx-4' value='FeMale'>FeMale</option>
+                                                        <option className='px-4 mx-4' value='FeMale'>Female</option>
 
                                                     </select>
 
@@ -328,7 +328,7 @@ function Updataemployeemaster() {
 
                                                 <div className='emailsection position-relative mx-2 d-grid  my-2'>
                                                     <label htmlFor='Age' className='lablesection color3 text-start mb-1'>
-                                                        Age<span className='star'>*</span>
+                                                        Age
                                                     </label>
 
                                                     <input
@@ -349,7 +349,7 @@ function Updataemployeemaster() {
 
                                                 <div className='emailsection  mx-2  w-100 my-2'>
                                                     <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
-                                                        Birth Date<span className='star'>*</span>
+                                                        Birth Date
                                                     </label>
                                                     <input type="date" id="JoiningDate"
 
@@ -369,10 +369,10 @@ function Updataemployeemaster() {
 
 
                                     {/* change the value for the request status  */}
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                    {/* <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
-                                                Employee Status<span className='star'>*</span>
+                                                Employee Status
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
                                                 onChange={e => {
@@ -392,7 +392,7 @@ function Updataemployeemaster() {
                                             </select>
 
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className="row mx-auto formsection">
@@ -400,7 +400,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
-                                                First Name<span className='star'>*</span>
+                                                First Name
                                             </label>
 
                                             <input
@@ -423,7 +423,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
-                                                Middle Name<span className='star'>*</span>
+                                                Middle Name
                                             </label>
 
                                             <input
@@ -447,7 +447,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Last Name<span className='star'>*</span>
+                                                Last Name
                                             </label>
 
                                             <input
@@ -474,7 +474,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='NationalityCode' className='lablesection color3 text-start mb-1'>
-                                                Nationality Code<span className='star'>*</span>
+                                                Nationality Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="NationalityCode" aria-label="Floating label select example" value={value.NationalityCode}
                                                 onChange={e => {
@@ -500,7 +500,7 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="NationalityDescription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Nationality Description<span className="star">*</span>
+                                                Nationality Description
                                             </label>
                                             <input
                                                 types='text'
@@ -523,7 +523,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='MaritalStatus' className='lablesection color3 text-start mb-1'>
-                                                Marital Status <span className='star'>*</span>
+                                                Marital Status 
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="MaritalStatus" aria-label="Floating label select example" value={value.MaritalStatus}
                                                 onChange={e => {
@@ -550,7 +550,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='NationalIQAMANumber' className='lablesection color3 text-start mb-1'>
-                                                National/IQAMA Number<span className='star'>*</span>
+                                                National/IQAMA Number
                                             </label>
 
                                             <input
@@ -573,7 +573,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='PassportNumber' className='lablesection color3 text-start mb-1'>
-                                                Passport Number<span className='star'>*</span>
+                                                Passport Number
                                             </label>
 
                                             <input
@@ -600,7 +600,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='MobileNumber' className='lablesection color3 text-start mb-1'>
-                                                Mobile Number<span className='star'>*</span>
+                                                Mobile Number
                                             </label>
 
                                             <PhoneInput
@@ -624,7 +624,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Landlinenumber' className='lablesection color3 text-start mb-1'>
-                                                Landline Number<span className='star'>*</span>
+                                                Landline Number
                                             </label>
 
                                             <PhoneInput
@@ -651,7 +651,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Designationcode' className='lablesection color3 text-start mb-1'>
-                                                Designation Code<span className='star'>*</span>
+                                                Designation Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="Designationcode" aria-label="Floating label select example" value={value.DesignationCode}
                                                 onChange={e => {
@@ -677,7 +677,7 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="DesignationName"
                                                 className="lablesection color3 text-start mb-1">
-                                                Designation Name<span className="star">*</span>
+                                                Designation Name
                                             </label>
                                             <input
                                                 types='text'
@@ -702,7 +702,7 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="EmailAddress"
                                                 className="lablesection color3 text-start mb-1">
-                                                Email Address <span className="star">*</span>
+                                                Email Address 
                                             </label>
                                             <input
                                                 types='text'
@@ -729,7 +729,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
-                                                Department Code<span className='star'>*</span>
+                                                Department Code
                                             </label>
                                             <select
                                                 className='rounded inputsectiondropdpwn color2 py-2'
@@ -753,7 +753,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                                Department Name<span className='star'>*</span>
+                                                Department Name
                                             </label>
 
                                             <input
@@ -777,7 +777,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                Building<span className='star'>*</span>
+                                                Building
                                             </label>
                                             <select className='roundedinputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
 
@@ -802,7 +802,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                Location<span className='star'>*</span>
+                                                Location
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.LocationCode}
                                                 onChange={e => {
@@ -829,7 +829,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
-                                                Joining Date<span className='star'>*</span>
+                                                Joining Date
                                             </label>
                                             <input type="date" id="JoiningDate"
 

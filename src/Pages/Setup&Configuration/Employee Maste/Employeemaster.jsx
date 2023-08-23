@@ -44,7 +44,7 @@ function Employeemaster() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'EmployeeID', headerName: 'EmployeeID#', width: 160 },
-        { field: 'EmployeeStatus', headerName: 'Employee STATUS', width: 160 },
+        { field: 'NationalityCode', headerName: 'Nationality Code', width: 160 },
         { field: 'BuildingCode', headerName: 'Building Code#', width: 160 },
         { field: 'DepartmentCode', headerName: 'DepartmentCode', width: 150 },
         { field: 'Gender', headerName: 'Gender', width: 160 },
@@ -154,7 +154,7 @@ function Employeemaster() {
         id: indes + 1,
         RequestNumber: row.RequestNumber,
         EmployeeID: row.EmployeeID,
-        EmployeeStatus: row.EmployeeStatus,
+        NationalityCode: row.NationalityCode,
         BuildingCode: row.BuildingCode,
         DepartmentCode: row.DepartmentCode,
         Gender: row.Gender,
@@ -186,7 +186,7 @@ function Employeemaster() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                            Employee Master <span className='star'>*</span></p>
+                                            Employee Master </p>
                                         <div className="d-flex">
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/Employeemaster')

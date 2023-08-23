@@ -270,6 +270,7 @@ function Viewwork() {
     const [Manufacturerdesc, setManufacturerdesc] = useState([])
     const [AssetCategory, setAssetCategory] = useState([])
     const [Model, setModel] = useState()
+   
     const AssetDesc = (e) => {
         const Deptnale = e.target.value;
 
@@ -460,13 +461,17 @@ function Viewwork() {
 
     // To get the all Data Work Request Number
     // Emp ID
-    function GetgetworkRequest() {
+   const [employeeid, setemployeeid] = useState()
+    function GetgetworkRequest(EmployeeID) {
+      
+        console.log('value.EmployeeID------------------------------', employeeid);
         axios.post(`/api/getworkRequest`, {
-            "RequestNumber": userId
+            EmployeeID: "12"
         }).then((res) => {
             console.log('asdfaf', res.data);
+            
             const {
-                EmployeeID,
+                // EmployeeID,
                 Firstname,
                 Lastname,
                 Middlename,
@@ -480,7 +485,7 @@ function Viewwork() {
 
             setvalue((prevValue) => ({
                 ...prevValue,
-                EmployeeID,
+                // EmployeeID,
                 Firstname,
                 Lastname,
                 Middlename,
@@ -496,6 +501,7 @@ function Viewwork() {
                 //// console.log(err);;
             });
     }
+   
     // Work Request
     function Workrequestget() {
         axios.post(`/api/getworkRequestsecond`, {
@@ -512,16 +518,17 @@ function Viewwork() {
                 ProblemCategory,
                 RequestDateTime,
                 AssetItemTagID,
+                EmployeeID,
                 // DepartmentCode,
                 // LocationCode,
                 // BuildingCode,
             } = res.data.recordsets[0][0];
             const timeanddate = moment(value.RequestDateTime).format('DD/MM/YYYY')
             setimtedata(timeanddate)
-            console.log('---------------', timeanddate);
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
+                EmployeeID,
                 WorkTrade,
                 WorkPriority,
                 ProblemDescription,
@@ -537,6 +544,45 @@ function Viewwork() {
             console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
             console.log('Work Request Number', res.data.recordsets[0][0]);
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID;
+            setemployeeid(EmployeeIDss)
+            axios.post(`/api/getworkRequest`, {
+                EmployeeID: EmployeeIDss
+            }).then((res) => {
+                console.log('asdfaf', res.data);
+
+                const {
+                    // EmployeeID,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    RequestDateTime,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                } = res.data.recordsets[0][0];
+
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    // EmployeeID,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    RequestDateTime,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+
+
+
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
                     console.log('assetworkrequest _ GET _ BYID', res.data.recordset);
