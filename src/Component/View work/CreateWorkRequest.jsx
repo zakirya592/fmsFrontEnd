@@ -154,7 +154,7 @@ function CreateWorkRequest() {
             BuildingCode: value.BuildingCode,
             DepartmentCode: value.DepartmentCode,
             LocationCode: value.LocationCode,
-            RequestNumber: value.RequestNumber,
+            // RequestNumber: value.RequestNumber,
         },)
             .then((res) => {
                 // console.log('Add work api first api', res.data);
@@ -619,9 +619,16 @@ function CreateWorkRequest() {
         // }
         // else{
             requestincreas()
-            Createapi();
+            // Createapi();
             workrequsrpostapi()
             AssetItemTagIDpost()
+            Swal.fire({
+                title: "Success",
+                text: "Work request has been created successfully",
+                icon: "success",
+                confirmButtonText: "OK",
+            })
+
             localStorage.removeItem('postemployid');
             localStorage.removeItem('EmployeeIDset');
             localStorage.removeItem('MobileNumber');
@@ -713,7 +720,7 @@ function CreateWorkRequest() {
 
                         // console.log('dfrfdf',results);
                         results.forEach((itemRecords, index) => {
-                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data[0]);
+                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                             // setgetdata(results);
                             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                 description: description,
@@ -730,37 +737,6 @@ function CreateWorkRequest() {
 
                     });
 
-
-                // {
-                //     AssetItemDescriptionsss.map((item,indi)=>{
-
-                //         axios.get(`/api/tblAssetsMaster_GET_BYID/${item}`)
-                //             .then((res) => {
-                //                 // console.log('Asset Item Descriptionsss', item);
-                //                 // console.log('tblAssetsMaster _GET_BYID', res.data.recordset[0]);
-                //                 setgetdata(res.data.recordset);
-                //             })
-                //             .catch((err) => {
-                //                 console.log(err);
-                //             });
-                //     })
-                // }
-
-                const assetDescriptionsString = AssetItemDescriptionsss.join(',');
-
-                // axios.get(`/api/tblAssetsMaster_GET_BYID`, null,{
-                //     params: {
-                //         AssetItemDescriptionsss: AssetItemDescriptionsss,
-                //     }
-                // })
-                //     .then((res) => {
-                //         console.log('TO get the list Asset Item Description', res.data.recordset);
-                //         console.log('Asser item desc', AssetItemDescriptionsss);
-                //         setgetdata(res.data.recordset);
-                //     })
-                //     .catch((err) => {
-                //         console.log(err);
-                //     });
 
             })
             .catch((err) => {
@@ -845,7 +821,7 @@ function CreateWorkRequest() {
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
         ...row.records,
-        id: indes + 1,
+        id: indes + 1 ,
         AssetItemDescription: row.description,
         ASQS: row.saq,
         AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
@@ -877,12 +853,62 @@ function CreateWorkRequest() {
         localStorage.setItem('EmployeeIDset', e.target.value)
     }
 
-    const handlePrint = () => {
-        window.print(); // This triggers the browser's print dialog
-    };
+const handlePrintAssetTable = (tableData) => {
+  const printWindow = window.open('', '_blank');
+
+  // Create a bold style for header cells
+  const headerStyle = 'font-weight: bold;';
+
+  const tableHtml = `
+    <table border="1">
+      <tr>
+        <th style="${headerStyle}">SEQ</th>
+        <th style="${headerStyle}">ASSET/STOCK NUMBER</th>
+        <th style="${headerStyle}">ASSET ITEM GROUP</th>
+        <th style="${headerStyle}">ASSET ITEM DESCRIPTION</th>
+        <th style="${headerStyle}">ASSET QTY</th>
+        <th style="${headerStyle}">MODEL</th>
+        <th style="${headerStyle}">MANUFACTURER</th>
+      </tr>
+      ${tableData.map(row => `
+        <tr>
+          <td>${row['id']}</td>
+          <td>${row['AssetNumber']}</td>
+          <td>${row['AssetItemGroup']}</td>
+          <td>${row['AssetItemDescription']}</td>
+          <td>${row['AssetQty']}</td>
+          <td>${row['Model']}</td>
+          <td>${row['Manufacturer']}</td>
+        </tr>`).join('')}
+    </table>`;
+
+  const printContent = `
+    <html>
+      <head>
+        <title>Asset Table</title>
+        <style>
+          @media print {
+            body {
+              padding: 0;
+              margin: 0;
+            }
+            th {
+              ${headerStyle}
+            }
+          }
+        </style>
+      </head>
+      <body>${tableHtml}</body>
+    </html>
+  `;
+
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+  printWindow.print();
+};
 
     const [unitCode, setUnitCode] = useState([]);
-
+    const [dropname, setdropname] = useState([])
     const handleUnitCodeChange = (e) => {
         // console.log(value);
         setvalue(prevValue => ({
@@ -902,6 +928,8 @@ function CreateWorkRequest() {
                 console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                const NAmese = data.map((namedata) => namedata?.Firstname);
+                setdropname(NAmese)
                 setUnitCode(unitNameList)
 
             })
@@ -942,7 +970,10 @@ function CreateWorkRequest() {
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
                                         {/* print  */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}><PrintIcon className='me-1' />Print</button>
+                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintAssetTable(filteredRows)}>
+                        <PrintIcon className="me-1" />
+                        Print
+                      </button>
                                         {/* excel  */}
                                         <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                         </CSVLink>
@@ -956,24 +987,8 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-1'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee
+                                                Employee Number
                                             </label>
-
-                                            {/* <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={value.EmployeeID}
-                                                onChange={employeeIDonchange}
-                                                onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' onClick={searchbtn} />
-                                            </p> */}
                                         </div>
                                         <Autocomplete
                                             id="zone"
@@ -999,17 +1014,8 @@ function CreateWorkRequest() {
                                                 if (value) {
                                                     // perform operation when input is cleared
                                                     console.log("cleared", value);
-                                                    // searchbtn(value)
-                                                    // postapi(value)
-
-                                                    // if (event.key === 'Enter') {
-                                                    //     event.preventDefault();
-                                                    //     postapi(value);
-                                                    // }
                                                 }
                                             }}
-                                            // onBlur={handleOnBlurCall}
-                                            //  onKeyDown={handleKeyPress}
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
@@ -1025,7 +1031,6 @@ function CreateWorkRequest() {
                                                     className='rounded inputsection py-0'
                                                     placeholder='Enter Employee Number'
                                                     required
-                                                // onClick={searchbtn}
                                                 />
                                             )}
                                             className='rounded inputsection'

@@ -19,11 +19,77 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
+import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
 
 function Employeemaster() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
+
+    // print button
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'id': index + 1,
+            'RequestNumber': row.RequestNumber,
+            'EmployeeID': row.EmployeeID,
+            'NationalityCode': row.NationalityCode,
+            'BuildingCode': row.BuildingCode,
+            'DepartmentCode': row.DepartmentCode,
+            'Gender': row.Gender,
+        }));
+
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">Request Number</th>
+          <th style="${headerStyle}">Employee ID</th>
+          <th style="${headerStyle}">Nationality Code</th>
+          <th style="${headerStyle}">Building Code</th>
+          <th style="${headerStyle}">Department Code</th>
+          <th style="${headerStyle}">Gender</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['Request Number']}</td>
+            <td>${row['Request Status']}</td>
+            <td>${row['Employee ID']}</td>
+            <td>${row['Nationality Code']}</td>
+            <td>${row['Building Code']}</td>
+            <td>${row['Department Code']}</td>
+            <td>${row['Gender']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
     // List a data thougth api 
     const getapi = () => {
         axios.get(`/api/EmployeeMaster_GET_LIST`, {
@@ -44,7 +110,7 @@ function Employeemaster() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'EmployeeID', headerName: 'EmployeeID#', width: 160 },
-        { field: 'EmployeeStatus', headerName: 'Employee STATUS', width: 160 },
+        { field: 'NationalityCode', headerName: 'Nationality Code', width: 160 },
         { field: 'BuildingCode', headerName: 'Building Code#', width: 160 },
         { field: 'DepartmentCode', headerName: 'DepartmentCode', width: 150 },
         { field: 'Gender', headerName: 'Gender', width: 160 },
@@ -154,7 +220,7 @@ function Employeemaster() {
         id: indes + 1,
         RequestNumber: row.RequestNumber,
         EmployeeID: row.EmployeeID,
-        EmployeeStatus: row.EmployeeStatus,
+        NationalityCode: row.NationalityCode,
         BuildingCode: row.BuildingCode,
         DepartmentCode: row.DepartmentCode,
         Gender: row.Gender,
@@ -186,18 +252,17 @@ function Employeemaster() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                            Employee Master <span className='star'>*</span></p>
+                                            Employee Master </p>
                                         <div className="d-flex">
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/Employeemaster')
                                             })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredData)}>
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
-                                            <button type="button" className="btn btn-outline-primary color2">
-                                                <img src={excel} alt="export" /> Export
-                                            </button>
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                            </CSVLink>
                                         </div>
                                     </div>
 
