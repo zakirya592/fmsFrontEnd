@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -20,9 +20,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { DataGrid } from '@mui/x-data-grid';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { v4 as uuidv4 } from 'uuid';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { CircularProgress } from '@mui/material';
 import { CSVLink } from "react-csv";
 
 function CreateWorkRequest() {
@@ -46,7 +46,7 @@ function CreateWorkRequest() {
     //     }
     //     return storedEmployeeID;
     // };
-// const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
+    // const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
     const initialEmployeeID = ''; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
@@ -54,19 +54,19 @@ function CreateWorkRequest() {
     const initialLastname = localStorage.getItem('Lastname') || ""; // Use empty string if null
     const initialMobileNumber = localStorage.getItem('MobileNumber') || ""; // Use empty string if null
     const initialLandlineNumber = localStorage.getItem('LandlineNumber') || ""; // Use empty string if null
-    const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code"; 
-    const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code"; 
-    const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code"; 
-    const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code"; 
-    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code"; 
-    const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code"; 
-    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc"; 
-    const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname"; 
-    const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc"; 
-    const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
+    const initialDepartmentCode = localStorage.getItem('Departmentcode') || "Select Dept Code";
+    const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code";
+    const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code";
+    const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code";
+    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code";
+    const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code";
+    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
+    const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname";
+    const initialWorkTradedesc = localStorage.getItem('WorkTradedesc') || "Select Work Trade desc";
+    const initialrequestnumber = localStorage.getItem('Requestnumbers') || "";
 
     const [value, setvalue] = useState({
-        EmployeeID:'' , Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
+        EmployeeID: null, Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
         MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
         DepartmentCode: initialDepartmentCode, Departmentname: initialDepartmentname,//Department api input 
         BuildingCode: initialBuildingCode, //AddBuildingInworkRequestPOST api input
@@ -273,7 +273,7 @@ function CreateWorkRequest() {
     }
 
     const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
-   
+
     function searchbtn(e) {
         // e.preventDefault();
         postapi(value.EmployeeID);
@@ -618,36 +618,38 @@ function CreateWorkRequest() {
         //     alert('Asset details is required.')
         // }
         // else{
-            requestincreas()
-            // Createapi();
-            workrequsrpostapi()
-            AssetItemTagIDpost()
-            Swal.fire({
-                title: "Success",
-                text: "Work request has been created successfully",
-                icon: "success",
-                confirmButtonText: "OK",
-            })
+        requestincreas()
+        // Createapi();
+        workrequsrpostapi()
+        AssetItemTagIDpost()
+        Swal.fire({
+            title: "Success",
+            text: "Work request has been created successfully",
+            icon: "success",
+            confirmButtonText: "OK",
+        })
 
-            localStorage.removeItem('postemployid');
-            localStorage.removeItem('EmployeeIDset');
-            localStorage.removeItem('MobileNumber');
-            localStorage.removeItem('RequestStatus');
-            localStorage.removeItem('Firstname');
-            localStorage.removeItem('Middlename');
-            localStorage.removeItem('Lastname');
-            localStorage.removeItem('phoneNumber');
-            localStorage.removeItem('LandlineNumber');
-            localStorage.removeItem('Departmentcode');
-            localStorage.removeItem('BuildingCode');
-            localStorage.removeItem('LocationCode');
-            localStorage.removeItem('WorkType');
-            localStorage.removeItem('WorkTradeCode');
-            localStorage.removeItem('WorkPriority');
-            localStorage.removeItem('WorkTypeDesc');
-            localStorage.removeItem('Departmentname');
-            localStorage.removeItem('WorkTradedesc');
-    //    }
+        localStorage.removeItem('postemployid');
+        localStorage.removeItem('EmployeeIDset');
+        localStorage.removeItem('MobileNumber');
+        localStorage.removeItem('RequestStatus');
+        localStorage.removeItem('Firstname');
+        localStorage.removeItem('Middlename');
+        localStorage.removeItem('Lastname');
+        localStorage.removeItem('phoneNumber');
+        localStorage.removeItem('LandlineNumber');
+        localStorage.removeItem('Departmentcode');
+        localStorage.removeItem('BuildingCode');
+        localStorage.removeItem('LocationCode');
+        localStorage.removeItem('WorkType');
+        localStorage.removeItem('WorkTradeCode');
+        localStorage.removeItem('WorkPriority');
+        localStorage.removeItem('WorkTypeDesc');
+        localStorage.removeItem('Departmentname');
+        localStorage.removeItem('WorkTradedesc');
+        localStorage.clear();
+
+        //    }
 
     }
     const Assetcodebtn = (e) => {
@@ -673,9 +675,6 @@ function CreateWorkRequest() {
         WorkRequestNumber();
     }
 
-    const Goback = () => {
-        navigate(-1); // Navigate back one step in the browser history
-    };
     //   Table section 
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
@@ -821,7 +820,7 @@ function CreateWorkRequest() {
 
     const filteredRows = getdata && getdata.map((row, indes) => ({
         ...row.records,
-        id: indes + 1 ,
+        id: indes + 1,
         AssetItemDescription: row.description,
         ASQS: row.saq,
         AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
@@ -853,13 +852,13 @@ function CreateWorkRequest() {
         localStorage.setItem('EmployeeIDset', e.target.value)
     }
 
-const handlePrintAssetTable = (tableData) => {
-  const printWindow = window.open('', '_blank');
+    const handlePrintAssetTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
 
-  // Create a bold style for header cells
-  const headerStyle = 'font-weight: bold;';
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
 
-  const tableHtml = `
+        const tableHtml = `
     <table border="1">
       <tr>
         <th style="${headerStyle}">SEQ</th>
@@ -882,7 +881,7 @@ const handlePrintAssetTable = (tableData) => {
         </tr>`).join('')}
     </table>`;
 
-  const printContent = `
+        const printContent = `
     <html>
       <head>
         <title>Asset Table</title>
@@ -902,22 +901,18 @@ const handlePrintAssetTable = (tableData) => {
     </html>
   `;
 
-  printWindow.document.write(printContent);
-  printWindow.document.close();
-  printWindow.print();
-};
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    }; 
 
     const [unitCode, setUnitCode] = useState([]);
     const [dropname, setdropname] = useState([])
-    const handleUnitCodeChange = (e) => {
-        // console.log(value);
-        setvalue(prevValue => ({
-            ...prevValue,
-            EmployeeID: e.target.value
-        }))
-        localStorage.setItem('EmployeeIDset', e.target.value)
-        // setSelectedUnitCode(value);
-    };
+    const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
+    const [gpcList, setGpcList] = useState([]); // gpc list
+    const abortControllerRef = useRef(null);
 
     useEffect(() => {
 
@@ -929,20 +924,145 @@ const handlePrintAssetTable = (tableData) => {
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
                 const NAmese = data.map((namedata) => namedata?.Firstname);
-                setdropname(NAmese)
+                // setdropname(NAmese)
+                setdropname(data)
                 setUnitCode(unitNameList)
 
             })
             .catch((error) => {
                 console.log('-----', error);
-
             }
             );
         // }
 
     }, [])
 
-   
+    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcList([]); // Clear the data list if there is no input
+            setUnitCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            return;
+        }
+        if (newInputValue === null) {
+
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoading(true);
+        setOpen(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRef.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCode(data ?? [])
+                    setOpen(true);
+                    setAutocompleteLoading(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    EmployeeID: []
+                }))
+                setAutocompleteLoading(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCode([])
+            setOpen(false);
+            setAutocompleteLoading(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChange = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === ' -') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }));
+        }
+        if (value && value.EmployeeID) {
+            postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: value.EmployeeID
+            }));
+            console.log('Received value----------:', value.EmployeeID);
+            localStorage.setItem('EmployeeIDset', value.EmployeeID);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+
+
+    const backbtn = (() => {
+        localStorage.removeItem('postemployid');
+        localStorage.removeItem('EmployeeIDset');
+        localStorage.removeItem('MobileNumber');
+        localStorage.removeItem('RequestStatus');
+        localStorage.removeItem('Firstname');
+        localStorage.removeItem('Middlename');
+        localStorage.removeItem('Lastname');
+        localStorage.removeItem('phoneNumber');
+        localStorage.removeItem('LandlineNumber');
+        localStorage.removeItem('Departmentcode');
+        localStorage.removeItem('BuildingCode');
+        localStorage.removeItem('LocationCode');
+        localStorage.removeItem('WorkType');
+        localStorage.removeItem('WorkTradeCode');
+        localStorage.removeItem('WorkPriority');
+        localStorage.removeItem('WorkTypeDesc');
+        localStorage.removeItem('Departmentname');
+        localStorage.removeItem('WorkTradedesc');
+        localStorage.clear();
+        navigate('/workRequest')
+
+    })
 
     return (
         <div>
@@ -953,9 +1073,7 @@ const handlePrintAssetTable = (tableData) => {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={(() => {
-                                        navigate('/workRequest')
-                                    })} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Work Request</p>
                                 </Typography>
                             </Toolbar>
@@ -970,10 +1088,10 @@ const handlePrintAssetTable = (tableData) => {
                                         {/* create */}
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork btnworkactive" onClick={allCreateapi}> <AddCircleOutlineIcon className='me-1' />Create</button>
                                         {/* print  */}
-                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintAssetTable(filteredRows)}>
-                        <PrintIcon className="me-1" />
-                        Print
-                      </button>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintAssetTable(filteredRows)}>
+                                            <PrintIcon className="me-1" />
+                                            Print
+                                        </button>
                                         {/* excel  */}
                                         <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                         </CSVLink>
@@ -990,58 +1108,69 @@ const handlePrintAssetTable = (tableData) => {
                                                 Employee Number
                                             </label>
                                         </div>
-                                        <Autocomplete
-                                            id="zone"
-                                            options={unitCode}
-                                            getOptionLabel={(option) => option}
-                                            // onChange={handleUnitCodeChange}
-                                            value={value.EmployeeID}
-                                            // onBlur={handleAutocompleteChange} 
-                                            onBlur={() => {
-                                                if (value.EmployeeID) {
-                                                    postapi(value.EmployeeID);
 
-                                                }
+                                        <Autocomplete
+                                            id="serachGpc"
+                                            className='rounded inputsection py-0 mt-0'
+                                            required
+                                            options={unitCode} // Use the formattedGpcList here
+                                            // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                            getOptionLabel={(option) =>
+                                                option?.EmployeeID
+                                                    ? option.EmployeeID + ' - ' + option.Firstname
+                                                    : ''
+                                            }
+                                            getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                            onChange={handleGPCAutoCompleteChange}
+                                            renderOption={(props, option) => (
+                                                <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                    {option.EmployeeID} - {option.Firstname}
+                                                </li>
+                                            )}
+                                            value={value}
+                                            onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChange(event, newInputValue, params)}
+                                            loading={autocompleteLoading}
+                                            open={open}
+                                            onOpen={() => {
+                                                // setOpen(true);
                                             }}
-                                            // onInputChange
-                                            defaultValue={value.EmployeeID}
-                                            onInputChange={(event, value) => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    EmployeeID: value
-                                                }))
-                                                localStorage.setItem('EmployeeIDset', value)
-                                                if (value) {
-                                                    // perform operation when input is cleared
-                                                    console.log("cleared", value);
-                                                }
+                                            onClose={() => {
+                                                setOpen(false);
                                             }}
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
+                                                    placeholder='Employee Number'
                                                     InputProps={{
                                                         ...params.InputProps,
-                                                        type: 'search',
-                                                        className: "text-black",
+                                                        endAdornment: (
+                                                            <React.Fragment>
+                                                                {autocompleteLoading ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                {params.InputProps.endAdornment}
+                                                            </React.Fragment>
+                                                        ),
                                                     }}
-                                                    InputLabelProps={{
-                                                        ...params.InputLabelProps,
-                                                        style: { color: "white" },
+                                                    sx={{
+                                                        '& label.Mui-focused': {
+                                                            color: '#000000',
+                                                        },
+                                                        '& .MuiInput-underline:after': {
+                                                            borderBottomColor: '#00006a',
+                                                            color: '#000000',
+                                                        },
+                                                        '& .MuiOutlinedInput-root': {
+                                                            '&:hover fieldset': {
+                                                                borderColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '&.Mui-focused fieldset': {
+                                                                borderColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                        },
                                                     }}
-                                                    className='rounded inputsection py-0'
-                                                    placeholder='Enter Employee Number'
-                                                    required
                                                 />
                                             )}
-                                            className='rounded inputsection'
-                                            classes={{
-                                                endAdornment: "text-white",
-                                            }}
-                                            sx={{
-                                                '& .MuiAutocomplete-endAdornment': {
-                                                    color: 'white',
-                                                },
-                                            }}
                                         />
                                     </div>
 
@@ -1375,7 +1504,7 @@ const handlePrintAssetTable = (tableData) => {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='WorkTypeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Type Description 
+                                                Work Type Description
                                             </label>
 
                                             <input
@@ -1442,7 +1571,7 @@ const handlePrintAssetTable = (tableData) => {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='workTradeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Trade Description  
+                                                Work Trade Description
                                             </label>
 
                                             <input
@@ -1481,9 +1610,7 @@ const handlePrintAssetTable = (tableData) => {
                                 </div>
                                 {/*Button section*/}
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                        navigate('/workRequest')
-                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={backbtn}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className='d-flex'>
 
                                         <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>

@@ -31,3 +31,18 @@
 .css-zq2xpb-MuiAutocomplete-root .MuiOutlinedInput-root{
     padding: 8px !important;
 }
+.css-1h51icj-MuiAutocomplete-root .MuiOutlinedInput-root .MuiAutocomplete-input {
+    padding: 0.5px 4px 0.5px 5px !important;
+}
+.MuiAutocomplete-popper li[data-focus="true"] {
+    /* background-color: red; */
+    color: black !important;
+}
+.css-9e5uuu-MuiPaper-root-MuiAutocomplete-paper{
+     /* background-color: red !important; */
+     color: black !important;
+}
+.css-gdh49b-MuiAutocomplete-listbox{
+     /* background-color: red !important; */
+     color: black !important;
+}
