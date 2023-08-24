@@ -538,6 +538,7 @@ function Updataworkrequest() {
             });
     }
     // Work Request
+    const [RequestDateTimeform, setRequestDateTimeform] = useState([])
     function Workrequestget() {
         axios.post(`/api/getworkRequestsecond`, {
             "RequestNumber": userId
@@ -558,8 +559,10 @@ function Updataworkrequest() {
                 // LocationCode,
                 // BuildingCode,
             } = res.data.recordsets[0][0];
-            const timeanddate = moment(value.RequestDateTime).format('DD/MM/YYYY')
-            setimtedata(timeanddate)
+            console.log('Time Now', moment(RequestDateTime).format('DD/MM/YYYY hh:mm A'));
+            const data = moment(RequestDateTime).format('YYYY-MM-DD')
+            setRequestDateTimeform(data)
+
             setvalue((prevValue) => ({
                 ...prevValue,
                 WorkType,
@@ -1073,16 +1076,15 @@ function Updataworkrequest() {
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                                 Request Date/Time <span className='star'>*</span>
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={value.RequestDateTime}
+                                            <input type={RequestDateTimeform} id="Employdata"
+                                                value={RequestDateTimeform}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        EmployeeID: e.target.value
+                                                        RequestDateTime: e.target.value
                                                     }))
                                                 }}
+                                                readOnly
                                                 name="birthdaytime" className='rounded inputsection py-2' />
                                         </div>
 
