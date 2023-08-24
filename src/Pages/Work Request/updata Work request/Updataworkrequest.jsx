@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -20,6 +20,7 @@ import moment from 'moment';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
+import { CircularProgress } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
 function Updataworkrequest() {
@@ -888,16 +889,12 @@ function Updataworkrequest() {
     });
 
     const [unitCode, setUnitCode] = useState([]);
-
-    const handleUnitCodeChange = (e) => {
-        // console.log(value);
-        setvalue(prevValue => ({
-            ...prevValue,
-            EmployeeID: e.target.value
-        }))
-        localStorage.setItem('EmployeeIDset', e.target.value)
-        // setSelectedUnitCode(value);
-    };
+    const [dropname, setdropname] = useState([])
+    const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
+    const [gpcList, setGpcList] = useState([]); // gpc list
+    const abortControllerRef = useRef(null);
 
     useEffect(() => {
 
@@ -908,17 +905,121 @@ function Updataworkrequest() {
                 console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                const NAmese = data.map((namedata) => namedata?.Firstname);
+                // setdropname(NAmese)
+                setdropname(data)
                 setUnitCode(unitNameList)
 
             })
             .catch((error) => {
                 console.log('-----', error);
-
             }
             );
         // }
 
     }, [])
+
+    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcList([]); // Clear the data list if there is no input
+            setUnitCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            return;
+        }
+        if (newInputValue === null) {
+
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoading(true);
+        setOpen(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRef.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCode(data ?? [])
+                    setOpen(true);
+                    setAutocompleteLoading(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    EmployeeID: []
+                }))
+                setAutocompleteLoading(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCode([])
+            setOpen(false);
+            setAutocompleteLoading(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChange = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === ' -') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }));
+        }
+        if (value && value.EmployeeID) {
+            postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: value.EmployeeID
+            }));
+            console.log('Received value----------:', value.EmployeeID);
+            localStorage.setItem('EmployeeIDset', value.EmployeeID);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
     
     
     return (
@@ -984,60 +1085,67 @@ function Updataworkrequest() {
                                             </p> */}
 
                                             <Autocomplete
-                                                id="zone"
-                                                options={unitCode}
-                                                getOptionLabel={(option) => option}
-                                                value={value.EmployeeID}
-                                                onInputChange={(event, newValue) => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeID: newValue
-                                                    }));
-                                                    localStorage.setItem('EmployeeIDset', newValue);
+                                                id="serachGpc"
+                                                className='rounded inputsection py-0 mt-0'
+                                                required
+                                                options={unitCode} // Use the formattedGpcList here
+                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                                getOptionLabel={(option) =>
+                                                    option?.EmployeeID
+                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                        : ''
+                                                }
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                                onChange={handleGPCAutoCompleteChange}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.EmployeeID} - {option.Firstname}
+                                                    </li>
+                                                )}
+                                                value={value}
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChange(event, newInputValue, params)}
+                                                loading={autocompleteLoading}
+                                                open={open}
+                                                onOpen={() => {
+                                                    // setOpen(true);
                                                 }}
-                                                filterOptions={(options, state) => {
-                                                    const inputValue = state.inputValue.toLowerCase();
-                                                    if (inputValue.length === 0) {
-                                                        return [];
-                                                    }
-                                                    return options.filter(option =>
-                                                        option.toLowerCase().includes(inputValue)
-                                                    );
-                                                }}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') {
-                                                        // Call your onClick method here
-                                                        if (value.EmployeeID) {
-                                                            postapi(value.EmployeeID);
-                                                        }
-                                                    }
+                                                onClose={() => {
+                                                    setOpen(false);
                                                 }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
+                                                        placeholder='Employee Number'
                                                         InputProps={{
                                                             ...params.InputProps,
-                                                            type: 'search',
-                                                            className: "text-black",
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoading ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
                                                         }}
-                                                        InputLabelProps={{
-                                                            ...params.InputLabelProps,
-                                                            style: { color: "white" },
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
                                                         }}
-                                                        className='rounded inputsection py-0'
-                                                        placeholder='Enter Employee Number'
-                                                        required
                                                     />
                                                 )}
-                                                className='rounded inputsection'
-                                                classes={{
-                                                    endAdornment: "text-white",
-                                                }}
-                                                sx={{
-                                                    '& .MuiAutocomplete-endAdornment': {
-                                                        color: 'white',
-                                                    },
-                                                }}
                                             />
                                         </div>
                                     </div>
