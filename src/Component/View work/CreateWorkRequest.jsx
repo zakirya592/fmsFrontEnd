@@ -675,9 +675,6 @@ function CreateWorkRequest() {
         WorkRequestNumber();
     }
 
-    const Goback = () => {
-        navigate(-1); // Navigate back one step in the browser history
-    };
     //   Table section 
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
@@ -1016,7 +1013,6 @@ const handlePrintAssetTable = (tableData) => {
                                             id="zone"
                                             options={unitCode}
                                             getOptionLabel={(option) => option}
-                                            // getOptionLabel={(option) => option}
                                             value={value.EmployeeID}
                                             onInputChange={(event, newValue) => {
                                                 setvalue(prevValue => ({
@@ -1031,7 +1027,7 @@ const handlePrintAssetTable = (tableData) => {
                                                     return [];
                                                 }
                                                 return options.filter(option =>
-                                                    option
+                                                    option.toLowerCase().includes(inputValue)
                                                 );
                                             }}
                                             onKeyDown={(e) => {
