@@ -982,37 +982,31 @@ function Updataworkrequest() {
                                                 id="zone"
                                                 options={unitCode}
                                                 getOptionLabel={(option) => option}
-                                                // onChange={handleUnitCodeChange}
                                                 value={value.EmployeeID}
-                                                // onBlur={handleAutocompleteChange} 
-                                                onBlur={() => {
-                                                    if (value.EmployeeID) {
-                                                        postapi(value.EmployeeID);
-
-                                                    }
-                                                }}
-                                                // onInputChange
-                                                defaultValue={value.EmployeeID} 
-                                                onInputChange={(event, value) => {
+                                                onInputChange={(event, newValue) => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        EmployeeID: value
-                                                    }))
-                                                    localStorage.setItem('EmployeeIDset',value)
-                                                    if (value) {
-                                                        // perform operation when input is cleared
-                                                        console.log("cleared", value);
-                                                        // searchbtn(value)
-                                                        // postapi(value)
-
-                                                        // if (event.key === 'Enter') {
-                                                        //     event.preventDefault();
-                                                        //     postapi(value);
-                                                        // }
+                                                        EmployeeID: newValue
+                                                    }));
+                                                    localStorage.setItem('EmployeeIDset', newValue);
+                                                }}
+                                                filterOptions={(options, state) => {
+                                                    const inputValue = state.inputValue.toLowerCase();
+                                                    if (inputValue.length === 0) {
+                                                        return [];
+                                                    }
+                                                    return options.filter(option =>
+                                                        option.toLowerCase().includes(inputValue)
+                                                    );
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        // Call your onClick method here
+                                                        if (value.EmployeeID) {
+                                                            postapi(value.EmployeeID);
+                                                        }
                                                     }
                                                 }}
-                                                // onBlur={handleOnBlurCall}
-                                                //  onKeyDown={handleKeyPress}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -1028,7 +1022,6 @@ function Updataworkrequest() {
                                                         className='rounded inputsection py-0'
                                                         placeholder='Enter Employee Number'
                                                         required
-                                                        // onClick={searchbtn}
                                                     />
                                                 )}
                                                 className='rounded inputsection'
