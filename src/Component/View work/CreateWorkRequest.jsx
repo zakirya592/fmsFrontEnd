@@ -66,7 +66,7 @@ function CreateWorkRequest() {
     const initialrequestnumber = localStorage.getItem('Requestnumbers') || ""; 
 
     const [value, setvalue] = useState({
-        EmployeeID:'' , Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
+        EmployeeID:null , Firstname: initialFirstName, Middlename: initialMiddlename, Lastname: initialLastname,
         MobileNumber: initialMobileNumber, LandlineNumber: initialLandlineNumber,//AddworkRequestPOST api input
         DepartmentCode: initialDepartmentCode, Departmentname: initialDepartmentname,//Department api input 
         BuildingCode: initialBuildingCode, //AddBuildingInworkRequestPOST api input
@@ -647,6 +647,8 @@ function CreateWorkRequest() {
             localStorage.removeItem('WorkTypeDesc');
             localStorage.removeItem('Departmentname');
             localStorage.removeItem('WorkTradedesc');
+           localStorage.clear();
+            
     //    }
 
     }
@@ -942,7 +944,29 @@ const handlePrintAssetTable = (tableData) => {
 
     }, [])
 
-   
+    const backbtn=(()=>{
+        localStorage.removeItem('postemployid');
+        localStorage.removeItem('EmployeeIDset');
+        localStorage.removeItem('MobileNumber');
+        localStorage.removeItem('RequestStatus');
+        localStorage.removeItem('Firstname');
+        localStorage.removeItem('Middlename');
+        localStorage.removeItem('Lastname');
+        localStorage.removeItem('phoneNumber');
+        localStorage.removeItem('LandlineNumber');
+        localStorage.removeItem('Departmentcode');
+        localStorage.removeItem('BuildingCode');
+        localStorage.removeItem('LocationCode');
+        localStorage.removeItem('WorkType');
+        localStorage.removeItem('WorkTradeCode');
+        localStorage.removeItem('WorkPriority');
+        localStorage.removeItem('WorkTypeDesc');
+        localStorage.removeItem('Departmentname');
+        localStorage.removeItem('WorkTradedesc');
+        localStorage.clear();
+        navigate('/workRequest')
+       
+    })
 
     return (
         <div>
@@ -953,9 +977,7 @@ const handlePrintAssetTable = (tableData) => {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={(() => {
-                                        navigate('/workRequest')
-                                    })} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Work Request</p>
                                 </Typography>
                             </Toolbar>
@@ -994,6 +1016,7 @@ const handlePrintAssetTable = (tableData) => {
                                             id="zone"
                                             options={unitCode}
                                             getOptionLabel={(option) => option}
+                                            // getOptionLabel={(option) => option}
                                             value={value.EmployeeID}
                                             onInputChange={(event, newValue) => {
                                                 setvalue(prevValue => ({
@@ -1008,7 +1031,7 @@ const handlePrintAssetTable = (tableData) => {
                                                     return [];
                                                 }
                                                 return options.filter(option =>
-                                                    option.toLowerCase().includes(inputValue)
+                                                    option
                                                 );
                                             }}
                                             onKeyDown={(e) => {
@@ -1484,9 +1507,7 @@ const handlePrintAssetTable = (tableData) => {
                                 </div>
                                 {/*Button section*/}
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                        navigate('/workRequest')
-                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={backbtn}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className='d-flex'>
 
                                         <button type="button" className="border-0 px-3  savebtn py-2" onClick={allCreateapi}><SaveIcon className='me-2' />SAVE</button>
