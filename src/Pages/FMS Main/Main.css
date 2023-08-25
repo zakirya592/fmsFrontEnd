@@ -62,8 +62,8 @@
 }
 
 .w-mainCircle> :nth-child(3) {
-    left: 33%;
-    top: 33%;
+    left: 30%;
+    top: 30%;
     width: 40%;
     height: 40%;
 }
@@ -147,7 +147,7 @@
 }
 
 .w-secCircle>img {
-    transform: scale(1.4);
+    transform: scale(1);
 }
 
 .w-backCircle {
