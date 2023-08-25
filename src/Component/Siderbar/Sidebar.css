@@ -1,6 +1,8 @@
 .loginimg{
     width: 90%;
+    cursor: pointer;
 }
+
 .toperheaderside{
     font-family: 'Inter';
     font-style: italic;

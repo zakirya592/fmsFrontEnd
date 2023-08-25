@@ -870,18 +870,41 @@ function Updataworkrequest() {
         );
     }
 
-    const filteredRows = getdata && getdata.map((row, indes) => ({
-        ...row.records,
-        id: indes + 1,
-        AssetItemDescription: row.description,
-        ASQS: row.saq,
-        AssetItemGroup: row.records ? row.records.data[0].AssetItemGroup : '',
-        AssetCategory: row.records ? row.records.data[0].AssetCategory : '',
-        AssetSubCategory: row.records ? row.records.data[0].AssetSubCategory : '',
-        AssetQty: row.records ? row.records.data[0].AssetQty : '',
-        Model: row.records ? row.records.data[0].Model : '',
-        Manufacturer: row.records ? row.records.data[0].Manufacturer : '', //this Both id  is to display a work types desc //ok
-    }))
+    const countDuplicates = (array, key) => {
+        const counts = {};
+        array.forEach(item => {
+            const value = item[key];
+            counts[value] = (counts[value] || 0) + 1;
+        });
+        return counts;
+    };
+    // Get the data first
+    const duplicatesCount = countDuplicates(getdata, 'description');
+    console.log('Duplicates Count:', duplicatesCount);
+
+    // Extract unique descriptions
+    const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
+
+    // Create filteredRows with unique descriptions and counts
+    const filteredRows = uniqueDescriptions.map((description, index) => ({
+        id: index + 1,
+        AssetItemDescription: description,
+        ASQS: getdata.find(row => row.description === description)?.saq || 0,
+        AssetQty: duplicatesCount[description] || 0,
+        AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
+        AssetCategory: getdata[index].records ? getdata[index].records.data[0].AssetCategory : '',
+        AssetSubCategory: getdata[index].records ? getdata[index].records.data[0].AssetSubCategory : '',
+        RequestDateTime: getdata[index].records ? getdata[index].records.data[0].RequestDateTime : '',
+        Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
+        Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
+    }));
+
+    // Now you can loop through the filteredRows and access duplicatesCount to display counts alongside entries
+    filteredRows.forEach(row => {
+        const description = row.AssetItemDescription;
+        const count = row.AssetQty;
+        console.log(`Description: ${description}, Count: ${count}`);
+    });
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 5,
@@ -1591,7 +1614,7 @@ function Updataworkrequest() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         localStorage.removeItem('EmployeeIDsetss');
                                         localStorage.clear();
-                                        navigate('/Addassetcode')
+                                        navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>

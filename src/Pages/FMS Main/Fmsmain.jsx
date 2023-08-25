@@ -19,7 +19,7 @@ import Assetmanagemtn from "../../Image/Asset Management.png"
 import Location from "../../Image/Location Management.png";
 import Cleaning from "../../Image/Cleaning Works.png"
 import Preventive from "../../Image/Preventive Maintenance.png"
-import mainlog from "../../Image/centerlog.png"
+import mainlog from "../../Image/log1.png"
 import { useNavigate } from "react-router-dom";
 import Assetmanagement from '../../Component/Siderbar/Assetmanagement';
 import SetupSidebar from '../Setup&Configuration/SetupSidebar';
