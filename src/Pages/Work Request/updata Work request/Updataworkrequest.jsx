@@ -869,7 +869,7 @@ function Updataworkrequest() {
             </div>
         );
     }
-    
+
     const countDuplicates = (array, key) => {
         const counts = {};
         array.forEach(item => {
@@ -1614,7 +1614,7 @@ function Updataworkrequest() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         localStorage.removeItem('EmployeeIDsetss');
                                         localStorage.clear();
-                                        navigate('/Addassetcode')
+                                        navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>

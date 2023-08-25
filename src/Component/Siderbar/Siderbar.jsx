@@ -80,7 +80,9 @@ function Siderbar(props) {
                     <Toolbar />
                     {/* <Divider /> */}
                     <span className="">
-                        <center>
+                        <center onClick={(() => {
+                            navigate('/')
+                        })} className='logss'>
                             <img className=" mx-auto loginimg" src={logo} alt="" />
                         </center>
                     </span>
