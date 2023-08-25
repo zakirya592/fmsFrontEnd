@@ -134,7 +134,7 @@ function Employeemaster() {
 
             swalWithBootstrapButtons.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "Do you want to deleting Employee Master !",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -156,7 +156,7 @@ function Employeemaster() {
                         });
                     swalWithBootstrapButtons.fire(
                         'Deleted!',
-                        'User has been deleted.',
+                        'Employee Master has been deleted.',
                         'success'
                     )
                 }

@@ -132,11 +132,9 @@ axios.get(`/api/Designation_GET_LIST`)
             });
     }
 
-    const postapi = (e) => {
-        // e.preventDefault(); http://gs1ksa.org:3021 http://gs1ksa.org:3021
-        axios.post(`/api/EmployeeMaster_post`, {
+    const addemploymaster = async () => {
+         axios.post(`/api/EmployeeMaster_post`, {
             EmployeeID: value.EmployeeID,
-            // EmployeeStatus: value.EmployeeStatus,
             Gender: value.Gender,
             Title: value.Title,
             BirthDate: value.BirthDate,
@@ -147,7 +145,7 @@ axios.get(`/api/Designation_GET_LIST`)
             NationalityCode: value.NationalityCode,
             MaritalStatus: value.MaritalStatus,
             NationalID: value.NationalID,
-            PassportNumber:value.PassportNumber,
+            PassportNumber: value.PassportNumber,
             MobileNumber: value.MobileNumber,
             LandlineNumber: value.LandlineNumber,
             DesignationCode: value.DesignationCode,
@@ -158,20 +156,44 @@ axios.get(`/api/Designation_GET_LIST`)
             JoiningDate: value.JoiningDate
         },)
             .then((res) => {
-                console.log('Add', res.data);
+                console.log(res.data);
                 Swal.fire(
                     'Created!',
                     ' Employee Master has been created',
                     'success'
                 )
-            }).then(
-                navigate('/Employeemaster')
-            )
+                    navigate('/Employeemaster')
+                
+
+            })
             .catch((err) => {
                 console.log(err);
-             
+                const statuss = err.response.status
+
+                if (statuss == 404) {
+                    Swal.fire(
+                        'Error!',
+                        'EmployeeID is required  ',
+                        'error'
+                    )
+                }
+                else if (statuss == 500) {
+                    Swal.fire(
+                        'Error!',
+                        'This EmployeeID Already exit ',
+                        'error'
+                    )
+                }
+                // else {
+                //     Swal.fire(
+                //         'Error!',
+                //         `${err.response.message}`,
+                //         'error'
+                //     )
+                // }
             });
-    }
+
+    };
 
     return (
         <>
@@ -852,7 +874,7 @@ axios.get(`/api/Designation_GET_LIST`)
                                         <ArrowCircleLeftOutlinedIcon className="me-2" />
                                         Back
                                     </button>
-                                    <button type="button" className="border-0 px-3 savebtn py-2" onClick={postapi}>
+                                    <button type="button" className="border-0 px-3 savebtn py-2" onClick={addemploymaster}>
                                         <SaveIcon className="me-2" />
                                         SAVE
                                     </button>
