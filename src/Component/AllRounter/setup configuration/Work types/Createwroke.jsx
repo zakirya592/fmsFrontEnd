@@ -49,7 +49,7 @@ function Createwroke() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`The Record already exists in the table`, {
+                toast.error(`This Work Type already exist`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,

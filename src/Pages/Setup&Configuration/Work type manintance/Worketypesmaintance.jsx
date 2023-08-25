@@ -57,7 +57,7 @@ function Worketypesmaintance() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this work type",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -72,16 +72,17 @@ function Worketypesmaintance() {
                         getapi()
                         // Refresh the table data if needed
                         // You can call the API again or remove the deleted row from the state
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Work Type has been deleted',
+                            'success'
+                        )
                     })
                     .catch((err) => {
                         // Handle delete error
                         console.log('Error deleting', err);
                     });
-                swalWithBootstrapButtons.fire(
-                    'Deleted!',
-                    'User has been deleted.',
-                    'success'
-                )
+               
             }
         })
 
@@ -177,7 +178,7 @@ function Worketypesmaintance() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Work Type has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
@@ -206,7 +207,6 @@ function Worketypesmaintance() {
                         <div className="py-3">
                             <div className="d-flex justify-content-between my-auto">
                                 <p className="color1 workitoppro my-auto">WORK TYPE MAINTENANCE
-                                    <span className='star'>*</span>
                                 </p>
                                 <div className="d-flex">
                                     <Createwroke />
@@ -248,7 +248,7 @@ function Worketypesmaintance() {
                                 <ArrowCircleLeftOutlinedIcon className='me-2' />
                                 Back
                             </button>
-                            <button type="button" className="border-0 px-3 savebtn py-2">
+                            <button type="button" className="border-0 px-3 savebtn py-2" >
                                 <SaveIcon className='me-2' />
                                 SAVE
                             </button>
