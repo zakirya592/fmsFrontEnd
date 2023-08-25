@@ -204,7 +204,7 @@ function WorkRequest() {
             <span style={{ paddingRight: '18px' }} >View</span>
             <VisibilityIcon />
           </MenuItem>
-          <MenuItem disabled={params.row.RequestStatus === 'Closed'} onClick={(() => {
+          <MenuItem disabled={params.row.RequestStatus === 'This Work Request is already closed..'} onClick={(() => {
             navigate(`/WorkRequest/Updata/${params.row.RequestNumber}`)
             localStorage.setItem('EMpIDUpdata', params.row.EmployeeID)
           })}>
@@ -246,22 +246,45 @@ function WorkRequest() {
   // workTypeDesc api 
   
   useEffect(() => {
-    const filteredRows = getdata && getdata.filter(row => (
+    const filteredRows = (getdata || []).filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
       (!requestByEmployee || row.EmployeeID.includes(requestByEmployee))
-    )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, indes) => ({
-      ...row,
-      id: indes+1,
-      RequestNumber: row.RequestNumber,
-      RequestStatus: row.RequestStatus,
-      EmployeeID: row.EmployeeID,
-      WorkPriority: row.WorkPriority,
-      RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
-      WorkType: row.WorkType,
-      workTypeDesc: row.workTypeDesc, //this Both id  is to display a work types desc //ok
-      WorkTrade: row.WorkTrade,
-      worktradeDesc: row.worktradeDesc,
-    }))
+    )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, index) => {
+      const isClosed = row.RequestStatus === "Closed";
+
+      if (isClosed) {
+        // If the request is closed, return a modified row with the closed message
+        return {
+          ...row,
+          id: index + 1,
+          RequestNumber: row.RequestNumber,
+          RequestStatus: isClosed ? "This Work Request is already closed.." : row.RequestStatus,
+          EmployeeID: row.EmployeeID,
+          WorkPriority: row.WorkPriority,
+          RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
+          WorkType: row.WorkType,
+          workTypeDesc: row.workTypeDesc,
+          WorkTrade: row.WorkTrade,
+          worktradeDesc: row.worktradeDesc,
+        };
+      } else {
+        // If the request is not closed, return the row as is
+        return {
+          ...row,
+          id: index + 1,
+          RequestNumber: row.RequestNumber,
+          RequestStatus: row.RequestStatus,
+          EmployeeID: row.EmployeeID,
+          WorkPriority: row.WorkPriority,
+          RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
+          WorkType: row.WorkType,
+          workTypeDesc: row.workTypeDesc,
+          WorkTrade: row.WorkTrade,
+          worktradeDesc: row.worktradeDesc,
+        };
+      }
+    });
+
     // Fetch work type descriptions for all unique work types
     const uniqueWorkTypes = [...new Set(filteredRows.map(row => row.WorkType))];
     // uniqueWorkTypes.forEach(workType => {
@@ -399,28 +422,28 @@ function WorkRequest() {
     }
   };
   const handleAddToWorkRequest = () => {
-    // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
+  if (!selectedRow || selectedRow.length === 0) {
+    console.log('Select a Work Request by checking the check box');
+    alert('Select a Work Request by checking the check box')
+    return;
+  }
 
-    const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
-    console.log("selectedRowData")
-    console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
-    // const selectedRowData = getdata.map((row, index) => ({
-    //     ...row,
-    //     id: index,
-    //     AssetItemDescription: row.AssetItemDescription,
-    // }))
-    console.log('Selected Row Data for Work Request:', selectedRowIds);
-    setSelectedRowIds(selectedRowData)
+  const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
+  console.log('Selected Row Data:', selectedRowData);
 
-    // TO GET ONLY ONE DESCRIPTION
-    console.log(selectedRowIds.RequestStatus);
-    let oneDesc = selectedRowData
-    // putapi(oneDesc)
-    console.log('Post the Data', selectedRowIds.RequestNumber);
-    navigate(`/WorkRequest/Updata/${selectedRowIds.RequestNumber}`)
-    // Perform your logic to add to work request using selectedRowData
-    // Example: sendToWorkRequest(selectedRowData);
-  };
+  setSelectedRowIds(selectedRowData);
+
+  // Assuming you want to navigate to the update page of the first selected row
+  if (selectedRow.length > 0) {
+    const firstSelectedRow = selectedRow[0];
+    console.log('Post the Data:', firstSelectedRow.RequestNumber);
+    navigate(`/WorkRequest/Updata/${firstSelectedRow.RequestNumber}`);
+  }
+
+  // Perform your logic to add to work request using selectedRowData
+  // Example: sendToWorkRequest(selectedRowData);
+};
+
 
     // const handleRowClick = (selectedRows) => {
     //     console.log(selectedRow)
@@ -449,7 +472,8 @@ function WorkRequest() {
                     <p className="color1 workitoppro my-auto">
                       Work Request Transactions</p>
                     <div className="d-flex">
-                      <button type="button" className="border-0 px-3  savebtn py-2" disabled={statuscheck === 'Closed' || selectedRowIds.length === 0}  onClick={handleAddToWorkRequest}>UPDATE</button>
+                      <button type="button" className="border-0 px-3  savebtn py-2" disabled={statuscheck === 'This Work Request is already closed..'} onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Request is already closed..' ? 'UPDATE' : 'UPDATE'}
+</button>
 
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')

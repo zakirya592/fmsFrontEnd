@@ -624,10 +624,13 @@ function CreateWorkRequest() {
         AssetItemTagIDpost()
         Swal.fire({
             title: "Success",
-            text: "Work request has been created successfully",
+            text: `Work request ${value.RequestNumber} has been created successfully`,
             icon: "success",
             confirmButtonText: "OK",
+           
+            
         })
+        navigate('/workrequest'); // Navigate after alert is closed
 
         localStorage.removeItem('postemployid');
         localStorage.removeItem('EmployeeIDset');
@@ -1105,7 +1108,7 @@ function CreateWorkRequest() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-1'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee Number
+                                                Employee
                                             </label>
                                         </div>
 

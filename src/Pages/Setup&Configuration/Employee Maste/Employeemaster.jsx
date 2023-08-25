@@ -106,6 +106,7 @@ function Employeemaster() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'EmployeeID', headerName: 'EmployeeID#', width: 160 },
+        { field: 'FullName', headerName: 'Name', width: 200 },
         { field: 'NationalityCode', headerName: 'Nationality Code', width: 160 },
         { field: 'BuildingCode', headerName: 'Building Code#', width: 160 },
         { field: 'DepartmentCode', headerName: 'DepartmentCode', width: 150 },
@@ -211,17 +212,22 @@ function Employeemaster() {
         );
     }
 
-    const filteredData = getdata && getdata.map((row, indes) => ({
-        ...row,
-        id: indes + 1,
-        RequestNumber: row.RequestNumber,
-        EmployeeID: row.EmployeeID,
-        NationalityCode: row.NationalityCode,
-        BuildingCode: row.BuildingCode,
-        DepartmentCode: row.DepartmentCode,
-        Gender: row.Gender,
+    const filteredData = getdata && getdata.map((row, index) => {
+        const fullName = `${row.Firstname} ${row.Middlename} ${row.Lastname}`.trim();
+        console.log(fullName);
+        return {
+            ...row,
+            id: index + 1,
+            RequestNumber: row.RequestNumber,
+            EmployeeID: row.EmployeeID,
+            FullName: fullName, // Combine first name, middle name, and last name
+            NationalityCode: row.NationalityCode,
+            BuildingCode: row.BuildingCode,
+            DepartmentCode: row.DepartmentCode,
+            Gender: row.Gender,
+        };
+    });
 
-    }))
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
