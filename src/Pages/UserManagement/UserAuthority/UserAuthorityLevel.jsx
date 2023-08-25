@@ -8,6 +8,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
@@ -35,6 +36,7 @@ function UserAuthority() {
       ),
     },
   ];
+  const navigate = useNavigate();
 
   const generateRandomData = () => {
     const rows = [];
@@ -58,8 +60,9 @@ function UserAuthority() {
           <AppBar className="fortrans locationfortrans" position="fixed">
             <Toolbar>
               <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
-                <p className="text-center my-auto ms-5">User Management</p>
+              <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                      navigate('/')
+                    })} />                <p className="text-center my-auto ms-5">User Management</p>
               </Typography>
             </Toolbar>
           </AppBar>
@@ -95,10 +98,9 @@ function UserAuthority() {
               </div>
             </div>
             <div className="d-flex justify-content-between mt-3 mb-3">
-              <button type="button" className="border-0 px-3 savebtn py-2">
-                <ArrowCircleLeftOutlinedIcon className='me-2' />
-                Back
-              </button>
+            <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                      navigate('/')
+                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
               <button type="button" className="border-0 px-3 savebtn py-2">
                 <SaveIcon className='me-2'/>
                 SAVE

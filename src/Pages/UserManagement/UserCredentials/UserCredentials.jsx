@@ -7,6 +7,8 @@ import pagepin from "../../../Image/pagepin.png"
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SaveIcon from '@mui/icons-material/Save';
+import { useNavigate } from 'react-router-dom';
+
 import { SearchOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -33,6 +35,7 @@ function UserCredentials() {
     const [windowuserpassword, setwindowuserpassword] = useState("")
     const [userIdPassword, setuserIdPassword] = useState("")
     const [emailAddress, setemailAddress] = useState("")
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -43,8 +46,9 @@ function UserCredentials() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
-                                    <p className="text-center my-auto ms-5">User Management</p>
+                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                      navigate('/')
+                    })} />                                    <p className="text-center my-auto ms-5">User Management</p>
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -476,7 +480,9 @@ function UserCredentials() {
                                 </div>
                                 {/* below Buttons */}
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" className="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                      navigate('/')
+                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" className="border-0 px-3  savebtn py-2" ><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
