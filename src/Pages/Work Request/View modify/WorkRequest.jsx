@@ -248,8 +248,11 @@ function WorkRequest() {
   useEffect(() => {
     const filteredRows = (getdata || []).filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-      (!requestByEmployee || row.EmployeeID.includes(requestByEmployee))
+      (!requestByEmployee || (row.EmployeeID && row.EmployeeID.includes(requestByEmployee)))
     )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, index) => {
+      // Your mapping logic remains the same
+    
+
       const isClosed = row.RequestStatus === "Closed";
 
       if (isClosed) {
@@ -493,7 +496,7 @@ function WorkRequest() {
                     <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Request  Number</label>
+                          Employee</label>
 
                         <input
                           types='text'
