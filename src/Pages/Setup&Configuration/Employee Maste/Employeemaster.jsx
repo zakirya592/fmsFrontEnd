@@ -242,7 +242,7 @@ function Employeemaster() {
                             <AppBar className="fortrans locationfortrans" position="fixed">
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
                       navigate('/')
                     })} />
                                         <p className="text-center my-auto ms-5">Employee Master</p>
