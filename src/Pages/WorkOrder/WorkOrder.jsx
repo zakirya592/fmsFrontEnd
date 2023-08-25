@@ -12,9 +12,11 @@ import WorkOrderCreate from "../../Component/View work/WorkOrderCreate";
 import PrintIcon from "@mui/icons-material/Print";
 import { useState } from "react";
 import { SearchOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 function WorkOrder() {
+    const navigate = useNavigate();
     const [orderNumber, setOrderNumber] = useState("");
     const [requestOrderNumber, setRequestOrderNumber] = useState("");
     const [workStatus, setWorkStatus] = useState("");
@@ -45,7 +47,9 @@ function WorkOrder() {
                                     noWrap
                                     component="div"
                                     className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                      navigate('/')
+                    })} />
                                     <p className="text-center my-auto ms-5">Work Order</p>
                                 </Typography>
                             </Toolbar>
@@ -475,7 +479,9 @@ function WorkOrder() {
                                     </div>
                                 </div>
                                 <div className="d-flex justify-content-between mt-3">
-                                <button type="button" class="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                      navigate('/')
+                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                 <button type="button" class="border-0 px-3  savebtn py-2"><SaveIcon className='me-2'/>SAVE</button>
                             </div>
                             </div>              
