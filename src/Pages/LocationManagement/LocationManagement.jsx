@@ -13,7 +13,11 @@ import excel from '../../Image/excel.png';
 import './locationmanagement.css';
 import { DataGrid } from '@mui/x-data-grid';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import { useNavigate } from 'react-router-dom';
+
+
 function LocationManagement() {
+
   const columns = [
     { field: 'SEQ.', headerName: 'SEQ.', width: 90 },
     { field: 'WORK ORDER#', headerName: 'WORK ORDER#', width: 150 },
@@ -27,6 +31,7 @@ function LocationManagement() {
     { field: 'BUILDING', headerName: 'BUILDING', width: 150 },
     { field: 'LOCATION', headerName: 'LOCATION', width: 150 },
   ];
+  const navigate = useNavigate();
 
   const generateRandomData = () => {
     const rows = [];
@@ -71,8 +76,9 @@ function LocationManagement() {
               <AppBar className="fortrans locationfortrans" position="fixed">
                 <Toolbar>
                   <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
-                    <p className="text-center my-auto ms-5">Location Management</p>
+                  <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                      navigate('/')
+                    })} />                    <p className="text-center my-auto ms-5">Location Management</p>
                   </Typography>
                 </Toolbar>
               </AppBar>
@@ -165,7 +171,9 @@ function LocationManagement() {
                     />
                   </div>
                   <div className="d-flex justify-content-between mt-3">
-                                <button type="button" class="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                  <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                      navigate('/')
+                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                 <button type="button" class="border-0 px-3  proceedbtn py-2"><VideoLibraryIcon className='me-2'/>Proceed to Transfer</button>
                             </div>
                 </div>

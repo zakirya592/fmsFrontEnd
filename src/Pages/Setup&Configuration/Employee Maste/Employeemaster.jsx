@@ -31,7 +31,6 @@ function Employeemaster() {
         const printWindow = window.open('', '_blank');
         const selectedData = tableData.map((row, index) => ({
             'id': index + 1,
-            'RequestNumber': row.RequestNumber,
             'EmployeeID': row.EmployeeID,
             'NationalityCode': row.NationalityCode,
             'BuildingCode': row.BuildingCode,
@@ -44,26 +43,23 @@ function Employeemaster() {
 
         const tableHtml = `
       <table border="1">
-        <tr>
-          <th style="${headerStyle}">SEQ</th>
-          <th style="${headerStyle}">Request Number</th>
-          <th style="${headerStyle}">Employee ID</th>
-          <th style="${headerStyle}">Nationality Code</th>
-          <th style="${headerStyle}">Building Code</th>
-          <th style="${headerStyle}">Department Code</th>
-          <th style="${headerStyle}">Gender</th>
-        </tr>
-        ${selectedData.map(row => `
-          <tr>
-            <td>${row['SEQ']}</td>
-            <td>${row['Request Number']}</td>
-            <td>${row['Request Status']}</td>
-            <td>${row['Employee ID']}</td>
-            <td>${row['Nationality Code']}</td>
-            <td>${row['Building Code']}</td>
-            <td>${row['Department Code']}</td>
-            <td>${row['Gender']}</td>
-          </tr>`).join('')}
+      <tr>
+      <th style="${headerStyle}">SEQ</th>
+      <th style="${headerStyle}">EmployeeID#</th>
+      <th style="${headerStyle}">Nationality Code</th>
+      <th style="${headerStyle}">Building Code#</th>
+      <th style="${headerStyle}">DepartmentCode</th>
+      <th style="${headerStyle}">Gender</th>
+  </tr>
+  ${selectedData.map(row => `
+  <tr>
+      <td>${row['id']}</td>
+      <td>${row['EmployeeID']}</td>
+      <td>${row['NationalityCode']}</td>
+      <td>${row['BuildingCode']}</td>
+      <td>${row['DepartmentCode']}</td>
+      <td>${row['Gender']}</td>
+  </tr>`).join('')}
       </table>`;
 
         const printContent = `
@@ -242,7 +238,7 @@ function Employeemaster() {
                             <AppBar className="fortrans locationfortrans" position="fixed">
                                 <Toolbar>
                                     <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
                       navigate('/')
                     })} />
                                         <p className="text-center my-auto ms-5">Employee Master</p>
