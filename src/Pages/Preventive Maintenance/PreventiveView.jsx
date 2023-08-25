@@ -14,8 +14,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Siderbar from '../../Component/Siderbar/Siderbar'
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import { useNavigate } from 'react-router-dom';
 
 function PreventiveView() {
+    const navigate = useNavigate();
     const [Employeenumber, setEmployeenumber] = useState('')
     const [WorkRequest, setWorkRequest] = useState('')
     const [Firstname, setFirstname] = useState('')
@@ -43,7 +45,9 @@ function PreventiveView() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                      navigate('/')
+                    })} />
                                     <p className="text-center my-auto ms-5">Preventive Maintenance</p>
                                 </Typography>
                             </Toolbar>
@@ -562,7 +566,9 @@ function PreventiveView() {
                             
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                      navigate('/')
+                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                    <div className="d-flex">
 
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2"><SaveIcon className='me-2' />SAVE</button>
