@@ -41,9 +41,17 @@ function Updataemployeemaster() {
 
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
+    const [dropdownGender, setdropdownGender] = useState([])
+    const [dropdownTitle, setdropdownTitle] = useState([])
+    const [dropdownMerital, setdropdownMarital] = useState([])
+    const [dropdownNationality, setdropdownNationality] = useState([])
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
+    const [dropdownDesignation, setdropdownDesignation] = useState([])
     const [ddata, setdata] = useState([])
+    const [desnation, setdesnation] = useState([]);
     const [bdata, setbata] = useState([])
+    const [desig, setdesig] = useState([]);
+
 
     const getapi = () => {
         axios.get(`/api/EmployeeMaster_GET_BYID/${userId}`, {
@@ -52,6 +60,7 @@ function Updataemployeemaster() {
                 console.log('TO Assets Master By ID', res.data);
                 const {
                     Firstname,
+                    NationalityCode,
                     Lastname,
                     Middlename,
                     MobileNumber,
@@ -67,6 +76,7 @@ function Updataemployeemaster() {
                     DesignationCode,
                     Title,
                     Gender,
+                    MaritalStatus,
                     Age,
                     JoiningDate,
                     BirthDate
@@ -75,10 +85,12 @@ function Updataemployeemaster() {
                     ...prevValue,
                     EmployeeStatus,
                     EmployeeID,
+                    NationalityCode,
                     Firstname,
                     Lastname,
                     Middlename,
                     Email,
+                                        MaritalStatus,
                     MobileNumber,
                     LandlineNumber,
                     DepartmentCode,
@@ -97,6 +109,23 @@ function Updataemployeemaster() {
                 const birthDate = moment(BirthDate).format('YYYY-MM-DD')
                 setbata(birthDate)
                 setdata(data)
+                const desnat=res.data.recordset[0].NationalityCode
+                axios.get(`/api/Nationality_GET_BYID/${desnat}`) 
+                .then((res) => {
+setdesnation(res.data.recordset[0].NationalityDesc);
+                })
+                .catch((err) => {  //continue
+                    //// console.log(err);;
+                });
+                                // designation
+                                const desi = res.data.recordset[0].DesignationCode
+                                axios.get(`/api/Designation_GET_BYID/${desi}`) 
+                                .then((res) => {
+                                    setdesig(res.data.recordset[0].DesignationDesc);
+                                                    })
+                                                    .catch((err) => {
+                                                        //// console.log(err);;
+                                                    });
                 console.log(data, birthDate);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
@@ -120,6 +149,47 @@ function Updataemployeemaster() {
         axios.get(`/api/Location_LIST`).then((res) => {
             // console.log("Loaction list", res.data.recordset);
             setdropdownLocation(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+                        // Designation
+        axios.get(`/api/Designation_GET_LIST`).then((res) => {
+            // console.log("Loaction list", res.data.recordset);
+            setdropdownDesignation(res.data.recordsets[0])
+            // console.log("--------",res.data.recordsets[0].DesignationCode);
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+        // merital
+        axios.get(`/api/MaritalStatus_GET_LIST`).then((res) => {
+            // console.log("Loaction list", res.data.recordset);
+            setdropdownMarital(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+            // nationality
+        axios.get(`/api/Nationality_GET_LIST`).then((res) => {
+            // console.log("Loaction list", res.data.recordset);
+            setdropdownNationality(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+            // title
+        axios.get(`/api/Title_GET_LIST`).then((res) => {
+            // console.log("Loaction list", res.data.recordset);
+            setdropdownTitle(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+            // GENDER
+        axios.get(`/api/Gender_GET_LIST`).then((res) => {
+            // console.log("Loaction list", res.data.recordset);
+            setdropdownGender(res.data.recordsets[0])
         })
             .catch((err) => {
                 // console.log(err);;
@@ -158,8 +228,38 @@ function Updataemployeemaster() {
                 // console.log(err);;
             });
     }
-
-    const postapi = (e) => {
+    const handleProvinceChangeNat = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            NationalityCode: e.target.value,
+        }));
+        axios.get(`/api/Nationality_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                // console.log(res.data);
+                setdesnation(res.data.recordset[0].NationalityDesc)
+            })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
+// designation
+const handleProvinceChangeDes = (e) => {
+    const Deptnale = e.target.value;
+    setvalue((prevValue) => ({
+        ...prevValue,
+        DesignationCode: e.target.value,
+    }));
+    axios.get(`/Designation_GET_BYID/${Deptnale}`)
+        .then((res) => {
+            // console.log(res.data);
+            setdesig(res.data.recordset[0].DesignationDesc)
+        })
+        .catch((err) => {
+            // console.log(err);;
+        });
+}
+    function postapi(e) {
         axios.put(`/api/EmployeeMaster_Put/${userId}`, {
             // EmployeeStatus: value.EmployeeStatus,
             Gender: value.Gender,
@@ -181,7 +281,7 @@ function Updataemployeemaster() {
             BuildingCode: value.BuildingCode,
             LocationCode: value.LocationCode,
             JoiningDate: value.JoiningDate
-        },)
+        })
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
@@ -306,10 +406,14 @@ function Updataemployeemaster() {
                                                         // dropdownIcon={<CaretDownOutlined />}
                                                         suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                                     >
-                                                        <option className='px-4 mx-4' value={value.Gender}>{value.Gender}</option>
-                                                        <option className='px-4 mx-4' value='Male'>Male</option>
-                                                        <option className='px-4 mx-4' value='Female'>FeMale</option>
-                                                        <option className='px-4 mx-4' value='other'>Other</option>
+                                                <option className='inputsectiondropdpwn' value={value.GenderDesc}>{value.GenderDesc}</option>
+                                                {
+                                                    dropdownGender && dropdownGender.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.GenderDesc}>{itme.GenderDesc}</option>
+                                                        )
+                                                    })
+                                                }
 
                                                     </select>
 
@@ -329,11 +433,14 @@ function Updataemployeemaster() {
                                                         // dropdownIcon={<CaretDownOutlined />}
                                                         suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                                     >
-                                                        <option className='px-4 mx-4' value={value.Title}>{value.Title}</option>
-
-                                                        <option className='px-4 mx-4' value='ms'>MS</option>
-                                                        <option className='px-4 mx-4' value='FeMale'>Female</option>
-
+                                                                                                        <option className='inputsectiondropdpwn' value={value.TitleCode}>{value.TitleCode}</option>
+                                                {
+                                                    dropdownTitle && dropdownTitle.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.TitleCode}>{itme.TitleCode}</option>
+                                                        )
+                                                    })
+                                                }
                                                     </select>
 
                                                 </div>
@@ -485,22 +592,21 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='NationalityCode' className='lablesection color3 text-start mb-1'>
-                                                Nationality Code
+                                                Nationality Code<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="NationalityCode" aria-label="Floating label select example" value={value.NationalityCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        NationalityCode: e.target.value
-                                                    }))
-                                                }}
+                                               onChange={handleProvinceChangeNat}
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                             >
-                                                <option className='' value='dfd'>Select Nationality Code</option>
-
-                                                <option value='12'> 12</option>
-
+<option className='inputsectiondropdpwn' value={value.NationalityCode}>{value.NationalityCode}</option>
+                                                {
+                                                    dropdownNationality && dropdownNationality.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.NationalityCode}>{itme.NationalityCode  }</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
 
                                         </div>
@@ -511,12 +617,13 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="NationalityDescription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Nationality Description
+                                                Nationality Description<span className="star">*</span>
                                             </label>
                                             <input
                                                 types='text'
                                                 id='NationalityDescription'
-                                                value={value.NationalityDescription}
+                                                value={desnation}
+                                                
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -546,9 +653,14 @@ function Updataemployeemaster() {
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                             >
-                                                <option className='' value=''>Select Marital Status </option>
-
-                                                <option value='22'>22</option>
+                                              <option className='inputsectiondropdpwn' value={value.MaritalDesc}>{value.MaritalDesc}</option>
+                                                {
+                                                    dropdownMerital && dropdownMerital.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.MaritalDesc}>{itme.MaritalDesc}</option>
+                                                        )
+                                                    })
+                                                }
 
                                             </select>
 
@@ -662,22 +774,21 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Designationcode' className='lablesection color3 text-start mb-1'>
-                                                Designation Code
+                                                Designation Code<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="Designationcode" aria-label="Floating label select example" value={value.DesignationCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        DesignationCode: e.target.value
-                                                    }))
-                                                }}
+                                                onChange={handleProvinceChangeDes}
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                             >
-                                                <option className='' value='dfd'>{value.DesignationCode}</option>
-
-                                                <option value='Nationality12'>Nationality Code 12</option>
-
+                                                <option value={value.DesignationCode}>{value.DesignationCode}</option>
+                                                {
+                                                    dropdownDesignation && dropdownDesignation.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.DesignationCode}>{itme.DesignationCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
 
                                         </div>
@@ -688,20 +799,14 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="DesignationName"
                                                 className="lablesection color3 text-start mb-1">
-                                                Designation Name
+                                                Designation Name<span className="star">*</span>
                                             </label>
                                             <input
                                                 types='text'
-                                                id='DesignationName'
-                                                value={value.DesignationName}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        DesignationName: e.target.value
-                                                    }))
-                                                }}
+                                                id='Departmentname'
+                                                value={desig}
                                                 className='rounded inputsection py-2'
-                                                placeholder='Designation Name'
+                                                placeholder='Department Name'
                                                 required
                                             ></input>
 
