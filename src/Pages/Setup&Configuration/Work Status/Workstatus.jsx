@@ -56,7 +56,7 @@ function Workstatus() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Work Status",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -78,7 +78,7 @@ function Workstatus() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Work status has been Deleted',
                     'success'
                 )
             }
@@ -161,8 +161,8 @@ function Workstatus() {
                 console.log('Add', res.data);
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    ' You have successfully updated.',
+                    'Update!',
+                    'Work status has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

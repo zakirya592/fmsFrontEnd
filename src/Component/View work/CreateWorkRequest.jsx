@@ -97,13 +97,27 @@ function CreateWorkRequest() {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
                 console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
-                // const reqput = res.data.recordset[0].RequestNumber + 1;
-                const reqput = res.data.recordset[0].RequestNumber;
+                const reqput = res.data.recordset[0].RequestNumber + 1;
+                // const reqput = res.data.recordset[0].RequestNumber;
+                // const reqput=19
                 setrenum(reqput)
+                
+                let formattedRequestNumber;
+                if (reqput >= 1 && reqput <= 9) {
+                    formattedRequestNumber = `000-000-00${reqput}`;
+                } else if (reqput >= 10 && reqput <= 99) {
+                    formattedRequestNumber = `000-000-0${reqput}`;
+                } else if (reqput >= 100 && reqput <= 999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else if (reqput >= 1000 && reqput <= 9999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                }
                 // localStorage.setItem('Requestnumbers', reqput)
-                setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-' + '0' + `${reqput}` }));
+                setvalue(prevState => ({ ...prevState, RequestNumber: formattedRequestNumber }));
                 const reqnumber = `000-000-0${reqput}`
-                localStorage.setItem('requestnumber', reqnumber)
+                localStorage.setItem('requestnumber', formattedRequestNumber)
             })
             .catch((err) => {
                 console.log(err);
