@@ -5,6 +5,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from "sweetalert2";
+
 function NewAssetType() {
 
     const [value, setvalue] = useState({
@@ -29,36 +31,32 @@ function NewAssetType() {
         },)
             .then((res) => {
                 console.log('Add', res.data);
-                setvalue(prevState => ({ ...prevState, AssetTypeCode: '', AssetTypeDesc: '' }));
-                // setAnchorEl(null);
-                toast.success('Add record successfully', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setvalue ({ AssetTypeCode: '', AssetTypeDesc: '' });
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Asset has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
-                // Swal.fire(
-                //     'Add!',
-                //     'Add record successfully',
-                //     'success'
-                // )
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Work Type already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        setvalue ({ AssetTypeCode: '', AssetTypeDesc: '' });}
                 });
+
+                setOpenDialog(false);
             });
     }
 
