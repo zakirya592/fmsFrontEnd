@@ -428,9 +428,9 @@ function WorkRequest() {
   if (!selectedRow || selectedRow.length === 0) {
     console.log('Select a Work Request by checking the check box');
     Swal.fire({
-      title: "Success",
+      title: "Error",
       text: `Select a Work Request by checking the check box`,
-      icon: "success",
+      icon: "error",
       confirmButtonText: "OK",
 
 
