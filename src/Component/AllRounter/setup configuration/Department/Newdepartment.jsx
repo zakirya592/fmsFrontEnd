@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
-import Menu from '@mui/material/Menu';
-import Fade from '@mui/material/Fade';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
-import Swal from "sweetalert2";
+import Dialog from '@mui/material/Dialog';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,16 +11,14 @@ function Newdepartment() {
     const [value, setvalue] = useState({
         DepartmentCode: '', DepartmentDesc: '',
     })
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+    const [openDialog, setOpenDialog] = useState(false);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
 
@@ -70,30 +66,19 @@ function Newdepartment() {
 
     return (
         <>
-            <button type="button" id="fade-button"
-                aria-controls={open ? 'fade-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick} className="btn btn-outline-primary mx-1 color2 btnwork">
+            <button
+                type="button"
+                onClick={handleOpenDialog}
+                className="btn btn-outline-primary mx-1 color2 btnwork"
+            >
                 <AddCircleOutlineIcon className="me-1" />
                 New
             </button>
+            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '650px' }}>
 
-            <Menu
-                id="fade-menu"
-                MenuListProps={{
-                    'aria-labelledby': 'fade-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                // onClose={handleClose}
-                TransitionComponent={Fade}
+                <form onSubmit={postapi} className='Sizing'>
 
-            >
-
-                <form onSubmit={postapi}>
-
-                    <div className="row mx-auto  w-100 formsection firstname">
+                    <div className="row mx-auto  w-100 formsection sizingtop">
                         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                             <div className='emailsection position-relative d-grid my-1'>
                                 <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
@@ -143,13 +128,13 @@ function Newdepartment() {
                     </div>
 
                     <div className="d-flex justify-content-between my-2 p-4 ">
-                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleClose}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
                     </div>
 
                 </form>
 
-            </Menu>
+                </Dialog>
             <ToastContainer />
         </>
     )
