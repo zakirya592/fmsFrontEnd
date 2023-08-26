@@ -79,7 +79,7 @@ function ProblemCategory() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Problem Category",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -101,7 +101,7 @@ function ProblemCategory() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Problem Category has been Deleted',
                     'success'
                 )
             }
@@ -158,7 +158,7 @@ function ProblemCategory() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Problem Category has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

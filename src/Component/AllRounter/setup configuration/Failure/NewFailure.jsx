@@ -31,7 +31,7 @@ function NewFailure() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, FailureStatusCode: '', FailureStatusDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
+                toast.success('Failure Code has been created', {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -44,7 +44,7 @@ function NewFailure() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
+                toast.error(`This Failure Code already exist`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
