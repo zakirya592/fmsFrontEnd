@@ -78,7 +78,7 @@ function CreateWork() {
                 New
             </button>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '850px' }}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '650px' }}>
 
                 <form onSubmit={postapi} className='Sizing'>
                     <div className="row mx-auto w-100 formsection sizingtop">
