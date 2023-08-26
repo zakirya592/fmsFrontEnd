@@ -57,7 +57,7 @@ function Workcategory() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Work category",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function Workcategory() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Work category has been Deleted',
                     'success'
                 )
             }
@@ -161,7 +161,7 @@ function Workcategory() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    ' Work category has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

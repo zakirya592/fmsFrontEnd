@@ -58,7 +58,7 @@ function Workpriority() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Work Priority",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -80,7 +80,7 @@ function Workpriority() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Work Priority has been Deleted',
                     'success'
                 )
             }
@@ -167,7 +167,7 @@ function Workpriority() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    ' Work Priority has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
