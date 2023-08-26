@@ -56,7 +56,7 @@ function Day() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Day",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -78,7 +78,7 @@ function Day() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Day  has been deleted',
                     'success'
                 )
             }
@@ -163,7 +163,7 @@ function Day() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Day has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

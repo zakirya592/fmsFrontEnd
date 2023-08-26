@@ -5,6 +5,8 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from "sweetalert2";
+
 function NewWorkcatagres() {
 
     const [value, setvalue] = useState({
@@ -18,6 +20,9 @@ function NewWorkcatagres() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+    };
+    const backCloseDialog = () => {
+        setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
     const postapi = (e) => {
@@ -30,34 +35,30 @@ function NewWorkcatagres() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WorkCategoryCode: '', WorkCategoryDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Work category has been created', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Work category has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
-                // Swal.fire(
-                //     'Add!',
-                //     'Add record successfully',
-                //     'success'
-                // )
             })
             .catch((err) => {
-                console.log(err);
-                toast.error(`This work category already exist`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Work category already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        setvalue(prevState => ({ ...prevState, WorkCategoryCode: '', WorkCategoryDesc: '' }));
+                    
+                     }
                 });
+                setOpenDialog(false);
             });
     }
 
@@ -128,7 +129,7 @@ function NewWorkcatagres() {
                     </div>
 
                     <div className="d-flex justify-content-between my-2 p-4 ">
-                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={backCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
                     </div>
 

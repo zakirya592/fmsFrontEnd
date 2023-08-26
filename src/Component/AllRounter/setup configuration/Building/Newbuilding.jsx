@@ -5,6 +5,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from "sweetalert2";
 
 function Newbuilding() {
 
@@ -19,9 +20,11 @@ function Newbuilding() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+    };
+    const backCloseDialog = () => {
+        setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
-
     const postapi = (e) => {
         e.preventDefault();
         axios.post(`/api/Building_post`, {
@@ -32,34 +35,30 @@ function Newbuilding() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, BuildingCode: '', BuildingDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Building code has been created', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Building code has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
-                // Swal.fire(
-                //     'Add!',
-                //     'Add record successfully',
-                //     'success'
-                // )
             })
             .catch((err) => {
-                console.log(err);
-                toast.error(`This Building code already exist`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Building code already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        setvalue(prevState => ({ ...prevState, BuildingCode: '', BuildingDesc: '' }));
+
+                    }
                 });
+                setOpenDialog(false);
             });
     }
 
@@ -129,7 +128,7 @@ function Newbuilding() {
                     </div>
 
                     <div className="d-flex justify-content-between my-2 p-4 ">
-                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={backCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
                     </div>
 

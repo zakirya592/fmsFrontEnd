@@ -83,7 +83,7 @@ function Soluctioncode() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Solution Code has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
@@ -126,7 +126,7 @@ function Soluctioncode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Solution Code",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -148,7 +148,7 @@ function Soluctioncode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Solution Code  has been deleted',
                     'success'
                 )
             }

@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
 import "./CreateWork.css"
+import Swal from "sweetalert2";
 
 function CreateWork() {
     const generateId = () => {
@@ -40,30 +41,32 @@ function CreateWork() {
             .then((res) => {
                 console.log('Add', res.data);
                 setValue({ WorkTypeCode: '', WorkTypeDesc: '' });
-                toast.success('Add record successfully', {
-                    position: 'bottom-center',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Work Type has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
-                handleCloseDialog(); // Close the dialog after success
+                // handleCloseDialog(); // Close the dialog after success
             })
             .catch((err) => {
                 console.log(err);
-                toast.error('This Work Type already exist', {
-                    position: 'bottom-center',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
+                Swal.fire(
+                    'Error!',
+                    'This Work Type already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        setValue({ WorkTypeCode: '', WorkTypeDesc: '' });  }
                 });
+
+                setOpenDialog(false);
             });
     };
 

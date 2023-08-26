@@ -6,6 +6,8 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../Work types/CreateWork.css"
+import Swal from "sweetalert2";
+
 function Newproblemcategory() {
 
     const [value, setvalue] = useState({
@@ -19,6 +21,9 @@ function Newproblemcategory() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+    };
+    const backCloseDialog = () => {
+        setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
 
@@ -31,30 +36,29 @@ function Newproblemcategory() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, ProblemCategoryCode: '', ProblemCategoryDesc: '' }));
-                // setAnchorEl(null);
-                toast.success('Problem Category has been created', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+               setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Problem Category has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
             })
             .catch((err) => {
-                console.log(err);
-                toast.error(`This Problem Category already exist`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Problem Category already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        setvalue(prevState => ({ ...prevState, ProblemCategoryCode: '', ProblemCategoryDesc: '' }));
+               }
                 });
+                setOpenDialog(false);
             });
     }
 
@@ -123,7 +127,7 @@ function Newproblemcategory() {
                     </div>
 
                     <div className="d-flex justify-content-between my-2 p-4 ">
-                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={backCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
                     </div>
 

@@ -102,7 +102,7 @@ function Failurecode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Failure Code has been Deleted',
+                    'Failure Code has been deleted',
                     'success'
                 )
             }

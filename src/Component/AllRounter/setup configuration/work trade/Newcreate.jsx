@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
+import Swal from "sweetalert2";
 import "./CreateTrade.css"
 function Newcreate() {
 
@@ -17,6 +18,9 @@ function Newcreate() {
         setOpenDialog(true);
     };   
     const handleCloseDialog = () => {
+        setOpenDialog(false);
+        };
+    const backCloseDialog = () => {
         setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
@@ -32,29 +36,31 @@ function Newcreate() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Work Trade has been created', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Work Trade has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`This work Trade already exist`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This work Trade already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc: '' }));
+                 }
                 });
+                setOpenDialog(false);
             });
     }
 
@@ -146,7 +152,7 @@ function Newcreate() {
                     <button
                             type="button"
                             className="border-0 px-3 savebtn py-2"
-                            onClick={handleCloseDialog}
+                            onClick={backCloseDialog}
                         >
                             <ArrowCircleLeftOutlinedIcon className="me-2" /> Back
                         </button>
