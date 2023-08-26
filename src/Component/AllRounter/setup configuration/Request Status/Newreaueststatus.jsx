@@ -32,7 +32,7 @@ function Newreaueststatus() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, RequestStatusCode: '', RequestStatusDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
+                toast.success('Request status has been created', {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -45,7 +45,7 @@ function Newreaueststatus() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
+                toast.error(`This Request status already exist`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
