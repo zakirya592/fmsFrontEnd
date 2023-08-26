@@ -427,7 +427,7 @@ function WorkRequest() {
     }
   };
   const handleAddToWorkRequest = () => {
-    console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow[0].RequestNumber);
+    console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
   if (!selectedRow || selectedRow.length === 0) {
     console.log('Select a Work Request by checking the check box');
     Swal.fire({
@@ -451,18 +451,19 @@ function WorkRequest() {
       return;
     }
 
+    // Assuming you want to navigate to the update page of the first selected row
+    if (selectedRow.length > 0) {
+      const firstSelectedRow = selectedRow[0];
+      console.log('Post the Data:', firstSelectedRow.RequestNumber);
+      navigate(`/WorkRequest/Updata/${firstSelectedRow.RequestNumber}`);
+    }
+
 
   const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
   console.log('Selected Row Data:', selectedRowData);
 
   setSelectedRowIds(selectedRowData);
 
-  // Assuming you want to navigate to the update page of the first selected row
-  if (selectedRow.length > 0) {
-    const firstSelectedRow = selectedRow[0];
-    console.log('Post the Data:', firstSelectedRow.RequestNumber);
-    navigate(`/WorkRequest/Updata/${firstSelectedRow.RequestNumber}`);
-  }
 
   // Perform your logic to add to work request using selectedRowData
   // Example: sendToWorkRequest(selectedRowData);
