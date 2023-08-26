@@ -84,7 +84,7 @@ function Departmentmaintence() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Department Code",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -106,7 +106,7 @@ function Departmentmaintence() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Department Code has been Deleted',
                     'success'
                 )
             }
@@ -163,7 +163,7 @@ function Departmentmaintence() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Department Code has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
