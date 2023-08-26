@@ -84,7 +84,7 @@ function Assectcondition() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Assect condition has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
@@ -127,7 +127,7 @@ function Assectcondition() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Assectcondition",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -149,7 +149,7 @@ function Assectcondition() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Assect condition has been deleted',
                     'success'
                 )
             }
