@@ -67,8 +67,8 @@ function Pagerounter() {
           {/* ---------Home Section----------- */}
           <Route exact path='/' element={<Fmsmain name="John" />} />
           {/*=====================  work Request=====================   */}
-          <Route exact path="/workrequest" element={<WorkRequest/>}/>       
-             {/*===================== View workRequest Viewwork =====================  */}
+          <Route exact path="/workrequest" element={<WorkRequest />} />
+          {/*===================== View workRequest Viewwork =====================  */}
           <Route exact path='/viewworkRequest' element={<Viewwork />} />
           {/* TO anthoer  */}
           <Route exact path='/viewworkRequest/:userId' element={<Viewwork />} />
@@ -125,8 +125,8 @@ function Pagerounter() {
           <Route exact path='/Titles' element={<Titless />} />
           {/*Maritalstatus*/}
           <Route exact path='/Maritalstatus' element={<Maritalstatus />} />
-                    {/*assetType*/}
-                    <Route exact path='/assettype' element={<Assecttypesmaintence />} />
+          {/*assetType*/}
+          <Route exact path='/assettype' element={<Assecttypesmaintence />} />
           {/*Assectcategory*/}
           <Route exact path='/AssetCategory' element={<Assectcategory />} />
           {/*Assectsubcategory*/}
@@ -135,7 +135,7 @@ function Pagerounter() {
           <Route exact path='/Assectcondition' element={<Assectcondition />} />
           {/*Nationality*/}
           <Route exact path='/Nationality' element={<Nationality />} />
-             {/*Employeemaster*/}
+          {/*Employeemaster*/}
           <Route exact path='/Employeemaster' element={<Employeemaster />} />
           <Route exact path='/Create/Employeemaster' element={<NewEmployeemaster />} />
           <Route exact path='/View/Employeemaster/:userId' element={<Viewemployeemaster />} />
@@ -158,7 +158,7 @@ function Pagerounter() {
           <Route exact path='AssetTransaction' element={<Maintransactiontable />} />
           <Route exact path='/View/transaction' element={<Viewtransaction />} />
           <Route exact path='/Updata/transaction' element={<Updatatransaction />} />
-          
+
           {/* System Modules */}
           <Route exact path="/systemmodules" element={<SystemModules />} />
 

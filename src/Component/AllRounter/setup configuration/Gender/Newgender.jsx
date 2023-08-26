@@ -19,6 +19,9 @@ function Newgender() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+    };
+    const backCloseDialog = () => {
+        setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
 
@@ -32,29 +35,29 @@ function Newgender() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, GenderCode: '', GenderDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Gender has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
             })
             .catch((err) => {
-                console.log(err);
-                toast.error(`The Error is due to ${err}`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Gender already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        setvalue(prevState => ({ ...prevState, GenderCode: '', GenderDesc: '' }));
+               }
                 });
+                setOpenDialog(false);
             });
     }
 
@@ -124,7 +127,7 @@ function Newgender() {
                     </div>
 
                     <div className="d-flex justify-content-between my-2 p-4 ">
-                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={handleCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                        <button type="button" class="border-0 px-3  savebtn py-2" onClick={backCloseDialog}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                         <button type="submit" class="border-0 px-3  savebtn py-2" ><AddCircleOutlineIcon className='me-2' />Add New</button>
                     </div>
 
