@@ -74,7 +74,7 @@ function AddWorkstatus() {
                 New
             </button>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '650px' }}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '850px' }}>
 
                 <form onSubmit={postapi} className='Sizing'>
 

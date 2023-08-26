@@ -1,13 +1,16 @@
 .sizingtrade{
     width:100% !important;
     border: 2px solid rgb(46, 46, 80); 
-    border-radius: 2px;
+    border-radius: 12px;
     background: #D7F2FD;
     height: 270px;
     }
     .sizingtoptrade{
-        padding-top: 15px;
+        padding-top: 20px;
     }
 .DialogSizing{
     border-radius: 20px !important;
+}
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    border-radius: 12px;
 }
