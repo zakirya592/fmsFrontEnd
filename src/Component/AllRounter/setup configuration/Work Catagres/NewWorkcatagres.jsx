@@ -33,7 +33,7 @@ function NewWorkcatagres() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WorkCategoryCode: '', WorkCategoryDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
+                toast.success('Work category has been created', {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -51,7 +51,7 @@ function NewWorkcatagres() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
+                toast.error(`This work category already exist`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
