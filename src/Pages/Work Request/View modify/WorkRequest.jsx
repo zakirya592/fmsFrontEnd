@@ -407,9 +407,11 @@ function WorkRequest() {
       // This condition checks if the clicked cell is a checkbox cell
       // Retrieve the entire data of the clicked row using its ID
       const clickedRow = filteredRows.find((row) => row.id === params.id);
+     
       console.log(params.id);
       if (clickedRow) {
         console.log("Selected row data:", clickedRow);
+        
         console.log(clickedRow.RequestStatus);
         setstatuscheck(clickedRow.RequestStatus)
         // setSelectedRowIds([params.id])
@@ -425,6 +427,7 @@ function WorkRequest() {
     }
   };
   const handleAddToWorkRequest = () => {
+    console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow[0].RequestNumber);
   if (!selectedRow || selectedRow.length === 0) {
     console.log('Select a Work Request by checking the check box');
     Swal.fire({
@@ -432,11 +435,22 @@ function WorkRequest() {
       text: `Select a Work Request by checking the check box`,
       icon: "error",
       confirmButtonText: "OK",
-
-
     })
+   
     return;
   }
+    if (statuscheck === 'This Work Request is already closed..') {
+      console.log('This Work Request is already closed..');
+      Swal.fire({
+        title: "Error",
+        text: `This Work Request No. ${selectedRow[0].RequestNumber}  is already closed..`,
+        icon: "error",
+        confirmButtonText: "OK",
+      })
+
+      return;
+    }
+
 
   const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
   console.log('Selected Row Data:', selectedRowData);
@@ -482,8 +496,7 @@ function WorkRequest() {
                     <p className="color1 workitoppro my-auto">
                       Work Request Transactions</p>
                     <div className="d-flex">
-                      <button type="button" className="border-0 px-3  savebtn py-2" disabled={statuscheck === 'This Work Request is already closed..'} onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Request is already closed..' ? 'UPDATE' : 'UPDATE'}
-</button>
+                      <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Request is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
