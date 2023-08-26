@@ -469,7 +469,7 @@ function Updataworkrequest() {
                 // setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
              Swal.fire({
                     title: "Success",
-                    text: `${res.data.message}`,
+                 text: ` Work Request ${userId} has been updated`,
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(

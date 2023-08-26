@@ -20,15 +20,15 @@ function NewEmployeemaster() {
 
     const navigate = useNavigate();
     const [value, setvalue] = useState({
-        EmployeeID: '', EmployeeStatus: '', 
-        Age: '', BirthDate:'',
+        EmployeeID: '', EmployeeStatus: '',
+        Age: '', BirthDate: '',
         Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
         LocationCode: '',// //AddLocationInworkRequestPOST api input
         MaritalStatus: '',
-        Gender: '', 
-        Title: '', 
+        Gender: '',
+        Title: '',
         RequestNumber: '', workTrade: '',// RequestNumber
         NationalityCode: '', NationalityDescription: '',
         NationalIQAMANumber: '', PassportNumber: '',
@@ -45,34 +45,86 @@ function NewEmployeemaster() {
     const [dropdownNationality, setdropdownNationality] = useState([]);
     const [dropdownDesignation, setdropdownDesignation] = useState([]);
 
+    // Work Employes ID  Api
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0]);
+                // const reqput = res.data.recordset[0].EmployeeID + 1;
+                const reqput = res.data.recordset[0].EmployeeID;
+                // const reqput=1000
+                let formattedRequestNumber;
+                if (reqput >= 1 && reqput <= 9) {
+                    formattedRequestNumber = `000${reqput}`;
+                } else if (reqput >= 10 && reqput <= 99) {
+                    formattedRequestNumber = `00${reqput}`;
+                } else if (reqput >= 100 && reqput <= 999) {
+                    formattedRequestNumber = `0${reqput}`;
+                } else if (reqput >= 1000 && reqput <= 9999) {
+                    formattedRequestNumber = `${reqput}`;
+                } else {
+                    formattedRequestNumber = `${reqput}`;
+                }
+                // localStorage.setItem('Requestnumbers', reqput)
+                setvalue(prevState => ({ ...prevState, EmployeeID: formattedRequestNumber }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        Requestnumberapi()
+    }, [])
 
+    const requestincreas = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0].EmployeeID);
+                const reqput = res.data.recordset[0].EmployeeID + 1;
+                // localStorage.setItem('Requestnumbers', reqput)
+                axios.put(`/api/EmployeeIDCount_Put/1`, {
+                    EmployeeID: reqput
+                })
+                    .then((res) => {
+                        console.log('Work Request Number put Api', res.data);
+                        const reqput = res.data.recordset[0].EmployeeID + 1;
+                        setvalue(prevState => ({ ...prevState, EmployeeID: '000-000-' + '0' + `${reqput}` }));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
 
     useEffect(() => {
         // Gender
         axios.get(`/api/Gender_GET_LIST`)
-        .then((res) => {
-            setdropdownGender(res.data.recordsets[0]);
-        })
-        .catch((err) => {
-            console.error("Gender API error:", err);
-        });
+            .then((res) => {
+                setdropdownGender(res.data.recordsets[0]);
+            })
+            .catch((err) => {
+                console.error("Gender API error:", err);
+            });
         // Title
         axios.get(`api/Title_GET_LIST`)
-        .then((res) => {
-            setdropdownTitle(res.data.recordsets[0]);
-        })
-        .catch((err) => {
-            console.error("Gender API error:", err);
-        });
+            .then((res) => {
+                setdropdownTitle(res.data.recordsets[0]);
+            })
+            .catch((err) => {
+                console.error("Gender API error:", err);
+            });
         // Fetch Designation
-axios.get(`/api/Designation_GET_LIST`)
-.then((res) => {
-    setdropdownDesignation(res.data.recordsets[0]);
-})
-.catch((err) => {
-    console.error("Designation API error:", err);
-});
+        axios.get(`/api/Designation_GET_LIST`)
+            .then((res) => {
+                setdropdownDesignation(res.data.recordsets[0]);
+            })
+            .catch((err) => {
+                console.error("Designation API error:", err);
+            });
 
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
@@ -98,21 +150,21 @@ axios.get(`/api/Designation_GET_LIST`)
             .catch((err) => {
                 // console.log(err);;
             });
-            // marital statement 
-            axios.get(`/api/MaritalStatus_GET_LIST`)
+        // marital statement 
+        axios.get(`/api/MaritalStatus_GET_LIST`)
             .then((res) => {
                 setdropdownMeritalStatus(res.data.recordsets[0]);
             })
             .catch((err) => {
                 console.error("Marital Status API error:", err);
             });
-            axios.get(`/api/Nationality_GET_LIST`)
-    .then((res) => {
-        setdropdownNationality(res.data.recordsets[0]);
-    })
-    .catch((err) => {
-        console.error("Nationality API error:", err);
-    });
+        axios.get(`/api/Nationality_GET_LIST`)
+            .then((res) => {
+                setdropdownNationality(res.data.recordsets[0]);
+            })
+            .catch((err) => {
+                console.error("Nationality API error:", err);
+            });
     }, [])
     // Department
     const [DeptDesc, setDeptDesc] = useState([])
@@ -133,7 +185,7 @@ axios.get(`/api/Designation_GET_LIST`)
     }
 
     const addemploymaster = async () => {
-         axios.post(`/api/EmployeeMaster_post`, {
+        axios.post(`/api/EmployeeMaster_post`, {
             EmployeeID: value.EmployeeID,
             Gender: value.Gender,
             Title: value.Title,
@@ -159,11 +211,11 @@ axios.get(`/api/Designation_GET_LIST`)
                 console.log(res.data);
                 Swal.fire(
                     'Created!',
-                    ' Employee Master has been created',
+                    `Employee Master ${value.EmployeeID} has been created successfully`,
                     'success'
                 )
-                    navigate('/Employeemaster')
-                
+                navigate('/Employeemaster')
+                requestincreas()
 
             })
             .catch((err) => {
@@ -220,7 +272,7 @@ axios.get(`/api/Designation_GET_LIST`)
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
                                         Create Set-Up-Employee Master
-                                       
+
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -260,12 +312,6 @@ axios.get(`/api/Designation_GET_LIST`)
                                                         types='text'
                                                         id='EmployeeID'
                                                         value={value.EmployeeID}
-                                                        onChange={e => {
-                                                            setvalue(prevValue => ({
-                                                                ...prevValue,
-                                                                EmployeeID: e.target.value
-                                                            }))
-                                                        }}
                                                         className='rounded inputsection py-2'
                                                         placeholder='Enter Employee Number'
                                                         required
@@ -285,27 +331,27 @@ axios.get(`/api/Designation_GET_LIST`)
                                                         Gender
                                                     </label>
                                                     <select
-    className='rounded inputsectiondropdpwn color2 py-2'
-    id="Gender"
-    aria-label="Floating label select example"
-    value={value.Gender}
-    onChange={e => {
-        setvalue(prevValue => ({
-            ...prevValue,
-            Gender: e.target.value
-        }))
-    }}
-    suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
->
-    <option className='px-4 mx-4' value=''>Select Gender</option>
-    {dropdownGender.map((item, index) => (
-        <option key={index} value={item.GenderDesc}>{item.GenderDesc}</option>
-    ))}
-</select>
+                                                        className='rounded inputsectiondropdpwn color2 py-2'
+                                                        id="Gender"
+                                                        aria-label="Floating label select example"
+                                                        value={value.Gender}
+                                                        onChange={e => {
+                                                            setvalue(prevValue => ({
+                                                                ...prevValue,
+                                                                Gender: e.target.value
+                                                            }))
+                                                        }}
+                                                        suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
+                                                    >
+                                                        <option className='px-4 mx-4' value=''>Select Gender</option>
+                                                        {dropdownGender.map((item, index) => (
+                                                            <option key={index} value={item.GenderDesc}>{item.GenderDesc}</option>
+                                                        ))}
+                                                    </select>
 
 
 
-                                                   
+
                                                 </div>
 
                                                 <div className='emailsection position-relative mx-2 d-grid my-2'>
@@ -313,23 +359,23 @@ axios.get(`/api/Designation_GET_LIST`)
                                                         Title
                                                     </label>
                                                     <select
-    className='rounded inputsectiondropdpwn color2 py-2'
-    id="Title"
-    aria-label="Floating label select example"
-    value={value.Title}
-    onChange={e => {
-        setvalue(prevValue => ({
-            ...prevValue,
-            Title: e.target.value
-        }))
-    }}
-    suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
->
-    <option className='px-4 mx-4' value=''>Select Title</option>
-    {dropdownTitle.map((item, index) => (
-        <option key={index} value={item.TitleCode}>{item.TitleCode}</option>
-    ))}
-</select>
+                                                        className='rounded inputsectiondropdpwn color2 py-2'
+                                                        id="Title"
+                                                        aria-label="Floating label select example"
+                                                        value={value.Title}
+                                                        onChange={e => {
+                                                            setvalue(prevValue => ({
+                                                                ...prevValue,
+                                                                Title: e.target.value
+                                                            }))
+                                                        }}
+                                                        suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
+                                                    >
+                                                        <option className='px-4 mx-4' value=''>Select Title</option>
+                                                        {dropdownTitle.map((item, index) => (
+                                                            <option key={index} value={item.TitleCode}>{item.TitleCode}</option>
+                                                        ))}
+                                                    </select>
 
 
                                                 </div>
@@ -360,7 +406,6 @@ axios.get(`/api/Designation_GET_LIST`)
                                                         Birth Date
                                                     </label>
                                                     <input type="date" id="BirthDate"
-
                                                         value={value.BirthDate}
                                                         onChange={e => {
                                                             setvalue(prevValue => ({
@@ -374,33 +419,6 @@ axios.get(`/api/Designation_GET_LIST`)
 
                                         </div>
                                     </div>
-
-
-                                    {/* change the value for the request status  */}
-                                    {/* <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='RequestStatus' className='lablesection color3 text-start mb-1'>
-                                                Employee Status
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn   color2 py-2' id="RequestStatus" aria-label="Floating label select example" value={value.RequestStatus}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        RequestStatus: e.target.value
-                                                    }))
-                                                }}
-                                                // dropdownIcon={<CaretDownOutlined />}
-                                                suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
-                                            >
-                                                <option className='' value='Not selected RequestStatus'>Employee Status</option>
-                                                <option value='open'>Open</option>
-                                                <option value='Closed'>Closed</option>
-                                                <option value='Cancelled'>Cancelled</option>
-
-                                            </select>
-
-                                        </div>
-                                    </div> */}
                                 </div>
 
                                 <div className="row mx-auto formsection">
@@ -480,83 +498,83 @@ axios.get(`/api/Designation_GET_LIST`)
                                 <div className="row mx-auto formsection">
                                     {/* change the value for the request status  */}
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-    <div className='emailsection position-relative d-grid my-2'>
-        <label htmlFor='NationalityCode' className='lablesection color3 text-start mb-1'>
-            Nationality Code
-        </label>
-        <select
-    className='rounded inputsectiondropdpwn color2 py-2'
-    id="NationalityCode"
-    aria-label="Floating label select example"
-    value={value.NationalityCode}
-    onChange={e => {
-        const selectedCode = e.target.value;
-        const selectedDescription = dropdownNationality.find(item => item.NationalityCode === selectedCode)?.NationalityDesc || '';
-        
-        setvalue(prevValue => ({
-            ...prevValue,
-            NationalityCode: selectedCode,
-            NationalityDescription: selectedDescription
-        }));
-    }}
-    suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
->
-    <option className='' value=''>Select Nationality Code</option>
-    {dropdownNationality.map((item, index) => (
-        <option key={index} value={item.NationalityCode}>{item.NationalityCode}</option>
-    ))}
-</select>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='NationalityCode' className='lablesection color3 text-start mb-1'>
+                                                Nationality Code
+                                            </label>
+                                            <select
+                                                className='rounded inputsectiondropdpwn color2 py-2'
+                                                id="NationalityCode"
+                                                aria-label="Floating label select example"
+                                                value={value.NationalityCode}
+                                                onChange={e => {
+                                                    const selectedCode = e.target.value;
+                                                    const selectedDescription = dropdownNationality.find(item => item.NationalityCode === selectedCode)?.NationalityDesc || '';
 
-    </div>
-</div>
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        NationalityCode: selectedCode,
+                                                        NationalityDescription: selectedDescription
+                                                    }));
+                                                }}
+                                                suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
+                                            >
+                                                <option className='' value=''>Select Nationality Code</option>
+                                                {dropdownNationality.map((item, index) => (
+                                                    <option key={index} value={item.NationalityCode}>{item.NationalityCode}</option>
+                                                ))}
+                                            </select>
 
-<div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">
-    <div className="emailsection position-relative d-grid my-2">
-        <label
-            htmlFor="NationalityDescription"
-            className="lablesection color3 text-start mb-1">
-            Nationality Description<span className="star">*</span>
-        </label>
-        <input
-            type='text'
-            id='NationalityDescription'
-            value={value.NationalityDescription}
-            onChange={e => {
-                setvalue(prevValue => ({
-                    ...prevValue,
-                    NationalityDescription: e.target.value
-                }))
-            }}
-            className='rounded inputsection py-2'
-            placeholder='Nationality Description'
-            required
-        />
-    </div>
-</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="NationalityDescription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Nationality Description<span className="star">*</span>
+                                            </label>
+                                            <input
+                                                type='text'
+                                                id='NationalityDescription'
+                                                value={value.NationalityDescription}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        NationalityDescription: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Nationality Description'
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='MaritalStatus' className='lablesection color3 text-start mb-1'>
-                                                Marital Status 
+                                                Marital Status
                                             </label>
                                             <select
-    className='rounded inputsectiondropdpwn color2 py-2'
-    id="MaritalStatus"
-    aria-label="Floating label select example"
-    value={value.MaritalStatus}
-    onChange={e => {
-        setvalue(prevValue => ({
-            ...prevValue,
-            MaritalStatus: e.target.value
-        }))
-    }}
-    suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
->
-    <option className='' value=''>Select Marital Status</option>
-    {dropdownMeritalStatus.map((item, index) => (
-        <option key={index} value={item.MaritalDesc}>{item.MaritalDesc}</option>
-    ))}
-</select>
+                                                className='rounded inputsectiondropdpwn color2 py-2'
+                                                id="MaritalStatus"
+                                                aria-label="Floating label select example"
+                                                value={value.MaritalStatus}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        MaritalStatus: e.target.value
+                                                    }))
+                                                }}
+                                                suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
+                                            >
+                                                <option className='' value=''>Select Marital Status</option>
+                                                {dropdownMeritalStatus.map((item, index) => (
+                                                    <option key={index} value={item.MaritalDesc}>{item.MaritalDesc}</option>
+                                                ))}
+                                            </select>
 
                                         </div>
                                     </div>
@@ -666,58 +684,58 @@ axios.get(`/api/Designation_GET_LIST`)
                                 <div className="row mx-auto formsection">
                                     {/* change the value for the request status  */}
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-    <div className='emailsection position-relative d-grid my-2'>
-        <label htmlFor='Designationcode' className='lablesection color3 text-start mb-1'>
-            Designation Code
-        </label>
-        <select
-            className='rounded inputsectiondropdpwn color2 py-2'
-            id="Designationcode"
-            aria-label="Floating label select example"
-            value={value.DesignationCode}
-            onChange={e => {
-                const selectedCode = e.target.value;
-                const selectedDescription = dropdownDesignation.find(item => item.DesignationCode === selectedCode)?.DesignationDesc || '';
-                
-                setvalue(prevValue => ({
-                    ...prevValue,
-                    DesignationCode: selectedCode,
-                    DesignationName: selectedDescription
-                }));
-            }}
-            suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
-        >
-            <option className='' value=''>Select Designation Code</option>
-            {dropdownDesignation.map((item, index) => (
-                <option key={index} value={item.DesignationCode}>{item.DesignationCode}</option>
-            ))}
-        </select>
-    </div>
-</div>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Designationcode' className='lablesection color3 text-start mb-1'>
+                                                Designation Code
+                                            </label>
+                                            <select
+                                                className='rounded inputsectiondropdpwn color2 py-2'
+                                                id="Designationcode"
+                                                aria-label="Floating label select example"
+                                                value={value.DesignationCode}
+                                                onChange={e => {
+                                                    const selectedCode = e.target.value;
+                                                    const selectedDescription = dropdownDesignation.find(item => item.DesignationCode === selectedCode)?.DesignationDesc || '';
 
-<div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">
-    <div className="emailsection position-relative d-grid my-2">
-        <label
-            htmlFor="DesignationName"
-            className="lablesection color3 text-start mb-1">
-            Designation Name
-        </label>
-        <input
-            type='text'
-            id='DesignationName'
-            value={value.DesignationName}
-            onChange={e => {
-                setvalue(prevValue => ({
-                    ...prevValue,
-                    DesignationName: e.target.value
-                }))
-            }}
-            className='rounded inputsection py-2'
-            placeholder='Designation Name'
-            required
-        />
-    </div>
-</div>
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        DesignationCode: selectedCode,
+                                                        DesignationName: selectedDescription
+                                                    }));
+                                                }}
+                                                suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
+                                            >
+                                                <option className='' value=''>Select Designation Code</option>
+                                                {dropdownDesignation.map((item, index) => (
+                                                    <option key={index} value={item.DesignationCode}>{item.DesignationCode}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="DesignationName"
+                                                className="lablesection color3 text-start mb-1">
+                                                Designation Name
+                                            </label>
+                                            <input
+                                                type='text'
+                                                id='DesignationName'
+                                                value={value.DesignationName}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        DesignationName: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Designation Name'
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
 
                                     <div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">

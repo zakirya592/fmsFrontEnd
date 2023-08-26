@@ -128,7 +128,7 @@ function WorkRequest() {
 
     swalWithBootstrapButtons.fire({
       title: 'Are you sure?',
-      text: "You want to delete this workRequest",
+      text: `You want to delete this ${RequestNumber} workRequest`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -143,7 +143,7 @@ function WorkRequest() {
               console.log('Deleted successfully', res);
               swalWithBootstrapButtons.fire(
                 'Deleted!',
-                'workrequest has been deleted.',
+                `workrequest ${RequestNumber} has been deleted.`,
                 'success'
               )
             getapi()

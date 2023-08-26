@@ -90,7 +90,7 @@ function Updataemployeemaster() {
                     Lastname,
                     Middlename,
                     Email,
-                                        MaritalStatus,
+                    MaritalStatus,
                     MobileNumber,
                     LandlineNumber,
                     DepartmentCode,
@@ -109,23 +109,23 @@ function Updataemployeemaster() {
                 const birthDate = moment(BirthDate).format('YYYY-MM-DD')
                 setbata(birthDate)
                 setdata(data)
-                const desnat=res.data.recordset[0].NationalityCode
-                axios.get(`/api/Nationality_GET_BYID/${desnat}`) 
-                .then((res) => {
-setdesnation(res.data.recordset[0].NationalityDesc);
-                })
-                .catch((err) => {  //continue
-                    //// console.log(err);;
-                });
-                                // designation
-                                const desi = res.data.recordset[0].DesignationCode
-                                axios.get(`/api/Designation_GET_BYID/${desi}`) 
-                                .then((res) => {
-                                    setdesig(res.data.recordset[0].DesignationDesc);
-                                                    })
-                                                    .catch((err) => {
-                                                        //// console.log(err);;
-                                                    });
+                const desnat = res.data.recordset[0].NationalityCode
+                axios.get(`/api/Nationality_GET_BYID/${desnat}`)
+                    .then((res) => {
+                        setdesnation(res.data.recordset[0].NationalityDesc);
+                    })
+                    .catch((err) => {  //continue
+                        //// console.log(err);;
+                    });
+                // designation
+                const desi = res.data.recordset[0].DesignationCode
+                axios.get(`/api/Designation_GET_BYID/${desi}`)
+                    .then((res) => {
+                        setdesig(res.data.recordset[0].DesignationDesc);
+                    })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
                 console.log(data, birthDate);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
@@ -153,7 +153,7 @@ setdesnation(res.data.recordset[0].NationalityDesc);
             .catch((err) => {
                 // console.log(err);;
             });
-                        // Designation
+        // Designation
         axios.get(`/api/Designation_GET_LIST`).then((res) => {
             // console.log("Loaction list", res.data.recordset);
             setdropdownDesignation(res.data.recordsets[0])
@@ -170,7 +170,7 @@ setdesnation(res.data.recordset[0].NationalityDesc);
             .catch((err) => {
                 // console.log(err);;
             });
-            // nationality
+        // nationality
         axios.get(`/api/Nationality_GET_LIST`).then((res) => {
             // console.log("Loaction list", res.data.recordset);
             setdropdownNationality(res.data.recordsets[0])
@@ -178,7 +178,7 @@ setdesnation(res.data.recordset[0].NationalityDesc);
             .catch((err) => {
                 // console.log(err);;
             });
-            // title
+        // title
         axios.get(`/api/Title_GET_LIST`).then((res) => {
             // console.log("Loaction list", res.data.recordset);
             setdropdownTitle(res.data.recordsets[0])
@@ -186,7 +186,7 @@ setdesnation(res.data.recordset[0].NationalityDesc);
             .catch((err) => {
                 // console.log(err);;
             });
-            // GENDER
+        // GENDER
         axios.get(`/api/Gender_GET_LIST`).then((res) => {
             // console.log("Loaction list", res.data.recordset);
             setdropdownGender(res.data.recordsets[0])
@@ -243,22 +243,22 @@ setdesnation(res.data.recordset[0].NationalityDesc);
                 // console.log(err);;
             });
     }
-// designation
-const handleProvinceChangeDes = (e) => {
-    const Deptnale = e.target.value;
-    setvalue((prevValue) => ({
-        ...prevValue,
-        DesignationCode: e.target.value,
-    }));
-    axios.get(`/Designation_GET_BYID/${Deptnale}`)
-        .then((res) => {
-            // console.log(res.data);
-            setdesig(res.data.recordset[0].DesignationDesc)
-        })
-        .catch((err) => {
-            // console.log(err);;
-        });
-}
+    // designation
+    const handleProvinceChangeDes = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            DesignationCode: e.target.value,
+        }));
+        axios.get(`/Designation_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                // console.log(res.data);
+                setdesig(res.data.recordset[0].DesignationDesc)
+            })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
     function postapi(e) {
         axios.put(`/api/EmployeeMaster_Put/${userId}`, {
             // EmployeeStatus: value.EmployeeStatus,
@@ -285,8 +285,8 @@ const handleProvinceChangeDes = (e) => {
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
-                    'Updata!',
-                    ' Employee Master has been updated',
+                    'Update!',
+                    `Employee Master ${userId} has been updated`,
                     'success'
                 ).then(() => {
                     navigate(`/Employeemaster`);
@@ -306,7 +306,7 @@ const handleProvinceChangeDes = (e) => {
                 });
             });
     }
- 
+
     return (
         <>
             <div className="bg">
@@ -331,8 +331,8 @@ const handleProvinceChangeDes = (e) => {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                       Updata Set-Up-Employee Master
-                                        
+                                        Updata Set-Up-Employee Master
+
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -406,14 +406,14 @@ const handleProvinceChangeDes = (e) => {
                                                         // dropdownIcon={<CaretDownOutlined />}
                                                         suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                                     >
-                                                <option className='inputsectiondropdpwn' value={value.GenderDesc}>{value.GenderDesc}</option>
-                                                {
-                                                    dropdownGender && dropdownGender.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.GenderDesc}>{itme.GenderDesc}</option>
-                                                        )
-                                                    })
-                                                }
+                                                        <option className='inputsectiondropdpwn' value={value.GenderDesc}>{value.GenderDesc}</option>
+                                                        {
+                                                            dropdownGender && dropdownGender.map((itme, index) => {
+                                                                return (
+                                                                    <option key={index} value={itme.GenderDesc}>{itme.GenderDesc}</option>
+                                                                )
+                                                            })
+                                                        }
 
                                                     </select>
 
@@ -433,14 +433,14 @@ const handleProvinceChangeDes = (e) => {
                                                         // dropdownIcon={<CaretDownOutlined />}
                                                         suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                                     >
-                                                                                                        <option className='inputsectiondropdpwn' value={value.TitleCode}>{value.TitleCode}</option>
-                                                {
-                                                    dropdownTitle && dropdownTitle.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.TitleCode}>{itme.TitleCode}</option>
-                                                        )
-                                                    })
-                                                }
+                                                        <option className='inputsectiondropdpwn' value={value.TitleCode}>{value.TitleCode}</option>
+                                                        {
+                                                            dropdownTitle && dropdownTitle.map((itme, index) => {
+                                                                return (
+                                                                    <option key={index} value={itme.TitleCode}>{itme.TitleCode}</option>
+                                                                )
+                                                            })
+                                                        }
                                                     </select>
 
                                                 </div>
@@ -595,15 +595,15 @@ const handleProvinceChangeDes = (e) => {
                                                 Nationality Code<span className='star'>*</span>
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="NationalityCode" aria-label="Floating label select example" value={value.NationalityCode}
-                                               onChange={handleProvinceChangeNat}
+                                                onChange={handleProvinceChangeNat}
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                             >
-<option className='inputsectiondropdpwn' value={value.NationalityCode}>{value.NationalityCode}</option>
+                                                <option className='inputsectiondropdpwn' value={value.NationalityCode}>{value.NationalityCode}</option>
                                                 {
                                                     dropdownNationality && dropdownNationality.map((itme, index) => {
                                                         return (
-                                                            <option key={index} value={itme.NationalityCode}>{itme.NationalityCode  }</option>
+                                                            <option key={index} value={itme.NationalityCode}>{itme.NationalityCode}</option>
                                                         )
                                                     })
                                                 }
@@ -623,7 +623,7 @@ const handleProvinceChangeDes = (e) => {
                                                 types='text'
                                                 id='NationalityDescription'
                                                 value={desnation}
-                                                
+
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -641,7 +641,7 @@ const handleProvinceChangeDes = (e) => {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='MaritalStatus' className='lablesection color3 text-start mb-1'>
-                                                Marital Status 
+                                                Marital Status
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="MaritalStatus" aria-label="Floating label select example" value={value.MaritalStatus}
                                                 onChange={e => {
@@ -653,7 +653,7 @@ const handleProvinceChangeDes = (e) => {
                                                 // dropdownIcon={<CaretDownOutlined />}
                                                 suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
                                             >
-                                              <option className='inputsectiondropdpwn' value={value.MaritalDesc}>{value.MaritalDesc}</option>
+                                                <option className='inputsectiondropdpwn' value={value.MaritalDesc}>{value.MaritalDesc}</option>
                                                 {
                                                     dropdownMerital && dropdownMerital.map((itme, index) => {
                                                         return (
@@ -818,7 +818,7 @@ const handleProvinceChangeDes = (e) => {
                                             <label
                                                 htmlFor="EmailAddress"
                                                 className="lablesection color3 text-start mb-1">
-                                                Email Address 
+                                                Email Address
                                             </label>
                                             <input
                                                 types='text'
