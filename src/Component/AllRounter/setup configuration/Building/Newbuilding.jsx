@@ -32,7 +32,7 @@ function Newbuilding() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, BuildingCode: '', BuildingDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
+                toast.success('Building code has been created', {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -50,7 +50,7 @@ function Newbuilding() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
+                toast.error(`This Building code already exist`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
