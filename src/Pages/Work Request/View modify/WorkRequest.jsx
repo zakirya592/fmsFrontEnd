@@ -427,7 +427,14 @@ function WorkRequest() {
   const handleAddToWorkRequest = () => {
   if (!selectedRow || selectedRow.length === 0) {
     console.log('Select a Work Request by checking the check box');
-    alert('Select a Work Request by checking the check box')
+    Swal.fire({
+      title: "Success",
+      text: `Select a Work Request by checking the check box`,
+      icon: "success",
+      confirmButtonText: "OK",
+
+
+    })
     return;
   }
 
