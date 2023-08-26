@@ -125,6 +125,8 @@ function Pagerounter() {
           <Route exact path='/Titles' element={<Titless />} />
           {/*Maritalstatus*/}
           <Route exact path='/Maritalstatus' element={<Maritalstatus />} />
+                    {/*assetType*/}
+                    <Route exact path='/assettype' element={<Assecttypesmaintence />} />
           {/*Assectcategory*/}
           <Route exact path='/AssetCategory' element={<Assectcategory />} />
           {/*Assectsubcategory*/}
