@@ -31,7 +31,7 @@ function NewAssetSubCategory() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, AssetSubCategoryCode: '', AssetSubCategoryDesc: '' }));
-                setAnchorEl(null);
+                setOpenDialog(false);
                 Swal.fire(
                     'Add!',
                     'Asset SubCategory Code has been created',
@@ -55,7 +55,7 @@ function NewAssetSubCategory() {
                         setvalue(prevState => ({ ...prevState, AssetSubCategoryCode: '', AssetSubCategoryDesc: '' }));
                     }
                 });
-                setAnchorEl(null);
+                setOpenDialog(false);
             });
     }
 

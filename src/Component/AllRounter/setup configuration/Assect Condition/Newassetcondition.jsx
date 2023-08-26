@@ -32,7 +32,7 @@ function Newassetcondition() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, AssetConditionCode: '', AssetConditionDesc: '' }));
-                setAnchorEl(null);
+                setOpenDialog(false);
                 Swal.fire(
                     'Add!',
                     'Asset Condition Code has been created',
@@ -55,7 +55,7 @@ function Newassetcondition() {
                          setvalue(prevState => ({ ...prevState, AssetConditionCode: '', AssetConditionDesc: '' }));
                     }
                 });
-                setAnchorEl(null);
+                setOpenDialog(false);
             });
     }
 
