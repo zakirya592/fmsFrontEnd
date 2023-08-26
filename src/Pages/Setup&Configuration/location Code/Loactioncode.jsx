@@ -81,7 +81,7 @@ function Loactioncode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Location ",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -103,7 +103,7 @@ function Loactioncode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'This Location has been Deleted',
                     'success'
                 )
             }
@@ -160,7 +160,7 @@ function Loactioncode() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Location has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
