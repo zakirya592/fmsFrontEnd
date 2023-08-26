@@ -5,6 +5,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from "sweetalert2";
 
 function NewwarrantyPeriod() {
 
@@ -32,29 +33,31 @@ function NewwarrantyPeriod() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WarrantyPeriodCode: '', WarrantyPeriodDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setOpenDialog(false);
+                const postdata = res.data.recordset[0].WarrantyPeriodCode
+                Swal.fire(
+                    'Add!',
+                    `Warranty Period ${postdata} has been created`,
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Warranty Period already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        setvalue(prevState => ({ ...prevState, WarrantyPeriodCode: '', WarrantyPeriodDesc: '' }));
+                 }
                 });
+                setOpenDialog(false);
             });
     }
 

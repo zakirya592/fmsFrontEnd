@@ -33,9 +33,10 @@ function Newassetcondition() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, AssetConditionCode: '', AssetConditionDesc: '' }));
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].AssetConditionCode
                 Swal.fire(
                     'Add!',
-                    'Asset Condition Code has been created',
+                    `Asset Condition Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

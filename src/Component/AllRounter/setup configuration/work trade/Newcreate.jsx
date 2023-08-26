@@ -37,9 +37,10 @@ function Newcreate() {
                 setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].WorkTradeCode
                 Swal.fire(
                     'Add!',
-                    'Work Trade has been created',
+                    `Work Trade ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

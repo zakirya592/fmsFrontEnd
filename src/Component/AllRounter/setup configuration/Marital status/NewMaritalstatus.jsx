@@ -40,9 +40,10 @@ function NewMaritalstatus() {
                 setvalue(prevState => ({ ...prevState, MaritalCode: '', MaritalDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].MaritalCode
                 Swal.fire(
                     'Add!',
-                    'Marital Status has been created',
+                    `Marital Status ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

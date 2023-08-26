@@ -36,9 +36,10 @@ function Newday() {
                 setvalue(prevState => ({ ...prevState, DaysCode: '', DaysSeq: '', DaysDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].DaysCode
                 Swal.fire(
                     'Add!',
-                    'Day has been created',
+                    `Day ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

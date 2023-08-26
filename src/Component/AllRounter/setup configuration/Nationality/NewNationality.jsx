@@ -37,9 +37,10 @@ function NewNationality() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, NationalityCode: '', NationalityDesc: '' }));
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].NationalityCode
                 Swal.fire(
                     'Add!',
-                    'Nationality has been created',
+                    `Nationality ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

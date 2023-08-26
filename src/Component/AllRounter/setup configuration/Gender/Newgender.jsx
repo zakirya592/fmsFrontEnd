@@ -36,9 +36,10 @@ function Newgender() {
                 setvalue(prevState => ({ ...prevState, GenderCode: '', GenderDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].GenderCode
                 Swal.fire(
                     'Add!',
-                    'Gender has been created',
+                    `Gender ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

@@ -37,9 +37,10 @@ function Newdepartment() {
                 setvalue(prevState => ({ ...prevState, DepartmentCode: '', DepartmentDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].DepartmentCode
                 Swal.fire(
                     'Add!',
-                    'Department Code has been created',
+                    `Department Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

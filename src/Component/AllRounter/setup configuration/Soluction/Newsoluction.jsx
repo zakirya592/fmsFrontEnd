@@ -37,9 +37,10 @@ function Newsoluction() {
                 setvalue(prevState => ({ ...prevState, SolutiontatusCode: '', SolutionStatusDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].SolutiontatusCode
                 Swal.fire(
                     'Add!',
-                    'Solution Code has been created',
+                    `Solution Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

@@ -32,9 +32,10 @@ function NewAssetSubCategory() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, AssetSubCategoryCode: '', AssetSubCategoryDesc: '' }));
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].AssetSubCategoryCode
                 Swal.fire(
                     'Add!',
-                    'Asset SubCategory Code has been created',
+                    `Asset SubCategory Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

@@ -36,9 +36,10 @@ function NewLoaction() {
                 setvalue(prevState => ({ ...prevState, LocationCode: '', LocationDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].LocationCode
                 Swal.fire(
                     'Add!',
-                    'Location has been created',
+                    `Location ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

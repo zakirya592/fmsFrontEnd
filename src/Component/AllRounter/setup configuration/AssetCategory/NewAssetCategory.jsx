@@ -37,9 +37,10 @@ function NewAssetCategory() {
                 setvalue(prevState => ({ ...prevState, AssetCategoryCode: '', AssetCategoryDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].AssetCategoryCode
                 Swal.fire(
                     'Add!',
-                    'Asset Category has been created',
+                    `Asset Category Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

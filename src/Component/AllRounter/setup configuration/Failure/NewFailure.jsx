@@ -36,9 +36,10 @@ function NewFailure() {
                 setvalue(prevState => ({ ...prevState, FailureStatusCode: '', FailureStatusDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].FailureStatusCode
                 Swal.fire(
                     'Add!',
-                    'Failure Code has been created',
+                    `Failure Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

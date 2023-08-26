@@ -37,9 +37,10 @@ function Newreaueststatus() {
                 setvalue(prevState => ({ ...prevState, RequestStatusCode: '', RequestStatusDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].RequestStatusCode
                 Swal.fire(
                     'Add!',
-                    'Request status has been created',
+                    `Request status  ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

@@ -36,9 +36,10 @@ function Newbuilding() {
                 setvalue(prevState => ({ ...prevState, BuildingCode: '', BuildingDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].BuildingCode
                 Swal.fire(
                     'Add!',
-                    'Building code has been created',
+                    `Building Code ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

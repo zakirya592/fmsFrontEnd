@@ -34,9 +34,10 @@ const handleCloseDialog = () => {
         console.log('Add', res.data);
         setvalue(prevState => ({ ...prevState, WorkPrioritySeq: '', WorkPriorityCode: '', WorkPriorityDesc: '' }));
        setOpenDialog(false);
+        const postdata = res.data.recordset[0].WorkPriorityCode
         Swal.fire(
           'Add!',
-          'Work Priority has been created',
+          `Work Priority ${postdata} has been created`,
           'success'
         ).then((result) => {
           if (result.isConfirmed) {

@@ -33,9 +33,10 @@ function NewAssetType() {
                 console.log('Add', res.data);
                 setvalue ({ AssetTypeCode: '', AssetTypeDesc: '' });
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].AssetTypeCode
                 Swal.fire(
                     'Add!',
-                    'Asset has been created',
+                    `Asset Type ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

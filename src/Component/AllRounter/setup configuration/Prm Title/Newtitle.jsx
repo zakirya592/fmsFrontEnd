@@ -34,9 +34,10 @@ function Newtitle() {
                 setvalue(prevState => ({ ...prevState, TitleCode: '', TitleDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].TitleCode
                 Swal.fire(
                     'Add!',
-                    'Title/Salutation has been created',
+                    `Title/Salutation  ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

@@ -36,9 +36,10 @@ function NewWorkcatagres() {
                 setvalue(prevState => ({ ...prevState, WorkCategoryCode: '', WorkCategoryDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].WorkCategoryCode
                 Swal.fire(
                     'Add!',
-                    'Work category has been created',
+                    `Work category ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

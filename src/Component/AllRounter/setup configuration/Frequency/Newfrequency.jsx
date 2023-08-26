@@ -36,9 +36,10 @@ function Newfrequency() {
                 setvalue(prevState => ({ ...prevState, FreqCode: '', FreqSeq: '', FreqDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].FreqCode
                 Swal.fire(
                     'Add!',
-                    'Frequency has been created',
+                    `Frequency ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

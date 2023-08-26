@@ -36,10 +36,11 @@ function Newproblemcategory() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, ProblemCategoryCode: '', ProblemCategoryDesc: '' }));
-               setOpenDialog(false);
+                setOpenDialog(false);
+                const postdata = res.data.recordset[0].ProblemCategoryCode
                 Swal.fire(
                     'Add!',
-                    'Problem Category has been created',
+                    `Problem Category ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {

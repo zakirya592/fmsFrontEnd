@@ -38,9 +38,10 @@ function AddWorkstatus() {
                 setvalue(prevState => ({ ...prevState, WorkStatusCode: '', WorkStatusDesc: '' }));
                 // setAnchorEl(null);
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].WorkStatusCode
                 Swal.fire(
                     'Add!',
-                    'Work status has been created',
+                    `Work status  ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {
