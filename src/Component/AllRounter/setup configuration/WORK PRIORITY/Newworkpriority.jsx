@@ -32,7 +32,7 @@ function Newworkpriority() {
       .then((res) => {
         console.log('Add', res.data);
         setvalue(prevState => ({ ...prevState, WorkPrioritySeq: '', WorkPriorityCode: '', WorkPriorityDesc: '' }));
-        toast.success('Add record successfully', {
+        toast.success('Work Priority has been created', {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -45,7 +45,7 @@ function Newworkpriority() {
       })
       .catch((err) => {
         console.log(err);
-        toast.error(`You will not add due to ${err.message}`, {
+        toast.error(`This work Priority already exist`, {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
