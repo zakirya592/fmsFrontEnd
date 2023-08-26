@@ -80,7 +80,7 @@ function RequestStatus() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Request Status",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -102,7 +102,7 @@ function RequestStatus() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Request Status  has been Deleted',
                     'success'
                 )
             }
@@ -159,7 +159,7 @@ function RequestStatus() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Request Status has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

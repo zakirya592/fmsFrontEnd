@@ -80,7 +80,7 @@ function Failurecode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Failure Code",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -102,7 +102,7 @@ function Failurecode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Failure Code has been Deleted',
                     'success'
                 )
             }
@@ -161,7 +161,7 @@ function Failurecode() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Failure Code has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
