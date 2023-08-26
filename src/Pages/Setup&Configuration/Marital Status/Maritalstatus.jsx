@@ -59,7 +59,7 @@ function Maritalstatus() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Marital Status",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -81,7 +81,7 @@ function Maritalstatus() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Marital Status has been deleted',
                     'success'
                 )
             }
@@ -163,7 +163,7 @@ function Maritalstatus() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Marital Status has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

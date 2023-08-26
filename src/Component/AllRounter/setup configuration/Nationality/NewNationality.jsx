@@ -5,6 +5,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from "sweetalert2";
+
 function NewNationality() {
 
     const [value, setvalue] = useState({
@@ -31,25 +33,21 @@ function NewNationality() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, NationalityCode: '', NationalityDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                // Swal.fire(
-                //     'Add!',
-                //     'Add record successfully',
-                //     'success'
-                // )
+                // toast.success('Nationality has been created', {
+                //     position: "bottom-center",
+                //     autoClose: 5000,
+                //     hideProgressBar: false,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                //     theme: "light",
+                // });
+               
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
+                toast.error('This Nationality already exist', {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -59,6 +57,7 @@ function NewNationality() {
                     progress: undefined,
                     theme: "light",
                 });
+               
             });
     }
 

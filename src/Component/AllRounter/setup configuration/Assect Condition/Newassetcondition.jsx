@@ -4,6 +4,7 @@ import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutl
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
+import Swal from "sweetalert2";
 import 'react-toastify/dist/ReactToastify.css';
 
 function Newassetcondition() {
@@ -31,30 +32,30 @@ function Newassetcondition() {
             .then((res) => {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, AssetConditionCode: '', AssetConditionDesc: '' }));
-                // setAnchorEl(null);
-                toast.success('Add record successfully', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                setOpenDialog(false);
+                Swal.fire(
+                    'Add!',
+                    'Asset Condition Code has been created',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the redirect after clicking "OK"
+                        window.location.reload() // Replace with your desired URL
+                    }
                 });
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not add due to ${err}`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
+                Swal.fire(
+                    'Error!',
+                    'This Asset Condition Code already exist',
+                    'error'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                         setvalue(prevState => ({ ...prevState, AssetConditionCode: '', AssetConditionDesc: '' }));
+                    }
                 });
+                setOpenDialog(false);
             });
     }
 

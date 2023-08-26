@@ -57,7 +57,7 @@ function Nationality() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Nationality",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function Nationality() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Nationality has been deleted',
                     'success'
                 )
             }
@@ -161,7 +161,7 @@ function Nationality() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Nationality has been updated',
                     'success'
                 ).then(() => {
                     handleClose();

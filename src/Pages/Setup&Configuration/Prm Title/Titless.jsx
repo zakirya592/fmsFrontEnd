@@ -58,7 +58,7 @@ function Titless() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "You want to delete this Title/Salutation !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -80,7 +80,7 @@ function Titless() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    'Title/Salutation has been deleted',
                     'success'
                 )
             }
@@ -162,7 +162,7 @@ function Titless() {
                 getapi()
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    'Title/Salutation has been updated',
                     'success'
                 ).then(() => {
                     handleClose();
