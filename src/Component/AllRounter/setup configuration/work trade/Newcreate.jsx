@@ -34,7 +34,7 @@ function Newcreate() {
                 console.log('Add', res.data);
                 setvalue(prevState => ({ ...prevState, WorkTypeCode: '', WorkTradeCode: '', WorkTradeDesc: '' }));
                 // setAnchorEl(null);
-                toast.success('Add record successfully', {
+                toast.success('Work Trade has been created', {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -47,7 +47,7 @@ function Newcreate() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`The Error is due to ${err}`, {
+                toast.error(`This work Trade already exist`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,

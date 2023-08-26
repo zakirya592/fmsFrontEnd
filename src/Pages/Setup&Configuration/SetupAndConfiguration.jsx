@@ -57,7 +57,7 @@ function SetupAndConfiguration() {
 
     swalWithBootstrapButtons.fire({
       title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      text: "You want to delete this  Work Trade",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function SetupAndConfiguration() {
           });
         swalWithBootstrapButtons.fire(
           'Deleted!',
-          'User has been deleted.',
+          'Work Trade has been Deleted',
           'success'
         )
       }
@@ -160,7 +160,7 @@ function SetupAndConfiguration() {
         getapi()
         Swal.fire(
           'Updata!',
-          ' You have successfully updated.',
+          ' Work Trade has been updated',
           'success'
         ).then(() => {
           handleClose();
