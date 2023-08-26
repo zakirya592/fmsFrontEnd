@@ -75,7 +75,7 @@ function Newbuilding() {
                 New
             </button>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '850px' }}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '650px' }}>
 
                 <form onSubmit={postapi} className='Sizing'>
 
