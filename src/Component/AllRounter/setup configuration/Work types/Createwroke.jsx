@@ -32,7 +32,6 @@ function CreateWork() {
 
     const postapi = (e) => {
         e.preventDefault();
-        const generatedId = generateId();
         axios
             .post(`/api/WorkType_post`, {
                 WorkTypeCode: value.WorkTypeCode,
