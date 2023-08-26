@@ -57,7 +57,7 @@ function AssetCategory() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Asset Category!",
+            text: `You want to delete this ${AssetCategoryCode} Asset Category`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function AssetCategory() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Asset Category has been deleted.',
+                    `Asset Category ${AssetCategoryCode} has been deleted.`,
                     'success'
                 )
             }
@@ -160,8 +160,8 @@ function AssetCategory() {
                 setAssetCategoryDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Asset Category has been updated.',
+                    'Update!',
+                    `Asset Category ${itemCode} has been updated.`,
                     'success'
                 ).then(() => {
                     handleClose();

@@ -57,7 +57,7 @@ function Gender() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Gender",
+            text: `You want to delete this ${GenderCode} Gender`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function Gender() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Gender has been deleted',
+                    `Gender ${GenderCode} has been deleted`,
                     'success'
                 )
             }
@@ -161,8 +161,8 @@ function Gender() {
                 console.log('Add', res.data);
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Gender has been updated',
+                    'Update!',
+                    `Gender ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

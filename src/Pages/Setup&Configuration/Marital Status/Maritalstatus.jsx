@@ -59,7 +59,7 @@ function Maritalstatus() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Marital Status",
+            text: `You want to delete this ${MaritalCode} Marital Status`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -81,7 +81,7 @@ function Maritalstatus() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Marital Status has been deleted',
+                    `Marital Status ${MaritalCode} has been deleted`,
                     'success'
                 )
             }
@@ -162,8 +162,8 @@ function Maritalstatus() {
                 setMaritalDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Marital Status has been updated',
+                    'Update!',
+                    `Marital Status ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

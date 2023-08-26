@@ -56,7 +56,7 @@ function Frequency() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Frequence!",
+            text: `You want to delete this ${FreqCode} Frequence!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -78,7 +78,7 @@ function Frequency() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Frequence has been deleted',
+                    `Frequence ${FreqCode} has been deleted`,
                     'success'
                 )
             }
@@ -163,8 +163,8 @@ function Frequency() {
                 console.log('Add', res.data);
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Frequence has been updated',
+                    'Update!',
+                    `Frequence ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

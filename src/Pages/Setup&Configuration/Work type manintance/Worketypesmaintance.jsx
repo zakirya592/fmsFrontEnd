@@ -57,7 +57,7 @@ function Worketypesmaintance() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this work type",
+            text: `You want to delete this ${workTrade} work type`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -74,7 +74,7 @@ function Worketypesmaintance() {
                         // You can call the API again or remove the deleted row from the state
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            'Work Type has been deleted',
+                            `Work Type ${workTrade} has been deleted`,
                             'success'
                         )
                     })
@@ -177,8 +177,8 @@ function Worketypesmaintance() {
                 console.log('Add', res.data);
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Work Type has been updated',
+                    'Update!',
+                    `Work Type ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

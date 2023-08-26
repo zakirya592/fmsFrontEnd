@@ -57,7 +57,7 @@ function Nationality() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Nationality",
+            text: `You want to delete this ${NationalityCode} Nationality`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function Nationality() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Nationality has been deleted',
+                    `Nationality ${NationalityCode} has been deleted`,
                     'success'
                 )
             }
@@ -160,8 +160,8 @@ function Nationality() {
                 setNationalityDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Nationality has been updated',
+                    'Update!',
+                    `Nationality ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

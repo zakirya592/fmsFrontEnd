@@ -57,7 +57,7 @@ function SetupAndConfiguration() {
 
     swalWithBootstrapButtons.fire({
       title: 'Are you sure?',
-      text: "You want to delete this  Work Trade",
+      text: `You want to delete this ${workTrade} Work Trade`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function SetupAndConfiguration() {
           });
         swalWithBootstrapButtons.fire(
           'Deleted!',
-          'Work Trade has been Deleted',
+          `Work Trade ${workTrade} has been Deleted`,
           'success'
         )
       }
@@ -159,8 +159,8 @@ function SetupAndConfiguration() {
         console.log('Add', res.data);
         getapi()
         Swal.fire(
-          'Updata!',
-          ' Work Trade has been updated',
+          'Update!',
+          `Work Trade ${itemCode} has been updated`,
           'success'
         ).then(() => {
           handleClose();

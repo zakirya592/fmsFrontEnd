@@ -56,7 +56,7 @@ function Day() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Day",
+            text: `You want to delete this ${DaysCode} Day`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -78,7 +78,7 @@ function Day() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Day  has been deleted',
+                    `${DaysCode} Day has been deleted`,
                     'success'
                 )
             }
@@ -162,8 +162,8 @@ function Day() {
                 console.log('Add', res.data);
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Day has been updated',
+                    'Update!',
+                    `Day ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

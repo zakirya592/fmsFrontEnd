@@ -27,6 +27,9 @@ function CreateWork() {
     };
 
     const handleCloseDialog = () => {
+        setOpenDialog(false)
+    };
+    const BackCloseDialog = () => {
         setOpenDialog(false);
         window.location.reload(); // Reload the page
     };
@@ -39,12 +42,13 @@ function CreateWork() {
                 WorkTypeDesc: value.WorkTypeDesc,
             })
             .then((res) => {
-                console.log('Add', res.data);
+                console.log('Add', res.data.recordset[0].WorkTypeCode);
                 setValue({ WorkTypeCode: '', WorkTypeDesc: '' });
                 setOpenDialog(false);
+                const postdata = res.data.recordset[0].WorkTypeCode
                 Swal.fire(
                     'Add!',
-                    'Work Type has been created',
+                    `Work Type ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {
@@ -58,7 +62,7 @@ function CreateWork() {
                 console.log(err);
                 Swal.fire(
                     'Error!',
-                    'This Work Type already exist',
+                    `This Work Type already exist`,
                     'error'
                 ).then((result) => {
                     if (result.isConfirmed) {
@@ -133,7 +137,7 @@ function CreateWork() {
                         <button
                             type="button"
                             className="border-0 px-3 savebtn py-2"
-                            onClick={handleCloseDialog}
+                            onClick={BackCloseDialog}
                         >
                             <ArrowCircleLeftOutlinedIcon className="me-2" /> Back
                         </button>

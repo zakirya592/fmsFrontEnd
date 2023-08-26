@@ -41,7 +41,7 @@ function Updataworktrade() {
                 setWorkTradeDesc('')
                 Swal.fire(
                     'Updata!',
-                    ' You have successfully updated.',
+                    `Work Trad ${EmployeeID } has been updated`,
                     'success'
                 ).then(() => {
                     navigate(`/WORKTRADE`);

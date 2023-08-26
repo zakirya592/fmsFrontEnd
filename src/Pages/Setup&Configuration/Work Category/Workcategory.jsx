@@ -57,7 +57,7 @@ function Workcategory() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Work category",
+            text: `You want to delete this ${WorkCategoryCode} Work category`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function Workcategory() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Work category has been Deleted',
+                    `Work category ${WorkCategoryCode}  has been Deleted`,
                     'success'
                 )
             }
@@ -160,8 +160,8 @@ function Workcategory() {
                 seteWorkCategoryDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    ' Work category has been updated',
+                    'Update!',
+                    `Work category ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

@@ -82,8 +82,8 @@ function Soluctioncode() {
                 seteSolutionStatusDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Solution Code has been updated',
+                    'Update!',
+                    `Solution Code ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();
@@ -126,7 +126,7 @@ function Soluctioncode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Solution Code",
+            text: `You want to delete this ${SolutiontatusCode} Solution Code`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -148,7 +148,7 @@ function Soluctioncode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Solution Code  has been deleted',
+                    `Solution Code ${SolutiontatusCode} has been deleted`,
                     'success'
                 )
             }

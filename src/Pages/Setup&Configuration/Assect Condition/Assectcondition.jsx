@@ -83,8 +83,8 @@ function Assectcondition() {
                 setAssetConditionDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Assect condition has been updated',
+                    'Update!',
+                    `Assect condition ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();
@@ -127,7 +127,7 @@ function Assectcondition() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Assectcondition",
+            text: `You want to delete this ${AssetConditionCode} Assectcondition`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -149,7 +149,7 @@ function Assectcondition() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Assect condition has been deleted',
+                    `Assect condition ${AssetConditionCode} has been deleted`,
                     'success'
                 )
             }

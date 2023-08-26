@@ -58,7 +58,7 @@ function Titless() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Title/Salutation !",
+            text: `You want to delete this ${TitleCode} Title/Salutation !`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -80,7 +80,7 @@ function Titless() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Title/Salutation has been deleted',
+                    `Title/Salutation ${TitleCode} has been deleted`,
                     'success'
                 )
             }
@@ -161,8 +161,8 @@ function Titless() {
                 setTitleDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Title/Salutation has been updated',
+                    'Update!',
+                    `Title/Salutation ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

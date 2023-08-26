@@ -82,7 +82,7 @@ function Buildingcode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Building Code ",
+            text: `You want to delete this ${BuildingCode} Building Code `,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -104,7 +104,7 @@ function Buildingcode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Building code has been updated.',
+                    `Building code ${BuildingCode} has been updated.`,
                     'success'
                 )
             }
@@ -160,8 +160,8 @@ function Buildingcode() {
                 seteBuildingDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Building code has been updated',
+                    'Update!',
+                    `Building code ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

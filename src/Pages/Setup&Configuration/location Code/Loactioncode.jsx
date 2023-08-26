@@ -81,7 +81,7 @@ function Loactioncode() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Location ",
+            text: `You want to delete ${LocationCode} this Location `,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -103,7 +103,7 @@ function Loactioncode() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'This Location has been Deleted',
+                    `This ${LocationCode} Location has been Deleted`,
                     'success'
                 )
             }
@@ -159,8 +159,8 @@ function Loactioncode() {
                 seteLocationDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Location has been updated',
+                    'Update!',
+                    `Location ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

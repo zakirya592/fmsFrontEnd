@@ -100,8 +100,8 @@ function WarrantyPeriod() {
                 setWarrantyPeriodDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    ' You have successfully updated.',
+                    'Update!',
+                    `Warranty Period ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();
@@ -128,7 +128,7 @@ function WarrantyPeriod() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: `You want to delete this ${WarrantyPeriodCode} Warrant Period`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -150,7 +150,7 @@ function WarrantyPeriod() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    `Warrant Period ${WarrantyPeriodCode} has been deleted`,
                     'success'
                 )
             }

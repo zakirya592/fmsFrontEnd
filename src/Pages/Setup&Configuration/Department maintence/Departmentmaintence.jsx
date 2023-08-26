@@ -84,7 +84,7 @@ function Departmentmaintence() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Department Code",
+            text: `You want to delete this ${DepartmentCode} Department Code`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -106,7 +106,7 @@ function Departmentmaintence() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'Department Code has been Deleted',
+                    `Department Code ${DepartmentCode} has been Deleted`,
                     'success'
                 )
             }
@@ -162,8 +162,8 @@ function Departmentmaintence() {
                 seteDepartmentDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    'Department Code has been updated',
+                    'Update!',
+                    `Department Code ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();

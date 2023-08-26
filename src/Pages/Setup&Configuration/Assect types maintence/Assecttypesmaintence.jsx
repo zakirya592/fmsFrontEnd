@@ -57,7 +57,7 @@ function Assecttypemaintence() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: `You want to delete this ${AssetTypeCode} Asset Type`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,7 +79,7 @@ function Assecttypemaintence() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    `Asset Type ${AssetTypeCode} has been deleted`,
                     'success'
                 )
             }
@@ -160,8 +160,8 @@ function Assecttypemaintence() {
                 setAssetTypeDesc('')
                 getapi()
                 Swal.fire(
-                    'Updata!',
-                    ' You have successfully updated.',
+                    'Update!',
+                    `Asset Type ${itemCode} has been updated`,
                     'success'
                 ).then(() => {
                     handleClose();
