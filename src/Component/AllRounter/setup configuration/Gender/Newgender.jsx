@@ -70,7 +70,7 @@ function Newgender() {
                 New
             </button>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '850px' }}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} className='DialogSizing'style={{ top: '-300px', left: '650px' }}>
 
                 <form onSubmit={postapi} className='Sizing'>
                     <div className="row mx-auto px-3 formsection sizingtop ">
@@ -78,7 +78,7 @@ function Newgender() {
                         <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div className='emailsection position-relative d-grid my-1'>
                                 <label htmlFor='GenderCode' className='lablesection color3 text-start mb-1'>
-                                    WorkCategory Code<span className='star'>*</span>
+                                    Gender Code<span className='star'>*</span>
                                 </label>
 
                                 <input
@@ -101,7 +101,7 @@ function Newgender() {
                         <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div className='emailsection position-relative d-grid my-1'>
                                 <label htmlFor='GenderDesc' className='lablesection color3 text-start mb-1'>
-                                    WorkCategory Desc <span className='star'>*</span>
+                                    Gender Desc <span className='star'>*</span>
                                 </label>
 
                                 <input
