@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
 import { Typography } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AppBar from '@mui/material/AppBar';
-import Modal from '@mui/material/Modal';
 import Toolbar from '@mui/material/Toolbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -247,10 +245,6 @@ function Worketypesmaintance() {
                             }}>
                                 <ArrowCircleLeftOutlinedIcon className='me-2' />
                                 Back
-                            </button>
-                            <button type="button" className="border-0 px-3 savebtn py-2" >
-                                <SaveIcon className='me-2' />
-                                SAVE
                             </button>
                         </div>
                     </div>
