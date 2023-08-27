@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-import SaveIcon from '@mui/icons-material/Save';
 import excel from '../../../Image/excel.png';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 // import './setupAndConfiguration.css';
@@ -222,10 +221,6 @@ function Assecttypemaintence() {
                             }}>
                                 <ArrowCircleLeftOutlinedIcon className='me-2' />
                                 Back
-                            </button>
-                            <button type="button" className="border-0 px-3 savebtn py-2">
-                                <SaveIcon className='me-2' />
-                                SAVE
                             </button>
                         </div>
                     </div>
