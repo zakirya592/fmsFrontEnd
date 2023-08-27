@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from 'react'
 import Box from "@mui/material/Box";
 import Siderbar from "../../Component/Siderbar/Siderbar";
 import pagepin from "../../Image/pagepin.png";
@@ -10,15 +11,18 @@ import SaveIcon from '@mui/icons-material/Save';
 import "../Work Request/View modify/Viewmodify.css";
 import WorkOrderCreate from "../../Component/View work/WorkOrderCreate";
 import PrintIcon from "@mui/icons-material/Print";
-import { useState } from "react";
 import { SearchOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import Autocomplete from '@mui/material/Autocomplete';
+import { CircularProgress } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 function WorkOrder() {
     const navigate = useNavigate();
-    const [orderNumber, setOrderNumber] = useState("");
-    const [requestOrderNumber, setRequestOrderNumber] = useState("");
+    const [value, setvalue] = useState({
+        orderNumber: '', RequestNumber: null, EmployeeID:null,
+    })
     const [workStatus, setWorkStatus] = useState("");
     const [workPriority, setWorkPriority] = useState("");
     const [workCategory, setWorkCategory] = useState("");
@@ -32,8 +36,210 @@ function WorkOrder() {
     const [completeEmployee, setcompleteEmployee] = useState("");
     const [CompleteEmployeeName, setCompleteEmployeeName] = useState("");
 
+    // Work Employes ID  Api
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0]);
+                const reqput = res.data.recordset[0].WorkOrderNumber;
+                // const reqput=1000
+                let formattedRequestNumber;
+                if (reqput >= 1 && reqput <= 9) {
+                    formattedRequestNumber = `000-000-00${reqput}`;
+                } else if (reqput >= 10 && reqput <= 99) {
+                    formattedRequestNumber = `000-000-0${reqput}`;
+                } else if (reqput >= 100 && reqput <= 999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else if (reqput >= 1000 && reqput <= 9999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                }
+                // localStorage.setItem('Requestnumbers', reqput)
+                setvalue(prevState => ({ ...prevState, orderNumber: formattedRequestNumber }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
+    useEffect(() => {
+        Requestnumberapi()
+    }, [])
+
+    const requestincreas = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                console.log('Work Request Number Api', res.data.recordset[0].EmployeeID);
+                const reqput = res.data.recordset[0].WorkOrderNumber + 1;
+                // localStorage.setItem('Requestnumbers', reqput)
+                axios.put(`/api/WorkOrderNumberCount_Put/1`, {
+                    WorkOrderNumber: reqput
+                })
+                    .then((res) => {
+                        console.log('Work Request Number put Api', res.data);
+                        const reqput = res.data.recordset[0].WorkOrderNumber + 1;
+                        setvalue(prevState => ({ ...prevState, orderNumber: '000-000-' + '0' + `${reqput}` }));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const created=()=>{
+        requestincreas()
+    }
     
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            [name]: value,
+        }));
+    };
+
+    // Work Request Number
+    const [unitCode, setUnitCode] = useState([]);
+    const [dropname, setdropname] = useState([])
+    const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
+    const [gpcList, setGpcList] = useState([]); // gpc list
+    const abortControllerRef = useRef(null);
+
+    useEffect(() => {
+
+        // const handleOnBlurCall = () => {
+
+        axios.get('/api/Filter_WR')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                console.log("----------------------------",data);
+                const unitNameList = data.map((requestdata) => ({
+                    RequestNumber: requestdata?.RequestNumber,
+                    RequestStatus: requestdata?.RequestStatus,
+                }));
+                setUnitCode(unitNameList)
+
+            })
+            .catch((error) => {
+                console.log('-----', error);
+            }
+            );
+        // }
+
+    }, [])
+
+    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+        
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcList([]); // Clear the data list if there is no input
+            setUnitCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            return;
+        }
+        if (newInputValue === null) {
+
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                RequestNumber: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoading(true);
+        setOpen(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRef.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/Filter_WR')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCode(data ?? [])
+                    setOpen(true);
+                    setAutocompleteLoading(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    RequestNumber: []
+                }))
+                setAutocompleteLoading(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCode([])
+            setOpen(false);
+            setAutocompleteLoading(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChange = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                RequestNumber: [],
+                RequestStatus:[]
+            }));
+        }
+        
+        if (value && value.RequestNumber) {
+            // postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                RequestNumber: value.RequestNumber,
+                RequestStatus: value.RequestStatus
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+
     return (
         <>
             <div className="bg">
@@ -93,10 +299,8 @@ function WorkOrder() {
                                             <input
                                             types='text'
                                             id='ordernumber'
-                                            value={orderNumber}
-                                            onChange={e => {
-                                                setOrderNumber(e.target.value)
-                                            }}
+                                                value={value.orderNumber}
+                                            onChange={handleInputChange}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Work Order Number'
                                             required
@@ -115,23 +319,70 @@ function WorkOrder() {
                                                 className="lablesection color3 text-start mb-1">
                                                 Work Request Number<span className="star">*</span>
                                             </label>
-                                            <input
-                                            types='text'
-                                            id='requestOrderNumber'
-                                            value={requestOrderNumber}
-                                            onChange={e => {
-                                                setRequestOrderNumber(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Work Request Number'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
-                                        </div>
+                                            <Autocomplete
+                                                id="serachGpc"
+                                                className='rounded inputsection py-0 mt-0'
+                                                required
+                                                options={unitCode} // Use the formattedGpcList here
+                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                                getOptionLabel={(option) =>
+                                                    option?.RequestNumber
+                                                        ? option.RequestNumber + ' - ' + option.RequestStatus
+                                                        : ''
+                                                }
+                                                getOptionSelected={(option, value) => option.RequestNumber === value.RequestNumber} // This determines which value gets sent to the API
+                                                onChange={handleGPCAutoCompleteChange}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.RequestNumber} - {option.RequestStatus}
+                                                    </li>
+                                                )}
+                                                value={value}
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChange(event, newInputValue, params)}
+                                                loading={autocompleteLoading}
+                                                open={open}
+                                                onOpen={() => {
+                                                    // setOpen(true);
+                                                }}
+                                                onClose={() => {
+                                                    setOpen(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Employee Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoading ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
+                                           </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
@@ -482,7 +733,7 @@ function WorkOrder() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workorder')
                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                <button type="button" class="border-0 px-3  savebtn py-2"><SaveIcon className='me-2'/>SAVE</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={created}><SaveIcon className='me-2'/>SAVE</button>
                             </div>
                             </div>              
                         </div>
