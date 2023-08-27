@@ -111,21 +111,7 @@ function Maintablemaster() {
         { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
         { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
-        {
-            field: 'addToWorkRequest',
-            headerName: 'Add To Work Request',
-            width: 180,
-            renderCell: (params) => (
-                <button
-                    type="button"
-                    className="border-0 px-3 savebtn py-2"
-                // onClick={() => handleButtonAddToWorkRequest(params.id)}
-                >
-                    Add To Work Request
-                </button>
-            ),
-        }
-
+      
     ];
 
     // Deleted api section
@@ -259,13 +245,6 @@ function Maintablemaster() {
                     }}  >
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
-                    </MenuItem>
-
-                    <MenuItem onClick={(e) => {
-                        putapi(params.row.AssetItemDescription);
-                        handleMenuClose();
-                    }}>
-                        <span style={{ paddingRight: '10px' }}>ADD TO WORK REQUEST</span>
                     </MenuItem>
                 </Menu>
             </div>
