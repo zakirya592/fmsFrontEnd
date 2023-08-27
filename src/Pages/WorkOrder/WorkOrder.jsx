@@ -21,21 +21,20 @@ import TextField from '@mui/material/TextField';
 function WorkOrder() {
     const navigate = useNavigate();
     const [value, setvalue] = useState({
-        orderNumber: '', RequestNumber: null, EmployeeID:null,
+        orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', workCategory: "", failureCode: '',
+        solutionCode: '', assignEmployee: null, EmployeeName:''
     })
-    const [workStatus, setWorkStatus] = useState("");
-    const [workPriority, setWorkPriority] = useState("");
-    const [workCategory, setWorkCategory] = useState("");
-    const [workCategoryDiscription, setWorkCategoryDiscription ] = useState("");
-    const [failureCode, setFailureCode] = useState("");
-    const [failureDiscriptionCode, setFailureDiscriptionCode] = useState("");
-    const [solutionCode, setsolutionCode] = useState("");
+    const [failureDiscriptionCode, setFailureDiscriptionCode] = useState([]);
     const [solutionCodeDiscription, setsolutionCodeDiscription] = useState("");
-    const [assignEmployee, setAssignEmployee] = useState("");
-    const [EmployeeName, setEmployeeName] = useState("");
     const [completeEmployee, setcompleteEmployee] = useState("");
     const [CompleteEmployeeName, setCompleteEmployeeName] = useState("");
 
+    const [RequestStatusLIST, setRequestStatusLIST] = useState([])
+    const [WorkPrioritlist, setWorkPrioritlist] = useState([])
+    const [workCategorylist, setworkCategorylist] = useState([])
+    const [WorkCategoryDiscription, setWorkCategoryDiscription] = useState([])
+    const [failureStatusCodelist, setfailureStatusCodelist] = useState([])
+    const [solutionCodelist, setsolutionCodelist] = useState([])
     // Work Employes ID  Api
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
@@ -90,10 +89,10 @@ function WorkOrder() {
             });
     }
 
-    const created=()=>{
+    const created = () => {
         requestincreas()
     }
-    
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setvalue((prevValue) => ({
@@ -104,22 +103,18 @@ function WorkOrder() {
 
     // Work Request Number
     const [unitCode, setUnitCode] = useState([]);
-    const [dropname, setdropname] = useState([])
     const [open, setOpen] = useState(false);
     const [autocompleteLoading, setAutocompleteLoading] = useState(false);
-    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
     const [gpcList, setGpcList] = useState([]); // gpc list
     const abortControllerRef = useRef(null);
 
     useEffect(() => {
-
         // const handleOnBlurCall = () => {
-
         axios.get('/api/Filter_WR')
             .then((response) => {
                 console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------",data);
+                console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -137,7 +132,7 @@ function WorkOrder() {
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
-        
+
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
@@ -223,16 +218,244 @@ function WorkOrder() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                RequestStatus:[]
+                RequestStatus: []
             }));
         }
-        
+
         if (value && value.RequestNumber) {
             // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: value.RequestNumber,
                 RequestStatus: value.RequestStatus
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+
+    useEffect(() => {
+        axios.get(`/api/RequestStatus_LIST`).then((res) => {
+            setRequestStatusLIST(res.data.recordsets[0])
+            console.log(res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        axios.get(`/api/WorkPriority_LIST`).then((res) => {
+            setWorkPrioritlist(res.data.recordsets[0])
+            console.log(res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        axios.get(`/api/WorkCatagres_GET_CODE_LIST`).then((res) => {
+            setworkCategorylist(res.data.recordsets[0])
+            console.log('WorkCatagres_GET_LIST', res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`/api/Failure_GET_CODELIST`).then((res) => {
+            setfailureStatusCodelist(res.data.recordsets[0])
+            console.log('Failure_GET_CODELIST', res.data.recordsets[0].FailureStatusCode);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`/api/Solution_GET_CODE_LIST`).then((res) => {
+            setsolutionCodelist(res.data.recordsets[0])
+            console.log('SolutiontatusCode', res.data.recordsets[0]);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [])
+
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            WorkCategoryCode: e.target.value,
+        }));
+        axios.get(`/api/WorkCatagres_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----', res.data);
+                setWorkCategoryDiscription(res.data.recordset[0].WorkCategoryDesc)
+
+            })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
+
+    const handleProvinceChangeFailure = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            failureCode: e.target.value,
+        }));
+        axios.get(`/api/Failure_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
+
+            })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
+
+    const solutionCodeheeandly = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            solutionCode: e.target.value,
+        }));
+        axios.get(`/api/Solution_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
+
+            })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
+
+    // Empoly
+    const [unitCodeID, setUnitCodeID] = useState([]);
+    const [openID, setOpenID] = useState(false);
+    const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
+    const [gpcListID, setGpcListID] = useState([]); // gpc list
+    const abortControllerRefID = useRef(null);
+
+    useEffect(() => {
+        // const handleOnBlurCall = () => {
+        axios.get('/api/EmployeeID_GET_LIST')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                console.log("----------------------------", data);
+                const dataget = data.map((requestdata) => ({
+                    RequestNumber: requestdata?.RequestNumber,
+                    RequestStatus: requestdata?.RequestStatus,
+                }));
+                // setUnitCodeID(dataget)
+                setOpenID(false)
+            })
+            .catch((error) => {
+                console.log('-----', error);
+            }
+            );
+        // }
+
+    }, [])
+
+    const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
+        console.log('==========+++++++======', newInputValueID)
+
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcListID([]); // Clear the data list if there is no input
+            setUnitCodeID([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValueID || newInputValueID.trim() === '') {
+            // perform operation when input is cleared
+            setGpcListID([]);
+            setUnitCodeID([])
+            return;
+        }
+        if (newInputValueID === null) {
+
+            // perform operation when input is cleared
+            setGpcListID([]);
+            setUnitCodeID([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                assignEmployee: [],
+                EmployeeName:[]
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoadingID(true);
+        setOpenID(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRefID.current) {
+                abortControllerRefID.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRefID.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCodeID(data ?? [])
+                    setOpenID(true);
+                    setUnitCodeID(data)
+                    setAutocompleteLoadingID(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    assignEmployee: [],
+                    EmployeeName: []
+                }))
+                setAutocompleteLoadingID(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCodeID([])
+            setOpenID(false);
+            setAutocompleteLoadingID(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChangeID = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                assignEmployee: [],
+                EmployeeName: []
+            }));
+        }
+
+        if (value && value.EmployeeID) {
+            // postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                assignEmployee: value.EmployeeID,
+                EmployeeName: value.Firstname
             }));
             console.log('Received value----------:', value);
         } else {
@@ -253,9 +476,9 @@ function WorkOrder() {
                                     noWrap
                                     component="div"
                                     className="d-flex py-2 ">
-                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
                                         navigate('/workorder')
-                    })} />
+                                    })} />
                                     <p className="text-center my-auto ms-5">Work Order</p>
                                 </Typography>
                             </Toolbar>
@@ -267,7 +490,7 @@ function WorkOrder() {
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
                                         View/Modify Work Orders
-                                        
+
                                     </p>
                                     <div className="d-flex">
                                         <img src={pagepin} className="me-2" alt="pagepin" />
@@ -297,19 +520,19 @@ function WorkOrder() {
                                                 Work Order Number <span className="star">*</span>
                                             </label>
                                             <input
-                                            types='text'
-                                            id='ordernumber'
+                                                types='text'
+                                                id='ordernumber'
                                                 value={value.orderNumber}
-                                            onChange={handleInputChange}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Work Order Number'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
+                                                onChange={handleInputChange}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Work Order Number'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
@@ -382,58 +605,77 @@ function WorkOrder() {
                                                     />
                                                 )}
                                             />
-                                           </div>
+                                        </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='workStatus' className='lablesection color3 text-start mb-1'>
-                                        Work Status
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="workStatus" aria-label="Floating label select example" value={workStatus}
-                                            onChange={(event) => {
-                                                setWorkStatus(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Work Status</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='workStatus' className='lablesection color3 text-start mb-1'>
+                                                Work Status
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workStatus" aria-label="Floating label select example"
+                                                value={value.WorkStatus}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkStatus: e.target.value
+                                                    }))
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Select Work Status</option>
+                                                {
+                                                    RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.RequestStatusCode}>{itme.RequestStatusCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='workpriority' className='lablesection color3 text-start mb-1'>
-                                            Work Priority 
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="workPriority" aria-label="Floating label select example" value={workPriority}
-                                            onChange={(event) => {
-                                                setWorkPriority(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Work Priority</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='workpriority' className='lablesection color3 text-start mb-1'>
+                                                Work Priority
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workPriority" aria-label="Floating label select example"
+                                                value={value.workPriority}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        workPriority: e.target.value
+                                                    }))
+                                                }} >
+                                                <option selected className='inputsectiondropdpwn'>Select Work Priority</option>
+                                                {
+                                                    WorkPrioritlist && WorkPrioritlist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkPriorityCode}>{itme.WorkPriorityCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                {/* second line */}
+                                    {/* second line */}
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                            Work Category 
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="workCategory" aria-label="Floating label select example" value={workCategory}
-                                            onChange={(event) => {
-                                                setWorkCategory(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Work Category</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
+                                                Work Category
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workCategory" aria-label="Floating label select example"
+                                                value={value.workCategoryCode}
+                                                onChange={handleProvinceChange} >
+                                                <option selected className='inputsectiondropdpwn'>Select Work Category</option>
+                                                {
+                                                    workCategorylist && workCategorylist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkCategoryCode}>{itme.WorkCategoryCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="workCategoryDiscription"
@@ -441,301 +683,356 @@ function WorkOrder() {
                                                 Work Category Discription
                                             </label>
                                             <input
-                                            types='text'
-                                            id='workCategoryDiscription'
-                                            value={workCategoryDiscription}
-                                            onChange={e => {
-                                                setWorkCategoryDiscription(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Work Category Discription'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
+                                                types='text'
+                                                id='workCategoryDiscription'
+                                                value={WorkCategoryDiscription}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Work Category Discription'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
                                         </div>
                                     </div>
                                     {/* Third line */}
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Work Description
-                                        </label>
-                                        <div className="form-floating inputsectiondropdpwn">
-                                            <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"></textarea>
-                                          
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
+                                                Work Description
+                                            </label>
+                                            <div className="form-floating inputsectiondropdpwn">
+                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"></textarea>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 </div>
 
                                 <hr className='color3 line' />
                                 {/* forth row */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='failurecode' className='lablesection color3 text-start mb-1'>
-                                        Failure Code 
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="failureCode" aria-label="Floating label select example" value={failureCode}
-                                            onChange={(event) => {
-                                                setFailureCode(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Failure Code</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='failurecode' className='lablesection color3 text-start mb-1'>
+                                                Failure Code
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="failureCode" aria-label="Floating label select example"
+                                                value={value.failureCode}
+                                                onChange={handleProvinceChangeFailure}>
+                                                <option selected className='inputsectiondropdpwn'>Select Failure Code</option>
+                                                {
+                                                    failureStatusCodelist && failureStatusCodelist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.FailureStatusCode}>{itme.FailureStatusCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="failureCodeDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Failure Code Description
+                                                Failure Code Description
                                             </label>
                                             <input
-                                            types='text'
-                                            id='failurecodediscription'
-                                            value={failureDiscriptionCode}
-                                            onChange={e => {
-                                                setFailureDiscriptionCode(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Work Category Discription'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
+                                                types='text'
+                                                id='failurecodediscription'
+                                                value={failureDiscriptionCode}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Work Category Discription'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 {/* fifth row  */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='solutioncode' className='lablesection color3 text-start mb-1'>
-                                        Solution Code 
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="failureCode" aria-label="Floating label select example" value={solutionCode}
-                                            onChange={(event) => {
-                                                setsolutionCode(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Solution Code</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='solutioncode' className='lablesection color3 text-start mb-1'>
+                                                Solution Code
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="failureCode" aria-label="Floating label select example"
+                                                value={value.solutionCode}
+                                                onChange={solutionCodeheeandly}>
+                                                <option selected className='inputsectiondropdpwn'>Select Solution Code</option>
+                                                {
+                                                    solutionCodelist && solutionCodelist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.SolutiontatusCode}>{itme.SolutiontatusCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="solutioncodeDisctiption"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Solution Code Description
+                                                Solution Code Description
                                             </label>
                                             <input
-                                            types='text'
-                                            id='solutioncodeDisctiption'
-                                            value={solutionCodeDiscription}
-                                            onChange={e => {
-                                                setsolutionCodeDiscription(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Solution Code Discription'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
+                                                types='text'
+                                                id='solutioncodeDisctiption'
+                                                value={solutionCodeDiscription}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Solution Code Discription'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 {/* sixth row */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='empoyeeid' className='lablesection color3 text-start mb-1'>
-                                        Assign to Employee 
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="empoyeeid" aria-label="Floating label select example" value={assignEmployee}
-                                            onChange={(event) => {
-                                                setAssignEmployee(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Employee ID</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='empoyeeid' className='lablesection color3 text-start mb-1'>
+                                                Assign to Employee
+                                            </label>
+                                            <Autocomplete
+                                                id="serachGpcid"
+                                                className='rounded inputsection py-0 mt-0'
+                                                required
+                                                options={unitCodeID}
+                                                getOptionLabel={(option) =>
+                                                    option?.EmployeeID
+                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                        : ''
+                                                }
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
+                                                onChange={handleGPCAutoCompleteChangeID}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.EmployeeID} - {option.Firstname}
+                                                    </li>
+                                                )}
+                                                value={value.EmployeeID}
+                                                onInputChange={(eventID, newInputValueID, params) =>
+                                                    handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
+                                                }
+                                                loading={autocompleteLoadingID}
+                                                open={openID} // Control open state based on selected value
+                                                onOpen={() => {
+                                                    setOpenID(true);
+                                                }}
+                                                onClose={() => {
+                                                    setOpenID(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Employee Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoadingID ? (
+                                                                        <CircularProgress style={{ color: 'black' }} size={20} />
+                                                                    ) : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="employeename"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Employee Name
+                                                Employee Name
                                             </label>
                                             <input
-                                            types='text'
-                                            id='employeename'
-                                            value={EmployeeName}
-                                            onChange={e => {
-                                                setEmployeeName(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Employee Name'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
+                                                types='text'
+                                                id='employeename'
+                                                value={value.EmployeeName}
+                                                // onChange={e => {
+                                                //     setEmployeeName(e.target.value)
+                                                // }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Employee Name'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 {/* Seventh row  */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                            Appiontment Date/Time
-                                        </label>
-                                            <input type="datetime-local" id="apaintmentdate"   name="birthdaytime" className='rounded inputsection py-2' />
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
+                                                Appiontment Date/Time
+                                            </label>
+                                            <input type="datetime-local" id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' />
 
-                                
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='scheduledate' className='lablesection color3 text-start mb-1'>
-                                            Scheduled Date/Time
-                                        </label>
-                                            <input type="datetime-local" id="apaintmentdate"   name="birthdaytime" className='rounded inputsection py-2' />
 
-                                
+                                        </div>
                                     </div>
-                                </div>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='scheduledate' className='lablesection color3 text-start mb-1'>
+                                                Scheduled Date/Time
+                                            </label>
+                                            <input type="datetime-local" id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' />
+
+
+                                        </div>
+                                    </div>
                                 </div>
                                 {/* Eight row */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='startdate' className='lablesection color3 text-start mb-1'>
-                                            Start Date/Time
-                                        </label>
-                                            <input type="datetime-local" id="startdate"   name="birthdaytime" className='rounded inputsection py-2' />
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='startdate' className='lablesection color3 text-start mb-1'>
+                                                Start Date/Time
+                                            </label>
+                                            <input type="datetime-local" id="startdate" name="birthdaytime" className='rounded inputsection py-2' />
 
-                                
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='endDate' className='lablesection color3 text-start mb-1'>
-                                            End Date/Time
-                                        </label>
-                                            <input type="datetime-local" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
 
-                                
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='totaldays' className='lablesection color3 text-start mb-1'>
-                                            Total days
-                                        </label>
-                                            <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='totalhours' className='lablesection color3 text-start mb-1'>
-                                            Total hours
-                                        </label>
-                                            <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='totalminutes' className='lablesection color3 text-start mb-1'>
-                                            Total Minutes
-                                        </label>
-                                            <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
-                                  </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='costofwork' className='lablesection color3 text-start mb-1'>
-                                            Cost of Work
-                                        </label>
-                                            <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='endDate' className='lablesection color3 text-start mb-1'>
+                                                End Date/Time
+                                            </label>
+                                            <input type="datetime-local" id="endDate" name="birthdaytime" className='rounded inputsection py-2' />
 
-                                
+
+                                        </div>
                                     </div>
-                                </div>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='totaldays' className='lablesection color3 text-start mb-1'>
+                                                Total days
+                                            </label>
+                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' />
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='totalhours' className='lablesection color3 text-start mb-1'>
+                                                Total hours
+                                            </label>
+                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' />
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='totalminutes' className='lablesection color3 text-start mb-1'>
+                                                Total Minutes
+                                            </label>
+                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' />
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='costofwork' className='lablesection color3 text-start mb-1'>
+                                                Cost of Work
+                                            </label>
+                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' />
+
+
+                                        </div>
+                                    </div>
                                 </div>
                                 {/* Ninth Row*/}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='completeemployee' className='lablesection color3 text-start mb-1'>
-                                        Completed By Employee 
-                                        </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="completeemploye" aria-label="Floating label select example" value={completeEmployee}
-                                            onChange={(event) => {
-                                                setcompleteEmployee(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Select Employee ID</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
-                                        </select>
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='completeemployee' className='lablesection color3 text-start mb-1'>
+                                                Completed By Employee
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="completeemploye" aria-label="Floating label select example" value={completeEmployee}
+                                                onChange={(event) => {
+                                                    setcompleteEmployee(event.target.value)
+                                                }}>
+                                                <option selected className='inputsectiondropdpwn'>Select Employee ID</option>
+                                                <option value={"First"}>One</option>
+                                                <option value={"Second"}>Two</option>
+                                                <option value={"three"}>Three</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="employeename"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Employee Name
+                                                Employee Name
                                             </label>
                                             <input
-                                            types='text'
-                                            id='employeename'
-                                            value={CompleteEmployeeName}
-                                            onChange={e => {
-                                                setCompleteEmployeeName(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Employee Name'
-                                            required
-                                        ></input>
-                                                                                <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchOutlined className=' serachicon' />
-                                        </p>
+                                                types='text'
+                                                id='employeename'
+                                                value={CompleteEmployeeName}
+                                                onChange={e => {
+                                                    setCompleteEmployeeName(e.target.value)
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Employee Name'
+                                                required
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workorder')
-                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={created}><SaveIcon className='me-2'/>SAVE</button>
+                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={created}><SaveIcon className='me-2' />SAVE</button>
+                                </div>
                             </div>
-                            </div>              
                         </div>
                     </Box>
                 </div>
