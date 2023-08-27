@@ -465,11 +465,11 @@ function Updataworkrequest() {
             EmployeeID: value.EmployeeID
         },)
             .then((res) => {
-                console.log('Updata the api data ', res.data);
+                console.log('Updata the api data --------------------------------------', res.data);
                 // setvalue(prevState => ({ ...prevState, RequestNumber: '', WorkPriority: '', WorkTrade: '', WorkType: '', }));
              Swal.fire({
                     title: "Success",
-                 text: ` Work Request ${userId} has been updated`,
+                 text: ` ${res.data.message}`,
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(
