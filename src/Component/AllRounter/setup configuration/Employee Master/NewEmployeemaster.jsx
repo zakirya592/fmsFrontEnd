@@ -19,9 +19,26 @@ import SaveIcon from '@mui/icons-material/Save';
 function NewEmployeemaster() {
 
     const navigate = useNavigate();
+
+    function getCurrentDateBirthDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function getCurrentJoiningDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     const [value, setvalue] = useState({
         EmployeeID: '', EmployeeStatus: '',
-        Age: '', BirthDate: '',
+        Age: '', BirthDate: getCurrentDateBirthDate(),
         Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
@@ -33,8 +50,16 @@ function NewEmployeemaster() {
         NationalityCode: '', NationalityDescription: '',
         NationalIQAMANumber: '', PassportNumber: '',
         DesignationCode: '', DesignationName: '', Email: '',
-        JoiningDate: '',
+        JoiningDate: getCurrentJoiningDate(),
     })
+
+    const BirthDateChange = (e) => {
+        setvalue((prevValue) => ({
+            ...prevValue,
+            BirthDate: e.target.value,
+        }));
+    };
+    
 
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownMeritalStatus, setdropdownMeritalStatus] = useState([])
@@ -407,12 +432,13 @@ function NewEmployeemaster() {
                                                     </label>
                                                     <input type="date" id="BirthDate"
                                                         value={value.BirthDate}
-                                                        onChange={e => {
-                                                            setvalue(prevValue => ({
-                                                                ...prevValue,
-                                                                BirthDate: e.target.value
-                                                            }))
-                                                        }}
+                                                        // onChange={e => {
+                                                        //     setvalue(prevValue => ({
+                                                        //         ...prevValue,
+                                                        //         BirthDate: e.target.value
+                                                        //     }))
+                                                        // }}
+                                                        onChange={BirthDateChange}
                                                         name="birthdaytime" className='rounded inputsection py-2' />
                                                 </div>
                                             </div>
