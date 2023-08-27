@@ -40,7 +40,7 @@ function NewEmployeeStatus() {
                 const postdata = res.data.recordset[0].EmployeeStatusCode
                 Swal.fire(
                     'Add!',
-                    `Work status  ${postdata} has been created`,
+                    `Employee Status  ${postdata} has been created`,
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {
@@ -54,7 +54,7 @@ function NewEmployeeStatus() {
                 console.log(err);
                 Swal.fire(
                     'Error!',
-                    'This Work status already exist',
+                    'This Employee Status already exist',
                     'error'
                 ).then((result) => {
                     if (result.isConfirmed) {
