@@ -250,7 +250,7 @@ function Updataemployeemaster() {
             ...prevValue,
             DesignationCode: e.target.value,
         }));
-        axios.get(`/Designation_GET_BYID/${Deptnale}`)
+        axios.get(`/api/Designation_GET_BYID/${Deptnale}`)
             .then((res) => {
                 // console.log(res.data);
                 setdesig(res.data.recordset[0].DesignationDesc)

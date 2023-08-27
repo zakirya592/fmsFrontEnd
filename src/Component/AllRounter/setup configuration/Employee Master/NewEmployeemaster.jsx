@@ -20,14 +20,6 @@ function NewEmployeemaster() {
 
     const navigate = useNavigate();
 
-    function getCurrentDateBirthDate() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-
     function getCurrentJoiningDate() {
         const today = new Date();
         const year = today.getFullYear();
@@ -38,7 +30,7 @@ function NewEmployeemaster() {
 
     const [value, setvalue] = useState({
         EmployeeID: '', EmployeeStatus: '',
-        Age: '', BirthDate: getCurrentDateBirthDate(),
+        Age: '', BirthDate:'',
         Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
