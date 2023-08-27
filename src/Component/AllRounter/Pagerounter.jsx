@@ -19,6 +19,7 @@ import Soluctioncode from '../../Pages/Setup&Configuration/Soluction code/Soluct
 import Assecttypesmaintence from '../../Pages/Setup&Configuration/Assect types maintence/Assecttypesmaintence'
 import Assectcategory from '../../Pages/Setup&Configuration/Assect category/Assectcategory'
 import Assectsubcategory from '../../Pages/Setup&Configuration/Assect subcategory/Assectsubcategory'
+import EmployeeStatus from '../../Pages/Setup&Configuration/EmployeeStatus/EmployeeStatus'
 import Worketypesmaintance from '../../Pages/Setup&Configuration/Work type manintance/Worketypesmaintance'
 import Assectcondition from '../../Pages/Setup&Configuration/Assect Condition/Assectcondition'
 import Workpriority from '../../Pages/Setup&Configuration/Work Priority/Workpriority'
@@ -131,6 +132,7 @@ function Pagerounter() {
           <Route exact path='/AssetCategory' element={<Assectcategory />} />
           {/*Assectsubcategory*/}
           <Route exact path='/AssetsubCategory' element={<Assectsubcategory />} />
+          <Route exact path='/AssetsubCategory' element={<Assectsubcategory />} />
           {/*Assectcondition*/}
           <Route exact path='/Assectcondition' element={<Assectcondition />} />
           {/*Nationality*/}
@@ -142,6 +144,8 @@ function Pagerounter() {
           <Route exact path='/Updata/Employeemaster/:userId' element={<Updataemployeemaster />} />
           {/*WarrantyPeriod*/}
           <Route exact path='/WarrantyPeriod' element={<WarrantyPeriod />} />
+          {/* Work Status */}
+          <Route exact path="employeeStatus" element ={<EmployeeStatus/>}/>
 
 
           {/* ================View/Modify Preventive Maintenance* ==================*/}
