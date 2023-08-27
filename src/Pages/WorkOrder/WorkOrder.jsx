@@ -267,7 +267,7 @@ function WorkOrder() {
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
                                         View/Modify Work Orders
-                                        <span className="star">*</span>
+                                        
                                     </p>
                                     <div className="d-flex">
                                         <img src={pagepin} className="me-2" alt="pagepin" />
@@ -294,7 +294,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="WorkOrderNumber"
                                                 className="lablesection color3 text-start mb-1" >
-                                                Work Order Number<span className="star">*</span>
+                                                Work Order Number <span className="star">*</span>
                                             </label>
                                             <input
                                             types='text'
@@ -317,7 +317,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="WorkRequestNumber"
                                                 className="lablesection color3 text-start mb-1">
-                                                Work Request Number<span className="star">*</span>
+                                                Work Request Number
                                             </label>
                                             <Autocomplete
                                                 id="serachGpc"
@@ -387,7 +387,7 @@ function WorkOrder() {
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='workStatus' className='lablesection color3 text-start mb-1'>
-                                        Work Status<span className="star">*</span>
+                                        Work Status
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="workStatus" aria-label="Floating label select example" value={workStatus}
                                             onChange={(event) => {
@@ -403,7 +403,7 @@ function WorkOrder() {
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='workpriority' className='lablesection color3 text-start mb-1'>
-                                            Work Priority <span className="star">*</span>
+                                            Work Priority 
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="workPriority" aria-label="Floating label select example" value={workPriority}
                                             onChange={(event) => {
@@ -420,7 +420,7 @@ function WorkOrder() {
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                            Work Category <span className="star">*</span>
+                                            Work Category 
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="workCategory" aria-label="Floating label select example" value={workCategory}
                                             onChange={(event) => {
@@ -438,7 +438,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Work Category Discription<span className="star">*</span>
+                                                Work Category Discription
                                             </label>
                                             <input
                                             types='text'
@@ -462,7 +462,7 @@ function WorkOrder() {
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Work Description<span className="star">*</span>
+                                            Work Description
                                         </label>
                                         <div className="form-floating inputsectiondropdpwn">
                                             <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of the problem " id="ProblemDescription"></textarea>
@@ -478,7 +478,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='failurecode' className='lablesection color3 text-start mb-1'>
-                                        Failure Code <span className="star">*</span>
+                                        Failure Code 
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="failureCode" aria-label="Floating label select example" value={failureCode}
                                             onChange={(event) => {
@@ -496,7 +496,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="failureCodeDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Failure Code Description<span className="star">*</span>
+                                                 Failure Code Description
                                             </label>
                                             <input
                                             types='text'
@@ -522,7 +522,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='solutioncode' className='lablesection color3 text-start mb-1'>
-                                        Solution Code <span className="star">*</span>
+                                        Solution Code 
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="failureCode" aria-label="Floating label select example" value={solutionCode}
                                             onChange={(event) => {
@@ -540,7 +540,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="solutioncodeDisctiption"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Solution Code Description<span className="star">*</span>
+                                                 Solution Code Description
                                             </label>
                                             <input
                                             types='text'
@@ -566,7 +566,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='empoyeeid' className='lablesection color3 text-start mb-1'>
-                                        Assign to Employee <span className="star">*</span>
+                                        Assign to Employee 
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="empoyeeid" aria-label="Floating label select example" value={assignEmployee}
                                             onChange={(event) => {
@@ -584,7 +584,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="employeename"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Employee Name<span className="star">*</span>
+                                                 Employee Name
                                             </label>
                                             <input
                                             types='text'
@@ -610,7 +610,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                            Appiontment Date/Time<span className="star">*</span>
+                                            Appiontment Date/Time
                                         </label>
                                             <input type="datetime-local" id="apaintmentdate"   name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -620,7 +620,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='scheduledate' className='lablesection color3 text-start mb-1'>
-                                            Scheduled Date/Time<span className="star">*</span>
+                                            Scheduled Date/Time
                                         </label>
                                             <input type="datetime-local" id="apaintmentdate"   name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -633,7 +633,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='startdate' className='lablesection color3 text-start mb-1'>
-                                            Start Date/Time<span className="star">*</span>
+                                            Start Date/Time
                                         </label>
                                             <input type="datetime-local" id="startdate"   name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -643,7 +643,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection d-grid my-2'>
                                         <label htmlFor='endDate' className='lablesection color3 text-start mb-1'>
-                                            End Date/Time<span className="star">*</span>
+                                            End Date/Time
                                         </label>
                                             <input type="datetime-local" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -653,7 +653,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='totaldays' className='lablesection color3 text-start mb-1'>
-                                            Total days<span className="star">*</span>
+                                            Total days
                                         </label>
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
                                     </div>
@@ -661,7 +661,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='totalhours' className='lablesection color3 text-start mb-1'>
-                                            Total hours<span className="star">*</span>
+                                            Total hours
                                         </label>
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
                                     </div>
@@ -669,7 +669,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='totalminutes' className='lablesection color3 text-start mb-1'>
-                                            Total Minutes<span className="star">*</span>
+                                            Total Minutes
                                         </label>
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
                                   </div>
@@ -677,7 +677,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                 <div className='emailsection d-grid my-2'>
                                         <label htmlFor='costofwork' className='lablesection color3 text-start mb-1'>
-                                            Cost of Work<span className="star">*</span>
+                                            Cost of Work
                                         </label>
                                             <input type="number" id="endDate"   name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -690,7 +690,7 @@ function WorkOrder() {
                                 <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='completeemployee' className='lablesection color3 text-start mb-1'>
-                                        Completed By Employee <span className="star">*</span>
+                                        Completed By Employee 
                                         </label>
                                         <select className='rounded inputsectiondropdpwn color2 py-2' id="completeemploye" aria-label="Floating label select example" value={completeEmployee}
                                             onChange={(event) => {
@@ -708,7 +708,7 @@ function WorkOrder() {
                                             <label
                                                 htmlFor="employeename"
                                                 className="lablesection color3 text-start mb-1">
-                                                 Employee Name<span className="star">*</span>
+                                                 Employee Name
                                             </label>
                                             <input
                                             types='text'
