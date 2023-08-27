@@ -362,7 +362,7 @@ function SetupSidebar() {
                 <List className='setupsidebar'>
                     {['. Employee Designation'].map((text, index) => (
                         <ListItem key={text} disablePadding onClick={(() => {
-                            // navigate('/workRequest')
+                            navigate('/EmployeeDesignation')
                         })}>
                             <ListItemButton>
                                 <ListItemText primary={text} />
