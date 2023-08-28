@@ -1,7 +1,5 @@
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-import React from 'react';
-import SaveIcon from '@mui/icons-material/Save';
-import Siderbar from '../../../Component/Siderbar/Siderbar';
 import excel from '../../../Image/excel.png';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import AppBar from '@mui/material/AppBar';
@@ -13,104 +11,258 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { DataGrid } from '@mui/x-data-grid';
+import Siderbar from '../../../Component/Siderbar/Siderbar';
+import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { CSVLink } from "react-csv"
+import NewSystemModule from '../../../Component/AllRounter/userManagement/SystemModules/NewSystemModules';
 
 function SystemModules() {
-  const columns = [
-    { field: 'id', headerName: 'SEQ.', width: 150 },
-    { field: 'description', headerName: 'DESCRIPTION', width: 270 },
-    { field: 'moduleAccessCode', headerName: 'MODULE ACCESS CODE', width: 270 },
-    {
-      field: 'action',
-      headerName: 'ACTION',
-      width: 170,
-      renderCell: (params) => (
-        <div>
-          <button type="button" className="btn  mx-1 color2 btnwork">
-            <FlipCameraAndroidIcon/>
-          </button>
-          <button type="button" className="btn  mx-1 color2 btnwork">
-          <DeleteOutlineIcon/>
-          </button>
-        </div>
-      ),
-    },
-  ];
-
-  const generateRandomData = () => {
-    const rows = [];
-    for (let i = 1; i <= 10; i++) {
-      rows.push({
-        id: i,
-        description: `Description Number  ${i}`,
-        moduleAccessCode: `XXX XXXX XXXXX ${i}`,
-      });
+    const ref = useRef(null)
+    const [itemCode, setItemCode] = useState(null);
+    //    List of table
+    const navigate = useNavigate()
+    const [getdata, setgetdata] = useState([])
+    const getapi = () => {
+        axios.get(`/api/SystemModules_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
-    return rows;
-  };
+    useEffect(() => {
+        getapi()
+    }, [])
+    const columns = [
+        { field: 'id', headerName: 'SEQ.', width: 150 },
+        { field: 'SystemModuleCode', headerName: 'MODULE ACCESS CODE', width: 270 },
+        { field: 'SystemModuleDesc', headerName: 'DESCRIPTION', width: 270 },
+        {
+            field: 'action',
+            headerName: 'ACTION',
+            width: 170,
+            renderCell: (params) => (
+                <div>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.SystemModuleCode)}>
+                        <FlipCameraAndroidIcon />
+                    </button>
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" class="btn" style={{ display: 'none' }} data-bs-toggle="modal" data-bs-target="#exampleModal" ref={ref}>
+                        <FlipCameraAndroidIcon />
+                    </button>
+                    <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => Deletedapi(params.row.SystemModuleCode)}>
+                        <DeleteOutlineIcon />
+                    </button>
 
-  const rows = generateRandomData();
-  const navigate = useNavigate();
-
-  return (
-    <>
-      <div className="bg">
-        <Box sx={{ display: "flex" }}>
-          <Siderbar />
-          <AppBar className="fortrans locationfortrans" position="fixed">
-            <Toolbar>
-              <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-              <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                      navigate('/')
-                    })} />                <p className="text-center my-auto ms-5">User Management</p>
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <div className="topermaringpage mb- container">
-            <div className="py-3">
-              <div className="d-flex justify-content-between my-auto">
-                <p className="color1 workitoppro my-auto">SYSTEM MODULES MAINTENANCE
-                  <span className='star'>*</span>
-                </p>
-                <div className="d-flex">
-                  <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                    <AddCircleOutlineIcon className="me-1" />
-                    New
-                  </button>
-                  <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                    <img src={excel} alt="export" className='me-1' />
-                    Import <GetAppIcon />
-                  </button>
-                  <button type="button" className="btn btn-outline-primary color2">
-                    <img src={excel} alt="export" className='me-1' /> Export <FileUploadIcon />
-                  </button>
                 </div>
-              </div>
-              <hr className="color3 line width" />
-              <div style={{ height: 420, width: '72%', margin:"auto"}} className='tableleft'> 
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  pageSize={5}
-                  checkboxSelection
-                  disableRowSelectionOnClick
-                />
-              </div>
+            ),
+        },
+    ];
+    const [SystemModuleDesc, setSystemModuleDesc] = useState()
+    const [open, setOpen] = useState(false)
+    // GEt by id Api
+    function updata(SystemModuleCode) {
+        console.log(SystemModuleCode);
+        ref.current.click()
+        // get api
+        axios.get(`/api/SystemModules_GET_BYID/${SystemModuleCode}`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list hg', res.data);
+                setSystemModuleDesc(res.data.recordset[0].SystemModuleDesc)
+                setItemCode(SystemModuleCode); // Store the WorkTypeCode in state
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    // UPdata api
+    const postapi = (e) => {
+        e.preventDefault();
+        // ref.current.click(SolutiontatusCode)
+        console.log(itemCode);
+        axios.put(`/api/SystemModules_Put/${itemCode}`, {
+            SystemModuleDesc: SystemModuleDesc,
+        },)
+            .then((res) => {
+                console.log('Add', res.data);
+                setSystemModuleDesc('')
+                getapi()
+                Swal.fire(
+                    'Update!',
+                    `System Module ${itemCode} has been updated`,
+                    'success'
+                ).then(() => {
+                    handleClose();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+   
+
+    // Deleted api section
+    const Deletedapi = (SystemModuleCode) => {
+        console.log(SystemModuleCode);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `You want to delete this ${SystemModuleCode} System Module`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/SystemModules_DELETE_BYID/${SystemModuleCode}`)
+                    .then((res) => {
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        getapi()
+                        // Refresh the table data if needed
+                        // You can call the API again or remove the deleted row from the state
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                    });
+                swalWithBootstrapButtons.fire(
+                    'Deleted!',
+                    `System Module ${SystemModuleCode} has been deleted`,
+                    'success'
+                )
+            }
+        })
+
+    };
+
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
+    const filteredData = getdata && getdata.map((row, indes) => ({
+        ...row,
+        id: indes + 1,
+        SystemModuleCode: row.SystemModuleCode,
+        SystemModuleDesc: row.SystemModuleDesc
+
+    }))
+
+    return (
+        <>
+            <div className="bg">
+                <Box sx={{ display: "flex" }}>
+                    <Siderbar />
+                    <AppBar className="fortrans locationfortrans" position="fixed">
+                        <Toolbar>
+                            <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" />
+                                <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <div className="topermaringpage  container">
+                        <div className="py-3">
+                            <div className="d-flex justify-content-between my-auto">
+                                <p className="color1 workitoppro my-auto">SYSTEM MODULES MAINTENANCE
+                                    <span className='star'>*</span>
+                                </p>
+                                <div className="d-flex">
+                                <NewSystemModule />
+                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                        <img src={excel} alt="export" className='me-1' />
+                                        Import <GetAppIcon />
+                                    </button>
+                                    <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
+                                    </CSVLink>
+                                </div>
+                            </div>
+                            <hr className="color3 line width" />
+                            <div style={{ height: 420, width: '80%' }} className='tableleft'>
+                                <DataGrid
+                                    rows={filteredData}
+                                    columns={columns}
+                                    pagination
+                                    rowsPerPageOptions={[25, 50, 100]} // Optional: Set available page size options
+                                    paginationModel={paginationModel}
+                                    onPaginationModelChange={setPaginationModel}
+                                    checkboxSelection
+                                    disableRowSelectionOnClick
+                                    disableMultipleSelection={true}
+                                    maxSelected={1} // can select only one, no top select all box
+                                />
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-between w-100 mt-3 mb-3">
+                            <button type="button" className="border-0 px-3 savebtn py-2">
+                                <ArrowCircleLeftOutlinedIcon className='me-2' />
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                </Box>
             </div>
-            <div className="d-flex justify-content-between mt-3 mb-3">
-              <button type="button" className="border-0 px-3 savebtn py-2">
-                <ArrowCircleLeftOutlinedIcon className='me-2' />
-                Back
-              </button>
-              <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                      navigate('/')
-                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+
+            {/* <!-- Modal --> */}
+            <div class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog" style={{ borderRadius: '10px', border: '4px solid #1E3B8B' }}>
+                    <div class="modal-content bgupdata">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel"> UPDATE SYSTEM MODULE</h5>
+                        </div>
+                        <div class="modal-body pt-0">
+                            <form onSubmit={postapi}>
+                                <div className='emailsection position-relative d-grid'>
+                                    <label htmlFor='SystemModuleDesc' className='lablesection color3 text-start mb-1'>
+                                        System Module Desc<span className='star'>*</span>
+                                    </label>
+
+                                    <input
+                                        types='text'
+                                        id='SystemModuleDesc'
+                                        value={SystemModuleDesc}
+                                        onChange={e => {
+                                            setSystemModuleDesc(e.target.value)
+                                        }}
+                                        className='rounded inputsection py-2 borderfo'
+                                        placeholder='System Module Desc'
+                                        required
+                                    ></input>
+                                </div>
+
+                                <div className="d-flex justify-content-between pt-3 ">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" data-bs-dismiss="modal"><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="submit" class="border-0 px-3 savebtn py-2" data-bs-dismiss="modal"><AddCircleOutlineIcon className='me-2' />Save</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </Box>
-      </div>
-    </>
-  )
+        </>
+    )
 }
 
-export default SystemModules;
+export default SystemModules
