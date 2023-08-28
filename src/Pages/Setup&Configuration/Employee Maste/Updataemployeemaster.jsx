@@ -294,16 +294,11 @@ function Updataemployeemaster() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not Updata the Date ${err.data}`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                Swal.fire(
+                    'Error!',
+                    ` Employee Master is Not update ${err.message}`,
+                    'error'
+                )
             });
     }
 
@@ -470,15 +465,41 @@ function Updataemployeemaster() {
                                                     <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
                                                         Birth Date
                                                     </label>
-                                                    <input type={bdata} id="JoiningDate"
+                                                    {/* <input type={bdata} id="JoiningDate"
                                                         value={bdata}
                                                         onChange={e => {
                                                             setvalue(prevValue => ({
                                                                 ...prevValue,
                                                                 JoiningDate: e.target.value
                                                             }))
-                                                        }}
-                                                        name="birthdaytime" className='rounded inputsection py-2' />
+                                                        }} */}
+                                                        {/* name="birthdaytime" className='rounded inputsection py-2'  /> */}
+                                                    {bdata !== 'Invalid date' ? (
+                                                        <input
+                                                            type="date"
+                                                            value={value.BirthDate}
+                                                            onChange={e => {
+                                                                setvalue(prevValue => ({
+                                                                    ...prevValue,
+                                                                    BirthDate: e.target.value
+                                                                }))
+                                                            }}
+                                                            
+                                                            className="rounded inputsection py-2"
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="date"
+                                                            value={value.BirthDate}
+                                                                onChange={e => {
+                                                                    setvalue(prevValue => ({
+                                                                        ...prevValue,
+                                                                        BirthDate: e.target.value
+                                                                    }))
+                                                                }}
+                                                            className="rounded inputsection py-2"
+                                                        />
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -592,7 +613,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='NationalityCode' className='lablesection color3 text-start mb-1'>
-                                                Nationality Code<span className='star'>*</span>
+                                                Nationality Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="NationalityCode" aria-label="Floating label select example" value={value.NationalityCode}
                                                 onChange={handleProvinceChangeNat}
@@ -617,7 +638,7 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="NationalityDescription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Nationality Description<span className="star">*</span>
+                                                Nationality Description
                                             </label>
                                             <input
                                                 types='text'
@@ -774,7 +795,7 @@ function Updataemployeemaster() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Designationcode' className='lablesection color3 text-start mb-1'>
-                                                Designation Code<span className='star'>*</span>
+                                                Designation Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="Designationcode" aria-label="Floating label select example" value={value.DesignationCode}
                                                 onChange={handleProvinceChangeDes}
@@ -799,7 +820,7 @@ function Updataemployeemaster() {
                                             <label
                                                 htmlFor="DesignationName"
                                                 className="lablesection color3 text-start mb-1">
-                                                Designation Name<span className="star">*</span>
+                                                Designation Name
                                             </label>
                                             <input
                                                 types='text'

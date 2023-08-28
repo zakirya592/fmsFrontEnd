@@ -273,7 +273,7 @@ function Addassetcode() {
     const filteredRows = getdata && getdata.filter(row => (
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
         // (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
-        (!requestByEmployee || row.AssetItemDescription.includes(requestByEmployee))
+        (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
     )).map((row, indes) => ({
         ...row,
         id: indes + 1,
