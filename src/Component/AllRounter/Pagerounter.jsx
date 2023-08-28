@@ -61,6 +61,8 @@ import GoodsreturnView from '../../Pages/Purchasing Management/Goods Return/Good
 import Updataworkrequest from '../../Pages/Work Request/updata Work request/Updataworkrequest'
 import Addassetcode from '../../Pages/Work Request/Add Asset code/Addassetcode'
 import Mainworkordeer from '../../Pages/WorkOrder/Mainworkordeer'
+import Updataorderwork from '../../Pages/WorkOrder/Updataorderwork'
+import Viewworkorder from '../../Pages/WorkOrder/Viewworkorder'
 function Pagerounter() {
 
   return (
@@ -82,7 +84,9 @@ function Pagerounter() {
           <Route exact path='/Addassetcode' element={<Addassetcode />} />
           {/*=====================  Word Order=====================   */}
           <Route exact path="/workorder" element={<Mainworkordeer />} />
-          <Route exact path='/workorder/view' element={<WorkOrder />} />
+          <Route exact path='/createworkorder' element={<WorkOrder />} />
+          <Route exact path='/Workorder/Updata/:userId' element={<Updataorderwork />} />
+          <Route exact path='/Workorder/View/:userId' element={<Viewworkorder />} />
 
           {/*=========== Location Management==============  */}
           <Route exact path='/locationmanagement' element={<LocationManagement />} />

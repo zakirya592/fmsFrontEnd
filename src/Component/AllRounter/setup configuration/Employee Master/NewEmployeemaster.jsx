@@ -30,7 +30,7 @@ function NewEmployeemaster() {
 
     const [value, setvalue] = useState({
         EmployeeID: '', EmployeeStatus: '',
-        Age: '', BirthDate:'',
+        Age: '', BirthDate:'0',
         Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: '', Departmentname: '',//Department api input 
         BuildingCode: '', //AddBuildingInworkRequestPOST api input
@@ -249,7 +249,7 @@ function NewEmployeemaster() {
                 else if (statuss == 500) {
                     Swal.fire(
                         'Error!',
-                        'This EmployeeID Already exit ',
+                        `This EmployeeID Already exit`,
                         'error'
                     )
                 }
@@ -431,7 +431,7 @@ function NewEmployeemaster() {
                                                         //     }))
                                                         // }}
                                                         onChange={BirthDateChange}
-                                                        name="birthdaytime" className='rounded inputsection py-2' />
+                                                        name="birthdaytime" className='rounded inputsection py-2'  />
                                                 </div>
                                             </div>
 
