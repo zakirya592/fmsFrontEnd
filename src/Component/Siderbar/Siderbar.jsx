@@ -232,7 +232,7 @@ function Siderbar(props) {
                     <List>
                         {['Warehouse Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                // navigate('/WorkRequest')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
@@ -247,7 +247,7 @@ function Siderbar(props) {
                     <List>
                         {['Dashboard'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                // navigate('/WorkRequest')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
@@ -262,7 +262,7 @@ function Siderbar(props) {
                     <List>
                         {['Reports'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                // navigate('/WorkRequest')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
@@ -277,7 +277,7 @@ function Siderbar(props) {
                     <List>
                         {['Space Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                // navigate('/WorkRequest')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
@@ -292,7 +292,7 @@ function Siderbar(props) {
                     <List>
                         {['Log-out'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/WorkRequest')
+                                navigate('/')
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
