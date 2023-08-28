@@ -54,6 +54,7 @@ import WarrantyPeriod from '../../Pages/Setup&Configuration/Warranty Period/Warr
 import Employeemaster from '../../Pages/Setup&Configuration/Employee Maste/Employeemaster'
 import Viewemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Viewemployeemaster'
 import NewEmployeemaster from './setup configuration/Employee Master/NewEmployeemaster'
+import CreateSupplier from './setup configuration/Supplier/CreateSupplier'
 import Updataemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Updataemployeemaster'
 import PurchaserequestView from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/PurchaserequestView'
 import Purachaseview from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Purachaseview'
@@ -154,6 +155,8 @@ function Pagerounter() {
           <Route exact path="/EmployeeDesignation" element ={<EmployeeDesignation/>}/>
           {/* Supplier */}
           <Route exact path="/Supplier" element ={<Supplier/>}/>
+                    <Route exact path='/Create/Supplier' element={<CreateSupplier />} />
+
 
 
           {/* ================View/Modify Preventive Maintenance* ==================*/}

@@ -1,296 +1,279 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-import SearchIcon from '@mui/icons-material/Search';
+import Siderbar from '../../../Component/Siderbar/Siderbar';
 import AppBar from '@mui/material/AppBar';
-import SaveAsIcon from '@mui/icons-material/SaveAs';
 import Toolbar from '@mui/material/Toolbar';
-import GetAppIcon from '@mui/icons-material/GetApp';
 import Typography from '@mui/material/Typography';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import Siderbar from '../../../Component/Siderbar/Siderbar';
-import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
-import "./Supplier.css"
-import axios from 'axios';
+import PrintIcon from '@mui/icons-material/Print';
+import excel from '../../../Image/excel.png';
+import { DataGrid } from '@mui/x-data-grid';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
-import { CSVLink } from "react-csv"
-function Supplier() {
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
+import { CSVLink } from "react-csv";
+import Swal from "sweetalert2";
 
-    const navigate = useNavigate()
-    // usestate
-    const [SupplierCode, setSupplierCode] = useState('')
-    const [SupplierName, setSupplierName] = useState('')
-    const [FirstName, setFirstName] = useState('')
-    const [MiddleName, setMiddleName] = useState('')
-    const [LastName, setLastName] = useState('')
-    const [mobileNumber, setMobileNumber] = useState('');
-    const [LandlineNumber, setLandlineNumber] = useState('');
-    const [email, setEmail] = useState('');
+function Employeemaster() {
+    const navigate = useNavigate();
+    const [getdata, setgetdata] = useState([])
+
+    // print button
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+        
+        const tableHtml = `
+            <table border="1">
+                <tr>
+                    <th style="${headerStyle}">SEQ</th>
+                    <th style="${headerStyle}">Vendor ID</th>
+                    <th style="${headerStyle}">Vendor Name</th>
+                    <th style="${headerStyle}">Mobile Number</th>
+                    <th style="${headerStyle}">Email</th>
+                </tr>
+                ${tableData.map(row => `
+                    <tr>
+                        <td>${row['id']}</td>
+                        <td>${row['VendorID']}</td>
+                        <td>${row['VendorName']}</td>
+                        <td>${row['ContactMobileNumber']}</td>
+                        <td>${row['ContactEmail']}</td>
+                    </tr>`).join('')}
+            </table>`;
+        
+        const printContent = `
+            <html>
+                <head>
+                    <title>DataGrid Table</title>
+                    <style>
+                        @media print {
+                            body {
+                                padding: 0;
+                                margin: 0;
+                            }
+                            th {
+                                ${headerStyle}
+                            }
+                        }
+                    </style>
+                </head>
+                <body>${tableHtml}</body>
+            </html>`;
+        
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+    // List a data thougth api 
+    const getapi = () => {
+        axios.get(`/api/VendorMaster_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
+
+
+    const columns = [
+        { field: 'id', headerName: 'SEQ.', width: 120 },
+        { field: 'VendorID', headerName: 'Vendor ID', width: 220 },
+        { field: 'VendorName', headerName: 'Vendor Name', width: 220 },
+        { field: 'ContactMobileNumber', headerName: 'Mobile Number', width: 220 },
+        { field: 'ContactEmail', headerName: 'Email', width: 220 },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 150, renderCell: ActionButtons },
+    ];
+    function ActionButtons(params) {
+        const [anchorEl, setAnchorEl] = useState(null);
+
+        const Deletedapi = (VendorID) => {
+            handleMenuClose();
+            
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success mx-2',
+                    cancelButton: 'btn btn-danger mx-2',
+                },
+                buttonsStyling: false
+            });
+        
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: `Do you want to delete Vendor with ID ${VendorID} ?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/VendorMaster_DELETE_BYID/${VendorID}`)
+                        .then((res) => {
+                            // Handle successful delete response
+                            console.log('Deleted successfully', res);
+                            getapi();
+                            // Refresh the table data if needed
+                            // You can call the API again or remove the deleted row from the state
+                        })
+                        .catch((err) => {
+                            // Handle delete error
+                            console.log('Error deleting', err);
+                        });
+        
+                    swalWithBootstrapButtons.fire(
+                        'Deleted!',
+                        `Vendor with ID ${VendorID} has been deleted.`,
+                        'success'
+                    );
+                }
+            });
+        };
+        
+        const handleMenuOpen = (event) => {
+            setAnchorEl(event.currentTarget);
+        };
+
+        const handleMenuClose = () => {
+            setAnchorEl(null);
+        };
+
+        const handleUpdate = () => {
+            // Handle update action
+            handleMenuClose();
+        };
+
+        const handleDeleteButtonClick = () => {
+            // Handle delete action
+            handleMenuClose();
+        };
+
+        return (
+            <div>
+                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
+                    <span style={{ paddingRight: '10px' }}>Action</span>
+                    <ArrowDropDownIcon />
+                </Button>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem onClick={(() => {
+                        navigate(`/View/Employeemaster/${params.row.VendorID}`)
+                    })}>
+                        <span style={{ paddingRight: '18px' }} >View</span>
+                        <VisibilityIcon />
+                    </MenuItem>
+                    <MenuItem onClick={(() => {
+                        navigate(`/Updata/Employeemaster/${params.row.VendorID}`)
+                    })}>
+                        <span style={{ paddingRight: '3px' }}>Update</span>
+                        <EditIcon />
+                    </MenuItem>
+                    <MenuItem onClick={() => Deletedapi(params.row.VendorID)}>
+                        <span style={{ paddingRight: '10px' }}>Delete</span>
+                        <DeleteIcon />
+                    </MenuItem>
+                </Menu>
+            </div>
+
+
+        );
+    }
+
+    const filteredData = getdata && getdata.map((row, index) => ({
+        id: index + 1,
+        VendorID: row.VendorID,
+        VendorName: row.VendorName,
+        ContactMobileNumber: row.ContactMobileNumber,
+        ContactEmail: row.ContactEmail,
+    }));
+
+
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
 
     return (
         <>
-            <div className="bg">
-                <Box sx={{ display: "flex" }}>
-                    <Siderbar />
-                    <AppBar className="fortrans locationfortrans" position="fixed">
-                        <Toolbar>
-                            <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => { navigate(`/`); }} />
-                                <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
-                    <div className="topermaringpage  container">
-                        <div className="py-3">
-                            <div className="d-flex justify-content-between my-auto">
-                                <p className="color1 workitoppro my-auto">View/Modify Vendor/Supplier Master
-                                    <span className='star'>*</span>
-                                </p>
-                                <div className="d-flex">
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                        <AddCircleOutlineIcon />
-                                        Create
-                                    </button>
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                        <LocalPrintshopIcon />
-                                        Print
-                                    </button>
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                        <GetAppIcon />
-                                        Export
-                                    </button>
+                <div className="bg">
+                    <div className="">
+                        <Box sx={{ display: 'flex' }}>
+                            <Siderbar />
+                            <AppBar className="fortrans locationfortrans" position="fixed">
+                                <Toolbar>
+                                    <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                      navigate('/')
+                    })} />
+                                        <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
+                                    </Typography>
+                                </Toolbar>
+                            </AppBar>
 
-                                </div>
-                            </div>
-                            <hr className="color3 line width" />
-                            <div className="row mx-auto formsection">
-
-                                <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                            Vendor/Supplier Code<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='SupplierCode'
-                                            value={SupplierCode}
-                                            onChange={e => {
-                                                setSupplierCode(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Supplier Code'
-                                            required
-                                        ></input>
-                                        <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                            <SearchIcon className=' serachicon' />
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                            Vendor/Supplier Name<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='SupplierName'
-                                            value={SupplierName}
-                                            onChange={e => {
-                                                setSupplierName(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Vendor/Supplier Name'
-                                            required
-                                        ></input>
-                                        <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Complete Address<span className='star'>*</span>
-                                        </label>
-                                        <div className="form-floating inputsectiondropdpwn">
-                                            <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Enter Address Details" id="CompleteAddress"></textarea>
-
+                            <div className="topermaringpage mb- container">
+                                <div className="py-3">
+                                    <div className="d-flex justify-content-between my-auto">
+                                        <p className="color1 workitoppro my-auto">
+                                        Create Vendor/Supplier Master <span className='star'>*</span> </p>
+                                        <div className="d-flex">
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
+                                                navigate('/Create/supplier')
+                                            })}><AddCircleOutlineIcon className='me-1' />Create</button>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredData)}>
+                                                <PrintIcon className="me-1" />
+                                                Print
+                                            </button>
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                            </CSVLink>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <hr className="color3 line width" />
-                            <Toolbar>
-                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 userCredentials" style={{ justifyContent: 'center' }}>
-                                    <p className="text-center my-auto" style={{ color: 'white', textAlign: 'center' }}>
-                                        Contact Person <span className='star'>*</span>
-                                    </p>
-                                </Typography>
-                            </Toolbar>
-                            {/* below section */}
-                            <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
-                                            First Name<span className='star'>*</span>
-                                        </label>
 
-                                        <input
-                                            types='text'
-                                            id='FirstName'
-                                            value={FirstName}
-                                            onChange={e => {
-                                                setFirstName(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Your First Name'
-                                            required
-                                        ></input>
-                                        <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                        </p>
+                                    <hr className="color3 line" />
+
+                                    <div style={{ height: 420, width: '100%' }}>
+                                        <DataGrid
+                                            rows={filteredData}
+                                            columns={columns}
+                                            pagination
+                                            rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                            paginationModel={paginationModel}
+                                            onPaginationModelChange={setPaginationModel}
+                                            checkboxSelection
+                                            disableRowSelectionOnClick
+                                            disableMultipleSelection
+                                        />
+
                                     </div>
-                                </div>
-                                <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='Middle' className='lablesection color3 text-start mb-1'>
-                                            Middle Name<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='Middle'
-                                            value={MiddleName}
-                                            onChange={e => {
-                                                setMiddleName(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Your Middle Name'
-                                            required
-                                        ></input>
-                                        <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                            Last Name<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='LastName'
-                                            value={LastName}
-                                            onChange={e => {
-                                                setLastName(e.target.value)
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='Enter Your Last Name'
-                                            required
-                                        ></input>
-                                        <p
-                                            className='position-absolute text-end serachicon'
-                                        >
-                                        </p>
-                                    </div>
-                                </div>
-                                </div>
-                                
-                                {/* mobile number */}
-                               < div className="row mx-auto">
-                                <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-            <div className='emailsection  d-grid my-2'>
-                <label htmlFor='MobileNumber' className='lablesection color3 text-start mb-1'>
-                    Mobile Number
-                </label>
-
-                <PhoneInput
-                    placeholder="+966   500000000"
-                    id='MobileNumber'
-                    value={mobileNumber}
-                    onChange={setMobileNumber}
-                    className='customstyling rounded inputsection custom-phone-input customstyling'
-                    defaultCountry="SA"
-                    dropdownClass='custom-phone-dropdown'
-                />
-            </div>
-        </div>
-        <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-            <div className='emailsection  d-grid my-2'>
-                <label htmlFor='LandlineNumber' className='lablesection color3 text-start mb-1'>
-                    LandLind Number
-                </label>
-
-                <PhoneInput
-                    placeholder="+966   500000000"
-                    id='LandlineNumber'
-                    value={LandlineNumber}
-                    onChange={setLandlineNumber}
-                    className='customstyling rounded inputsection custom-phone-input customstyling'
-                    defaultCountry="SA"
-                    dropdownClass='custom-phone-dropdown'
-                />
-            </div>
-        </div>
-        {/* email here */}
-        <div className="col-sm-7 col-md-3 col-lg-3 col-xl-3">
-            <div className="emailsection position-relative d-grid my-2">
-                <label htmlFor="EmailAddress" className="lablesection color3 text-start mb-1">
-                    Email Address
-                </label>
-                <input
-                    type="email"
-                    id="EmailAddress"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="rounded inputsection py-2"
-                    placeholder="Enter your Email Address"
-                    required
-                />
-            </div>
-        </div>
-
-        {/* vonderInformation */}
-        <div className="col-sm-12 col-md-9 col-lg-9 col-xl-9 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Vonder Information<span className='star'>*</span>
-                                        </label>
-                                        <div className="form-floating inputsectiondropdpwn">
-                                            <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Enter Vendor related products or any additional information " id="CompleteAddress"></textarea>
-
-                                        </div>
+                                    <div className="d-flex justify-content-between mt-3">
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                      navigate('/')
+                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="d-flex justify-content-between w-100 mt-3 mb-3">
-                            <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => { navigate(`/`); }}>
-                                <ArrowCircleLeftOutlinedIcon className='me-2' />
-                                Back
-                            </button>
-                            <button type="button" className="border-0 px-3 savebtn py-2" >
-                                <SaveAsIcon className='me-2' />
-                                Save
-                            </button>
-                        </div>
+                        </Box>
                     </div>
-                </Box>
-            </div>
+                </div>
         </>
-    )
+    );
 }
 
-export default Supplier
+export default Employeemaster;
