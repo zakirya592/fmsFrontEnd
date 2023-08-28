@@ -21,6 +21,7 @@ import Assectcategory from '../../Pages/Setup&Configuration/Assect category/Asse
 import Assectsubcategory from '../../Pages/Setup&Configuration/Assect subcategory/Assectsubcategory'
 import EmployeeStatus from '../../Pages/Setup&Configuration/EmployeeStatus/EmployeeStatus'
 import EmployeeDesignation from '../../Pages/Setup&Configuration/EmployeeDesignation/EmployeeDesignation'
+import Supplier from '../../Pages/Setup&Configuration/Supplier/Supplier'
 import Worketypesmaintance from '../../Pages/Setup&Configuration/Work type manintance/Worketypesmaintance'
 import Assectcondition from '../../Pages/Setup&Configuration/Assect Condition/Assectcondition'
 import Workpriority from '../../Pages/Setup&Configuration/Work Priority/Workpriority'
@@ -151,6 +152,8 @@ function Pagerounter() {
           <Route exact path="/employeeStatus" element ={<EmployeeStatus/>}/>
           {/* Employee Designation */}
           <Route exact path="/EmployeeDesignation" element ={<EmployeeDesignation/>}/>
+          {/* Supplier */}
+          <Route exact path="/Supplier" element ={<Supplier/>}/>
 
 
           {/* ================View/Modify Preventive Maintenance* ==================*/}
