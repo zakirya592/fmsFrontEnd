@@ -294,16 +294,11 @@ function Updataemployeemaster() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error(`You will not Updata the Date ${err.data}`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                Swal.fire(
+                    'Error!',
+                    ` Employee Master is Not update ${err.message}`,
+                    'error'
+                )
             });
     }
 
@@ -470,15 +465,41 @@ function Updataemployeemaster() {
                                                     <label htmlFor='JoiningDate' className='lablesection color3 text-start mb-1'>
                                                         Birth Date
                                                     </label>
-                                                    <input type={bdata} id="JoiningDate"
+                                                    {/* <input type={bdata} id="JoiningDate"
                                                         value={bdata}
                                                         onChange={e => {
                                                             setvalue(prevValue => ({
                                                                 ...prevValue,
                                                                 JoiningDate: e.target.value
                                                             }))
-                                                        }}
-                                                        name="birthdaytime" className='rounded inputsection py-2' />
+                                                        }} */}
+                                                        {/* name="birthdaytime" className='rounded inputsection py-2'  /> */}
+                                                    {bdata !== 'Invalid date' ? (
+                                                        <input
+                                                            type="date"
+                                                            value={value.BirthDate}
+                                                            onChange={e => {
+                                                                setvalue(prevValue => ({
+                                                                    ...prevValue,
+                                                                    BirthDate: e.target.value
+                                                                }))
+                                                            }}
+                                                            
+                                                            className="rounded inputsection py-2"
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="date"
+                                                            value={value.BirthDate}
+                                                                onChange={e => {
+                                                                    setvalue(prevValue => ({
+                                                                        ...prevValue,
+                                                                        BirthDate: e.target.value
+                                                                    }))
+                                                                }}
+                                                            className="rounded inputsection py-2"
+                                                        />
+                                                    )}
                                                 </div>
                                             </div>
 

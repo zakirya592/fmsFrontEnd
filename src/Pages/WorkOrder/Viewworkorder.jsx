@@ -1,30 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Box from "@mui/material/Box";
 import Siderbar from "../../Component/Siderbar/Siderbar";
-import pagepin from "../../Image/pagepin.png";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import excel from "../../Image/excel.png";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import SaveIcon from '@mui/icons-material/Save';
 import "../Work Request/View modify/Viewmodify.css";
-import WorkOrderCreate from "../../Component/View work/WorkOrderCreate";
-import PrintIcon from "@mui/icons-material/Print";
+import { useNavigate, useParams } from "react-router-dom";
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
+import moment from 'moment';
 
-function WorkOrder() {
+function Viewworkorder() {
     const navigate = useNavigate();
+    let { userId } = useParams();
     const [value, setvalue] = useState({
         orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
-        solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName:'',
-        costWork: '', appiontment: "", scheduled: '', WorkCategoryDiscriptionmain:'',
+        solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName: '',
+        costWork: '', AppointmentDateTime: "", ScheduledDateTime: '', WorkCategoryDiscriptionmain: '',
     })
     const [failureDiscriptionCode, setFailureDiscriptionCode] = useState([]);
     const [solutionCodeDiscription, setsolutionCodeDiscription] = useState("");
@@ -44,58 +42,90 @@ function WorkOrder() {
     const [daysBetween, setDaysBetween] = useState(0);
 
     // Work Employes ID  Api
-    const Requestnumberapi = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
-            .then((res) => {
-                console.log('Work Request Number Api', res.data.recordset[0]);
-                const reqput = res.data.recordset[0].WorkOrderNumber;
-                // const reqput=1000
-                let formattedRequestNumber;
-                if (reqput >= 1 && reqput <= 9) {
-                    formattedRequestNumber = `000-000-00${reqput}`;
-                } else if (reqput >= 10 && reqput <= 99) {
-                    formattedRequestNumber = `000-000-0${reqput}`;
-                } else if (reqput >= 100 && reqput <= 999) {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                } else if (reqput >= 1000 && reqput <= 9999) {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                } else {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                }
-                // localStorage.setItem('Requestnumbers', reqput)
-                setvalue(prevState => ({ ...prevState, orderNumber: formattedRequestNumber }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+    // Emp ID
+    function GetgetworkRequest() {
+        axios.get(`/api/WorkOrders_GET_BYID/${userId}`).then((res) => {
+            console.log('asdfaf=====================================', res);
 
-    useEffect(() => {
-        Requestnumberapi()
-    }, [])
+            const orderNumber = res.data.recordset[0].WorkOrderNumber
+            const RequestNumber = res.data.recordset[0].WorkRequestNumber
+            const costWork = res.data.recordset[0].TotalCostofWork;
+            const assignEmployee = res.data.recordset[0].AssignedtoEmployeeID
+            const completeEmployee = res.data.recordset[0].CompletedByEmployeeID
+            const WorkCategoryDiscriptionmain = res.data.recordset[0].WorkDescription
+            const workStatus = res.data.recordset[0].WorkStatus
+            const workPriority = res.data.recordset[0].WorkPriority
+            const WorkCategory = res.data.recordset[0].WorkCategoryCode
+            const failureCode = res.data.recordset[0].FailureCode
+            const solutionCode = res.data.recordset[0].SolutionCode
+            const ScheduledDateTime = moment(res.data.recordset[0].ScheduledDateTime).format('YYYY-MM-DD')
+            const AppointmentDateTime = moment(res.data.recordset[0].AppointmentDateTime).format('YYYY-MM-DD')
+            const startdat = moment(res.data.recordset[0].StartWorkOrderDateTime).format('YYYY-MM-DD h:mm A')
+            const enddata = moment(res.data.recordset[0].EndWorkOrderDateTime).format('YYYY-MM-DD h:mm A')
+            setStartDate(startdat)
+            setEndDate(enddata)
+            setvalue((prevValue) => ({
+                ...prevValue,
+                orderNumber,
+                RequestNumber,
+                costWork,
+                WorkCategoryDiscriptionmain,
+                workStatus,
+                workPriority,
+                WorkCategory,
+                failureCode,
+                solutionCode,
+                assignEmployee,
+                completeEmployee,
+                ScheduledDateTime,
+                AppointmentDateTime
+            }));
 
-    const requestincreas = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
-            .then((res) => {
-                console.log('Work Request Number Api', res.data.recordset[0].EmployeeID);
-                const reqput = res.data.recordset[0].WorkOrderNumber + 1;
-                // localStorage.setItem('Requestnumbers', reqput)
-                axios.put(`/api/WorkOrderNumberCount_Put/1`, {
-                    WorkOrderNumber: reqput
+            setminutesdifferent(res.data.recordset[0].TotalMinutes)
+            setTimeDifference(res.data.recordset[0].TotalHours)
+            setDaysBetween(res.data.recordset[0].TotalDays)
+            // FailureCodedec
+            const FailureCodedec = res.data.recordset[0].FailureCode
+            axios.get(`/api/Failure_GET_BYID/${FailureCodedec}`)
+                .then((res) => {
+                    // console.log('-----:', res.data);
+                    setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
+
                 })
-                    .then((res) => {
-                        console.log('Work Request Number put Api', res.data);
-                        const reqput = res.data.recordset[0].WorkOrderNumber + 1;
-                        setvalue(prevState => ({ ...prevState, orderNumber: '000-000-' + '0' + `${reqput}` }));
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            })
+                .catch((err) => {
+                    // console.log(err);;
+                });
+            // SolutionCode
+            const soluctionCodedec = res.data.recordset[0].SolutionCode
+            axios.get(`/api/Solution_GET_BYID/${soluctionCodedec}`)
+                .then((res) => {
+                    setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
+                })
+                .catch((err) => {
+                    // console.log(err);;
+                });
+
+            // Work Catager
+            const workcategoryCodedec = res.data.recordset[0].WorkCategoryCode
+            axios.get(`/api/WorkCatagres_GET_BYID/${workcategoryCodedec}`)
+                .then((res) => {
+                    // console.log('-----', res.data);
+                    setWorkCategoryDiscription(res.data.recordset[0].WorkCategoryDesc)
+
+                })
+                .catch((err) => {
+                    // console.log(err);;
+                });
+
+
+        })
             .catch((err) => {
-                console.log(err);
+                //// console.log(err);;
             });
     }
+    useEffect(() => {
+        GetgetworkRequest()
+    }, [])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -116,9 +146,9 @@ function WorkOrder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
+                // console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
+                // console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -242,21 +272,21 @@ function WorkOrder() {
     useEffect(() => {
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
             setRequestStatusLIST(res.data.recordsets[0])
-            console.log(res.data);
+            // console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
             });
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
             setWorkPrioritlist(res.data.recordsets[0])
-            console.log(res.data);
+            // console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
             });
         axios.get(`/api/WorkCatagres_GET_CODE_LIST`).then((res) => {
             setworkCategorylist(res.data.recordsets[0])
-            console.log('WorkCatagres_GET_LIST', res.data);
+            // console.log('WorkCatagres_GET_LIST', res.data);
         })
             .catch((err) => {
                 console.log(err);
@@ -264,7 +294,7 @@ function WorkOrder() {
 
         axios.get(`/api/Failure_GET_CODELIST`).then((res) => {
             setfailureStatusCodelist(res.data.recordsets[0])
-            console.log('Failure_GET_CODELIST', res.data.recordsets[0].FailureStatusCode);
+            // console.log('Failure_GET_CODELIST', res.data.recordsets[0].FailureStatusCode);
         })
             .catch((err) => {
                 console.log(err);
@@ -272,7 +302,7 @@ function WorkOrder() {
 
         axios.get(`/api/Solution_GET_CODE_LIST`).then((res) => {
             setsolutionCodelist(res.data.recordsets[0])
-            console.log('SolutiontatusCode', res.data.recordsets[0]);
+            // console.log('SolutiontatusCode', res.data.recordsets[0]);
         })
             .catch((err) => {
                 console.log(err);
@@ -287,7 +317,7 @@ function WorkOrder() {
         }));
         axios.get(`/api/WorkCatagres_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----', res.data);
+                // console.log('-----', res.data);
                 setWorkCategoryDiscription(res.data.recordset[0].WorkCategoryDesc)
 
             })
@@ -304,7 +334,7 @@ function WorkOrder() {
         }));
         axios.get(`/api/Failure_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----:', res.data);
+                // console.log('-----:', res.data);
                 setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
 
             })
@@ -321,7 +351,7 @@ function WorkOrder() {
         }));
         axios.get(`/api/Solution_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----:', res.data);
+                // console.log('-----:', res.data);
                 setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
 
             })
@@ -385,7 +415,7 @@ function WorkOrder() {
             setvalue(prevValue => ({
                 ...prevValue,
                 assignEmployee: [],
-                EmployeeName:[]
+                EmployeeName: []
             }))
             return;
         }
@@ -466,8 +496,8 @@ function WorkOrder() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
-   
-// Time section Logic.
+
+    // Time section Logic.
     const handleStartDateChange = (event) => {
         const selectedStartDate = new Date(event.target.value);
         const nextDay = new Date(selectedStartDate);
@@ -503,7 +533,7 @@ function WorkOrder() {
         } else {
             setDaysBetween(0);
         }
-        
+
 
     };
     const calculateTimeDifference = () => {
@@ -514,12 +544,12 @@ function WorkOrder() {
             const timeDiff = Math.abs(endDateTime - startDateTime);
             // const hours = Math.floor(timeDiff / (1000 * 60 * 60));
             // const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const hours = Math.floor(timeDiff  / 3600000); // 1 hour = 3600000 milliseconds
-            console.log(hours*60);
+            const hours = Math.floor(timeDiff / 3600000); // 1 hour = 3600000 milliseconds
+            console.log(hours * 60);
             // const minutes = Math.floor((timeDiff * 60 % 3600000) / 60000); // 1 minute = 60000 milliseconds
             const minutes = hours * 60
 
-            
+
             setTimeDifference(hours);
             setminutesdifferent(minutes)
         } else {
@@ -664,53 +694,6 @@ function WorkOrder() {
         }
     }
 
-    // Post api for all
-    const Createapi = async () => {
-        await axios.post(`/api/WorkOrders_post`, {
-            WorkOrderNumber: value.orderNumber,
-            WorkRequestNumber: value.RequestNumber,
-            WorkStatus: value.workStatus,
-            WorkPriority: value.workPriority,
-            WorkCategoryCode: value.WorkCategory,
-            WorkDescription: value.WorkCategoryDiscriptionmain,
-            FailureCode: value.failureCode,
-            SolutionCode: value.solutionCode,
-            AssignedtoEmployeeID: value.assignEmployee,
-            AppointmentDateTime: value.appiontment,
-            ScheduledDateTime: value.scheduled,
-            StartWorkOrderDateTime: startDate,
-            EndWorkOrderDateTime: endDate,
-            TotalDays: daysBetween,
-            TotalHours: timeDifference,
-            TotalMinutes: minutesdifferent,
-            TotalCostofWork: value.costWork,
-            CompletedByEmployeeID: value.completeEmployee,
-            CompletionDateTime: startDate,
-        },)
-            .then((res) => {
-                console.log('Add work api first api', res.data);
-                 Swal.fire({
-                        title: "Success",
-                        text: `Work Order ${value.orderNumber} has been created successfully`,
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Navigate to the next page when "OK" is clicked
-                            navigate('/workorder')
-                        }
-                    });
-            })
-            .catch((err) => {
-                console.log(err);
-               
-            });
-    };
-
-    const created = () => {
-        requestincreas()
-        Createapi()
-    }
 
     return (
         <>
@@ -738,23 +721,8 @@ function WorkOrder() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        Create Work Orders
-
+                                        View/Modify Work Orders
                                     </p>
-                                    {/* <div className="d-flex">
-                                        <img src={pagepin} className="me-2" alt="pagepin" />
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-primary mx-1 color2 btnwork">
-                                            <PrintIcon className="me-1" />
-                                            Print
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-primary color2">
-                                            <img src={excel} alt="excel" /> Export
-                                        </button>
-                                    </div> */}
                                 </div>
                                 <hr className="color3 line" />
 
@@ -1164,28 +1132,28 @@ function WorkOrder() {
                                             <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                                 Appiontment Date/Time
                                             </label>
-                                            <input type="datetime-local" id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' 
-                                                value={value.appiontment}
+                                            <input type={value.AppointmentDateTime} id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2'
+                                                value={value.AppointmentDateTime}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        appiontment: e.target.value
+                                                        AppointmentDateTime: e.target.value
                                                     }))
-                                                }}/>
+                                                }} />
 
 
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='scheduledate' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='ScheduledDateTimeate' className='lablesection color3 text-start mb-1'>
                                                 Scheduled Date/Time
                                             </label>
-                                            <input type="datetime-local" id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' value={value.scheduled}
+                                            <input type={value.ScheduledDateTime} id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' value={value.ScheduledDateTime}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        scheduled: e.target.value
+                                                        ScheduledDateTime: e.target.value
                                                     }))
                                                 }} />
 
@@ -1200,7 +1168,7 @@ function WorkOrder() {
                                             <label htmlFor='startdate' className='lablesection color3 text-start mb-1'>
                                                 Start Date/Time
                                             </label>
-                                            <input type="datetime-local" id="startdate" name="birthdaytime" className='rounded inputsection py-2' value={startDate}
+                                            <input type={startDate} id="startdate" name="birthdaytime" className='rounded inputsection py-2' value={startDate}
                                                 onChange={handleStartDateChange}
                                                 min={new Date()} />
 
@@ -1212,7 +1180,7 @@ function WorkOrder() {
                                             <label htmlFor='endDate' className='lablesection color3 text-start mb-1'>
                                                 End Date/Time
                                             </label>
-                                            <input type="datetime-local" id="endDate" name="birthdaytime" className='rounded inputsection py-2' 
+                                            <input type={endDate} id="endDate" name="birthdaytime" className='rounded inputsection py-2'
                                                 value={endDate}
                                                 onChange={handleEndDateChange}
                                                 min={startDate} />
@@ -1225,7 +1193,7 @@ function WorkOrder() {
                                             <label htmlFor='totaldays' className='lablesection color3 text-start mb-1'>
                                                 Total days
                                             </label>
-                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' value={daysBetween}/>
+                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' value={daysBetween} />
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
@@ -1241,7 +1209,7 @@ function WorkOrder() {
                                             <label htmlFor='totalminutes' className='lablesection color3 text-start mb-1'>
                                                 Total Minutes
                                             </label>
-                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' value={minutesdifferent}/>
+                                            <input type="number" id="endDate" name="birthdaytime" className='rounded inputsection py-2' value={minutesdifferent} />
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
@@ -1347,7 +1315,7 @@ function WorkOrder() {
                                                 types='text'
                                                 id='employeename'
                                                 value={value.CompleteEmployeeName}
-                                               
+
                                                 className='rounded inputsection py-2'
                                                 placeholder='Employee Name'
                                                 required
@@ -1364,7 +1332,6 @@ function WorkOrder() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workorder')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={created}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
                         </div>
@@ -1375,4 +1342,4 @@ function WorkOrder() {
     );
 }
 
-export default WorkOrder;
+export default Viewworkorder;
