@@ -370,13 +370,14 @@ function SetupSidebar() {
                         </ListItem>
                     ))}
                 </List>
+                
                 {/* Vendor/Supplier   */}
                 <List className='setupsidebar setupsidebarlast'>
                     {['. Vendor/Supplier '].map((text, index) => (
                         <ListItem key={text} disablePadding
-                        //    onClick={(() => {
-                        //     //   navigate('/workRequest')
-                        // //   })}
+                           onClick={(() => {
+                              navigate('/supplier')
+                          })}
                         >
                             <ListItemButton>
                                 <ListItemText primary={text} />
