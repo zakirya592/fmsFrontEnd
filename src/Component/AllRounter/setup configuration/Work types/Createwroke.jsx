@@ -31,7 +31,6 @@ function CreateWork() {
     };
     const BackCloseDialog = () => {
         setOpenDialog(false);
-        window.location.reload(); // Reload the page
     };
 
     const postapi = (e) => {
