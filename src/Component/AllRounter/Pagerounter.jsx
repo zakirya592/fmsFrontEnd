@@ -35,6 +35,7 @@ import Day from '../../Pages/Setup&Configuration/Day/Day'
 import Frequency from '../../Pages/Setup&Configuration/Frequency/Frequency'
 import Nationality from '../../Pages/Setup&Configuration/Nationality/Nationality'
 import CreateWorkRequest from '../View work/CreateWorkRequest'
+import CreateAssetMaster from '../../Pages/Asset Management/Asset Master/CreateAssetMaster'
 import Updataworktype from '../../Pages/Setup&Configuration/Work type manintance/Updataworktype'
 import Updataworktrade from '../../Pages/Setup&Configuration/Work trade/Updataworktrade'
 import Updataworkstatus from '../../Pages/Setup&Configuration/Work Status/Updataworkstatus'
@@ -85,6 +86,8 @@ function Pagerounter() {
           <Route exact path='/WorkRequest/Updata/:userId' element={<Updataworkrequest />} />
           {/* create work Request */}
           <Route exact path="/createworkrequest" element={<CreateWorkRequest />} />
+          {/* create asset master */}
+          <Route exact path="/CreateAssetMaster" element={<CreateAssetMaster />} />
           {/* Addassetcode */}
           <Route exact path='/Addassetcode' element={<Addassetcode />} />
           {/*=====================  Word Order=====================   */}

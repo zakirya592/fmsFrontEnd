@@ -304,11 +304,9 @@ function Maintablemaster() {
                                         <p className="color1 workitoppro my-auto">
                                             Asset Master List</p>
                                         <div className="d-flex">
-                                            {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                                navigate('/createworkrequest')
-                                            })}>
-                                          <AddCircleOutlineIcon className='me-1' />Create
-                                          </button> */}
+                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
+                                                navigate('/createAssetMaster')
+                                            })}><AddCircleOutlineIcon className='me-1' />Create</button>
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}>
                                                 <PrintIcon className="me-1" />
