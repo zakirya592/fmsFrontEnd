@@ -175,7 +175,7 @@ function Employeemaster() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem onClick={(() => {
-                        navigate(`/View/Employeemaster/${params.row.VendorID}`)
+                        navigate(`/View/Supplier/${params.row.VendorID}`)
                     })}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
