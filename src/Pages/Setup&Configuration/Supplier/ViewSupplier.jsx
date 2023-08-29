@@ -82,7 +82,7 @@ const fetchVendorById = async () => {
                     <div className="py-3">
                         <div className="d-flex justify-content-between my-auto">
                             <p className="color1 workitoppro my-auto">View/Modify Vendor/Supplier Master
-                                <span className='star'>*</span>
+                                 
                             </p>
                         </div>
                         <hr className="color3 line width" />
@@ -91,7 +91,7 @@ const fetchVendorById = async () => {
                             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                 <div className='emailsection position-relative d-grid my-2'>
                                     <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                        Vendor/Supplier Code<span className='star'>*</span>
+                                        Vendor/Supplier Code <span className='star'>*</span> 
                                     </label>
                                     <input
     type="text"
@@ -112,7 +112,7 @@ const fetchVendorById = async () => {
                             <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                 <div className='emailsection position-relative d-grid my-2'>
                                     <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                        Vendor/Supplier Name<span className='star'>*</span>
+                                        Vendor/Supplier Name 
                                     </label>
     
                                     <input
@@ -134,7 +134,7 @@ const fetchVendorById = async () => {
                             <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7">
         <div className="emailsection d-grid my-2">
             <label htmlFor="ProblemDescription" className="lablesection color3 text-start mb-1">
-                Complete Address<span className="star">*</span>
+                Complete Address
             </label>
             <div className="form-floating inputsectiondropdpwn">
             <textarea
@@ -154,7 +154,7 @@ const fetchVendorById = async () => {
                         <Toolbar>
                             <Typography variant="h6" noWrap component="div" className="d-flex py-2 userCredentials" style={{ justifyContent: 'center' }}>
                                 <p className="text-center my-auto" style={{ color: 'white', textAlign: 'center' }}>
-                                    Contact Person <span className='star'>*</span>
+                                    Contact Person  
                                 </p>
                             </Typography>
                         </Toolbar>
@@ -163,7 +163,7 @@ const fetchVendorById = async () => {
     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
         <div className="emailsection position-relative d-grid my-2">
             <label htmlFor="ContactFirstname" className="lablesection color3 text-start mb-1">
-                First Name<span className="star">*</span>
+                First Name
             </label>
             <input
                 type="text"
@@ -179,7 +179,7 @@ const fetchVendorById = async () => {
     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
         <div className="emailsection position-relative d-grid my-2">
             <label htmlFor="ContactMiddlename" className="lablesection color3 text-start mb-1">
-                Middle Name<span className="star">*</span>
+                Middle Name
             </label>
             <input
                 type="text"
@@ -195,7 +195,7 @@ const fetchVendorById = async () => {
     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
         <div className="emailsection position-relative d-grid my-2">
             <label htmlFor="ContactLastname" className="lablesection color3 text-start mb-1">
-                Last Name<span className="star">*</span>
+                Last Name
             </label>
             <input
                 type="text"
@@ -267,7 +267,7 @@ const fetchVendorById = async () => {
     <div className="col-sm-12 col-md-9 col-lg-9 col-xl-9 ">
         <div className='emailsection d-grid my-2'>
             <label htmlFor='VendorInformation' className='lablesection color3 text-start mb-1'>
-                Vendor Information<span className='star'>*</span>
+                Vendor Information 
             </label>
             <div className="form-floating inputsectiondropdpwn">
                 <textarea
