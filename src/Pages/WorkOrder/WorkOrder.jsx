@@ -24,7 +24,7 @@ function WorkOrder() {
     const [value, setvalue] = useState({
         orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
         solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName:'',
-        costWork: '', appiontment: "", scheduled: '', WorkCategoryDiscriptionmain:'',
+        costWork: '0', appiontment: "", scheduled: '', WorkCategoryDiscriptionmain:'',
     })
     const [failureDiscriptionCode, setFailureDiscriptionCode] = useState([]);
     const [solutionCodeDiscription, setsolutionCodeDiscription] = useState("");
@@ -37,10 +37,10 @@ function WorkOrder() {
     const [solutionCodelist, setsolutionCodelist] = useState([])
 
     // state for the time 
-    const [startDate, setStartDate] = useState('');
+    const [startDate, setStartDate] = useState('0');
     const [endDate, setEndDate] = useState('');
-    const [timeDifference, setTimeDifference] = useState('');
-    const [minutesdifferent, setminutesdifferent] = useState('')
+    const [timeDifference, setTimeDifference] = useState(0);
+    const [minutesdifferent, setminutesdifferent] = useState(0)
     const [daysBetween, setDaysBetween] = useState(0);
 
     // Work Employes ID  Api
