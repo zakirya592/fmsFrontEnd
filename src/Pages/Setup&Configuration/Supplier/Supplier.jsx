@@ -181,7 +181,7 @@ function Employeemaster() {
                         <VisibilityIcon />
                     </MenuItem>
                     <MenuItem onClick={(() => {
-                        navigate(`/Updata/Employeemaster/${params.row.VendorID}`)
+                        navigate(`/Update/Supplier/${params.row.VendorID}`)
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />

@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
+import { useParams } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AppBar from '@mui/material/AppBar';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import Toolbar from '@mui/material/Toolbar';
-import GetAppIcon from '@mui/icons-material/GetApp';
 import Typography from '@mui/material/Typography';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import Siderbar from "../../../../Component/Siderbar/Siderbar";
-import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import Siderbar from "../../../Component/Siderbar/Siderbar";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import axios from 'axios';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { CSVLink } from 'react-csv';
-function CreateSupplier() {
+function UpdataSupplier() {
     const navigate = useNavigate();
-  
+    let { userId } = useParams();
     const [value, setValue] = useState({
       VendorID: '',
       VendorName: '',
@@ -38,57 +36,53 @@ function CreateSupplier() {
         }));
       };
     
-      const addSupplier = async () => {
-        axios.post(`/api/VendorMaster_post`, {
-          VendorID: value.VendorID,
-          VendorName: value.VendorName,
-          VendorAddress: value.VendorAddress,
-          ContactLastname: value.ContactLastname,
-          ContactFirstname: value.ContactFirstname,
-          ContactMiddlename: value.ContactMiddlename,
-          ContactMobileNumber: value.ContactMobileNumber,
-          ContactLandlineNumber: value.ContactLandlineNumber,
-          ContactEmail: value.ContactEmail,
-          VendorInformation: value.VendorInformation,
-        },)
-            .then((res) => {
-                console.log(res.data);
-                Swal.fire(
-                    'Created!',
-                    `Supplier ${value.VendorID} has been created successfully`,
-                    'success'
-                )
-                navigate('/supplier')
+const fetchVendorById = async () => {
+    try {
+        const response = await axios.get(`/api/VendorMaster_GET_BYID/${userId}`);
+        const vendorData = response.data.recordsets[0][0];
+        console.log('Response data:', vendorData.VendorID); 
+        setValue({
+            VendorID: vendorData.VendorID,
+            VendorName: vendorData.VendorName,
+            VendorAddress: vendorData.VendorAddress,
+            ContactLastname: vendorData.ContactLastname,
+            ContactFirstname: vendorData.ContactFirstname,
+            ContactMiddlename: vendorData.ContactMiddlename,
+            ContactMobileNumber: vendorData.ContactMobileNumber,
+            ContactLandlineNumber: vendorData.ContactLandlineNumber,
+            ContactEmail: vendorData.ContactEmail,
+            VendorInformation: vendorData.VendorInformation,
+        });
+    } catch (error) {
+        console.error('Error fetching vendor data:', error);
+        // Handle error...
+    }
+};
+    useEffect(() => {
+        fetchVendorById(); // Fetch vendor data when the component mounts
+    }, []);
+    const Putapi = async () => {
+        try {
+            const responses = await axios.put(`/api/VendorMaster_Put/${userId}`, value);
+            console.log('Update', responses);
+            
+            Swal.fire(
+                'Update!',
+                `Supplier ${userId} has been updated`,
+                'success'
+            );
+            navigate(`/supplier`);
+        } catch (err) {
+            console.log(err);
+            Swal.fire(
+                'Error!',
+                `Supplier is not updated ${err.message}`,
+                'error'
+            );
+        }
+    };   
+    
 
-            })
-            .catch((err) => {
-                console.log(err);
-                const statuss = err.response.status
-
-                if (statuss == 404) {
-                    Swal.fire(
-                        'Error!',
-                        'Supplier is required  ',
-                        'error'
-                    )
-                }
-                else if (statuss == 500) {
-                    Swal.fire(
-                        'Error!',
-                        `This Supplier Already exit`,
-                        'error'
-                    )
-                }
-                // else {
-                //     Swal.fire(
-                //         'Error!',
-                //         `${err.response.message}`,
-                //         'error'
-                //     )
-                // }
-            });
-
-    };
     return (
         <>
         <div className="bg">
@@ -105,24 +99,9 @@ function CreateSupplier() {
                 <div className="topermaringpage  container">
                     <div className="py-3">
                         <div className="d-flex justify-content-between my-auto">
-                            <p className="color1 workitoppro my-auto">Create Vendor/Supplier Master
+                            <p className="color1 workitoppro my-auto">Update Vendor/Supplier Master
                                 <span className='star'>*</span>
                             </p>
-                            <div className="d-flex">
-                                <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                    <AddCircleOutlineIcon />
-                                    Create
-                                </button>
-                                <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                    <LocalPrintshopIcon />
-                                    Print
-                                </button>
-                                <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
-                                    <GetAppIcon />
-                                    Export
-                                </button>
-    
-                            </div>
                         </div>
                         <hr className="color3 line width" />
                         <div className="row mx-auto formsection">
@@ -323,11 +302,11 @@ function CreateSupplier() {
 
                     </div>
                     <div className="d-flex justify-content-between w-100 mt-3 mb-3">
-                        <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => { navigate(`/supplier`); }}>
+                        <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => { navigate(`/`); }}>
                             <ArrowCircleLeftOutlinedIcon className='me-2' />
                             Back
                         </button>
-                        <button type="button" className="border-0 px-3 savebtn py-2" onClick={addSupplier}>
+                        <button type="button" className="border-0 px-3 savebtn py-2" onClick={Putapi}>
                             <SaveAsIcon className='me-2' />
                             Save
                         </button>
@@ -339,4 +318,4 @@ function CreateSupplier() {
         );
     }
     
-    export default CreateSupplier;
+    export default UpdataSupplier;

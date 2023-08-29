@@ -73,7 +73,7 @@ const fetchVendorById = async () => {
                 <AppBar className="fortrans locationfortrans" position="fixed">
                     <Toolbar>
                         <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                            <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => { navigate(`/`); }} />
+                            <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={() => { navigate(`/supplier`); }} />
                             <p className="text-center my-auto ms-5">Set-Up & Configuration</p>
                         </Typography>
                     </Toolbar>
@@ -284,7 +284,7 @@ const fetchVendorById = async () => {
 
                     </div>
                     <div className="d-flex justify-content-between w-100 mt-3 mb-3">
-                        <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => { navigate(`/`); }}>
+                        <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => { navigate(`/supplier`); }}>
                             <ArrowCircleLeftOutlinedIcon className='me-2' />
                             Back
                         </button>
