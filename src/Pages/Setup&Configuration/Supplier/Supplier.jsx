@@ -232,7 +232,7 @@ function Employeemaster() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                        Create Vendor/Supplier Master <span className='star'>*</span> </p>
+                                        Vendor/Supplier Master <span className='star'>*</span> </p>
                                         <div className="d-flex">
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/supplier')
