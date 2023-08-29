@@ -20,7 +20,6 @@ function Newassetcondition() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        window.location.reload(); // Reload the page
     };
 
     const postapi = (e) => {

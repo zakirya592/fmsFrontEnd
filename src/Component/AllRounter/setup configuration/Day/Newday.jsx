@@ -21,7 +21,6 @@ function Newday() {
     };
     const backCloseDialog = () => {
         setOpenDialog(false);
-        window.location.reload(); // Reload the page
     };
 
     const postapi = (e) => {

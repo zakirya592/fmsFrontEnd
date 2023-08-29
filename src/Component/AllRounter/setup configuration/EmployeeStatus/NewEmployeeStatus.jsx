@@ -24,7 +24,6 @@ function NewEmployeeStatus() {
     };
     const backCloseDialog = () => {
         setOpenDialog(false);
-        window.location.reload(); // Reload the page
     };
     const postapi = (e) => {
         e.preventDefault();

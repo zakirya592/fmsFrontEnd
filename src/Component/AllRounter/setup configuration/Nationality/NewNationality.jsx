@@ -23,7 +23,6 @@ function NewNationality() {
     };
     const backCloseDialog = () => {
         setOpenDialog(false);
-        window.location.reload(); // Reload the page
     };
 
 
