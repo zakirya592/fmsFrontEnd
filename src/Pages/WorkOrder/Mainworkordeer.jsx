@@ -243,7 +243,7 @@ function Mainworkordeer() {
                     OrderStatus: isClosed ? "This Work Order is already closed.." : row.WorkStatus,
                     WorkRequestNumber: row.WorkRequestNumber,
                     WorkPriority: row.WorkPriority,
-                    RequestDateTime: moment(row.ScheduledDateTime).format('DD/MM/YYYY'),
+                    RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
                     WorkCategory: row.WorkCategoryCode,
                     SOLUCTIONCODE: row.SolutionCode,
                 };
@@ -256,7 +256,7 @@ function Mainworkordeer() {
                     OrderStatus: isClosed ? "This Work Order is already closed.." : row.WorkStatus,
                     WorkRequestNumber: row.WorkRequestNumber,
                     WorkPriority: row.WorkPriority,
-                    RequestDateTime: moment(row.ScheduledDateTime).format('DD/MM/YYYY'),
+                    RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
                     WorkCategory: row.WorkCategoryCode,
                     SOLUCTIONCODE: row.SolutionCode,
                 };

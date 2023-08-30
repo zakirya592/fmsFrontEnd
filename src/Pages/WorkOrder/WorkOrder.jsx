@@ -868,7 +868,7 @@ function WorkOrder() {
                                                         workStatus: e.target.value
                                                     }))
                                                 }}>
-                                                <option selected className='inputsectiondropdpwn'>Select Work Status</option>
+                                                <option className='inputsectiondropdpwn' value='Open'>Open</option>
                                                 {
                                                     RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
                                                         return (
