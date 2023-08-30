@@ -5,7 +5,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import SaveIcon from '@mui/icons-material/Save';
 import "../Work Request/View modify/Viewmodify.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { SearchOutlined } from '@ant-design/icons';
@@ -13,7 +12,6 @@ import axios from 'axios';
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Swal from "sweetalert2";
 import moment from 'moment';
 
 function Viewworkorder() {
@@ -44,6 +42,12 @@ function Viewworkorder() {
     const [edata, seteata] = useState([])
     const [scheduleddata, setscheduleddata] = useState([])
     const [appiontmentddata, setappiontmentddata] = useState([])
+    // Assign to Employee Logic.
+    const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
+    const [opencompleteemployee, setOpencompleteemployee] = useState(false);
+    const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
+    const [gpcListcompleteemployee, setGpcListcompleteemployee] = useState([]); // gpc list
+    const abortControllerRefcompleteemployee = useRef(null);
     // Work Employes ID  Api
     // Emp ID
     function GetgetworkRequest() {
@@ -74,9 +78,14 @@ function Viewworkorder() {
             seteata(edata)
             setscheduleddata(scheduledd)
             setappiontmentddata(appiontment)
-
             setStartDate(startdat)
             setEndDate(enddata)
+
+
+            setUnitCodeID([{ EmployeeID: assignEmployee, Firstname: '' }]);
+            const defaultEmployeeOption = { EmployeeID: assignEmployee, Firstname: '' };
+            setUnitCodecompleteemployee([{ EmployeeID: completeEmployee, Firstname: '' }])
+            const defaultcomplempeOption = { EmployeeID: completeEmployee, Firstname: '' };
             setvalue((prevValue) => ({
                 ...prevValue,
                 orderNumber,
@@ -88,8 +97,9 @@ function Viewworkorder() {
                 WorkCategory,
                 failureCode,
                 solutionCode,
-                assignEmployee,
-                completeEmployee,
+                // assignEmployee,
+                assignEmployee: defaultEmployeeOption,
+                completeEmployee: defaultcomplempeOption,
                 ScheduledDateTime,
                 AppointmentDateTime
             }));
@@ -452,7 +462,7 @@ function Viewworkorder() {
                     //or Id state da setGpcList da 
                     setUnitCodeID(data ?? [])
                     setOpenID(true);
-                    setUnitCodeID(data)
+                    // setUnitCodeID(data)
                     setAutocompleteLoadingID(false);
                     // 
                 })
@@ -501,7 +511,7 @@ function Viewworkorder() {
             // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                assignEmployee: value.EmployeeID,
+                assignEmployee: value,
                 EmployeeName: value.Firstname
             }));
             console.log('Received value----------:', value);
@@ -571,12 +581,7 @@ function Viewworkorder() {
     };
 
     // Assign to Employee Logic.
-    const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
-    const [opencompleteemployee, setOpencompleteemployee] = useState(false);
-    const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
-    const [gpcListcompleteemployee, setGpcListcompleteemployee] = useState([]); // gpc list
-    const abortControllerRefcompleteemployee = useRef(null);
-
+  
     useEffect(() => {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
@@ -698,7 +703,7 @@ function Viewworkorder() {
             // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: value.EmployeeID,
+                completeEmployee: value,
                 CompleteEmployeeName: value.Firstname
             }));
             console.log('Received value----------:', value);
@@ -1060,7 +1065,8 @@ function Viewworkorder() {
                                                         {option.EmployeeID} - {option.Firstname}
                                                     </li>
                                                 )}
-                                                value={value.EmployeeID}
+                                                // value={value.EmployeeID}
+                                                value={value.assignEmployee}
                                                 onInputChange={(eventID, newInputValueID, params) =>
                                                     handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
                                                 }
@@ -1317,7 +1323,8 @@ function Viewworkorder() {
                                                         {option.EmployeeID} - {option.Firstname}
                                                     </li>
                                                 )}
-                                                value={value.EmployeeID}
+                                                value={value.completeEmployee}
+                                                
                                                 onInputChange={(eventcompleteemployee, newInputValuecompleteemployee, params) =>
                                                     handleAutoCompleteInputChangecompleteemployee(eventcompleteemployee, newInputValuecompleteemployee, params)
                                                 }
