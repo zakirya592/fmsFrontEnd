@@ -456,17 +456,304 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                     </div>
                                 </div>
                                     </div>
-                                    <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Remarks /  Notes<span className="star">*</span>
+                                    <div className="row mx-auto formsection">
+                                    <div className="col-sm-7 col-md-4 col-lg-2 col-xl-2 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="workCategoryDiscription"
+                                                className="lablesection color3 text-start mb-1">
+                                                on-Hand Qty.<span className="star">*</span>
+                                            </label>
+                                            <input
+                                            types='text'
+                                            id='manufacturer'
+                                            value={manufacturer}
+                                            onChange={e => {
+                                                setmanufacturer(e.target.value)
+                                            }}
+                                            className='rounded inputsection py-2'
+                                            placeholder='999,999'
+                                            required
+                                        ></input>
+                                                                         
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="workCategoryDiscription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Re-Order Qty Level<span className="star">*</span>
+                                            </label>
+                                            <input
+                                            types='text'
+                                            id='Model'
+                                            value={Model}
+                                            onChange={e => {
+                                                setModel(e.target.value)
+                                            }}
+                                            className='rounded inputsection py-2'
+                                            placeholder='999,999'
+                                            required
+                                        ></input>
+                                                                         
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="workCategoryDiscription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Minimum Level<span className="star">*</span>
+                                            </label>
+                                            <input
+                                            types='text'
+                                            id='Brand'
+                                            value={Brand}
+                                            onChange={e => {
+                                                setBrand(e.target.value)
+                                            }}
+                                            className='rounded inputsection py-2'
+                                            placeholder='999,999'
+                                            required
+                                        ></input>
+                                                                         
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="workCategoryDiscription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Maximum Level<span className="star">*</span>
+                                            </label>
+                                            <input
+                                            types='text'
+                                            id='Brand'
+                                            value={Brand}
+                                            onChange={e => {
+                                                setBrand(e.target.value)
+                                            }}
+                                            className='rounded inputsection py-2'
+                                            placeholder='999,999'
+                                            required
+                                        ></input>
+                                                                         
+                                        </div>
+                                    </div>
+                                    <div className="d-flex mt-3">
+                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                    <div className='emailsection position-relative d-grid my-2'>
+                                        <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
+                                            Units <span className="star">*</span>
                                         </label>
-                                        <div className="form-floating inputsectiondropdpwn">
-                                            <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Remarks /  Additional Notes " id="Remarks"></textarea>
-                                          
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" value={WarrentyPeriod}
+                                            onChange={(event) => {
+                                                setWarrentyPeriod(event.target.value)
+                                            }}>
+                                            <option selected className='inputsectiondropdpwn'>Units</option>
+                                            <option value={"First"}>One</option>
+                                            <option value={"Second"}>Two</option>
+                                            <option value={"three"}>Three</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-sm-1 col-md-1 col-lg-1 col-xl-1 ">
+                                    </div>
+                                <div className="col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
+                                        <div className="emailsection position-relative d-grid my-2">
+                                            <label
+                                                htmlFor="workCategoryDiscription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Units Descriptions<span className="star">*</span>
+                                            </label>
+                                            <input
+                                            types='text'
+                                            id='Brand'
+                                            value={Brand}
+                                            onChange={e => {
+                                                setBrand(e.target.value)
+                                            }}
+                                            className='rounded inputsection py-2'
+                                            placeholder='Units Descriptions'
+                                            required
+                                        ></input>
+                                                                         
                                         </div>
                                     </div>
                                 </div>
+                                    </div>
+                                                                        {/* last perchase */}
+                                                                        <hr className="color3 line" />
+
+<div className="row mx-auto formsection">
+<div className="col-sm-7 col-md-4 col-lg-2 col-xl-2 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            last purchase date<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='manufacturer'
+        value={manufacturer}
+        onChange={e => {
+            setmanufacturer(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='dd/mm/yy'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+<div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            Po Referencell<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='Model'
+        value={Model}
+        onChange={e => {
+            setModel(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='xxx xxx xxx'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+<div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            Purchase Amount<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='Brand'
+        value={Brand}
+        onChange={e => {
+            setBrand(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='999,999'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+<div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            PO Qty. Units<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='Brand'
+        value={Brand}
+        onChange={e => {
+            setBrand(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='999,999'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+<div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            Warrenty Period<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='Brand'
+        value={Brand}
+        onChange={e => {
+            setBrand(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='years'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+<div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            Warrenty End<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='Brand'
+        value={Brand}
+        onChange={e => {
+            setBrand(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='years'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+</div>
+{/* vonder Code*/}
+<div className="row mx-auto formsection">
+<div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+<div className='emailsection position-relative d-grid my-2'>
+    <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
+        Vendor Code <span className="star">*</span>
+    </label>
+    <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" value={WarrentyPeriod}
+        onChange={(event) => {
+            setWarrentyPeriod(event.target.value)
+        }}>
+        <option selected className='inputsectiondropdpwn'>Select Vendor Code</option>
+        <option value={"First"}>One</option>
+        <option value={"Second"}>Two</option>
+        <option value={"three"}>Three</option>
+    </select>
+</div>
+</div>
+<div className="col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
+    <div className="emailsection position-relative d-grid my-2">
+        <label
+            htmlFor="workCategoryDiscription"
+            className="lablesection color3 text-start mb-1">
+            Vendor Name<span className="star">*</span>
+        </label>
+        <input
+        types='text'
+        id='Brand'
+        value={Brand}
+        onChange={e => {
+            setBrand(e.target.value)
+        }}
+        className='rounded inputsection py-2'
+        placeholder='Vendor Name'
+        required
+    ></input>
+                                     
+    </div>
+</div>
+</div>
                                 <div className="d-flex justify-content-between mt-3">
                                   <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => navigate('/AssetMasters')}>
                                       <ArrowCircleLeftOutlinedIcon className="me-2" />
