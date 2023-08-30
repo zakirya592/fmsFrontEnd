@@ -40,7 +40,10 @@ function Viewworkorder() {
     const [timeDifference, setTimeDifference] = useState('');
     const [minutesdifferent, setminutesdifferent] = useState('')
     const [daysBetween, setDaysBetween] = useState(0);
-
+    const [bdata, setbata] = useState([])
+    const [edata, seteata] = useState([])
+    const [scheduleddata, setscheduleddata] = useState([])
+    const [appiontmentddata, setappiontmentddata] = useState([])
     // Work Employes ID  Api
     // Emp ID
     function GetgetworkRequest() {
@@ -58,10 +61,20 @@ function Viewworkorder() {
             const WorkCategory = res.data.recordset[0].WorkCategoryCode
             const failureCode = res.data.recordset[0].FailureCode
             const solutionCode = res.data.recordset[0].SolutionCode
-            const ScheduledDateTime = moment(res.data.recordset[0].ScheduledDateTime).format('YYYY-MM-DD')
-            const AppointmentDateTime = moment(res.data.recordset[0].AppointmentDateTime).format('YYYY-MM-DD')
-            const startdat = moment(res.data.recordset[0].StartWorkOrderDateTime).format('YYYY-MM-DD h:mm A')
-            const enddata = moment(res.data.recordset[0].EndWorkOrderDateTime).format('YYYY-MM-DD h:mm A')
+            const ScheduledDateTime = res.data.recordset[0].ScheduledDateTime
+            const AppointmentDateTime = res.data.recordset[0].AppointmentDateTime
+            const startdat = res.data.recordset[0].StartWorkOrderDateTime
+            const enddata = res.data.recordset[0].EndWorkOrderDateTime
+
+            const sdata = moment(startdat).format('YYYY-MM-DD h:mm A')
+            const edata = moment(enddata).format('YYYY-MM-DD h:mm A')
+            const scheduledd = moment(ScheduledDateTime).format('YYYY-MM-DD h:mm A')
+            const appiontment = moment(AppointmentDateTime).format('YYYY-MM-DD h:mm A')
+            setbata(sdata)
+            seteata(edata)
+            setscheduleddata(scheduledd)
+            setappiontmentddata(appiontment)
+
             setStartDate(startdat)
             setEndDate(enddata)
             setvalue((prevValue) => ({
@@ -1132,16 +1145,25 @@ function Viewworkorder() {
                                             <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                                 Appiontment Date/Time
                                             </label>
-                                            <input type={value.AppointmentDateTime} id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.AppointmentDateTime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        AppointmentDateTime: e.target.value
-                                                    }))
-                                                }} />
-
-
+                                            {appiontmentddata !== 'Invalid date' ? (
+                                                <input type='datetime-local' id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={value.AppointmentDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            AppointmentDateTime: e.target.value
+                                                        }))
+                                                    }} />
+                                            ) : (
+                                                <input type='datetime-local' id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={value.AppointmentDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            AppointmentDateTime: e.target.value
+                                                        }))
+                                                    }} />
+                                            )}
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
@@ -1149,13 +1171,23 @@ function Viewworkorder() {
                                             <label htmlFor='ScheduledDateTimeate' className='lablesection color3 text-start mb-1'>
                                                 Scheduled Date/Time
                                             </label>
-                                            <input type={value.ScheduledDateTime} id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' value={value.ScheduledDateTime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        ScheduledDateTime: e.target.value
-                                                    }))
-                                                }} />
+                                            {scheduleddata !== 'Invalid date' ? (
+                                                <input type='datetime-local' id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' value={value.ScheduledDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            ScheduledDateTime: e.target.value
+                                                        }))
+                                                    }} />
+                                            ) : (
+                                                <input type='datetime-local' id="apaintmentdate" name="birthdaytime" className='rounded inputsection py-2' value={value.ScheduledDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            ScheduledDateTime: e.target.value
+                                                        }))
+                                                    }} />
+                                            )}
 
 
                                         </div>
@@ -1168,9 +1200,27 @@ function Viewworkorder() {
                                             <label htmlFor='startdate' className='lablesection color3 text-start mb-1'>
                                                 Start Date/Time
                                             </label>
-                                            <input type={startDate} id="startdate" name="birthdaytime" className='rounded inputsection py-2' value={startDate}
+                                            {bdata !== 'Invalid date' ? (
+                                                <input
+                                                    type="datetime-local"
+                                                    value={startDate}
+                                                    id="startdate" name="birthdaytime" className='rounded inputsection py-2'
+                                                    onChange={handleStartDateChange}
+                                                    min={new Date()}
+                                                />
+                                            ) : (
+                                                <input
+                                                    type="datetime-local"
+                                                    value={startDate}
+                                                    onChange={handleStartDateChange}
+                                                    min={new Date()}
+                                                    id="startdate" name="birthdaytime" className='rounded inputsection py-2'
+                                                />
+                                            )}
+                                            {/* <input type={startDate} id="startdate" name="birthdaytime" className='rounded inputsection py-2' value={startDate}
                                                 onChange={handleStartDateChange}
-                                                min={new Date()} />
+                                                min={new Date()} 
+                                                {...(startDate == 'Invalid date' && { min: new Date() })}/> */}
 
 
                                         </div>
@@ -1180,10 +1230,24 @@ function Viewworkorder() {
                                             <label htmlFor='endDate' className='lablesection color3 text-start mb-1'>
                                                 End Date/Time
                                             </label>
-                                            <input type={endDate} id="endDate" name="birthdaytime" className='rounded inputsection py-2'
+                                            {edata !== 'Invalid date' ? (
+                                                <input type='datetime-local' id="endDate" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={endDate}
+                                                    onChange={handleEndDateChange}
+                                                    min={startDate}
+                                                />
+                                            ) : (
+                                                <input type='datetime-local' id="endDate" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={endDate}
+                                                    onChange={handleEndDateChange}
+                                                    min={startDate}
+                                                />
+                                            )}
+                                            {/* <input type='datetime-local' id="endDate" name="birthdaytime" className='rounded inputsection py-2'
                                                 value={endDate}
                                                 onChange={handleEndDateChange}
-                                                min={startDate} />
+                                                min={startDate} 
+                                                /> */}
 
 
                                         </div>
