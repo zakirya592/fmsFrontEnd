@@ -78,6 +78,13 @@ function Updataorderwork() {
             setappiontmentddata(appiontment)
             setStartDate(startdat)
             setEndDate(enddata)
+
+
+            setUnitCodeID([{ EmployeeID: assignEmployee, Firstname: '' }]);
+            const defaultEmployeeOption = { EmployeeID: assignEmployee, Firstname: '' };
+            setUnitCodecompleteemployee([{ EmployeeID: completeEmployee, Firstname: '' }])
+            const defaultcomplempeOption = { EmployeeID: completeEmployee, Firstname: '' };
+
             setvalue((prevValue) => ({
                 ...prevValue,
                 orderNumber,
@@ -91,9 +98,12 @@ function Updataorderwork() {
                 solutionCode,
                 assignEmployee,
                 completeEmployee,
+                // assignEmployee: defaultEmployeeOption,
+                // completeEmployee: defaultcomplempeOption,
                 ScheduledDateTime,
                 AppointmentDateTime
             }));
+            
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": assignEmployee
             }).then((res) => {

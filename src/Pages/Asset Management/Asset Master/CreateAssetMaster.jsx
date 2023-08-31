@@ -18,10 +18,23 @@ import Swal from "sweetalert2";
 function CreateAssetMaster() {
     let { userId } = useParams();
     const navigate = useNavigate();
-    const [assetCategory, setassetCategory] = useState('Asset Category');
-    const [assetType, setassetType] = useState("");
+    const [value, setvalue] = useState({
+        assetSubCategory: '', assetCategory: '', AssetItemGroup: '', assetType: '', WarrentyPeriod: '', Vendorcode: '', Unitscode:''
+    })
+
+    const [assetSubCategorylist, setassetSubCategorylist] = useState("");
+    const [assetCategorylist, setassetCategorylist] = useState("");
+    const [AssetItemGrouplist, setAssetItemGrouplist] = useState("");
+    const [assetTypelist, setassetTypelist] = useState("");
+    const [WarrentyPeriodlist, setWarrentyPeriodlist] = useState("");
+    const [Vendorcodelist, setVendorcodelist] = useState("");
+    const [Unitscodelist, setUnitscodelist] = useState("");
+    const [UnitsDescriptions, setUnitsDescriptions] = useState("");
+
+    const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
-    const [assetSubCategory, setassetSubCategory] = useState("");
+    const [VendorName, setVendorName] = useState("");
+
     const [assetCategoryDiscription, setassetCategoryDiscription ] = useState("");
     const [assetSubCategoryDiscription, setassetSubCategoryDiscription ] = useState("");
     const [assetItemDiscription, setassetItemDiscription ] = useState("");
@@ -29,35 +42,174 @@ function CreateAssetMaster() {
     const [Model, setModel ] = useState("");
     const [Brand, setBrand ] = useState("");
     const [purchaseAmount, setpurchaseAmount ] = useState("");
-    const [WarrentyPeriod, setWarrentyPeriod ] = useState("");
-    const [AssetItemGroup, setAssetItemGroup] = useState("");
-const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
-    const getapi = () => {
-        axios.get(`/api/AssetsMaster_GET_BYID/${userId}`, {
-        },)
+ useEffect(() => {
+
+     axios.get(`/api/AssetSubCategory_GET_LIST`).then((res) => {
+         setassetSubCategorylist(res.data.recordsets[0])
+        //  console.log(res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+     axios.get(`/api/AssetCategory_GET_LIST`).then((res) => {
+         setassetCategorylist(res.data.recordsets[0])
+        //  console.log(res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+     axios.get(`/api/AssetItemGroup_GET_LIST`).then((res) => {
+         setAssetItemGrouplist(res.data.recordsets[0])
+         console.log(res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+     axios.get(`/api/AssetType_GET_LIST`).then((res) => {
+         setassetTypelist(res.data.recordsets[0])
+         console.log(res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+     axios.get(`/api/WarrantyPeriod_GET_LIST`).then((res) => {
+         setWarrentyPeriodlist(res.data.recordsets[0])
+         console.log('WarrantyPeriod_GET_LIST',res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+     axios.get(`/api/Filter_VendorMaster`).then((res) => {
+         setVendorcodelist(res.data.recordsets[0])
+         console.log('VendorMaster_GET_LIST', res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+     axios.get(`/api/MaterialUnits_GET_LIST`).then((res) => {
+         setUnitscodelist(res.data.recordsets[0])
+         console.log('MaterialUnits_GET_LIST', res.data);
+     })
+         .catch((err) => {
+             console.log(err);
+         });
+
+ }, [])
+ 
+    const handleProvinceChangeassetSubCategory = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            assetSubCategory: e.target.value,
+        }));
+        axios.get(`/api/AssetSubCategory_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('TO Assets Master By ID', res.data);
-                setassetItemDiscription(res.data.recordset[0].AssetItemDescription)
-                setModel(res.data.recordset[0].Model)
-                setmanufacturer(res.data.recordset[0].Manufacturer)
-                setBrand(res.data.recordset[0].Brand)
-                setassetType(res.data.recordset[0].setassetType)
-                setassetCategory(res.data.recordset[0].AssetCategory)
+                console.log('-----:', res.data);
+                setassetSubCategoryDiscription(res.data.recordset[0].AssetSubCategoryDesc)
+
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err);;
             });
     }
-    useEffect(() => {
-        getapi()
-    }, [])
+
+    const handleProvinceChangeasassetCategory = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            assetCategory: e.target.value,
+        }));
+        axios.get(`/api/AssetCategory_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setassetCategoryDiscription(res.data.recordset[0].AssetCategoryDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+
+    const handleProvinceChangeAssetItemGroup = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            AssetItemGroup: e.target.value,
+        }));
+        axios.get(`/api/AssetItemGroup_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setAssetitemGroupDescription(res.data.recordset[0].AssetItemGroupCodeDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+
+    const handleProvinceChangeassetType = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            assetType: e.target.value,
+        }));
+        axios.get(`/api/AssetType_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+
+    const handleProvinceChangeVendorcode = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            Vendorcode: e.target.value,
+        }));
+        axios.get(`/api/VendorMaster_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setVendorName(res.data.recordset[0].VendorName)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+
+    const handleProvinceChangeUnitscode = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            Unitscode: e.target.value,
+        }));
+        axios.get(`/api/MaterialUnits_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setUnitsDescriptions(res.data.recordset[0].MaterialUnitDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
 
     const postapi = (e) => {
         axios.put(`/api/AssetsMaster_Put/${userId}`, {
-            AssetItemGroup: AssetItemGroup,
-            AssetType: assetType,
-            AssetCategory: assetCategory,
-            AssetSubCategory: assetSubCategory,
+            AssetItemGroup: value.AssetItemGroup,
+            AssetType: value.assetType,
+            AssetCategory: value.assetCategory,
+            AssetSubCategory: value.assetSubCategory,
             Manufacturer: manufacturer,
             Model: Model,
             Brand: Brand,
@@ -76,6 +228,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                 console.log(err);
             });
     }
+
   return (
     <>
     <div className="bg">
@@ -132,28 +285,34 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                               Asset Category<span className="star">*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example" value={assetCategory}
-                                            onChange={(event) => {
-                                                setassetCategory(event.target.value)
-                                            }}>
-                                              <option selected className='inputsectiondropdpwn'>{assetCategory}</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example" 
+                                         value={value.assetCategory}
+                                              onChange={handleProvinceChangeasassetCategory}>
+                                              <option selected className='inputsectiondropdpwn'>Select Asset Category</option>
+                                              {
+                                                  assetCategorylist && assetCategorylist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.AssetCategoryCode}>{itme.AssetCategoryCode}</option>
+                                                      )
+                                                  })
+                                              }
                                         </select>
                                     </div>
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                             Asset Sub-Category <span className="star">*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="subCategory" aria-label="Floating label select example" value={assetSubCategory}
-                                            onChange={(event) => {
-                                                setassetSubCategory(event.target.value)
-                                            }}>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="subCategory" aria-label="Floating label select example" 
+                                              value={value.assetSubCategory}
+                                              onChange={handleProvinceChangeassetSubCategory}>
                                             <option selected className='inputsectiondropdpwn'>Select Asset Sub-Category</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
+                                              {
+                                                  assetSubCategorylist && assetSubCategorylist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.AssetSubCategoryCode}>{itme.AssetSubCategoryCode}</option>
+                                                      )
+                                                  })
+                                              }
                                         </select>
                                     </div>
                                 </div>
@@ -168,9 +327,9 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                             types='text'
                                             id='workCategoryDiscription'
                                             value={assetCategoryDiscription}
-                                            onChange={e => {
-                                                setassetCategoryDiscription(e.target.value)
-                                            }}
+                                            // onChange={e => {
+                                            //     setassetCategoryDiscription(e.target.value)
+                                            // }}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Asset Category Discription'
                                             required
@@ -191,9 +350,9 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                             types='text'
                                             id='assetsubcategorydiscription'
                                             value={assetSubCategoryDiscription}
-                                            onChange={e => {
-                                                setassetSubCategoryDiscription(e.target.value)
-                                            }}
+                                            // onChange={e => {
+                                            //     setassetSubCategoryDiscription(e.target.value)
+                                            // }}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Sub-Category Discription'
                                             required
@@ -240,14 +399,17 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                           <label htmlFor='AssetItemGroup' className='lablesection color3 text-start mb-1'>
                                               Asset Item Group<span className="star">*</span>
                                           </label>
-                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemGroup" aria-label="Floating label select example" value={AssetItemGroup}
-                                              onChange={(event) => {
-                                                  setAssetItemGroup(event.target.value)
-                                              }}>
+                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemGroup" aria-label="Floating label select example"
+                                           value={value.AssetItemGroup}
+                                              onChange={handleProvinceChangeAssetItemGroup}>
                                               <option selected className='inputsectiondropdpwn'>Select Asset type</option>
-                                              <option value={"First"}>One</option>
-                                              <option value={"Second"}>Two</option>
-                                              <option value={"three"}>Three</option>
+                                              {
+                                                  AssetItemGrouplist && AssetItemGrouplist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.AssetItemGroupCode}>{itme.AssetItemGroupCode}</option>
+                                                      )
+                                                  })
+                                              }
                                           </select>
                                       </div>
                                   </div>
@@ -262,9 +424,9 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                               types='text'
                                               id='AssetitemGroupDescription'
                                               value={AssetitemGroupDescription}
-                                              onChange={e => {
-                                                  setAssetitemGroupDescription(e.target.value)
-                                              }}
+                                            //   onChange={e => {
+                                            //       setAssetitemGroupDescription(e.target.value)
+                                            //   }}
                                               className='rounded inputsection py-2'
                                               placeholder='Enter Type Discription'
                                               required
@@ -283,14 +445,18 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                             Asset Type <span className="star">*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="assettype" aria-label="Floating label select example" value={assetType}
-                                            onChange={(event) => {
-                                                setassetType(event.target.value)
-                                            }}>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="assettype" aria-label="Floating label select example"
+                                           value={value.assetType}
+                                              onChange={handleProvinceChangeassetType}
+                                            >
                                             <option selected className='inputsectiondropdpwn'>Select Asset type</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
+                                              {
+                                                  assetTypelist && assetTypelist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.AssetTypeCode}>{itme.AssetTypeCode}</option>
+                                                      )
+                                                  })
+                                              }
                                         </select>
                                     </div>
                                 </div>
@@ -305,9 +471,9 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                             types='text'
                                             id='assetsubcategorydiscription'
                                             value={assetTypeDiscription}
-                                            onChange={e => {
-                                                setassetTypeDiscription(e.target.value)
-                                            }}
+                                            // onChange={e => {
+                                            //     setassetTypeDiscription(e.target.value)
+                                            // }}
                                             className='rounded inputsection py-2'
                                             placeholder='Enter Type Discription'
                                             required
@@ -424,14 +590,24 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                             Warrenty Period <span className="star">*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" value={WarrentyPeriod}
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example"
+                                              value={value.WarrentyPeriod}
                                             onChange={(event) => {
-                                                setWarrentyPeriod(event.target.value)
-                                            }}>
+                                                // setWarrentyPeriod(event.target.value)
+                                                setvalue((prevValue) => ({
+                                                    ...prevValue,
+                                                    WarrentyPeriod: event.target.value,
+                                                }));
+                                            }}
+                                            >
                                             <option selected className='inputsectiondropdpwn'>Warrenty Period</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
+                                              {
+                                                  WarrentyPeriodlist && WarrentyPeriodlist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.WarrantyPeriodCode}>{itme.WarrantyPeriodCode}</option>
+                                                      )
+                                                  })
+                                              }
                                         </select>
                                     </div>
                                 </div>
@@ -548,14 +724,17 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                             Units <span className="star">*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" value={WarrentyPeriod}
-                                            onChange={(event) => {
-                                                setWarrentyPeriod(event.target.value)
-                                            }}>
-                                            <option selected className='inputsectiondropdpwn'>Units</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" 
+                                                  value={value.Unitscode}
+                                             onChange={handleProvinceChangeUnitscode}>
+                                            <option className='inputsectiondropdpwn'>Units</option>
+                                                  {
+                                                      Unitscodelist && Unitscodelist.map((itme, index) => {
+                                                          return (
+                                                              <option key={index} value={itme.MaterialUnitCode}>{itme.MaterialUnitCode}</option>
+                                                          )
+                                                      })
+                                                  }
                                         </select>
                                     </div>
                                 </div>
@@ -571,10 +750,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                             <input
                                             types='text'
                                             id='Brand'
-                                            value={Brand}
-                                            onChange={e => {
-                                                setBrand(e.target.value)
-                                            }}
+                                                  value={UnitsDescriptions}
                                             className='rounded inputsection py-2'
                                             placeholder='Units Descriptions'
                                             required
@@ -722,14 +898,19 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                         <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
                                             Vendor Code <span className="star">*</span>
                                         </label>
-                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" value={WarrentyPeriod}
-                                            onChange={(event) => {
-                                                setWarrentyPeriod(event.target.value)
-                                            }}>
+                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example"
+                                           value={value.Vendorcode}
+                                            onChange={handleProvinceChangeVendorcode}
+                                           
+                                            >
                                             <option selected className='inputsectiondropdpwn'>Select Vendor Code</option>
-                                            <option value={"First"}>One</option>
-                                            <option value={"Second"}>Two</option>
-                                            <option value={"three"}>Three</option>
+                                              {
+                                                  Vendorcodelist && Vendorcodelist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.VendorID}>{itme.VendorID}</option>
+                                                      )
+                                                  })
+                                              }
                                         </select>
                                     </div>
                                     </div>
@@ -743,10 +924,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                             <input
                                             types='text'
                                             id='Brand'
-                                            value={Brand}
-                                            onChange={e => {
-                                                setBrand(e.target.value)
-                                            }}
+                                            value={VendorName}
                                             className='rounded inputsection py-2'
                                             placeholder='Vendor Name'
                                             required
