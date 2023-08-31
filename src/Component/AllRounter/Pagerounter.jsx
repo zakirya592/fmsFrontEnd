@@ -69,7 +69,6 @@ import Addassetcode from '../../Pages/Work Request/Add Asset code/Addassetcode'
 import Mainworkordeer from '../../Pages/WorkOrder/Mainworkordeer'
 import Updataorderwork from '../../Pages/WorkOrder/Updataorderwork'
 import Viewworkorder from '../../Pages/WorkOrder/Viewworkorder'
-import Testing from '../../Pages/WorkOrder/Testing'
 function Pagerounter() {
 
   return (
@@ -78,7 +77,6 @@ function Pagerounter() {
         <Routes>
           {/* ---------Home Section----------- */}
           <Route exact path='/' element={<Fmsmain name="John" />} />
-          <Route exact path='/testing' element={<Testing name="John" />} />
           {/*=====================  work Request=====================   */}
           <Route exact path="/workrequest" element={<WorkRequest />} />
           {/*===================== View workRequest Viewwork =====================  */}
