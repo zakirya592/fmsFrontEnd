@@ -94,7 +94,41 @@ function Updataorderwork() {
                 ScheduledDateTime,
                 AppointmentDateTime
             }));
+            axios.post(`/api/getworkRequest`, {
+                "EmployeeID": assignEmployee
+            }).then((res) => {
+                console.log('asdfaf=====================================', res);
+                const {
+                    EmployeeName,
+                } = res.data.recordsets[0];
+                const firstname = res.data.recordset[0].Firstname
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    EmployeeName: firstname
+                }));
 
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+
+            axios.post(`/api/getworkRequest`, {
+                "EmployeeID": completeEmployee
+            }).then((res) => {
+                console.log('asdfaf=====================================', res);
+                const {
+                    CompleteEmployeeName,
+                } = res.data.recordsets[0];
+                const CompleteddEmployeeName = res.data.recordset[0].Firstname
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    CompleteEmployeeName: CompleteddEmployeeName
+                }));
+
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
             setminutesdifferent(res.data.recordset[0].TotalMinutes)
             setTimeDifference(res.data.recordset[0].TotalHours)
             setDaysBetween(res.data.recordset[0].TotalDays)
