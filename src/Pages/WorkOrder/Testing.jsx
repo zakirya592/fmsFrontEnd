@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 
 function Testing() {
     const [value, setvalue] = useState({
-        EmployeeID: '', Firstname: ''
+        assignEmployee: '', EmployeeName: ''
     })
     // Emp ID
     function GetgetworkRequest() {
@@ -16,16 +16,14 @@ function Testing() {
             "EmployeeID": "2687643826"
         }).then((res) => {
             console.log('asdfaf=====================================', res);
-            const {
-                EmployeeID,
-                Firstname,
-            } = res.data.recordsets[0][0];
-    
+            const Employee = res.data.recordsets[0][0].EmployeeID
+            const CompleteEmployee = res.data.recordsets[0][0].Firstname
+            console.log(CompleteEmployee);
 
             setvalue((prevValue) => ({
                 ...prevValue,
-                EmployeeID,
-                Firstname,
+                assignEmployee: Employee,
+                EmployeeName: CompleteEmployee,
             }));
           
         })
@@ -33,6 +31,7 @@ function Testing() {
                 //// console.log(err);;
             });
     }
+
     useEffect(() => {
         GetgetworkRequest()
     }, [])
@@ -45,9 +44,6 @@ function Testing() {
     const abortControllerRefAE = useRef(null);
 
     useEffect(() => {
-
-        // const handleOnBlurCall = () => {
-
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
                 console.log('Dropdown me', response.data.recordset)
@@ -75,7 +71,7 @@ function Testing() {
             return; // Do not perform search if the input is cleared or an option is selected
         }
         if (reason === 'option') {
-            return reason// Do not perform search if the option is selected
+            return reason; // Do not perform search if the option is selected
         }
 
         if (!newInputValue || newInputValue.trim() === '') {
@@ -91,12 +87,12 @@ function Testing() {
             setUnitCodeAE([])
             setvalue(prevValue => ({
                 ...prevValue,
-                EmployeeID: []
+                assignEmployee: [] // Change to assignEmployee
             }))
             return;
         }
 
-        // postapi(newInputValue.EmployeeID);
+        // postapi(newInputValue.assignEmployee); // Change to assignEmployee
         setAutocompleteLoadingAE(true);
         setOpenAE(true);
         try {
@@ -106,11 +102,16 @@ function Testing() {
             }
             // Create a new AbortController
             abortControllerRefAE.current = new AbortController();
-            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            // I don't know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
                     console.log('Dropdown me', response.data.recordset)
-                    const data = response?.data?.recordset;
+                    // const data = response?.data?.recordset;
+                    const data = response?.data?.recordset.map(item => ({
+                        ...item,
+                        assignEmployee: item.EmployeeID, // Change EmployeeID to assignEmployee
+                        EmployeeName:item.Firstname
+                    }));
                     //name state da setdropname
                     //or Id state da setGpcList da 
                     setUnitCodeAE(data ?? [])
@@ -132,7 +133,7 @@ function Testing() {
                 // Ignore abort errors
                 setvalue(prevValue => ({
                     ...prevValue,
-                    EmployeeID: []
+                    assignEmployee: [] // Change to assignEmployee
                 }))
                 setAutocompleteLoadingAE(true);
                 console.log(error)
@@ -144,7 +145,6 @@ function Testing() {
             setOpenAE(false);
             setAutocompleteLoadingAE(false);
         }
-
     }
 
     const handleGPCAutoCompleteChangeAE = (event, value) => {
@@ -153,20 +153,20 @@ function Testing() {
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
-                EmployeeID: []
+                assignEmployee: [] // Change to assignEmployee
             }));
         }
-        if (value && value.EmployeeID) {
-           
+        if (value && value.assignEmployee) { // Change to assignEmployee
+
             setvalue(prevValue => ({
                 ...prevValue,
-                EmployeeID: value.EmployeeID
+                assignEmployee: value.assignEmployee // Change to assignEmployee
             }));
-            console.log('Received value----------:', value.EmployeeID);
-            localStorage.setItem('EmployeeIDset', value.EmployeeID);
+            console.log('Received value----------:', value.assignEmployee);
         } else {
-            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+            console.log('Value or value.assignEmployee is null:', value); // Debugging line
         }
+    
     }
 
 
@@ -188,17 +188,16 @@ function Testing() {
                           className='rounded inputsection py-0 mt-0'
                           required
                           options={unitCodeAE} // Use the formattedGpcList here
-                          // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                           getOptionLabel={(option) =>
-                              option?.EmployeeID
-                                  ? option.EmployeeID + ' - ' + option.Firstname
+                              option?.assignEmployee // Change to assignEmployee
+                                  ? option.assignEmployee + ' - ' + option.EmployeeName
                                   : ''
                           }
-                          getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                          getOptionSelected={(option, value) => option.assignEmployee === value.assignEmployee} // Change to assignEmployee
                           onChange={handleGPCAutoCompleteChangeAE}
                           renderOption={(props, option) => (
                               <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                  {option.EmployeeID} - {option.Firstname}
+                                  {option.assignEmployee} - {option.EmployeeName}
                               </li>
                           )}
                           value={value}
@@ -246,6 +245,11 @@ function Testing() {
                               />
                           )}
                       />
+                
+
+
+
+
                   </div>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
@@ -258,7 +262,7 @@ function Testing() {
                       <input
                           types='text'
                           id='employeename'
-                          value={value.CompleteEmployeeName}
+                          value={value.EmployeeName}
                           className='rounded inputsection py-2'
                           placeholder='Employee Name'
                           required
