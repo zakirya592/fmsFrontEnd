@@ -703,6 +703,12 @@ function WorkOrder() {
             })
             .catch((err) => {
                 console.log(err);
+                Swal.fire({
+                    title: "Error",
+                    text: `WorkRequestNumber is required`,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
                
             });
     };
