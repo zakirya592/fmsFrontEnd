@@ -1,68 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Box from "@mui/material/Box";
-import Siderbar from "../../Component/Siderbar/Siderbar";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import SaveIcon from '@mui/icons-material/Save';
 import "../Work Request/View modify/Viewmodify.css";
-import { useNavigate, useParams } from "react-router-dom";
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Swal from "sweetalert2";
-import moment from 'moment';
 
 function Testing() {
     const [value, setvalue] = useState({
-        orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
-        solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName: '',
-        costWork: '', AppointmentDateTime: "", ScheduledDateTime: '', WorkCategoryDiscriptionmain: '',
+        EmployeeID: '', Firstname: ''
     })
-
     // Emp ID
     function GetgetworkRequest() {
-        axios.get(`/api/WorkOrders_GET_BYID/000-000-005`).then((res) => {
+        axios.post(`/api/getworkRequest`, {
+            "EmployeeID": "2687643826"
+        }).then((res) => {
             console.log('asdfaf=====================================', res);
-
-            const orderNumber = res.data.recordset[0].WorkOrderNumber
-            const assignEmployee = res.data.recordset[0].AssignedtoEmployeeID
-            const completeEmployee = res.data.recordset[0].CompletedByEmployeeID
-            const defaultEmployeeOption = { EmployeeID: assignEmployee, Firstname: '' };
-            // setUnitCodecompleteemployee([{ EmployeeID: completeEmployee, Firstname: '' }])
-            const defaultcomplempeOption = { EmployeeID: completeEmployee, Firstname: '' };
+            const {
+                EmployeeID,
+                Firstname,
+            } = res.data.recordsets[0][0];
+    
 
             setvalue((prevValue) => ({
                 ...prevValue,
-                orderNumber,
-                // assignEmployee,
-                // completeEmployee,
-                assignEmployee: defaultEmployeeOption,
-                completeEmployee: defaultcomplempeOption,
+                EmployeeID,
+                Firstname,
             }));
-
-
-            axios.post(`/api/getworkRequest`, {
-                "EmployeeID": completeEmployee
-            }).then((res) => {
-                console.log('completeEmployee=====================================', res);
-                const CompleteddEmployeeName = res.data.recordset[0].Firstname
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    CompleteEmployeeName: CompleteddEmployeeName
-                }));
-
-                setUnitCodecompleteemployee([{ EmployeeID: CompleteddEmployeeName, Firstname: CompleteddEmployeeName }]);
-                console.log(unitCodecompleteemployee);
-            })
-                .catch((err) => {
-                    //// console.log(err);;
-                });
-
-
+          
         })
             .catch((err) => {
                 //// console.log(err);;
@@ -71,25 +36,28 @@ function Testing() {
     useEffect(() => {
         GetgetworkRequest()
     }, [])
-    const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
-    const [opencompleteemployee, setOpencompleteemployee] = useState(false);
-    const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
-    const [gpcListcompleteemployee, setGpcListcompleteemployee] = useState([]); // gpc list
-    const abortControllerRefcompleteemployee = useRef(null);
+
+    const [unitCodeAE, setUnitCodeAE] = useState([]);
+    const [dropnameAE, setdropnameAE] = useState([])
+    const [openAE, setOpenAE] = useState(false);
+    const [autocompleteLoadingAE, setAutocompleteLoadingAE] = useState(false);
+    const [gpcListAE, setGpcListAE] = useState([]); // gpc list
+    const abortControllerRefAE = useRef(null);
 
     useEffect(() => {
+
         // const handleOnBlurCall = () => {
+
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
                 console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
-                const dataget = data.map((requestdata) => ({
-                    RequestNumber: requestdata?.RequestNumber,
-                    RequestStatus: requestdata?.RequestStatus,
-                }));
-                // setUnitCodeID(dataget)
-                setOpencompleteemployee(false)
+                const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                const NAmese = data.map((namedata) => namedata?.Firstname);
+                // setdropname(NAmese)
+                setdropnameAE(data)
+                setUnitCodeAE(unitNameList)
+
             })
             .catch((error) => {
                 console.log('-----', error);
@@ -99,47 +67,45 @@ function Testing() {
 
     }, [])
 
-    const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
+    const handleAutoCompleteInputChangeAE = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
-            setGpcListcompleteemployee([]); // Clear the data list if there is no input
-            setUnitCodecompleteemployee([])
+            setGpcListAE([]); // Clear the data list if there is no input
+            setUnitCodeAE([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
         if (reason === 'option') {
             return reason// Do not perform search if the option is selected
         }
 
-        if (!newInputValuecompleteemployee || newInputValuecompleteemployee.trim() === '') {
+        if (!newInputValue || newInputValue.trim() === '') {
             // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
-            setUnitCodecompleteemployee([])
+            setGpcListAE([]);
+            setUnitCodeAE([])
             return;
         }
-        if (newInputValuecompleteemployee === null) {
+        if (newInputValue === null) {
 
             // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
-            setUnitCodecompleteemployee([])
+            setGpcListAE([]);
+            setUnitCodeAE([])
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: [],
-                CompleteEmployeeName: []
+                EmployeeID: []
             }))
             return;
         }
 
         // postapi(newInputValue.EmployeeID);
-        setAutocompleteLoadingcompleteemployee(true);
-        setOpencompleteemployee(true);
+        setAutocompleteLoadingAE(true);
+        setOpenAE(true);
         try {
             // Cancel any pending requests
-            if (abortControllerRefcompleteemployee.current) {
-                abortControllerRefcompleteemployee.current.abort();
+            if (abortControllerRefAE.current) {
+                abortControllerRefAE.current.abort();
             }
             // Create a new AbortController
-            abortControllerRefcompleteemployee.current = new AbortController();
+            abortControllerRefAE.current = new AbortController();
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
@@ -147,10 +113,9 @@ function Testing() {
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
-                    setUnitCodecompleteemployee(data ?? [])
-                    setOpencompleteemployee(true);
-                    setUnitCodecompleteemployee(data)
-                    setAutocompleteLoadingcompleteemployee(false);
+                    setUnitCodeAE(data ?? [])
+                    setOpenAE(true);
+                    setAutocompleteLoadingAE(false);
                     // 
                 })
                 .catch((error) => {
@@ -167,44 +132,47 @@ function Testing() {
                 // Ignore abort errors
                 setvalue(prevValue => ({
                     ...prevValue,
-                    completeEmployee: [],
-                    CompleteEmployeeName: []
+                    EmployeeID: []
                 }))
+                setAutocompleteLoadingAE(true);
                 console.log(error)
                 return;
             }
             console.error(error);
             console.log(error)
-            setUnitCodecompleteemployee([])
-            setOpencompleteemployee(false);
-            setAutocompleteLoadingcompleteemployee(false);
+            setUnitCodeAE([])
+            setOpenAE(false);
+            setAutocompleteLoadingAE(false);
         }
 
     }
 
-    const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
+    const handleGPCAutoCompleteChangeAE = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
-        if (value === null || value === '-') {
+        if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: [],
-                CompleteEmployeeName: []
+                EmployeeID: []
             }));
         }
-
         if (value && value.EmployeeID) {
-            // postapi(value.EmployeeID);
+           
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: value.EmployeeID,
-                CompleteEmployeeName: value.Firstname
+                EmployeeID: value.EmployeeID
             }));
-            console.log('Received value----------:', value);
+            console.log('Received value----------:', value.EmployeeID);
+            localStorage.setItem('EmployeeIDset', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+
+
+   
+
+
   return (
     <div>
           <div className="row mx-auto formsection">
@@ -213,48 +181,45 @@ function Testing() {
                       <label htmlFor='completeemployee' className='lablesection color3 text-start mb-1'>
                           Completed By Employee
                       </label>
+                    
+
                       <Autocomplete
-                          id="completeemployee"
+                          id="serachGpc"
                           className='rounded inputsection py-0 mt-0'
                           required
-                          options={unitCodecompleteemployee}
+                          options={unitCodeAE} // Use the formattedGpcList here
+                          // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                           getOptionLabel={(option) =>
                               option?.EmployeeID
                                   ? option.EmployeeID + ' - ' + option.Firstname
                                   : ''
                           }
-                          getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
-                          onChange={handleGPCAutoCompleteChangecompleteemployee}
+                          getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                          onChange={handleGPCAutoCompleteChangeAE}
                           renderOption={(props, option) => (
                               <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
                                   {option.EmployeeID} - {option.Firstname}
                               </li>
                           )}
-                          value={value.completeEmployee || null}
-                        // value={value.EmployeeID}
-                          onInputChange={(eventcompleteemployee, newInputValuecompleteemployee, params) =>
-                              handleAutoCompleteInputChangecompleteemployee(eventcompleteemployee, newInputValuecompleteemployee, params)
-                          }
-                          loading={autocompleteLoadingcompleteemployee}
-                          open={opencompleteemployee} // Control open state based on selected value
+                          value={value}
+                          onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChangeAE(event, newInputValue, params)}
+                          loading={autocompleteLoadingAE}
+                          open={openAE}
                           onOpen={() => {
-                              // setOpenID(true);
+                              // setOpenAE(true);
                           }}
                           onClose={() => {
-                              setOpencompleteemployee(false);
+                              setOpenAE(false);
                           }}
                           renderInput={(params) => (
                               <TextField
                                   {...params}
-                                  value={value.completeEmployee || ''}
                                   placeholder='Employee Number'
                                   InputProps={{
                                       ...params.InputProps,
                                       endAdornment: (
                                           <React.Fragment>
-                                              {autocompleteLoadingcompleteemployee ? (
-                                                  <CircularProgress style={{ color: 'black' }} size={20} />
-                                              ) : null}
+                                              {autocompleteLoadingAE ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
                                               {params.InputProps.endAdornment}
                                           </React.Fragment>
                                       ),
@@ -294,7 +259,6 @@ function Testing() {
                           types='text'
                           id='employeename'
                           value={value.CompleteEmployeeName}
-
                           className='rounded inputsection py-2'
                           placeholder='Employee Name'
                           required

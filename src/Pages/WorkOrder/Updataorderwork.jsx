@@ -23,6 +23,7 @@ function Updataorderwork() {
         orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
         solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName: '',
         costWork: '', AppointmentDateTime: "", ScheduledDateTime: '', WorkCategoryDiscriptionmain: '',
+        EmployeeID: '', Firstname: '',
     })
     const [failureDiscriptionCode, setFailureDiscriptionCode] = useState([]);
     const [solutionCodeDiscription, setsolutionCodeDiscription] = useState("");
@@ -42,12 +43,20 @@ function Updataorderwork() {
     const [daysBetween, setDaysBetween] = useState(0);
 
     // Work Employes ID  Api
-
     const [bdata, setbata] = useState([])
     const [edata, seteata] = useState([])
+    const [EI, setEi] = useState([])
     const [scheduleddata, setscheduleddata] = useState([])
     const [appiontmentddata, setappiontmentddata] = useState([])
     // Emp ID
+
+    const [unitCodeEI, setUnitCodeEI] = useState([]);
+    const [dropname, setdropnameEI] = useState([])
+    const [openEI, setOpenEI] = useState(false);
+    const [autocompleteLoadingEI, setAutocompleteLoadingEI] = useState(false);
+    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
+    const [gpcListEI, setGpcListEI] = useState([]); // gpc list
+    const abortControllerRefEI = useRef(null);
     function GetgetworkRequest() {
         axios.get(`/api/WorkOrders_GET_BYID/${userId}`).then((res) => {
             console.log('asdfaf=====================================', res);
@@ -79,10 +88,11 @@ function Updataorderwork() {
             setStartDate(startdat)
             setEndDate(enddata)
 
-
+            
+          
             setUnitCodeID([{ EmployeeID: assignEmployee, Firstname: '' }]);
             const defaultEmployeeOption = { EmployeeID: assignEmployee, Firstname: '' };
-            setUnitCodecompleteemployee([{ EmployeeID: completeEmployee, Firstname: '' }])
+            // setUnitCodecompleteemployee([{ EmployeeID: completeEmployee, Firstname: '' }])
             const defaultcomplempeOption = { EmployeeID: completeEmployee, Firstname: '' };
 
             setvalue((prevValue) => ({
@@ -103,6 +113,28 @@ function Updataorderwork() {
                 ScheduledDateTime,
                 AppointmentDateTime
             }));
+
+            axios.post(`/api/getworkRequest`, {
+                "EmployeeID": completeEmployee
+            }).then((res) => {
+                console.log('asdfaf=====================================', res);
+                const CompleteddEmployeeName = res.data.recordset[0].Firstname
+                const {
+                    EmployeeID,
+                    Firstname
+                } = res.data.recordsets[0][0];
+
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    EmployeeID,
+                    Firstname,
+                    CompleteEmployeeName:CompleteddEmployeeName,
+                }));
+
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
             
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": assignEmployee
@@ -122,23 +154,23 @@ function Updataorderwork() {
                     //// console.log(err);;
                 });
 
-            axios.post(`/api/getworkRequest`, {
-                "EmployeeID": completeEmployee
-            }).then((res) => {
-                console.log('asdfaf=====================================', res);
-                const {
-                    CompleteEmployeeName,
-                } = res.data.recordsets[0];
-                const CompleteddEmployeeName = res.data.recordset[0].Firstname
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    CompleteEmployeeName: CompleteddEmployeeName
-                }));
+            // axios.post(`/api/getworkRequest`, {
+            //     "EmployeeID": completeEmployee
+            // }).then((res) => {
+            //     console.log('asdfaf=====================================', res);
+            //     const {
+            //         CompleteEmployeeName,
+            //     } = res.data.recordsets[0];
+            //     const CompleteddEmployeeName = res.data.recordset[0].Firstname
+            //     setvalue((prevValue) => ({
+            //         ...prevValue,
+            //         CompleteEmployeeName: CompleteddEmployeeName
+            //     }));
 
-            })
-                .catch((err) => {
-                    //// console.log(err);;
-                });
+            // })
+            //     .catch((err) => {
+            //         //// console.log(err);;
+            //     });
             setminutesdifferent(res.data.recordset[0].TotalMinutes)
             setTimeDifference(res.data.recordset[0].TotalHours)
             setDaysBetween(res.data.recordset[0].TotalDays)
@@ -181,6 +213,7 @@ function Updataorderwork() {
                 //// console.log(err);;
             });
     }
+
     useEffect(() => {
         GetgetworkRequest()
     }, [])
@@ -420,6 +453,7 @@ function Updataorderwork() {
 
     // Assign to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
+   
     const [openID, setOpenID] = useState(false);
     const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
     const [gpcListID, setGpcListID] = useState([]); // gpc list
@@ -616,25 +650,23 @@ function Updataorderwork() {
     };
 
     // Assign to Employee Logic.
-    const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
-    const [opencompleteemployee, setOpencompleteemployee] = useState(false);
-    const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
-    const [gpcListcompleteemployee, setGpcListcompleteemployee] = useState([]); // gpc list
-    const abortControllerRefcompleteemployee = useRef(null);
 
+
+    
     useEffect(() => {
+
         // const handleOnBlurCall = () => {
+
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
                 console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
-                const dataget = data.map((requestdata) => ({
-                    RequestNumber: requestdata?.RequestNumber,
-                    RequestStatus: requestdata?.RequestStatus,
-                }));
-                // setUnitCodeID(dataget)
-                setOpencompleteemployee(false)
+                const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                const NAmese = data.map((namedata) => namedata?.Firstname);
+                // setdropnameEI(NAmese)
+                setdropnameEI(data)
+                setUnitCodeEI(unitNameList)
+
             })
             .catch((error) => {
                 console.log('-----', error);
@@ -644,47 +676,45 @@ function Updataorderwork() {
 
     }, [])
 
-    const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
+    const handleAutoCompleteInputChangeEI = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
-            setGpcListcompleteemployee([]); // Clear the data list if there is no input
-            setUnitCodecompleteemployee([])
+            setGpcListEI([]); // Clear the data list if there is no input
+            setUnitCodeEI([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
         if (reason === 'option') {
             return reason// Do not perform search if the option is selected
         }
 
-        if (!newInputValuecompleteemployee || newInputValuecompleteemployee.trim() === '') {
+        if (!newInputValue || newInputValue.trim() === '') {
             // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
-            setUnitCodecompleteemployee([])
+            setGpcListEI([]);
+            setUnitCodeEI([])
             return;
         }
-        if (newInputValuecompleteemployee === null) {
+        if (newInputValue === null) {
 
             // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
-            setUnitCodecompleteemployee([])
+            setGpcListEI([]);
+            setUnitCodeEI([])
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: [],
-                CompleteEmployeeName: []
+                EmployeeID: []
             }))
             return;
         }
 
         // postapi(newInputValue.EmployeeID);
-        setAutocompleteLoadingcompleteemployee(true);
-        setOpencompleteemployee(true);
+        setAutocompleteLoadingEI(true);
+        setOpenEI(true);
         try {
             // Cancel any pending requests
-            if (abortControllerRefcompleteemployee.current) {
-                abortControllerRefcompleteemployee.current.abort();
+            if (abortControllerRefEI.current) {
+                abortControllerRefEI.current.abort();
             }
             // Create a new AbortController
-            abortControllerRefcompleteemployee.current = new AbortController();
+            abortControllerRefEI.current = new AbortController();
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
@@ -692,10 +722,9 @@ function Updataorderwork() {
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
-                    setUnitCodecompleteemployee(data ?? [])
-                    setOpencompleteemployee(true);
-                    setUnitCodecompleteemployee(data)
-                    setAutocompleteLoadingcompleteemployee(false);
+                    setUnitCodeEI(data ?? [])
+                    setOpenEI(true);
+                    setAutocompleteLoadingEI(false);
                     // 
                 })
                 .catch((error) => {
@@ -712,41 +741,39 @@ function Updataorderwork() {
                 // Ignore abort errors
                 setvalue(prevValue => ({
                     ...prevValue,
-                    completeEmployee: [],
-                    CompleteEmployeeName: []
+                    EmployeeID: []
                 }))
-                setAutocompleteLoadingID(true);
+                setAutocompleteLoadingEI(true);
                 console.log(error)
                 return;
             }
             console.error(error);
             console.log(error)
-            setUnitCodecompleteemployee([])
-            setOpencompleteemployee(false);
-            setAutocompleteLoadingcompleteemployee(false);
+            setUnitCodeEI([])
+            setOpenEI(false);
+            setAutocompleteLoadingEI(false);
         }
 
     }
 
-    const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
+    const handleGPCAutoCompleteChangeEI = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
-        if (value === null || value === '-') {
+        if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: [],
-                CompleteEmployeeName: []
+                EmployeeID: []
             }));
         }
-
         if (value && value.EmployeeID) {
-            // postapi(value.EmployeeID);
+
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: value.EmployeeID,
-                CompleteEmployeeName: value.Firstname
+                EmployeeID: value.EmployeeID,
+                Firstname: value.Firstname,
+                CompleteEmployeeName:value.Firstname
             }));
-            console.log('Received value----------:', value);
+            console.log('Received value----------:', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -772,7 +799,7 @@ function Updataorderwork() {
             TotalHours: timeDifference,
             TotalMinutes: minutesdifferent,
             TotalCostofWork: value.costWork,
-            CompletedByEmployeeID: value.completeEmployee,
+            CompletedByEmployeeID: value.EmployeeID,
             CompletionDateTime: startDate,
         },)
             .then((res) => {
@@ -1409,33 +1436,32 @@ function Updataorderwork() {
                                                 Completed By Employee
                                             </label>
                                             <Autocomplete
-                                                id="completeemployee"
+                                                id="serachGpc"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
-                                                options={unitCodecompleteemployee}
+                                                options={unitCodeEI} // Use the formattedGpcList here
+                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                                                 getOptionLabel={(option) =>
                                                     option?.EmployeeID
                                                         ? option.EmployeeID + ' - ' + option.Firstname
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
-                                                onChange={handleGPCAutoCompleteChangecompleteemployee}
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                                onChange={handleGPCAutoCompleteChangeEI}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
                                                         {option.EmployeeID} - {option.Firstname}
                                                     </li>
                                                 )}
-                                                value={value.EmployeeID}
-                                                onInputChange={(eventcompleteemployee, newInputValuecompleteemployee, params) =>
-                                                    handleAutoCompleteInputChangecompleteemployee(eventcompleteemployee, newInputValuecompleteemployee, params)
-                                                }
-                                                loading={autocompleteLoadingcompleteemployee}
-                                                open={opencompleteemployee} // Control open state based on selected value
+                                                value={value}
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChangeEI(event, newInputValue, params)}
+                                                loading={autocompleteLoadingEI}
+                                                open={openEI}
                                                 onOpen={() => {
-                                                    // setOpenID(true);
+                                                    // setOpenEI(true);
                                                 }}
                                                 onClose={() => {
-                                                    setOpencompleteemployee(false);
+                                                    setOpenEI(false);
                                                 }}
                                                 renderInput={(params) => (
                                                     <TextField
@@ -1445,9 +1471,7 @@ function Updataorderwork() {
                                                             ...params.InputProps,
                                                             endAdornment: (
                                                                 <React.Fragment>
-                                                                    {autocompleteLoadingcompleteemployee ? (
-                                                                        <CircularProgress style={{ color: 'black' }} size={20} />
-                                                                    ) : null}
+                                                                    {autocompleteLoadingEI ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
                                                                     {params.InputProps.endAdornment}
                                                                 </React.Fragment>
                                                             ),
