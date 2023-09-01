@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar'
 import "./Preventive.css"
 import excel from "../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
+// import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined } from '@ant-design/icons';
@@ -15,7 +16,7 @@ import Siderbar from '../../Component/Siderbar/Siderbar'
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
 
-function CreatePreventiveMaintainance() {
+function UpdatePreventive() {
     const navigate = useNavigate();
     const [Employeenumber, setEmployeenumber] = useState('')
     const [WorkRequest, setWorkRequest] = useState('')
@@ -45,7 +46,7 @@ function CreatePreventiveMaintainance() {
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
                                 <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                      navigate('/preventive')
+                      navigate('/')
                     })} />
                                     <p className="text-center my-auto ms-5">Preventive Maintenance</p>
                                 </Typography>
@@ -54,9 +55,10 @@ function CreatePreventiveMaintainance() {
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
 
+
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Preventive Maintenance<span className='star'>*</span></p>
+                                    <p className='color1 workitoppro my-auto'>Update Preventive Maintenance <span className='star'>*</span></p>
                                     <div className="d-flex">
                                         {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
                                         <Create />
@@ -565,7 +567,7 @@ function CreatePreventiveMaintainance() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                 <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                      navigate('/preventive')
+                      navigate('/')
                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                    <div className="d-flex">
 
@@ -583,4 +585,4 @@ function CreatePreventiveMaintainance() {
     )
 }
 
-export default CreatePreventiveMaintainance
+export default UpdatePreventive

@@ -23,11 +23,10 @@ import { CSVLink } from "react-csv";
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import Swal from "sweetalert2";
-import moment from 'moment';
-
+import moment from 'moment'
 function Mainworkordeer() {
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [getdata, setgetdata] = useState([])
@@ -91,7 +90,6 @@ function Mainworkordeer() {
         <body>${tableHtml}</body>
       </html>
     `;
-
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.print();
@@ -113,14 +111,12 @@ function Mainworkordeer() {
     }, [])
 
     // Deleted api section
-    // Deleted api section
     const Deletedapi = (WorkOrderNumber) => {
         console.log(WorkOrderNumber);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
                 cancelButton: 'btn btn-danger mx-2',
-                // actions: 'mx-3'
             },
             buttonsStyling: false
         })
@@ -156,10 +152,8 @@ function Mainworkordeer() {
                             text: 'Something went wrong!',
                         })
                     });
-
             }
         })
-
     };
 
     const columns = [
@@ -197,13 +191,13 @@ function Mainworkordeer() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem onClick={(() => {
-                        navigate(`/Workorder/View/${params.row.WorkOrderNumber}`)
+                        navigate(`/Preventive/view/${params.row.WorkOrderNumber}`)
                     })}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
                     <MenuItem disabled={params.row.WorkStatus === 'This Work Order is already closed..'} onClick={(() => {
-                        navigate(`/Workorder/Updata/${params.row.WorkOrderNumber}`)
+                        navigate(`/Preventive/update/${params.row.WorkOrderNumber}`)
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
@@ -217,8 +211,6 @@ function Mainworkordeer() {
                     </MenuItem>
                 </Menu>
             </div>
-
-
         );
     }
     const [filteredRows, setFilteredRows] = useState([]);
@@ -229,9 +221,6 @@ function Mainworkordeer() {
             (!RequestStatusFilterValue || row.WorkStatus === RequestStatusFilterValue) &&
             (!requestByEmployee || (row.WorkOrderNumber && row.WorkOrderNumber.includes(requestByEmployee)))
         )).sort((a, b) => a.WorkOrderNumber - b.WorkOrderNumber).map((row, index) => {
-            // Your mapping logic remains the same
-
-
             const isClosed = row.WorkStatus === "Closed";
 
             if (isClosed) {
@@ -323,7 +312,6 @@ function Mainworkordeer() {
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
     useEffect(() => {
-        console.log("Testing.....")
         console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
         console.log(rowSelectionModel)  // ....clear....???
     }, [])

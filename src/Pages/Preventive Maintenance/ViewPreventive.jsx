@@ -6,7 +6,6 @@ import excel from "../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
 // import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
 import Create from '../../Component/View work/Create'
@@ -58,7 +57,7 @@ function PreventiveView() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View/Modify Preventive Maintenance*</p>
+                                    <p className='color1 workitoppro my-auto'>View/Modify Preventive Maintenance <span className='star'>*</span></p>
                                     <div className="d-flex">
                                         {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
                                         <Create />
@@ -571,8 +570,6 @@ function PreventiveView() {
                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                    <div className="d-flex">
 
-                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2"><SaveIcon className='me-2' />SAVE</button>
-                                    <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2"><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
                                    </div>
 
                                 </div>

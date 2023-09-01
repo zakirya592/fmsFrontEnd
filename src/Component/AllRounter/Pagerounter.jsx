@@ -7,6 +7,8 @@ import WorkOrder from "../../Pages/WorkOrder/WorkOrder"
 import LocationManagement from '../../Pages/LocationManagement/LocationManagement'
 import SetupAndConfiguration from '../../Pages/Setup&Configuration/SetupAndConfiguration'
 import MainPreventiveMaintenance from '../../Pages/Preventive Maintenance/MainPreventiveMaintenance'
+import ViewPreventive from '../../Pages/Preventive Maintenance/ViewPreventive'
+import UpdatePreventive from '../../Pages/Preventive Maintenance/UpdatePreventive'
 import CreatePreventiveMaintenance from '../../Pages/Preventive Maintenance/CreatePreventiveMaintainance'
 import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
 import SystemModules from "../../Pages/UserManagement/SystemModules/SystemModules"
@@ -177,7 +179,8 @@ function Pagerounter() {
           {/* ================ Preventive Maintenance* ==================*/}
           <Route exact path='/Preventive' element={<MainPreventiveMaintenance />} />
           <Route exact path='/CreatePreventive' element={<CreatePreventiveMaintenance />} />
-
+          <Route exact path='/Preventive/view/:userId' element={<ViewPreventive />} />
+          <Route exact path='/Preventive/update/:userid' element={<UpdatePreventive />} />
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<Cleaningworksview />} />
 
