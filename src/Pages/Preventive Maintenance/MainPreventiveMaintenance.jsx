@@ -423,7 +423,7 @@ function Mainworkordeer() {
                                       <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
                                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                          navigate('/createworkorder')
+                                          navigate('/createpreventive')
                                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
                                       {/* print  */}
                                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
