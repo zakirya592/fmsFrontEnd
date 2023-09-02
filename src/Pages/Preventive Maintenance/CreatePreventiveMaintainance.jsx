@@ -50,7 +50,16 @@ function CreatePreventiveMaintainance() {
     const [dropdownWorkTradeLIST, setdropdownWorkTradeLIST] = useState([])
 
 
-
+// current date and time 
+const getCurrentDateTimeString = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
 
     // apis
     useEffect(() => {
@@ -210,7 +219,7 @@ function CreatePreventiveMaintainance() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                                Employee Number<span className='star'>*</span>
+                                                Employee 
                                             </label>
 
                                             <input
@@ -221,7 +230,7 @@ function CreatePreventiveMaintainance() {
                                                     setEmployeenumber(e.target.value)
                                                 }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
+                                                placeholder='Employee Number'
                                                 required
                                             ></input>
                                             <p
@@ -259,12 +268,18 @@ function CreatePreventiveMaintainance() {
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time
+                                        <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
+                                                Request Date/Time<span className='star'>*</span>
                                             </label>
-                                            <input type="datetime-local" id="Employdata" name="birthdaytime" className='rounded inputsection py-2' />
-
-
+<input
+type="datetime-local"
+id="Employdata"
+// value={value.RequestDateTime || getCurrentDateTimeString()} // Use a default value or value.RequestDateTime
+value={getCurrentDateTimeString()}
+// onChange={handleInputChange}
+name="RequestDateTime"
+className='rounded inputsection py-2'
+/>
                                         </div>
                                     </div>
 
