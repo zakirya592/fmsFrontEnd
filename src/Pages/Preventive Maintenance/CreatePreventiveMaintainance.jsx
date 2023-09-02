@@ -25,7 +25,6 @@ function CreatePreventiveMaintainance() {
     const [Middlename, setMiddlename] = useState('')
     const [Lastname, setLastname] = useState('')
     const [WorkType, setWorkType] = useState('')
-    const [WorkTypeDescription, setWorkTypeDescription] = useState('')
     const [WorkPriority, setWorkPriority] = useState('')
     const [workTrade, setworkTrade] = useState('')
     const [AssetCode, setAssetCode] = useState('')
@@ -46,6 +45,7 @@ function CreatePreventiveMaintainance() {
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     const [WorkPrioritlist, setWorkPrioritlist] = useState([])
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
+    const [dropdownWorkTradeLIST, setdropdownWorkTradeLIST] = useState([])
 
 
 
@@ -71,6 +71,13 @@ function CreatePreventiveMaintainance() {
         axios.get(`/api/Location_LIST`).then((res) => {
             // console.log("Loaction list", res.data.recordset);
             setdropdownLocation(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                // console.log(err);;
+            });
+        axios.get(`/api/WorkTRADE_GET_LIST`).then((res) => {
+            // console.log("Loaction list", res.data.recordset);
+            setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
                 // console.log(err);;
@@ -630,17 +637,21 @@ function CreatePreventiveMaintainance() {
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
                                                 Work Trade
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={workTrade}
-                                                onChange={(event) => {
-                                                    setworkTrade(event.target.value)
-                                                }}>
-                                                <option selected className='inputsectiondropdpwn'>Select Work Trade</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
+                                                // value={value.WorkTrade}
+                                                // onChange={Worktrandedesc}
+                                                >
+                                                <option className='inputsectiondropdpwn'>{localStorage.getItem('WorkTradeCode') || 'Select Work Trade'}</option>
+                                                {
+                                                    dropdownWorkTradeLIST && dropdownWorkTradeLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkTradeCode}>{itme.WorkTradeCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
