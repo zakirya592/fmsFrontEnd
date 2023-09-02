@@ -124,7 +124,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time<span className='star'>*</span>
+                                                Request Date/Time
                                             </label>
                                             <input type="datetime-local" id="Employdata" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -135,7 +135,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
-                                                First Name<span className='star'>*</span>
+                                                First Name
                                             </label>
 
                                             <input
@@ -155,7 +155,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
-                                                Middle Name<span className='star'>*</span>
+                                                Middle Name
                                             </label>
 
                                             <input
@@ -175,7 +175,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Last Name<span className='star'>*</span>
+                                                Last Name
                                             </label>
 
                                             <input
@@ -195,7 +195,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkType' className='lablesection color3 text-start mb-1'>
-                                                Work Type<span className='star'>*</span>
+                                                Work Type
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkType" aria-label="Floating label select example" value={WorkType}
                                                 onChange={(event) => {
@@ -212,7 +212,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='WorkTypeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Type Description <span className='star'>*</span>
+                                                Work Type Description 
                                             </label>
 
                                             <input
@@ -232,7 +232,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkPriority' className='lablesection color3 text-start mb-1'>
-                                                Work Priority<span className='star'>*</span>
+                                                Work Priority
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="WorkPriority" aria-label="Floating label select example" value={WorkPriority}
                                                 onChange={(event) => {
@@ -255,7 +255,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
-                                                Asset Item Tag<span className='star'>*</span>
+                                                Asset Item Tag
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example" value={AssetCode}
                                                 onChange={(event) => {
@@ -272,7 +272,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                                Asset Description<span className='star'>*</span>
+                                                Asset Description
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription"></textarea>
@@ -289,7 +289,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='AssetCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Category<span className='star'>*</span>
+                                                Asset Category
                                             </label>
 
                                             <input
@@ -309,7 +309,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Manufacturer' className='lablesection color3 text-start mb-1'>
-                                                Manufacturer<span className='star'>*</span>
+                                                Manufacturer
                                             </label>
 
                                             <input
@@ -329,7 +329,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3">
                                         <div className='emailsection  d-grid my-2'>
                                             <label htmlFor='Model' className='lablesection color3 text-start mb-1'>
-                                                Model<span className='star'>*</span>
+                                                Model
                                             </label>
 
                                             <input
@@ -349,7 +349,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-2 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Warrantyper' className='lablesection color3 text-start mb-1'>
-                                                Warranty Period<span className='star'>*</span>
+                                                Warranty Period
                                             </label>
                                             <input type="datetime-local" id="Warrantyper" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -360,7 +360,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-2 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Warrantyend' className='lablesection color3 text-start mb-1'>
-                                                Warranty End Date<span className='star'>*</span>
+                                                Warranty End Date
                                             </label>
                                             <input type="date" id="Warrantyend" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -375,7 +375,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
-                                                Department Code<span className='star'>*</span>
+                                                Department Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={Departmentcode}
                                                 onChange={(event) => {
@@ -392,7 +392,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                                Department Name<span className='star'>*</span>
+                                                Department Name
                                             </label>
 
                                             <input
@@ -412,7 +412,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                Building<span className='star'>*</span>
+                                                Building
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={Building}
                                                 onChange={(event) => {
@@ -429,7 +429,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                Location<span className='star'>*</span>
+                                                Location
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={Location}
                                                 onChange={(event) => {
@@ -451,7 +451,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                                Maintenance Description<span className='star'>*</span>
+                                                Maintenance Description
                                             </label>
                                             <div className="form-floating inputsectiondropdpwn">
                                                 <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Describe the nature of maintenance " id="ProblemDescription"></textarea>
@@ -470,7 +470,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
-                                                Schedule-Start Date/Time*<span className='star'>*</span>
+                                                Schedule-Start Date/Time*
                                             </label>
                                             <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -481,7 +481,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
-                                                Schedule-End Date/Time*<span className='star'>*</span>
+                                                Schedule-End Date/Time*
                                             </label>
                                             <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -492,7 +492,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
-                                                Work Trade<span className='star'>*</span>
+                                                Work Trade
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={workTrade}
                                                 onChange={(event) => {
@@ -508,7 +508,7 @@ function UpdatePreventive() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Scheduling' className='lablesection color3 text-start mb-1'>
-                                                Scheduling Priority*<span className='star'>*</span>
+                                                Scheduling Priority*
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Scheduling" aria-label="Floating label select example" value={Scheduling}
                                                 onChange={(event) => {
@@ -527,7 +527,7 @@ function UpdatePreventive() {
                                 <div className="formsection mx-auto p-2 mt-2 ">
                                     <div className=' rounded inputsection py-2 text-start '>
                                         <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
-                                            Frequency<span className='star'>*</span>
+                                            Frequency
                                         </label>
                                         
                                         <div className="form-check form-check-inline ms-3">
