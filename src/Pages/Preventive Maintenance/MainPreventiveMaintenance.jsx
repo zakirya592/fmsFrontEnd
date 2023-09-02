@@ -35,39 +35,38 @@ function Mainworkordeer() {
         const printWindow = window.open('', '_blank');
         const selectedData = tableData.map((row, index) => ({
             'SEQ': index + 1,
-            'Order Number': row.WorkOrderNumber,
-            'ORDER Status': row.WorkStatus,
-            'Work Request Number': row.WorkRequestNumber,
+            'WORK REQUEST NUMBER': row.RequestNumber,
+            'WORK TYPE': row.WorkStatus,
+            'Asset Item Tag': row.AssetItemTagID,
             'Work Priority': row.WorkPriority,
-            'Request  Date': row.ScheduledDateTime,
-            'Work Category': row.WorkCategoryCode,
-            'Soluction Code': row.SolutionCode,
+            'Request Date': row.RequestDateTime,
+            'Department Code': row.DepartmentCode,
+            'Building Code': row.BuildingCode,
         }));
-        // Create a bold style for header cells
         const headerStyle = 'font-weight: bold;';
 
         const tableHtml = `
       <table border="1">
         <tr>
           <th style="${headerStyle}">SEQ</th>
-          <th style="${headerStyle}">Order Number</th>
-          <th style="${headerStyle}">ORDER Status</th>
           <th style="${headerStyle}">Work Request Number</th>
+          <th style="${headerStyle}">Work Type</th>
+          <th style="${headerStyle}">Asset Item Tag</th>
           <th style="${headerStyle}">Work Priority</th>
           <th style="${headerStyle}">Request Date</th>
-          <th style="${headerStyle}">Work Category </th>
-          <th style="${headerStyle}">Soluction Code</th>
+          <th style="${headerStyle}">Department Code </th>
+          <th style="${headerStyle}">Building Code</th>
         </tr>
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
-            <td>${row['Request Number']}</td>
+            <td>${row['Work Request Number<']}</td>
             <td>${row['ORDER Status']}</td>
             <td>${row['Employee ID']}</td>
             <td>${row['Work Priority']}</td>
             <td>${row['Request Date']}</td>
-            <td>${row['Work Category ']}</td>
-            <td>${row['Soluction Code']}</td>
+            <td>${row['Department Code']}</td>
+            <td>${row['Building Code']}</td>
           </tr>`).join('')}
       </table>`;
 
@@ -96,7 +95,7 @@ function Mainworkordeer() {
     };
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/WorkOrders_GET_LIST`, {
+        axios.get(`/api/PreventiveMaintenance_GET_LIST`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
@@ -111,8 +110,8 @@ function Mainworkordeer() {
     }, [])
 
     // Deleted api section
-    const Deletedapi = (WorkOrderNumber) => {
-        console.log(WorkOrderNumber);
+    const Deletedapi = (RequestNumber) => {
+        console.log(RequestNumber);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -123,7 +122,7 @@ function Mainworkordeer() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: `You want to delete this ${WorkOrderNumber} workOrder`,
+            text: `You want to delete this ${RequestNumber} Work Request Number`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -131,14 +130,14 @@ function Mainworkordeer() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/WorkOrders_DELETE_BYID/${WorkOrderNumber}`)
+                axios.delete(`/api/PreventiveMaintenance_DELETE_BYID/${RequestNumber}`)
                     .then((res) => {
                         getapi()
                         // Handle successful delete response
                         console.log('Deleted successfully', res);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            `workorder ${WorkOrderNumber} has been deleted.`,
+                            `Work Request Number ${RequestNumber} has been deleted.`,
                             'success'
                         )
                         getapi()
@@ -158,13 +157,13 @@ function Mainworkordeer() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'OrderNumber', headerName: 'ORDER NUMBER#', width: 160 },
-        { field: 'OrderStatus', headerName: 'ORDER STATUS', width: 160 },
-        { field: 'WorkRequestNumber', headerName: 'REQUEST NUMBER#', width: 160 },
+        { field: 'RequestNumber', headerName: 'WORK REQUEST NUMBER#', width: 200 },
+        { field: 'WorkType', headerName: 'WORK TYPE', width: 160 },
+        { field: 'AssetItemTagID', headerName: 'ASSET ITEM TAG#', width: 160 },
         { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
         { field: 'RequestDateTime', headerName: 'REQUEST DATE', width: 200 },
-        { field: 'WorkCategory', headerName: 'WORK CATEGORY ', width: 160 },
-        { field: 'SOLUCTIONCODE', headerName: 'SOLUCTION CODE ', width: 160 },
+        { field: 'DepartmentCode', headerName: 'DEPARTMENT CODE ', width: 160 },
+        { field: 'BuildingCode', headerName: 'BUILDING CODE ', width: 160 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -191,19 +190,19 @@ function Mainworkordeer() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem onClick={(() => {
-                        navigate(`/Preventive/view/${params.row.WorkOrderNumber}`)
+                        navigate(`/Preventive/view/${params.row.RequestNumber}`)
                     })}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
                     <MenuItem disabled={params.row.WorkStatus === 'This Work Order is already closed..'} onClick={(() => {
-                        navigate(`/Preventive/update/${params.row.WorkOrderNumber}`)
+                        navigate(`/Preventive/update/${params.row.RequestNumber}`)
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
                     <MenuItem onClick={() => {
-                        Deletedapi(params.row.WorkOrderNumber)
+                        Deletedapi(params.row.RequestNumber)
                         handleMenuClose();
                     }}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
@@ -219,8 +218,8 @@ function Mainworkordeer() {
     useEffect(() => {
         const filteredRows = (getdata || []).filter(row => (
             (!RequestStatusFilterValue || row.WorkStatus === RequestStatusFilterValue) &&
-            (!requestByEmployee || (row.WorkOrderNumber && row.WorkOrderNumber.includes(requestByEmployee)))
-        )).sort((a, b) => a.WorkOrderNumber - b.WorkOrderNumber).map((row, index) => {
+            (!requestByEmployee || (row.RequestNumber && row.RequestNumber.includes(requestByEmployee)))
+        )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, index) => {
             const isClosed = row.WorkStatus === "Closed";
 
             if (isClosed) {
@@ -228,26 +227,26 @@ function Mainworkordeer() {
                 return {
                     ...row,
                     id: index + 1,
-                    OrderNumber: row.WorkOrderNumber,
-                    OrderStatus: isClosed ? "This Work Order is already closed.." : row.WorkStatus,
-                    WorkRequestNumber: row.WorkRequestNumber,
+                    RequestNumber: row.RequestNumber,
+                    WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
+                    AssetItemTagID: row.AssetItemTagID,
                     WorkPriority: row.WorkPriority,
                     RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
-                    WorkCategory: row.WorkCategoryCode,
-                    SOLUCTIONCODE: row.SolutionCode,
+                    DepartmentCode: row.DepartmentCode,
+                    BuildingCode: row.BuildingCode,
                 };
             } else {
                 // If the request is not closed, return the row as is
                 return {
                     ...row,
                     id: index + 1,
-                    OrderNumber: row.WorkOrderNumber,
-                    OrderStatus: isClosed ? "This Work Order is already closed.." : row.WorkStatus,
-                    WorkRequestNumber: row.WorkRequestNumber,
+                    RequestNumber: row.RequestNumber,
+                    WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
+                    AssetItemTagID: row.AssetItemTagID,
                     WorkPriority: row.WorkPriority,
                     RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
-                    WorkCategory: row.WorkCategoryCode,
-                    SOLUCTIONCODE: row.SolutionCode,
+                    DepartmentCode: row.DepartmentCode,
+                    BuildingCode: row.BuildingCode,
                 };
             }
         });
@@ -328,7 +327,7 @@ function Mainworkordeer() {
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
 
-                console.log(clickedRow.OrderStatus);
+                console.log(clickedRow.WorkType);
                 setstatuscheck(clickedRow.WorkStatus)
                 // setSelectedRowIds([params.id])
                 setSelectedRowIds(clickedRow)
@@ -359,7 +358,7 @@ function Mainworkordeer() {
             console.log('This Work Order is already closed..');
             Swal.fire({
                 title: "Error",
-                text: `This Work Order No. ${selectedRow[0].WorkOrderNumber}  is already closed..`,
+                text: `This Work Order No. ${selectedRow[0].RequestNumber}  is already closed..`,
                 icon: "error",
                 confirmButtonText: "OK",
             })
@@ -371,7 +370,7 @@ function Mainworkordeer() {
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
             console.log('Post the Data:', firstSelectedRow.WorkStatus);
-            navigate(`/Workorder/Updata/${firstSelectedRow.WorkOrderNumber}`);
+            navigate(`/Workorder/Updata/${firstSelectedRow.RequestNumber}`);
         }
 
 
