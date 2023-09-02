@@ -40,8 +40,8 @@ function Mainworkordeer() {
             'ORDER Status': row.WorkStatus,
             'Work Request Number': row.WorkRequestNumber,
             'Work Priority': row.WorkPriority,
-            'Request  Date': row.ScheduledDateTime,
-            'Work Category': row.WorkCategoryCode,
+            'Request Date': row.ScheduledDateTime,
+            'Work Category': row.WorkCategory,
             'Soluction Code': row.SolutionCode,
         }));
         // Create a bold style for header cells
@@ -62,12 +62,12 @@ function Mainworkordeer() {
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
-            <td>${row['Request Number']}</td>
+            <td>${row['Order Number']}</td>
             <td>${row['ORDER Status']}</td>
-            <td>${row['Employee ID']}</td>
+            <td>${row['Work Request Number']}</td>
             <td>${row['Work Priority']}</td>
             <td>${row['Request Date']}</td>
-            <td>${row['Work Category ']}</td>
+            <td>${row['Work Category']}</td>
             <td>${row['Soluction Code']}</td>
           </tr>`).join('')}
       </table>`;
