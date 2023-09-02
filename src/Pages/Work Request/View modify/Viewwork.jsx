@@ -508,6 +508,8 @@ function Viewwork() {
             });
     }
    const [RequestDateTimeform, setRequestDateTimeform] = useState([])
+
+    const [datanumber, setdatanumber] = useState([])
     // Work Request
     function Workrequestget() {
         axios.post(`/api/getworkRequestsecond`, {
@@ -593,11 +595,12 @@ function Viewwork() {
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
                     console.log('assetworkrequest  GET  BYID', res.data.recordset);
+                    console.log('length', res.data.recordset.length);
                     const AssetItemDescriptionsssss = res.data.recordset
                     // setgetdata(res.data.recordset);
                     const SAQ = res.data.recordset.map((item) => item.seq);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                    console.log(AssetItemDescriptionsssss);
+                    console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
 
                     const promises = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
@@ -605,7 +608,7 @@ function Viewwork() {
 
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
-                                console.log(res.data.recordset);
+                                console.log('=====', res.data.recordset);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -619,61 +622,78 @@ function Viewwork() {
                                     data: null // Handle error case here
                                 };
                             });
+
                     });
 
-                    Promise.all(promises)
-                        .then((results) => {
+                    const assetItemTagIDs = [];
 
-                            // console.log('dfrfdf',results);
-                            results.forEach((itemRecords, index) => {
+                    // Create an array of promises for fetching data and updating assetItemTagIDs
+                    const promisesNumber = res.data.recordset.map((item) => {
+                        const itid = item.AssetItemDescription;
+                        console.log(itid);
+
+                        return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                            .then((res) => {
+                                console.log('=====------', res.data.recordset[0].AssetItemTagID);
+                                return {
+                                    item,
+                                    data: res.data.recordset,// Store API response data here
+                                };
+
+                            })
+
+
+                            .catch((err) => {
+                                console.log(err);
+                                return {
+                                    item,
+                                    data: null // Handle error case here
+                                };
+                            });
+                    });
+
+                    Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+                        .then(([results1, results2]) => {
+
+
+                            // console.log('dfrfdf---------------------',results1);
+                            // console.log('-------------------------------', results2);
+                            results1.forEach((itemRecords, index) => {
                                 console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                                 // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
-                                    records: results[index],
+                                    records: results1[index],
                                     saq: SAQ[index],
                                 }));
 
                                 const recordsWithSAQ = SAQ.map((saq, index) => ({
                                     saq: SAQ[index],
-                                    records: results[index],
+                                    records: results1[index],
                                 }));
+
+
                                 setgetdata(recordsWithDescriptions, recordsWithSAQ);
+
+
+                            });
+                            results2.forEach((itemRecords, index) => {
+                                // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                                // console.log("---------------------------------",assetItemTagID);
+                                const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                                    assetItemTagID: assetItemTagID,
+                                    records: results2[index],
+                                    saq: SAQ[index],
+                                }));
+                                setdatanumber(assetItemTagID);
+
                             });
 
                         });
 
 
-                    // {
-                    //     AssetItemDescriptionsss.map((item,indi)=>{
 
-                    //         axios.get(`/api/tblAssetsMaster_GET_BYID/${item}`)
-                    //             .then((res) => {
-                    //                 // console.log('Asset Item Descriptionsss', item);
-                    //                 // console.log('tblAssetsMaster _GET_BYID', res.data.recordset[0]);
-                    //                 setgetdata(res.data.recordset);
-                    //             })
-                    //             .catch((err) => {
-                    //                 console.log(err);
-                    //             });
-                    //     })
-                    // }
 
-                    const assetDescriptionsString = AssetItemDescriptionsss.join(',');
-
-                    // axios.get(`/api/tblAssetsMaster_GET_BYID`, null,{
-                    //     params: {
-                    //         AssetItemDescriptionsss: AssetItemDescriptionsss,
-                    //     }
-                    // })
-                    //     .then((res) => {
-                    //         console.log('TO get the list Asset Item Description', res.data.recordset);
-                    //         console.log('Asser item desc', AssetItemDescriptionsss);
-                    //         setgetdata(res.data.recordset);
-                    //     })
-                    //     .catch((err) => {
-                    //         console.log(err);
-                    //     });
 
                 })
                 .catch((err) => {
@@ -763,7 +783,7 @@ function Viewwork() {
     const [getdata, setgetdata] = useState([])
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'AssetNumber', headerName: 'ASSET/STOCK NUMBER', width: 220 },
+        { field: 'AssetItemTagID', headerName: 'ASSET/STOCK NUMBER', width: 220 },
         { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
         { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
         { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
@@ -843,17 +863,18 @@ function Viewwork() {
         });
         return counts;
     };
+
     // Get the data first
     const duplicatesCount = countDuplicates(getdata, 'description');
-    console.log('Duplicates Count:', duplicatesCount);
+
 
     // Extract unique descriptions
     const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
-
     // Create filteredRows with unique descriptions and counts
     const filteredRows = uniqueDescriptions.map((description, index) => ({
         id: index + 1,
         AssetItemDescription: description,
+        AssetItemTagID: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '',
         ASQS: getdata.find(row => row.description === description)?.saq || 0,
         AssetQty: duplicatesCount[description] || 0,
         AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
@@ -864,11 +885,13 @@ function Viewwork() {
         Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
     }));
 
-    // Now you can loop through the filteredRows and access duplicatesCount to display counts alongside entries
     filteredRows.forEach(row => {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
-        console.log(`Description: ${description}, Count: ${count}`);
+        const AssetItemTagID = "sdf";
+
+        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
+
     });
 
     const [paginationModel, setPaginationModel] = React.useState({
