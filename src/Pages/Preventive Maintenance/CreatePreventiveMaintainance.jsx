@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react'
+import React, { useState , useEffect,useRef} from 'react'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import "./Preventive.css"
@@ -15,11 +15,14 @@ import Siderbar from '../../Component/Siderbar/Siderbar'
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Autocomplete from '@mui/material/Autocomplete';
+import Swal from "sweetalert2";
+import TextField from '@mui/material/TextField';
+import { CircularProgress } from '@mui/material';
 
 
 function CreatePreventiveMaintainance() {
     const navigate = useNavigate();
-    const [Employeenumber, setEmployeenumber] = useState('')
     const [WorkRequest, setWorkRequest] = useState('')
     const [Firstname, setFirstname] = useState('')
     const [Middlename, setMiddlename] = useState('')
@@ -39,7 +42,15 @@ function CreatePreventiveMaintainance() {
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
 
     const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
+    const [unitCode, setUnitCode] = useState([]);
+    const [gpcList, setGpcList] = useState([]); // gpc list
+    const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+    const abortControllerRef = useRef(null);
 
+    const [value, setvalue] = useState({
+        EmployeeID: null
+    })
 
     // dropdown
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
@@ -182,6 +193,158 @@ const getCurrentDateTimeString = () => {
                 console.log(err);;
             });
     }
+    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcList([]); // Clear the data list if there is no input
+            setUnitCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            return;
+        }
+        if (newInputValue === null) {
+
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoading(true);
+        setOpen(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRef.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCode(data ?? [])
+                    setOpen(true);
+                    setAutocompleteLoading(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    EmployeeID: []
+                }))
+                setAutocompleteLoading(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCode([])
+            setOpen(false);
+            setAutocompleteLoading(false);
+        }
+
+    }
+    function postapi(EmployeeID) {
+        axios.post(`/api/getworkRequest_by_EPID`, {
+            EmployeeID,
+        }).then((res) => {
+            // console.log(res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Employee ID not found!', 'error')
+                // setModelError(true);
+            } else {
+
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                    WorkTrade,
+                    // RequestNumber
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                    WorkTrade,
+                    // RequestNumber
+                }));
+                console.log('-------------------', res.data.recordsets[0][0]);
+                const Depauto = res.data.recordsets[0][0].DepartmentCode
+                console.log('-------------------------------------------', Depauto);
+                axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                    .then((res) => {
+                        setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                    })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
+
+            }
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
+    }
+    const handleGPCAutoCompleteChange = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === ' -') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }));
+        }
+        if (value && value.EmployeeID) {
+            postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: value.EmployeeID
+            }));
+            console.log('Received value----------:', value.EmployeeID);
+            localStorage.setItem('EmployeeIDset', value.EmployeeID);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
     return (
         <div>
             <div className='bg'>
@@ -218,28 +381,80 @@ const getCurrentDateTimeString = () => {
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Employeenumber' className='lablesection color3 text-start mb-1'>
-                                                Employee 
+                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
+                                                Employee
                                             </label>
+                                        </div>
 
-                                            <input
-                                                types='text'
-                                                id='Employeenumber'
-                                                value={Employeenumber}
-                                                onChange={e => {
-                                                    setEmployeenumber(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Employee Number'
-                                                required
-                                            ></input>
+                                        <Autocomplete
+                                            id="serachGpc"
+                                            className='rounded inputsection py-0 mt-0'
+                                            required
+                                            options={unitCode} // Use the formattedGpcList here
+                                            // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                            getOptionLabel={(option) =>
+                                                option?.EmployeeID
+                                                    ? option.EmployeeID + ' - ' + option.Firstname
+                                                    : ''
+                                            }
+                                            getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                            onChange={handleGPCAutoCompleteChange}
+                                            renderOption={(props, option) => (
+                                                <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                    {option.EmployeeID} - {option.Firstname}
+                                                </li>
+                                            )}
+                                            value={value}
+                                            onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChange(event, newInputValue, params)}
+                                            loading={autocompleteLoading}
+                                            open={open}
+                                            onOpen={() => {
+                                                // setOpen(true);
+                                            }}
+                                            onClose={() => {
+                                                setOpen(false);
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    placeholder='Employee Number'
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        endAdornment: (
+                                                            <React.Fragment>
+                                                                {autocompleteLoading ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                {params.InputProps.endAdornment}
+                                                            </React.Fragment>
+                                                        ),
+                                                    }}
+                                                    sx={{
+                                                        '& label.Mui-focused': {
+                                                            color: '#000000',
+                                                        },
+                                                        '& .MuiInput-underline:after': {
+                                                            borderBottomColor: '#00006a',
+                                                            color: '#000000',
+                                                        },
+                                                        '& .MuiOutlinedInput-root': {
+                                                            '&:hover fieldset': {
+                                                                borderColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '&.Mui-focused fieldset': {
+                                                                borderColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                        },
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </div>
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
                                                 <SearchOutlined className=' serachicon' />
                                             </p>
-                                        </div>
-                                    </div>
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection position-relative d-grid my-2'>
@@ -285,37 +500,47 @@ className='rounded inputsection py-2'
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
                                                 First Name
                                             </label>
 
                                             <input
                                                 types='text'
                                                 id='Firstname'
-                                                value={Firstname}
+                                                value={value.Firstname}
+                                                // value={item.Firstname}
                                                 onChange={e => {
-                                                    setFirstname(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Firstname: e.target.value
+                                                    }))
+                                                    localStorage.setItem('Firstname', e.target.value);
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter First Name'
-                                                required
+                                                required={true}
                                             ></input>
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
                                                 Middle Name
                                             </label>
 
                                             <input
                                                 types='text'
                                                 id='Middlename'
-                                                value={Middlename}
+                                                value={value.Middlename}
                                                 onChange={e => {
-                                                    setMiddlename(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Middlename: e.target.value
+                                                    }))
+                                                    localStorage.setItem('Middlename', e.target.value);
                                                 }}
+
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Middle Name'
                                                 required
@@ -325,16 +550,21 @@ className='rounded inputsection py-2'
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
                                                 Last Name
                                             </label>
 
                                             <input
                                                 types='text'
                                                 id='Lastname'
-                                                value={Lastname}
+                                                value={value.Lastname}
+
                                                 onChange={e => {
-                                                    setLastname(e.target.value)
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Lastname: e.target.value
+                                                    }))
+                                                    localStorage.setItem('Lastname', e.target.value);
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Last Name'
