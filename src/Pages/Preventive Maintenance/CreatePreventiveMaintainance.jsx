@@ -26,7 +26,7 @@ function CreatePreventiveMaintainance() {
     const [Lastname, setLastname] = useState('')
     const [WorkType, setWorkType] = useState('')
     const [WorkPriority, setWorkPriority] = useState('')
-    const [workTrade, setworkTrade] = useState('')
+    const [assetTypelist, setassetTypelist] = useState("");
     const [AssetCode, setAssetCode] = useState('')
     const [AssetCategory, setAssetCategory] = useState('')
     const [Manufacturer, setManufacturer] = useState('')
@@ -35,6 +35,8 @@ function CreatePreventiveMaintainance() {
     const [Departmentcode, setDepartmentcode] = useState('')
     const [Location, setLocation] = useState('')
     const [Building, setBuilding] = useState('')
+    const [assetType, setAssetType] = useState('')
+    const [assetTypeDiscription, setassetTypeDiscription] = useState("");
 
     const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
 
@@ -82,6 +84,14 @@ function CreatePreventiveMaintainance() {
             .catch((err) => {
                 // console.log(err);;
             });
+            // asset type
+            axios.get(`/api/AssetType_GET_LIST`).then((res) => {
+                setassetTypelist(res.data.recordsets[0])
+                console.log(res.data);
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
                     // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             // console.log("Department LIST", res.data.recordset);
@@ -146,6 +156,22 @@ function CreatePreventiveMaintainance() {
         //     .catch((err) => {
         //         console.log(err);
         //     });
+    }
+    const handleProvinceChangeassetType = (e) => {
+        const Deptnale = e.target.value;
+        setAssetType((prevValue) => ({
+            ...prevValue,
+            assetType: e.target.value,
+        }));
+        axios.get(`/api/AssetType_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
     }
     return (
         <div>
@@ -372,30 +398,43 @@ function CreatePreventiveMaintainance() {
                                 <div className="row mx-auto formsection">
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
-                                                Asset Item Tag
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example" value={AssetCode}
-                                                onChange={(event) => {
-                                                    setAssetCode(event.target.value)
-                                                }}>
-                                                <option selected className='inputsectiondropdpwn'>Enter/Select Asset Code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
-                                            </select>
+                                        <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
+                                            Asset Type <span className="star">*</span>
+                                        </label>
+                                        <select className='rounded inputsectiondropdpwn color2 py-2' id="assettype" aria-label="Floating label select example"
+                                        //    value={value.assetType}
+                                              onChange={handleProvinceChangeassetType}
+                                            >
+                                            <option selected className='inputsectiondropdpwn'>Select Asset type</option>
+                                              {
+                                                  assetTypelist && assetTypelist.map((itme, index) => {
+                                                      return (
+                                                          <option key={index} value={itme.AssetTypeCode}>{itme.AssetTypeCode}</option>
+                                                      )
+                                                  })
+                                              }
+                                        </select>
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                                Asset Description
+                                        <label
+                                                htmlFor="workCategoryDiscription"
+                                                className="lablesection color3 text-start mb-1">
+                                                Asset type Discription<span className="star">*</span>
                                             </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription"></textarea>
-
-                                            </div>
+                                            <input
+                                            types='text'
+                                            id='assetsubcategorydiscription'
+                                            value={assetTypeDiscription}
+                                            // onChange={e => {
+                                            //     setassetTypeDiscription(e.target.value)
+                                            // }}
+                                            className='rounded inputsection py-2'
+                                            placeholder='Enter Type Discription'
+                                            required
+                                        ></input>
                                         </div>
                                     </div>
 
