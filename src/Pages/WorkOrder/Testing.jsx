@@ -1,282 +1,237 @@
 import React, { useState, useEffect, useRef } from 'react'
-import "../Work Request/View modify/Viewmodify.css";
-import { SearchOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import Autocomplete from '@mui/material/Autocomplete';
-import { CircularProgress } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import Siderbar from '../../Component/Siderbar/Siderbar'
+import Box from '@mui/material/Box'
+import AppBar from '@mui/material/AppBar'
+import { DataGrid } from '@mui/x-data-grid';
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import Toolbar from '@mui/material/Toolbar';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Typography from '@mui/material/Typography';
 
-function Testing() {
-    const [value, setvalue] = useState({
-        assignEmployee: '', EmployeeName: ''
-    })
-    // Emp ID
-    function GetgetworkRequest() {
-        axios.post(`/api/getworkRequest`, {
-            "EmployeeID": "2687643826"
-        }).then((res) => {
-            console.log('asdfaf=====================================', res);
-            const Employee = res.data.recordsets[0][0].EmployeeID
-            const CompleteEmployee = res.data.recordsets[0][0].Firstname
-            console.log(CompleteEmployee);
+function CreateWorkRequest() {
+ //   Table section 
+    const [getdata, setgetdata] = useState([])
+    const [datanumber, setdatanumber] = useState([])
+    // List a data thougth api 
+    const getapi = () => {
+        // const empid = localStorage.getItem('postemployid',)
+        const empid = localStorage.getItem('requestnumber',)
+        axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
+            .then((res) => {
+                console.log('assetworkrequest  GET  BYID', res.data.recordset);
+                console.log('length', res.data.recordset.length);
+                const AssetItemDescriptionsssss = res.data.recordset
+                // setgetdata(res.data.recordset);
+                const SAQ = res.data.recordset.map((item) => item.seq);
+                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
 
-            setvalue((prevValue) => ({
-                ...prevValue,
-                assignEmployee: Employee,
-                EmployeeName: CompleteEmployee,
-            }));
-          
-        })
-            .catch((err) => {
-                //// console.log(err);;
-            });
-    }
+                const promises = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
 
-    useEffect(() => {
-        GetgetworkRequest()
-    }, [])
+                    return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                        .then((res) => {
+                            console.log('=====', res.data.recordset);
+                            return {
+                                item,
+                                data: res.data.recordset,// Store API response data here
+                            };
 
-    const [unitCodeAE, setUnitCodeAE] = useState([]);
-    const [dropnameAE, setdropnameAE] = useState([])
-    const [openAE, setOpenAE] = useState(false);
-    const [autocompleteLoadingAE, setAutocompleteLoadingAE] = useState(false);
-    const [gpcListAE, setGpcListAE] = useState([]); // gpc list
-    const abortControllerRefAE = useRef(null);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
 
-    useEffect(() => {
-        axios.get('/api/EmployeeID_GET_LIST')
-            .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
-                const data = response?.data?.recordset;
-                const unitNameList = data.map((unitData) => unitData?.EmployeeID);
-                const NAmese = data.map((namedata) => namedata?.Firstname);
-                // setdropname(NAmese)
-                setdropnameAE(data)
-                setUnitCodeAE(unitNameList)
+                });
+
+                const assetItemTagIDs = [];
+
+                // Create an array of promises for fetching data and updating assetItemTagIDs
+                const promisesNumber = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
+
+                    return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                        .then((res) => {
+                            console.log('=====------', res.data.recordset[0].AssetItemTagID);
+                            return {
+                                item,
+                                data: res.data.recordset,// Store API response data here
+                            };
+
+                        })
+
+                       
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
+                });
+
+                Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+                    .then(([results1, results2]) => {
+                       
+
+                        // console.log('dfrfdf---------------------',results1);
+                        // console.log('-------------------------------', results2);
+                        results1.forEach((itemRecords, index) => {
+                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                            // setgetdata(results);
+                            const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                description: description,
+                                records: results1[index],
+                                saq: SAQ[index],
+                            }));
+
+                            const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                saq: SAQ[index],
+                                records: results1[index],
+                            }));
+
+                            
+                            setgetdata(recordsWithDescriptions, recordsWithSAQ);
+                          
+                            
+                        });
+                        results2.forEach((itemRecords, index) => {
+                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                            // console.log("---------------------------------",assetItemTagID);
+                            const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                                assetItemTagID: assetItemTagID,
+                                records: results2[index],
+                                saq: SAQ[index],
+                            }));
+                            setdatanumber(assetItemTagID);
+
+                    });
+                        
+                    });
+
+
+
+
 
             })
-            .catch((error) => {
-                console.log('-----', error);
-            }
-            );
-        // }
-
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
     }, [])
 
-    const handleAutoCompleteInputChangeAE = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
-        if (reason === 'reset' || reason === 'clear') {
-            setGpcListAE([]); // Clear the data list if there is no input
-            setUnitCodeAE([])
-            return; // Do not perform search if the input is cleared or an option is selected
-        }
-        if (reason === 'option') {
-            return reason; // Do not perform search if the option is selected
-        }
+    const columns = [
+        { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'AssetItemTagID', headerName: 'ASSET/STOCK NUMBER', width: 220 },
+        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
+        { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
+        { field: 'Model', headerName: 'MODEL', width: 200 },
+        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
+    ];
 
-        if (!newInputValue || newInputValue.trim() === '') {
-            // perform operation when input is cleared
-            setGpcListAE([]);
-            setUnitCodeAE([])
-            return;
-        }
-        if (newInputValue === null) {
+    const countDuplicates = (array, key) => {
+        const counts = {};
+        array.forEach(item => {
+            const value = item[key];
+            counts[value] = (counts[value] || 0) + 1;
+        });
+        return counts;
+    };
 
-            // perform operation when input is cleared
-            setGpcListAE([]);
-            setUnitCodeAE([])
-            setvalue(prevValue => ({
-                ...prevValue,
-                assignEmployee: [] // Change to assignEmployee
-            }))
-            return;
-        }
-
-        // postapi(newInputValue.assignEmployee); // Change to assignEmployee
-        setAutocompleteLoadingAE(true);
-        setOpenAE(true);
-        try {
-            // Cancel any pending requests
-            if (abortControllerRefAE.current) {
-                abortControllerRefAE.current.abort();
-            }
-            // Create a new AbortController
-            abortControllerRefAE.current = new AbortController();
-            // I don't know what is the response of your api but integrate your api into this block of code thanks 
-            axios.get('/api/EmployeeID_GET_LIST')
-                .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
-                    // const data = response?.data?.recordset;
-                    const data = response?.data?.recordset.map(item => ({
-                        ...item,
-                        assignEmployee: item.EmployeeID, // Change EmployeeID to assignEmployee
-                        EmployeeName:item.Firstname
-                    }));
-                    //name state da setdropname
-                    //or Id state da setGpcList da 
-                    setUnitCodeAE(data ?? [])
-                    setOpenAE(true);
-                    setAutocompleteLoadingAE(false);
-                    // 
-                })
-                .catch((error) => {
-                    console.log('-----', error);
-
-                }
-                );
-
-        }
-
-
-        catch (error) {
-            if (error?.name === 'CanceledError') {
-                // Ignore abort errors
-                setvalue(prevValue => ({
-                    ...prevValue,
-                    assignEmployee: [] // Change to assignEmployee
-                }))
-                setAutocompleteLoadingAE(true);
-                console.log(error)
-                return;
-            }
-            console.error(error);
-            console.log(error)
-            setUnitCodeAE([])
-            setOpenAE(false);
-            setAutocompleteLoadingAE(false);
-        }
-    }
-
-    const handleGPCAutoCompleteChangeAE = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
-        if (value === null || value === ' -') {
-            setvalue(prevValue => ({
-                ...prevValue,
-                assignEmployee: [] // Change to assignEmployee
-            }));
-        }
-        if (value && value.assignEmployee) { // Change to assignEmployee
-
-            setvalue(prevValue => ({
-                ...prevValue,
-                assignEmployee: value.assignEmployee // Change to assignEmployee
-            }));
-            console.log('Received value----------:', value.assignEmployee);
-        } else {
-            console.log('Value or value.assignEmployee is null:', value); // Debugging line
-        }
-    
-    }
-
-
+    // Get the data first
+    const duplicatesCount = countDuplicates(getdata, 'description');
    
 
+    // Extract unique descriptions
+    const uniqueDescriptions = Array.from(new Set(getdata.map(row =>  row.description)));
+    // const uniqueDesID = Array.from(new Set(datanumber.map(row => row.AssetItemTagID)));
+    // console.log('uniqueDescriptions-------------------------', uniqueDesID);
+   
+    // Create filteredRows with unique descriptions and counts
+    const filteredRows = uniqueDescriptions.map((description, index) => ({
 
-  return (
-    <div>
-          <div className="row mx-auto formsection">
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                  <div className='emailsection position-relative d-grid my-2'>
-                      <label htmlFor='completeemployee' className='lablesection color3 text-start mb-1'>
-                          Completed By Employee
-                      </label>
-                    
+        id: index + 1,
+        AssetItemDescription: description,
+        AssetItemTagID: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '', 
+        ASQS: getdata.find(row => row.description === description)?.saq || 0,
+        AssetQty: duplicatesCount[description] || 0,
+        AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
+        AssetCategory: getdata[index].records ? getdata[index].records.data[0].AssetCategory : '',
+        AssetSubCategory: getdata[index].records ? getdata[index].records.data[0].AssetSubCategory : '',
+        RequestDateTime: getdata[index].records ? getdata[index].records.data[0].RequestDateTime : '',
+        Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
+        Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
+    }));
 
-                      <Autocomplete
-                          id="serachGpc"
-                          className='rounded inputsection py-0 mt-0'
-                          required
-                          options={unitCodeAE} // Use the formattedGpcList here
-                          getOptionLabel={(option) =>
-                              option?.assignEmployee // Change to assignEmployee
-                                  ? option.assignEmployee + ' - ' + option.EmployeeName
-                                  : ''
-                          }
-                          getOptionSelected={(option, value) => option.assignEmployee === value.assignEmployee} // Change to assignEmployee
-                          onChange={handleGPCAutoCompleteChangeAE}
-                          renderOption={(props, option) => (
-                              <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                  {option.assignEmployee} - {option.EmployeeName}
-                              </li>
-                          )}
-                          value={value}
-                          onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChangeAE(event, newInputValue, params)}
-                          loading={autocompleteLoadingAE}
-                          open={openAE}
-                          onOpen={() => {
-                              // setOpenAE(true);
-                          }}
-                          onClose={() => {
-                              setOpenAE(false);
-                          }}
-                          renderInput={(params) => (
-                              <TextField
-                                  {...params}
-                                  placeholder='Employee Number'
-                                  InputProps={{
-                                      ...params.InputProps,
-                                      endAdornment: (
-                                          <React.Fragment>
-                                              {autocompleteLoadingAE ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
-                                              {params.InputProps.endAdornment}
-                                          </React.Fragment>
-                                      ),
-                                  }}
-                                  sx={{
-                                      '& label.Mui-focused': {
-                                          color: '#000000',
-                                      },
-                                      '& .MuiInput-underline:after': {
-                                          borderBottomColor: '#00006a',
-                                          color: '#000000',
-                                      },
-                                      '& .MuiOutlinedInput-root': {
-                                          '&:hover fieldset': {
-                                              borderColor: '#00006a',
-                                              color: '#000000',
-                                          },
-                                          '&.Mui-focused fieldset': {
-                                              borderColor: '#00006a',
-                                              color: '#000000',
-                                          },
-                                      },
-                                  }}
-                              />
-                          )}
-                      />
-                
+    // Now you can loop through the filteredRows and access duplicatesCount to display counts alongside entries
+    filteredRows.forEach(row => {
+        const description = row.AssetItemDescription;
+        const count = row.AssetQty;
+        const AssetItemTagID = "sdf";
 
+        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
 
+    });
 
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
 
-                  </div>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                  <div className="emailsection position-relative d-grid my-2">
-                      <label
-                          htmlFor="employeename"
-                          className="lablesection color3 text-start mb-1">
-                          Employee Name
-                      </label>
-                      <input
-                          types='text'
-                          id='employeename'
-                          value={value.EmployeeName}
-                          className='rounded inputsection py-2'
-                          placeholder='Employee Name'
-                          required
-                      ></input>
-                      <p
-                          className='position-absolute text-end serachicon'
-                      >
-                          <SearchOutlined className=' serachicon' />
-                      </p>
-                  </div>
-              </div>
-          </div>
-    </div>
-  )
+    return (
+        <div>
+            <div className='bg'>
+                <div className=''>
+                    <Box sx={{ display: 'flex' }}>
+                        <Siderbar />
+                        <AppBar className="fortrans locationfortrans" position="fixed">
+                            <Toolbar>
+                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                    <p className="text-center my-auto mx-auto">Work Request</p>
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+                        <div className="topermaringpage mb-4 container">
+                            <div className="py-3">
+                                {/* Top section */}
+                                <div className="d-flex justify-content-between my-auto">
+                                    <p className='color1 workitoppro my-auto'>Create Work  Request</p>
+                                    
+                                </div>
+                                {/* Table section */}
+                                <div style={{ height: 300, width: '100%' }}>
+                                    <DataGrid
+                                        rows={filteredRows}
+                                        columns={columns}
+                                        pagination
+                                        rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                        paginationModel={paginationModel}
+                                        onPaginationModelChange={setPaginationModel}
+                                        checkboxSelection
+                                        disableRowSelectionOnClick
+                                        disableMultipleSelection
+                                    />
+
+                                </div>
+                                {/*Button section*/}
+                            </div>
+                        </div>
+                    </Box>
+                </div>
+            </div >
+            <ToastContainer />
+        </div >
+    )
 }
 
-export default Testing
+export default CreateWorkRequest
