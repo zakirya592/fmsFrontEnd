@@ -426,12 +426,12 @@ function MainCleaningWork() {
                     <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Order Number</label>
+                          Work Request #</label>
 
                         <input
                           types='text'
                           id='Employeenumber'
-                          placeholder="Select Employee # "
+                          placeholder="Select Work Request # "
                           value={requestByEmployee}
                           className='rounded inputsection py-2'
                           onChange={(e) => setrequestByEmployee(e.target.value)}
@@ -443,27 +443,6 @@ function MainCleaningWork() {
                         </p>
                       </div>
                     </div>
-                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5">
-                      <div className='emailsection position-relative d-grid my-2'>
-                        <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Order Status
-                        </label>
-
-                        <select
-                          id='RequestStatus'
-                          value={RequestStatusFilterValue}
-                          className='rounded inputsection py-2'
-                          onChange={(e) => setRequestStatusFilterValue(e.target.value)}
-                        >
-                          <option value=''>Select Status</option>
-                          <option value='Open'>Open</option>
-                          <option value='Closed'>Closed</option>
-                          <option value='Cancelled'>Cancelled</option>
-                        </select>
-
-                      </div>
-                    </div>
-
                   </div>
                               {/* table section */}
                               <div style={{ height: 400, width: '100%' }}>
