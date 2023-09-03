@@ -695,7 +695,7 @@ const [emplid, setemplid] = useState()
             DepartmentCode: value.DepartmentCode,
             BuildingCode: value.BuildingCode,
             LocationCode: value.LocationCode,
-            MaintenanceDescription: value.maindescript,
+            MaintenanceDescription: value.MaintenanceDescription,
             Frequency: selectedOption,
             ScheduleStartDateTime: value.Schedulestarttime,
             ScheduleEndDateTime: value.Scheduleendtime,
