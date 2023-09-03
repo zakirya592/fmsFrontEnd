@@ -35,8 +35,8 @@ function Mainworkordeer() {
         const printWindow = window.open('', '_blank');
         const selectedData = tableData.map((row, index) => ({
             'SEQ': index + 1,
-            'WORK REQUEST NUMBER': row.RequestNumber,
-            'WORK TYPE': row.WorkStatus,
+            'Work Request Number': row.RequestNumber,
+            'Work Type': row.WorkStatus,
             'Asset Item Tag': row.AssetItemTagID,
             'Work Priority': row.WorkPriority,
             'Request Date': row.RequestDateTime,
@@ -60,9 +60,9 @@ function Mainworkordeer() {
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
-            <td>${row['Work Request Number<']}</td>
-            <td>${row['ORDER Status']}</td>
-            <td>${row['Employee ID']}</td>
+            <td>${row['Work Request Number']}</td>
+             <td>${row['Work Type']}</td>
+            <td>${row['Asset Item Tag']}</td>
             <td>${row['Work Priority']}</td>
             <td>${row['Request Date']}</td>
             <td>${row['Department Code']}</td>
@@ -195,8 +195,9 @@ function Mainworkordeer() {
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem disabled={params.row.WorkStatus === 'This Work Order is already closed..'} onClick={(() => {
+                    <MenuItem  onClick={(() => {
                         navigate(`/Preventive/update/${params.row.RequestNumber}`)
+                        // console.log(params.row.RequestNumber);
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
@@ -370,7 +371,7 @@ function Mainworkordeer() {
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
             console.log('Post the Data:', firstSelectedRow.WorkStatus);
-            navigate(`/Workorder/Updata/${firstSelectedRow.RequestNumber}`);
+            navigate(`/Preventive/update/${firstSelectedRow.RequestNumber}`)
         }
 
 
@@ -426,7 +427,7 @@ function Mainworkordeer() {
                     <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Order Number</label>
+                          Work Request Numbe</label>
 
                         <input
                           types='text'
@@ -443,27 +444,6 @@ function Mainworkordeer() {
                         </p>
                       </div>
                     </div>
-                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5">
-                      <div className='emailsection position-relative d-grid my-2'>
-                        <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Order Status
-                        </label>
-
-                        <select
-                          id='RequestStatus'
-                          value={RequestStatusFilterValue}
-                          className='rounded inputsection py-2'
-                          onChange={(e) => setRequestStatusFilterValue(e.target.value)}
-                        >
-                          <option value=''>Select Status</option>
-                          <option value='Open'>Open</option>
-                          <option value='Closed'>Closed</option>
-                          <option value='Cancelled'>Cancelled</option>
-                        </select>
-
-                      </div>
-                    </div>
-
                   </div>
                               {/* table section */}
                               <div style={{ height: 400, width: '100%' }}>
