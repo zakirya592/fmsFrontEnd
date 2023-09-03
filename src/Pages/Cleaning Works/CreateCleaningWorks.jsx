@@ -584,8 +584,8 @@ function CreateCleaningWorks() {
                                 <div className="row mx-auto formsection">
 
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
+                                        <div className='emailsection position-relative d-grid my-1'>
+                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start'>
                                                 Employee
                                             </label>
                                         </div>
