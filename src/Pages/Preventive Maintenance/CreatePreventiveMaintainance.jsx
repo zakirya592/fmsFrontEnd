@@ -26,10 +26,6 @@ function CreatePreventiveMaintainance() {
     const [AssetCategory, setAssetCategory] = useState('')
     const [Manufacturer, setManufacturer] = useState('')
     const [Model, setModel] = useState('')
-    const [Scheduling, setScheduling] = useState('')
-    const [Departmentcode, setDepartmentcode] = useState('')
-    const [Building, setBuilding] = useState('')
-    const [assetType, setAssetType] = useState('')
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
 
     const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
@@ -531,8 +527,8 @@ function CreatePreventiveMaintainance() {
 
     const Createapi = async () => {
         await axios.post(`/api/PreventiveMaintenance_post`, {
-            RequestNumber: value.EmployeeID,
-            EmployeeID: value.RequestNumber,
+            RequestNumber: value.RequestNumber,
+            EmployeeID: value.EmployeeID,
             RequestDateTime: value.RequestDateTime,
             WorkType: value.WorkType,
             WorkPriority: value.WorkPriority,
@@ -551,7 +547,7 @@ function CreatePreventiveMaintainance() {
                 if (res.status == 201) {
                     Swal.fire({
                         title: "Success",
-                        text: `Preventive ${value.EmployeeID} has been created`,
+                        text: `Preventive ${value.RequestNumber} has been created`,
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then((result) => {
@@ -561,12 +557,19 @@ function CreatePreventiveMaintainance() {
                         }
                     });
                 }
+                if (res.status == 404){
+                    Swal.fire({
+                        title: "Error",
+                        text: "RequestNumber is required",
+                        icon: "error",
+                    })
+                }
             })
             .catch((err) => {
                 console.log(err);
                 Swal.fire({
                     title: "Error",
-                    text: "This Employee Number already exist",
+                    text: "RequestNumber is required",
                     icon: "error",
                 })
             });
@@ -620,7 +623,6 @@ function CreatePreventiveMaintainance() {
                                         <Autocomplete
                                             id="serachGpc"
                                             className='rounded inputsection py-0 mt-0'
-                                            required
                                             options={unitCode} // Use the formattedGpcList here
                                             // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                                             getOptionLabel={(option) =>
@@ -695,8 +697,8 @@ function CreatePreventiveMaintainance() {
 
                                             <Autocomplete
                                                 id="completeemployee"
-                                                className='rounded inputsection py-0 mt-0'
                                                 required
+                                                className='rounded inputsection py-0 mt-0'
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber

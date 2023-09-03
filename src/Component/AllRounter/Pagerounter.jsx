@@ -184,8 +184,7 @@ function Pagerounter() {
           <Route exact path='/Preventive' element={<MainPreventiveMaintenance />} />
           <Route exact path='/CreatePreventive' element={<CreatePreventiveMaintenance />} />
           <Route exact path='/Preventive/view/:userId' element={<ViewPreventive />} />
-          <Route exact path='/Preventive/update/:userid' element={<UpdatePreventive />} />
-
+          <Route exact path='/Preventive/update/:userId' element={<UpdatePreventive />} />
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<MainCleaningWork />} />
           <Route exact path='/CreateCleaningWork' element={<CreateCleaningWork />} />
