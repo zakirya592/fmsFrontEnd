@@ -24,8 +24,6 @@ function CreateCleaningWorks() {
     const navigate = useNavigate();
 
     const [WorkRequest, setWorkRequest] = useState('')
-    const [Scheduling, setScheduling] = useState('')
-
     //dropdowns
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
@@ -34,13 +32,15 @@ function CreateCleaningWorks() {
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownCleaning, setdropdownCleaning] = useState([])
     const[dropdownWorkTrade, setdropdownWorkTrade] = useState([])
+    const[dropdownSchedPriorityCode, setdropdownSchedPriorityCode] = useState([])
     const [value, setvalue] = useState({
         EmployeeID: null,
         DepartmentCode: 'Select Dept Code',
         BuildingCode: 'Select Building',
         Location: 'Select Location',
         CleaningGroupCode:"Select Cleaning Group",
-        WorkTradeCode:"Select Work Trade"
+        WorkTradeCode:"Select Work Trade",
+        SchedPriorityCode:"Select Scheduling"
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -76,6 +76,14 @@ useEffect(() => {
         axios.get(`/api/CleaningGroup_GET_LIST`).then((res) => {
             // console.log("Department LIST", res.data.recordset);
             setdropdownCleaning(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
+        // Scheduling
+        axios.get(`/api/SchedPriority_GET_LIST`).then((res) => {
+            // console.log("Department LIST", res.data.recordset);
+            setdropdownSchedPriorityCode(res.data.recordsets[0])
         })
             .catch((err) => {
                 //// console.log(err);;
@@ -833,16 +841,23 @@ className='rounded inputsection py-2'
                                   <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                       <div className='emailsection position-relative d-grid my-2'>
                                           <label htmlFor='Scheduling' className='lablesection color3 text-start mb-1'>
-                                              Scheduling Priority*<span className='star'>*</span>
+                                              Scheduling Priority
                                           </label>
-                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="Scheduling" aria-label="Floating label select example" value={Scheduling}
-                                              onChange={(event) => {
-                                                  setScheduling(event.target.value)
-                                              }}>
-                                              <option selected className='inputsectiondropdpwn'>Select Scheduling Priority</option>
-                                              <option value={"First"}>One</option>
-                                              <option value={"Second"}>Two</option>
-                                              <option value={"three"}>Three</option>
+                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={value.SchedPriorityCode}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        SchedPriorityCode: e.target.value
+                                                    }))
+                                                }}>
+                                                <option className='inputsectiondropdpwn' value={value.SchedPriorityCode}>{value.SchedPriorityCode}</option>
+                                                {
+                                                    dropdownSchedPriorityCode && dropdownSchedPriorityCode.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.SchedPriorityCode}>{itme.SchedPriorityCode}</option>
+                                                        )
+                                                    })
+                                                }
                                           </select>
                                       </div>
                                   </div>
