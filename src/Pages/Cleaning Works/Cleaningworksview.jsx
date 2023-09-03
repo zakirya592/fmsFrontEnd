@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';import Swal from "sweetalert2";
+import axios from 'axios';
 import excel from "../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
@@ -24,113 +25,60 @@ function Cleaningworksview() {
     const navigate = useNavigate();
 
     const [WorkRequest, setWorkRequest] = useState('')
-    //dropdowns
-    const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
-    const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
-    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
-    const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
-    const [dropdownLocation, setdropdownLocation] = useState([])
-    const [dropdownCleaning, setdropdownCleaning] = useState([])
-    const[dropdownWorkTrade, setdropdownWorkTrade] = useState([])
-    const[dropdownSchedPriorityCode, setdropdownSchedPriorityCode] = useState([])
-    const [value, setvalue] = useState({
-        EmployeeID: null,
-        DepartmentCode: 'Select Dept Code',
-        BuildingCode: 'Select Building',
-        Location: 'Select Location',
-        CleaningGroupCode:"Select Cleaning Group",
-        WorkTradeCode:"Select Work Trade",
-        SchedPriorityCode:"Select Scheduling"
-    })
+    const [Firstname, setFirstname] = useState('')
+    const [Middlename, setMiddlename] = useState('')
+    const [Lastname, setLastname] = useState('')
+    const [WorkType, setWorkType] = useState('')
+    const [WorkTypeDescription, setWorkTypeDescription] = useState('')
+    const [WorkPriority, setWorkPriority] = useState('')
+    const [workTrade, setworkTrade] = useState('')
+    const [AssetCode, setAssetCode] = useState('')
+    const [AssetCategory, setAssetCategory] = useState('')
+    const [Manufacturer, setManufacturer] = useState('')
+    const [Model, setModel] = useState('')
+    const [Scheduling, setScheduling] = useState('')
+    const [Departmentcode, setDepartmentcode] = useState('')
+    const [Location, setLocation] = useState('')
+    const [Building, setBuilding] = useState('')
+    const [Departmentname, setDepartmentname] = useState('')
+
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
-    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
     const abortControllerRef = useRef(null);
-    const [DeptDesc, setDeptDesc] = useState([])
-    const[CleaningDesc,setCleaningDesc] = useState([])
-
-
     // current date and time 
-const getCurrentDateTimeString = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
 
-// all drop down api 
-useEffect(() => {
-    // Building_LIST
-    axios.get(`/api/Building_LIST`).then((res) => {
-        // console.log("dropdownBuilding LIST", res.data.recordset);
-        setdropdownBuildingLIST(res.data.recordsets[0])
+    const [value, setvalue] = useState({
+        RequestDateTime: getCurrentDateTimeString(), // Initialize with current date and time
+        EmployeeID: null,
     })
-        .catch((err) => {
-            //// console.log(err);;
-        });
-        // dropdownCleaning
-        axios.get(`/api/CleaningGroup_GET_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
-            setdropdownCleaning(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                //// console.log(err);;
-            });
-        // Scheduling
-        axios.get(`/api/SchedPriority_GET_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
-            setdropdownSchedPriorityCode(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                //// console.log(err);;
-            });
-    // WorkType_LIST
-    axios.get(`/api/WorkType_LIST`).then((res) => {
-        // console.log("WorkType LIST", res.data.recordset);
-        setdropdownworktypesLIST(res.data.recordsets[0])
-    })
-        .catch((err) => {
-            //// console.log(err);;
-        });
-    // WorkPriority_LIST
-    axios.get(`/api/WorkPriority_LIST`).then((res) => {
-        // console.log("WorkPriority LIST", res.data.recordset);
-        setdropdownWorkPriorityLIST(res.data.recordsets[0])
-    })
-        .catch((err) => {
-            //// console.log(err);;
-        });
-                // Location
-                axios.get(`/api/Location_LIST`).then((res) => {
-                    // console.log("Loaction list", res.data.recordset);
-                    setdropdownLocation(res.data.recordsets[0])
-                })
-                    .catch((err) => {
-                        // console.log(err);;
-                    });
-                    // Work Trade
-                    axios.get(`/api/WorkTRADE_GET_LIST`).then((res) => {
-                        // console.log("Department LIST", res.data.recordset);
-                        setdropdownWorkTrade(res.data.recordsets[0])
-                    })
-                        .catch((err) => {
-                            //// console.log(err);;
-                        });
-            // dropdownDepartmentLIST
-            axios.get(`/api/Department_LIST`).then((res) => {
-                // console.log("Department LIST", res.data.recordset);
-                setdropdownDepartmentLIST(res.data.recordsets[0])
+
+    const [DeptDesc, setDeptDesc] = useState([])
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setDepartmentcode((prevValue) => ({
+            ...prevValue,
+            DepartmentCode: e.target.value,
+        }));
+        axios.get(`/api/Department_desc_LIST/${Deptnale}`)
+            .then((res) => {
+                // console.log(res.data);
+                setDeptDesc(res.data.recordset[0].DepartmentDesc)
             })
-                .catch((err) => {
-                    //// console.log(err);;
-                });
-
-}, [])
-
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
@@ -230,7 +178,7 @@ useEffect(() => {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTradeCode,
+                    WorkTrade,
                     // RequestNumber
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
@@ -243,7 +191,7 @@ useEffect(() => {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTradeCode,
+                    WorkTrade,
                     // RequestNumber
                 }));
                 console.log('-------------------', res.data.recordsets[0][0]);
@@ -263,56 +211,6 @@ useEffect(() => {
                 //// console.log(err);;
             });
     }
-
-    // descriptions
-    const [WorkTypedesc, setWorkTypedesc] = useState([])
-    const Workypesdesc = (e) => {
-        const Deptnale = e.target.value;
-        setvalue(prevValue => ({
-            ...prevValue,
-            WorkType: e.target.value
-        }))
-        axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
-            .then((res) => {
-                // console.log(res.data);
-                setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
-            })
-            .catch((err) => {
-                // console.log(err);;
-            });
-    }
-    // department
-        const handleProvinceChange = (e) => {
-            const Deptnale = e.target.value;
-            setvalue((prevValue) => ({
-                ...prevValue,
-                DepartmentCode: e.target.value,
-            }));
-            axios.get(`/api/Department_desc_LIST/${Deptnale}`)
-                .then((res) => {
-                    // console.log(res.data);
-                    setDeptDesc(res.data.recordset[0].DepartmentDesc)
-                })
-                .catch((err) => {
-                    //// console.log(err);;
-                });
-        }
-        // Cleaning
-        const handleCleaningChange = (e) => {
-            const Deptnale = e.target.value;
-            setvalue((prevValue) => ({
-                ...prevValue,
-                CleaningGroupCode: e.target.value,
-            }));
-            axios.get(`/api/CleaningGroup_GET_BYID/${Deptnale}`)
-                .then((res) => {
-                    console.log(res.data, "cleaningdsjdf kdsfj");
-                    setCleaningDesc(res.data.recordset[0].CleaningGroupDesc)
-                })
-                .catch((err) => {
-                    //// console.log(err);;
-                });
-        }
     const handleGPCAutoCompleteChange = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
@@ -334,6 +232,8 @@ useEffect(() => {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+
+
   return (
     <>
           <div className='bg'>
@@ -469,19 +369,18 @@ useEffect(() => {
 
                                   <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                       <div className='emailsection d-grid my-2'>
-                                      <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time
-                                            </label>
-<input
-type="datetime-local"
-id="Employdata"
-// value={value.RequestDateTime || getCurrentDateTimeString()} // Use a default value or value.RequestDateTime
-value={getCurrentDateTimeString()}
-// onChange={handleInputChange}
-name="RequestDateTime"
-className='rounded inputsection py-2'
-/>
-
+                                          <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
+                                              Request Date/Time<span className='star'>*</span>
+                                          </label>
+                                          <input
+                                              type="datetime-local"
+                                              id="Employdata"
+                                              // value={value.RequestDateTime || getCurrentDateTimeString()} // Use a default value or value.RequestDateTime
+                                              value={getCurrentDateTimeString()}
+                                            //   onChange={handleInputChange}
+                                              name="RequestDateTime"
+                                              className='rounded inputsection py-2'
+                                          />
 
                                       </div>
                                   </div>
