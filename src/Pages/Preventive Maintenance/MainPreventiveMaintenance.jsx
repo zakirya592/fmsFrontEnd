@@ -36,7 +36,7 @@ function Mainworkordeer() {
         const selectedData = tableData.map((row, index) => ({
             'SEQ': index + 1,
             'Work Request Number': row.RequestNumber,
-            'Work Type': row.WorkStatus,
+            'Work Type': row.WorkType,
             'Asset Item Tag': row.AssetItemTagID,
             'Work Priority': row.WorkPriority,
             'Request Date': row.RequestDateTime,
