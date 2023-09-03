@@ -29,7 +29,6 @@ function UpdatePreventive() {
     const [Model, setModel] = useState('')
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
 
-    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
     const [open, setOpen] = useState(false);
@@ -46,13 +45,12 @@ function UpdatePreventive() {
     const [bdata, setbata] = useState([])
     const [edata, setedata] = useState([])
     const [requestdata, setrequestdata] = useState([])
-
+const [emplid, setemplid] = useState()
     function postapisas() {
-        console.log(userId);
         axios.post(`/api/getworkRequest_by_EPID`, {
-            'EmployeeID': userId,
+            'EmployeeID': emplid,
         }).then((res) => {
-            // console.log(res.data)
+            console.log('======++++',res.data)
             const {
                 Firstname,
                 Lastname,
@@ -92,7 +90,6 @@ function UpdatePreventive() {
                 DepartmentCode,
                 BuildingCode,
                 LocationCode,
-                WorkTrade,
                 WorkType,
                 MaintenanceDescription,
                 SchedulingPriority,
@@ -114,13 +111,37 @@ function UpdatePreventive() {
                 DepartmentCode,
                 BuildingCode,
                 LocationCode,
-                WorkTrade,
                 MaintenanceDescription,
                 WorkPriority,
                 SchedulingPriority,
                 AssetItemTagID,
             }));
-
+            const Emplid = res.data.recordsets[0][0].EmployeeID
+            axios.post(`/api/getworkRequest_by_EPID`, {
+                'EmployeeID': Emplid,
+            }).then((res) => {
+                console.log('======++++', res.data)
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    // RequestNumber
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    // RequestNumber
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+           
+            setemplid(Emplid)
+            console.log('EmployeeIDEmployeeID', Emplid);
             // requestdata
             const requestda = res.data.recordsets[0][0].RequestDateTime
             const reqdata = moment(requestda).format('YYYY-MM-DD h:mm A')
@@ -286,7 +307,7 @@ function UpdatePreventive() {
                 // console.log(err);;
             });
     }
-    const [WorkTypedesc, setWorkTypedesc] = useState(initialWorkTypeDesc)
+    const [WorkTypedesc, setWorkTypedesc] = useState('')
     const Workypesdesc = (e) => {
         localStorage.setItem('WorkType', e.target.value)
         const Deptnale = e.target.value;

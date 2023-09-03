@@ -28,7 +28,6 @@ function CreatePreventiveMaintainance() {
     const [Model, setModel] = useState('')
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
 
-    const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
     const [open, setOpen] = useState(false);
@@ -147,7 +146,7 @@ function CreatePreventiveMaintainance() {
                 // console.log(err);;
             });
     }
-    const [WorkTypedesc, setWorkTypedesc] = useState(initialWorkTypeDesc)
+    const [WorkTypedesc, setWorkTypedesc] = useState('')
     const Workypesdesc = (e) => {
         localStorage.setItem('WorkType', e.target.value)
         const Deptnale = e.target.value;
