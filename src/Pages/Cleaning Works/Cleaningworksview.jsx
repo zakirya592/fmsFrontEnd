@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import Autocomplete from '@mui/material/Autocomplete';
-import { useNavigate,useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import excel from "../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
@@ -19,11 +19,9 @@ import Swal from "sweetalert2";
 import TextField from '@mui/material/TextField';
 import moment from 'moment';
 
-function Cleaningworksview () {
+function Cleaningworksview() {
     const navigate = useNavigate();
     let { userId } = useParams();
-console.log(userId);
-    const [WorkRequest, setWorkRequest] = useState('')
     //dropdowns
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
@@ -42,8 +40,8 @@ console.log(userId);
         WorkTradeCode: "Select Work Trade",
         SchedPriorityCode: "Select Scheduling",
         Intruction_Remarks: '',
-        Scheduleendtime:"",
-        Schedulestarttime:"",
+        Scheduleendtime: "",
+        Schedulestarttime: "",
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -88,7 +86,8 @@ console.log(userId);
                 SchedulingPriority,
                 WorkPriority,
                 AssetItemTagID,
-                CleaningGroup
+                CleaningGroup,
+                Intruction_Remarks,
             } = res.data.recordsets[0][0];
 
 
@@ -109,13 +108,23 @@ console.log(userId);
                 WorkPriority,
                 SchedulingPriority,
                 AssetItemTagID,
-                CleaningGroup
+                CleaningGroup,
+                Intruction_Remarks
             }));
-            
+            // CleaningGroup_GET_BYID
+            const cleaningGroup = res.data.recordsets[0][0].CleaningGroup
+            axios.get(`/api/CleaningGroup_GET_BYID/${cleaningGroup}`)
+                .then((res) => {
+                    console.log(res.data, "cleaningdsjdf kdsfj");
+                    setCleaningDesc(res.data.recordset[0].CleaningGroupDesc)
+                })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
                 'EmployeeID': Emplid,
-                
+
             }).then((res) => {
                 console.log('======++++', res.data)
                 const {
@@ -204,6 +213,7 @@ console.log(userId);
     useEffect(() => {
         GetgetworkRequest(); // Fetch vendor data when the component mounts
     }, []);
+
     // all drop down api 
     useEffect(() => {
         // Building_LIST
@@ -518,68 +528,16 @@ console.log(userId);
                 }));
             }
         });
-    }    
+    }
     const [selectedOption, setSelectedOption] = useState(null);
-    const Createapi = async () => {
-        await axios.post(`/api/CleaningWorks_post`, {
-            RequestNumber: value.RequestNumber,
-            EmployeeID: value.EmployeeID,
-            RequestDateTime: value.RequestDateTime,
-            WorkType: value.WorkType,
-            CleaningGroup: value.CleaningGroupCode,
-            WorkPriority: value.WorkPriority,
-            Intruction_Remarks:value.Intruction_Remarks,
-            AssetItemTagID: value.AssetItemTagID,
-            DepartmentCode: value.DepartmentCode,
-            BuildingCode: value.BuildingCode,
-            LocationCode: value.LocationCode,
-            MaintenanceDescription: value.maindescript,
-            Frequency: selectedOption,
-            ScheduleStartDateTime: value.Schedulestarttime,
-            ScheduleEndDateTime: value.Scheduleendtime,
-            SchedulingPriority: value.schedulingpriority,
-
-        },)
-            .then((res) => {
-                console.log('Add work api first api', res.data);
-                if (res.status == 201) {
-                    Swal.fire({
-                        title: "Success",
-                        text: `Preventive ${value.RequestNumber} has been created`,
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Navigate to the next page when "OK" is clicked
-                            navigate('/cleaning')
-                        }
-                    });
-                }
-                if (res.status == 404){
-                    Swal.fire({
-                        title: "Error",
-                        text: "RequestNumber is required",
-                        icon: "error",
-                    })
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                Swal.fire({
-                    title: "Error",
-                    text: "RequestNumber is required",
-                    icon: "error",
-                })
-            });
-    };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setvalue((prevValue) => ({
-          ...prevValue,
-          [name]: value,
+            ...prevValue,
+            [name]: value,
         }));
-      };
-      const handleRadioChange = (event) => {
+    };
+    const handleRadioChange = (event) => {
         setSelectedOption(event.target.value);
     };
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
@@ -663,7 +621,7 @@ console.log(userId);
         }
 
     }
-                const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
+    const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
@@ -1144,9 +1102,10 @@ console.log(userId);
                                             <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
                                                 Cleaning Group
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="cleaninggroup" aria-label="Floating label select example" value={value.CleaningGroupCode}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="cleaninggroup" aria-label="Floating label select example"
+                                                value={value.CleaningGroup}
                                                 onChange={handleCleaningChange}          >
-                                                <option value={value.CleaningGroupCode}>{value.CleaningGroupCode}</option>
+                                                <option value="Cleaning Group">Select Cleaning Group</option>
 
                                                 {
                                                     dropdownCleaning && dropdownCleaning.map((itme, index) => {
@@ -1178,18 +1137,18 @@ console.log(userId);
 
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-    Instructions/Remarks
-</label>
-<div className="form-floating inputsectiondropdpwn">
-    <textarea
-        className='rounded inputsectiondropdpwn w-100 color2 py-2'
-        placeholder="Describe the cleaning works"
-        id="ProblemDescription"
-        name="Intruction_Remarks" // Add a name attribute to the textarea
-        value={value.Intruction_Remarks} // Ensure it's bound to the value in your state
-        onChange={handleInputChange} // Include this if you want to update the state on input changes
-    ></textarea>
+                                            <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
+                                                Instructions/Remarks
+                                            </label>
+                                            <div className="form-floating inputsectiondropdpwn">
+                                                <textarea
+                                                    className='rounded inputsectiondropdpwn w-100 color2 py-2'
+                                                    placeholder="Describe the cleaning works"
+                                                    id="ProblemDescription"
+                                                    name="Intruction_Remarks" // Add a name attribute to the textarea
+                                                    value={value.Intruction_Remarks} // Ensure it's bound to the value in your state
+                                                    onChange={handleInputChange} // Include this if you want to update the state on input changes
+                                                ></textarea>
 
                                             </div>
                                         </div>
@@ -1204,7 +1163,7 @@ console.log(userId);
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
                                                 Schedule-Start Date/Time*
                                             </label>
                                             <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
@@ -1220,7 +1179,7 @@ console.log(userId);
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
                                                 Schedule-End Date/Time*
                                             </label>
                                             <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
@@ -1262,14 +1221,14 @@ console.log(userId);
                                             <label htmlFor='Scheduling' className='lablesection color3 text-start mb-1'>
                                                 Scheduling Priority
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={value.SchedPriorityCode}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={value.SchedulingPriority}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        SchedPriorityCode: e.target.value
+                                                        SchedulingPriority: e.target.value
                                                     }))
                                                 }}>
-                                                <option className='inputsectiondropdpwn' value={value.SchedPriorityCode}>{value.SchedPriorityCode}</option>
+                                                <option className='inputsectiondropdpwn' value="Select Scheduling">Select Scheduling</option>
                                                 {
                                                     dropdownSchedPriorityCode && dropdownSchedPriorityCode.map((itme, index) => {
                                                         return (
@@ -1286,7 +1245,7 @@ console.log(userId);
                                 {/* 6th row */}
                                 <div className="formsection mx-auto p-2 mt-2 ">
                                     <div className=' rounded inputsection py-2 text-start '>
-                                    <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
+                                        <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
                                             Frequency
                                         </label>
 
@@ -1324,8 +1283,6 @@ console.log(userId);
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className="d-flex">
 
-                                        <button type="button" class="border-0 px-3 mx-2  savebtn py-2"onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
-                                        <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2"><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
                                     </div>
 
                                 </div>
@@ -1338,4 +1295,4 @@ console.log(userId);
     )
 }
 
-export default  Cleaningworksview
+export default Cleaningworksview
