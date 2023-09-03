@@ -25,7 +25,6 @@ function CreateCleaningWorks() {
 
     const [WorkRequest, setWorkRequest] = useState('')
     const [workTrade, setworkTrade] = useState('')
-    const [AssetCode, setAssetCode] = useState('')
     const [Scheduling, setScheduling] = useState('')
 
     //dropdowns
@@ -34,12 +33,13 @@ function CreateCleaningWorks() {
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
-
+    const [dropdownCleaning, setdropdownCleaning] = useState([])
     const [value, setvalue] = useState({
         EmployeeID: null,
         DepartmentCode: 'Select Dept Code',
         BuildingCode: 'Select Building',
-        Location: 'Select Location'
+        Location: 'Select Location',
+        CleaningGroupCode:"Select Cleaning Group"
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -47,6 +47,7 @@ function CreateCleaningWorks() {
     const [open, setOpen] = useState(false);
     const abortControllerRef = useRef(null);
     const [DeptDesc, setDeptDesc] = useState([])
+    const[CleaningDesc,setCleaningDesc] = useState([])
 
 
     // current date and time 
@@ -70,6 +71,14 @@ useEffect(() => {
         .catch((err) => {
             //// console.log(err);;
         });
+        // dropdownCleaning
+        axios.get(`/api/CleaningGroup_GET_LIST`).then((res) => {
+            // console.log("Department LIST", res.data.recordset);
+            setdropdownCleaning(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
     // WorkType_LIST
     axios.get(`/api/WorkType_LIST`).then((res) => {
         // console.log("WorkType LIST", res.data.recordset);
@@ -291,6 +300,22 @@ useEffect(() => {
                 .then((res) => {
                     // console.log(res.data);
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+        }
+        // Cleaning
+        const handleCleaningChange = (e) => {
+            const Deptnale = e.target.value;
+            setvalue((prevValue) => ({
+                ...prevValue,
+                CleaningGroupCode: e.target.value,
+            }));
+            axios.get(`/api/CleaningGroup_GET_BYID/${Deptnale}`)
+                .then((res) => {
+                    console.log(res.data, "cleaningdsjdf kdsfj");
+                    setCleaningDesc(res.data.recordset[0].CleaningGroupDesc)
                 })
                 .catch((err) => {
                     //// console.log(err);;
@@ -723,16 +748,19 @@ className='rounded inputsection py-2'
                                   <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                       <div className='emailsection position-relative d-grid my-2'>
                                           <label htmlFor='AssetCode' className='lablesection color3 text-start mb-1'>
-                                              Cleaning Group<span className='star'>*</span>
+                                              Cleaning Group
                                           </label>
-                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetCode" aria-label="Floating label select example" value={AssetCode}
-                                              onChange={(event) => {
-                                                  setAssetCode(event.target.value)
-                                              }}>
-                                              <option selected className='inputsectiondropdpwn'>Select Cleaning Group</option>
-                                              <option value={"First"}>One</option>
-                                              <option value={"Second"}>Two</option>
-                                              <option value={"three"}>Three</option>
+                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="cleaninggroup" aria-label="Floating label select example" value={value.CleaningGroupCode}
+                                                                               onChange={handleCleaningChange}          >
+                                                <option value={value.CleaningGroupCode}>{value.CleaningGroupCode}</option>
+
+                                                {
+                                                    dropdownCleaning && dropdownCleaning.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.CleaningGroupCode}>{itme.CleaningGroupCode}</option>
+                                                        )
+                                                    })
+                                                }
                                           </select>
                                       </div>
                                   </div>
@@ -740,10 +768,10 @@ className='rounded inputsection py-2'
                                   <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                       <div className='emailsection d-grid my-2'>
                                           <label htmlFor='AssetDescription' className='lablesection color3 text-start mb-1'>
-                                              Group Description<span className='star'>*</span>
+                                              Group Description
                                           </label>
                                           <div className="form-floating inputsectiondropdpwn">
-                                              <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription"></textarea>
+                                              <textarea className='rounded inputsectiondropdpwn w-100 color2 py-1' placeholder="Asset Description " id="AssetDescription" value={CleaningDesc}></textarea>
 
                                           </div>
                                       </div>
