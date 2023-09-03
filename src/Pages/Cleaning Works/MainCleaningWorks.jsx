@@ -190,13 +190,13 @@ function MainCleaningWork() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem onClick={(() => {
-                        navigate(`/Preventive/view/${params.row.RequestNumber}`)
+                        navigate(`/cleaning/view/${params.row.RequestNumber}`)
                     })}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
                     <MenuItem disabled={params.row.WorkStatus === 'This Work Order is already closed..'} onClick={(() => {
-                        navigate(`/Preventive/update/${params.row.RequestNumber}`)
+                        navigate(`/Cleaning/update/${params.row.RequestNumber}`)
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />

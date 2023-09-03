@@ -12,6 +12,8 @@ import UpdatePreventive from '../../Pages/Preventive Maintenance/UpdatePreventiv
 import CreatePreventiveMaintenance from '../../Pages/Preventive Maintenance/CreatePreventiveMaintainance'
 import MainCleaningWork from '../../Pages/Cleaning Works/MainCleaningWorks'
 import CreateCleaningWork from '../../Pages/Cleaning Works/CreateCleaningWorks'
+import Cleaningworksview from '../../Pages/Cleaning Works/Cleaningworksview'
+import UpdateCleaningWork from '../../Pages/Cleaning Works/UpdateCleaningWork'
 import SystemModules from "../../Pages/UserManagement/SystemModules/SystemModules"
 import UserAuthority from '../../Pages/UserManagement/UserAuthority/UserAuthorityLevel'
 import UserCredentials from '../../Pages/UserManagement/UserCredentials/UserCredentials'
@@ -186,6 +188,8 @@ function Pagerounter() {
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<MainCleaningWork />} />
           <Route exact path='/CreateCleaningWork' element={<CreateCleaningWork />} />
+          <Route exact path='/Cleaning/view/:userid' element={<Cleaningworksview />} />
+          <Route exact path='/Cleaning/update/:userid' element={<UpdateCleaningWork />} />
 
 
           {/* Asset Management */}
