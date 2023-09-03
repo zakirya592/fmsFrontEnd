@@ -328,7 +328,7 @@ useEffect(() => {
                 ...prevValue,
                 EmployeeID: value.EmployeeID
             }));
-            console.log('Received value----------:', value.EmployeeID);
+            console.log('Received value------ the data ----:', value.EmployeeID);
             localStorage.setItem('EmployeeIDset', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
