@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 // import "./Preventive.css"
 import { useNavigate } from 'react-router-dom';
-
+import Swal from "sweetalert2";
+import axios from 'axios';
 import excel from "../../Image/excel.png"
 import PrintIcon from '@mui/icons-material/Print';
 // import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
@@ -38,6 +39,199 @@ function Cleaningworksview() {
     const [Location, setLocation] = useState('')
     const [Building, setBuilding] = useState('')
     const [Departmentname, setDepartmentname] = useState('')
+
+    const [unitCode, setUnitCode] = useState([]);
+    const [gpcList, setGpcList] = useState([]); // gpc list
+    const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+    const abortControllerRef = useRef(null);
+    // current date and time 
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
+    const [value, setvalue] = useState({
+        RequestDateTime: getCurrentDateTimeString(), // Initialize with current date and time
+        EmployeeID: null,
+    })
+
+    const [DeptDesc, setDeptDesc] = useState([])
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setDepartmentcode((prevValue) => ({
+            ...prevValue,
+            DepartmentCode: e.target.value,
+        }));
+        axios.get(`/api/Department_desc_LIST/${Deptnale}`)
+            .then((res) => {
+                // console.log(res.data);
+                setDeptDesc(res.data.recordset[0].DepartmentDesc)
+            })
+            .catch((err) => {
+                // console.log(err);;
+            });
+    }
+
+    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcList([]); // Clear the data list if there is no input
+            setUnitCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            return;
+        }
+        if (newInputValue === null) {
+
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoading(true);
+        setOpen(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRef.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCode(data ?? [])
+                    setOpen(true);
+                    setAutocompleteLoading(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    EmployeeID: []
+                }))
+                setAutocompleteLoading(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCode([])
+            setOpen(false);
+            setAutocompleteLoading(false);
+        }
+
+    }
+    function postapi(EmployeeID) {
+        axios.post(`/api/getworkRequest_by_EPID`, {
+            EmployeeID,
+        }).then((res) => {
+            // console.log(res.data)
+            if (res.data.recordsets[0].length === 0) {
+                Swal.fire('Oops...!', 'Employee ID not found!', 'error')
+                // setModelError(true);
+            } else {
+
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                    WorkTrade,
+                    // RequestNumber
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    LandlineNumber,
+                    DepartmentCode,
+                    BuildingCode,
+                    LocationCode,
+                    WorkTrade,
+                    // RequestNumber
+                }));
+                console.log('-------------------', res.data.recordsets[0][0]);
+                const Depauto = res.data.recordsets[0][0].DepartmentCode
+                console.log('-------------------------------------------', Depauto);
+                axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                    .then((res) => {
+                        setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                    })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
+
+            }
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
+    }
+    const handleGPCAutoCompleteChange = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === ' -') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }));
+        }
+        if (value && value.EmployeeID) {
+            postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: value.EmployeeID
+            }));
+            console.log('Received value----------:', value.EmployeeID);
+            localStorage.setItem('EmployeeIDset', value.EmployeeID);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+
+
   return (
     <>
           <div className='bg'>
@@ -129,8 +323,15 @@ function Cleaningworksview() {
                                           <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
                                               Request Date/Time<span className='star'>*</span>
                                           </label>
-                                          <input type="datetime-local" id="Employdata" name="birthdaytime" className='rounded inputsection py-2' />
-
+                                          <input
+                                              type="datetime-local"
+                                              id="Employdata"
+                                              // value={value.RequestDateTime || getCurrentDateTimeString()} // Use a default value or value.RequestDateTime
+                                              value={getCurrentDateTimeString()}
+                                            //   onChange={handleInputChange}
+                                              name="RequestDateTime"
+                                              className='rounded inputsection py-2'
+                                          />
 
                                       </div>
                                   </div>
