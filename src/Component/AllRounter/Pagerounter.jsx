@@ -188,8 +188,8 @@ function Pagerounter() {
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<MainCleaningWork />} />
           <Route exact path='/CreateCleaningWork' element={<CreateCleaningWork />} />
-          <Route exact path='/Cleaning/view/:userid' element={<Cleaningworksview />} />
-          <Route exact path='/Cleaning/update/:userid' element={<UpdateCleaningWork />} />
+          <Route exact path='/Cleaning/view/:userId' element={<Cleaningworksview />} />
+          <Route exact path='/Cleaning/update/:userId' element={<UpdateCleaningWork />} />
 
 
           {/* Asset Management */}

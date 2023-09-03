@@ -406,7 +406,7 @@ function CreateCleaningWorks() {
                 if (res.status == 201) {
                     Swal.fire({
                         title: "Success",
-                        text: `Preventive ${value.RequestNumber} has been created`,
+                        text: `CleaningWork ${value.RequestNumber} has been created`,
                         icon: "success",
                         confirmButtonText: "OK",
                     }).then((result) => {
