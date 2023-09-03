@@ -40,7 +40,10 @@ function CreateCleaningWorks() {
         Location: 'Select Location',
         CleaningGroupCode: "Select Cleaning Group",
         WorkTradeCode: "Select Work Trade",
-        SchedPriorityCode: "Select Scheduling"
+        SchedPriorityCode: "Select Scheduling",
+        Intruction_Remarks: '',
+        Scheduleendtime:"",
+        Schedulestarttime:""
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -377,6 +380,69 @@ function CreateCleaningWorks() {
             }
         });
     }    
+    const [selectedOption, setSelectedOption] = useState(null);
+    const Createapi = async () => {
+        await axios.post(`/api/CleaningWorks_post`, {
+            RequestNumber: value.RequestNumber,
+            EmployeeID: value.EmployeeID,
+            RequestDateTime: value.RequestDateTime,
+            WorkType: value.WorkType,
+            CleaningGroup: value.CleaningGroupCode,
+            WorkPriority: value.WorkPriority,
+            Intruction_Remarks:value.Intruction_Remarks,
+            AssetItemTagID: value.AssetItemTagID,
+            DepartmentCode: value.DepartmentCode,
+            BuildingCode: value.BuildingCode,
+            LocationCode: value.LocationCode,
+            MaintenanceDescription: value.maindescript,
+            Frequency: selectedOption,
+            ScheduleStartDateTime: value.Schedulestarttime,
+            ScheduleEndDateTime: value.Scheduleendtime,
+            SchedulingPriority: value.schedulingpriority,
+
+        },)
+            .then((res) => {
+                console.log('Add work api first api', res.data);
+                if (res.status == 201) {
+                    Swal.fire({
+                        title: "Success",
+                        text: `Preventive ${value.RequestNumber} has been created`,
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Navigate to the next page when "OK" is clicked
+                            navigate('/cleaning')
+                        }
+                    });
+                }
+                if (res.status == 404){
+                    Swal.fire({
+                        title: "Error",
+                        text: "RequestNumber is required",
+                        icon: "error",
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                Swal.fire({
+                    title: "Error",
+                    text: "RequestNumber is required",
+                    icon: "error",
+                })
+            });
+    };
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setvalue((prevValue) => ({
+          ...prevValue,
+          [name]: value,
+        }));
+      };
+      const handleRadioChange = (event) => {
+        setSelectedOption(event.target.value);
+    };
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
         console.log('==========+++++++======', newInputValuecompleteemployee)
 
@@ -973,11 +1039,18 @@ function CreateCleaningWorks() {
 
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                                Instructions/Remarks<span className='star'>*</span>
-                                            </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder=" Describe the cleaning works  " id="ProblemDescription"></textarea>
+                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
+    Instructions/Remarks
+</label>
+<div className="form-floating inputsectiondropdpwn">
+    <textarea
+        className='rounded inputsectiondropdpwn w-100 color2 py-2'
+        placeholder="Describe the cleaning works"
+        id="ProblemDescription"
+        name="Intruction_Remarks" // Add a name attribute to the textarea
+        value={value.Intruction_Remarks} // Ensure it's bound to the value in your state
+        onChange={handleInputChange} // Include this if you want to update the state on input changes
+    ></textarea>
 
                                             </div>
                                         </div>
@@ -992,23 +1065,33 @@ function CreateCleaningWorks() {
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
                                                 Schedule-Start Date/Time*
                                             </label>
-                                            <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2' />
-
-
+                                            <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
+                                                value={value.Schedulestarttime}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Schedulestarttime: e.target.value
+                                                    }))
+                                                }} />
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
+                                        <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
                                                 Schedule-End Date/Time*
                                             </label>
-                                            <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2' />
-
-
+                                            <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
+                                                value={value.Scheduleendtime}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Scheduleendtime: e.target.value
+                                                    }))
+                                                }} />
                                         </div>
                                     </div>
 
@@ -1064,38 +1147,32 @@ function CreateCleaningWorks() {
                                 {/* 6th row */}
                                 <div className="formsection mx-auto p-2 mt-2 ">
                                     <div className=' rounded inputsection py-2 text-start '>
-                                        <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
-                                            Frequency<span className='star'>*</span>
+                                    <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
+                                            Frequency
                                         </label>
 
                                         <div className="form-check form-check-inline ms-3">
-                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Daily" value="option1" />
+                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Daily"
+                                                value="Daily"
+                                                checked={selectedOption === "Daily"}
+                                                onChange={handleRadioChange} />
                                             <label className="form-check-label color3 radialable" htmlFor="Daily">Daily</label>
                                         </div>
 
                                         <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Weekly" value="option2" />
+                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Weekly"
+                                                value="Weekly"
+                                                checked={selectedOption === "Weekly"}
+                                                onChange={handleRadioChange} />
                                             <label className="form-check-label color3 radialable" htmlFor="Weekly">Weekly</label>
                                         </div>
 
                                         <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Monthly" value="option1" />
+                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Monthly"
+                                                value="Monthly"
+                                                checked={selectedOption === "Monthly"}
+                                                onChange={handleRadioChange} />
                                             <label className="form-check-label color3 radialable" htmlFor="Monthly">Monthly</label>
-                                        </div>
-
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Bi-Monthly" value="option2" />
-                                            <label className="form-check-label color3 radialable" htmlFor="Bi-Monthly">Bi-Monthly</label>
-                                        </div>
-
-                                        <div className="form-check form-check-inline ">
-                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Quarterly" value="option1" />
-                                            <label className="form-check-label color3 radialable" htmlFor="Quarterly">Quarterly</label>
-                                        </div>
-
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Yearly" value="option2" />
-                                            <label className="form-check-label color3 radialable" htmlFor="Yearly">Yearly</label>
                                         </div>
 
                                     </div>
@@ -1108,7 +1185,7 @@ function CreateCleaningWorks() {
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className="d-flex">
 
-                                        <button type="button" class="border-0 px-3 mx-2  savebtn py-2"><SaveIcon className='me-2' />SAVE</button>
+                                        <button type="button" class="border-0 px-3 mx-2  savebtn py-2"onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
                                         <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2"><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
                                     </div>
 
