@@ -24,7 +24,6 @@ function CreateCleaningWorks() {
     const navigate = useNavigate();
 
     const [WorkRequest, setWorkRequest] = useState('')
-    const [workTrade, setworkTrade] = useState('')
     const [Scheduling, setScheduling] = useState('')
 
     //dropdowns
@@ -34,12 +33,14 @@ function CreateCleaningWorks() {
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownCleaning, setdropdownCleaning] = useState([])
+    const[dropdownWorkTrade, setdropdownWorkTrade] = useState([])
     const [value, setvalue] = useState({
         EmployeeID: null,
         DepartmentCode: 'Select Dept Code',
         BuildingCode: 'Select Building',
         Location: 'Select Location',
-        CleaningGroupCode:"Select Cleaning Group"
+        CleaningGroupCode:"Select Cleaning Group",
+        WorkTradeCode:"Select Work Trade"
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -103,22 +104,14 @@ useEffect(() => {
                     .catch((err) => {
                         // console.log(err);;
                     });
-    // AssetType_LIST
-    // axios.get(`/api/AssetType_LIST`).then((res) => {
-    //     // console.log("AssetType_LIST", res.data.recordset);
-    //     setdropdownAssetTypeLIST(res.data.recordsets[0])
-    // })
-    //     .catch((err) => {
-    //         //// console.log(err);;
-    //     });
-    // ProblemCategory_LIST
-    // axios.get(`/api/ProblemCategory_LIST`).then((res) => {
-    //     // console.log("ProblemCategory_LIST", res.data.recordset);
-    //     setdropdownProblemCategoryLIST(res.data.recordsets[0])
-    // })
-    //     .catch((err) => {
-    //         //// console.log(err);;
-    //     });
+                    // Work Trade
+                    axios.get(`/api/WorkTRADE_GET_LIST`).then((res) => {
+                        // console.log("Department LIST", res.data.recordset);
+                        setdropdownWorkTrade(res.data.recordsets[0])
+                    })
+                        .catch((err) => {
+                            //// console.log(err);;
+                        });
             // dropdownDepartmentLIST
             axios.get(`/api/Department_LIST`).then((res) => {
                 // console.log("Department LIST", res.data.recordset);
@@ -229,7 +222,7 @@ useEffect(() => {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTrade,
+                    WorkTradeCode,
                     // RequestNumber
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
@@ -242,7 +235,7 @@ useEffect(() => {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTrade,
+                    WorkTradeCode,
                     // RequestNumber
                 }));
                 console.log('-------------------', res.data.recordsets[0][0]);
@@ -279,15 +272,6 @@ useEffect(() => {
             .catch((err) => {
                 // console.log(err);;
             });
-        // WorkTrade_LIST
-        // axios.get(`/api/WorkTrade_LIST/${Deptnale}`).then((res) => {
-        //     // console.log("WorkTrade_LIST", res.data.recordset);
-        //     setdropdownWorkTradeLIST(res.data.recordsets[0])
-        // })
-        //     .catch((err) => {
-        //         //// console.log(err);;
-        //     });
-
     }
     // department
         const handleProvinceChange = (e) => {
@@ -826,16 +810,23 @@ className='rounded inputsection py-2'
                                   <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                       <div className='emailsection position-relative d-grid my-2'>
                                           <label htmlFor='workTrade' className='lablesection color3 text-start mb-1'>
-                                              Work Trade<span className='star'>*</span>
+                                              Work Trade
                                           </label>
-                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={workTrade}
-                                              onChange={(event) => {
-                                                  setworkTrade(event.target.value)
-                                              }}>
-                                              <option selected className='inputsectiondropdpwn'>Select Work Trade</option>
-                                              <option value={"First"}>One</option>
-                                              <option value={"Second"}>Two</option>
-                                              <option value={"three"}>Three</option>
+                                          <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example" value={value.WorkTradeCode}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        WorkTradeCode: e.target.value
+                                                    }))
+                                                }}>
+                                                <option className='inputsectiondropdpwn' value={value.WorkTradeCode}>{value.WorkTradeCode}</option>
+                                                {
+                                                    dropdownWorkTrade && dropdownWorkTrade.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.WorkTradeCode}>{itme.WorkTradeCode}</option>
+                                                        )
+                                                    })
+                                                }
                                           </select>
                                       </div>
                                   </div>
