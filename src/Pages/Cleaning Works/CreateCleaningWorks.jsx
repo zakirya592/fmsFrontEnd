@@ -470,7 +470,7 @@ useEffect(() => {
                                   <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                       <div className='emailsection d-grid my-2'>
                                       <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time<span className='star'>*</span>
+                                                Request Date/Time
                                             </label>
 <input
 type="datetime-local"
@@ -796,7 +796,7 @@ className='rounded inputsection py-2'
                                   <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                       <div className='emailsection d-grid my-2'>
                                           <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
-                                              Schedule-Start Date/Time*<span className='star'>*</span>
+                                              Schedule-Start Date/Time*
                                           </label>
                                           <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2' />
 
@@ -807,7 +807,7 @@ className='rounded inputsection py-2'
                                   <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                       <div className='emailsection d-grid my-2'>
                                           <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
-                                              Schedule-End Date/Time*<span className='star'>*</span>
+                                              Schedule-End Date/Time*
                                           </label>
                                           <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2' />
 

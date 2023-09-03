@@ -37,7 +37,7 @@ function MainCleaningWork() {
             'SEQ': index + 1,
             'WORK REQUEST NUMBER': row.RequestNumber,
             'WORK TYPE': row.WorkStatus,
-            'Asset Item Tag': row.AssetItemTagID,
+            'CLEANING GROUP': row.CleaningGroup,
             'Work Priority': row.WorkPriority,
             'Request Date': row.RequestDateTime,
             'Department Code': row.DepartmentCode,
@@ -51,7 +51,7 @@ function MainCleaningWork() {
           <th style="${headerStyle}">SEQ</th>
           <th style="${headerStyle}">Work Request Number</th>
           <th style="${headerStyle}">Work Type</th>
-          <th style="${headerStyle}">Asset Item Tag</th>
+          <th style="${headerStyle}">Cleaning Group</th>
           <th style="${headerStyle}">Work Priority</th>
           <th style="${headerStyle}">Request Date</th>
           <th style="${headerStyle}">Department Code </th>
@@ -61,8 +61,8 @@ function MainCleaningWork() {
           <tr>
             <td>${row['SEQ']}</td>
             <td>${row['Work Request Number<']}</td>
-            <td>${row['ORDER Status']}</td>
-            <td>${row['Employee ID']}</td>
+            <td>${row['Work Type']}</td>
+            <td>${row['Cleaning Group']}</td>
             <td>${row['Work Priority']}</td>
             <td>${row['Request Date']}</td>
             <td>${row['Department Code']}</td>
@@ -95,7 +95,7 @@ function MainCleaningWork() {
     };
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/PreventiveMaintenance_GET_LIST`, {
+        axios.get(`/api/CleaningWorks_GET_LIST`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
@@ -130,7 +130,7 @@ function MainCleaningWork() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/PreventiveMaintenance_DELETE_BYID/${RequestNumber}`)
+                axios.delete(`/api/CleaningWorks_DELETE_BYID/${RequestNumber}`)
                     .then((res) => {
                         getapi()
                         // Handle successful delete response
@@ -159,7 +159,7 @@ function MainCleaningWork() {
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'RequestNumber', headerName: 'WORK REQUEST NUMBER#', width: 200 },
         { field: 'WorkType', headerName: 'WORK TYPE', width: 160 },
-        { field: 'AssetItemTagID', headerName: 'ASSET ITEM TAG#', width: 160 },
+        { field: 'CleaningGroup', headerName: 'CLEANING GROUP#', width: 160 },
         { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
         { field: 'RequestDateTime', headerName: 'REQUEST DATE', width: 200 },
         { field: 'DepartmentCode', headerName: 'DEPARTMENT CODE ', width: 160 },
@@ -229,7 +229,7 @@ function MainCleaningWork() {
                     id: index + 1,
                     RequestNumber: row.RequestNumber,
                     WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
-                    AssetItemTagID: row.AssetItemTagID,
+                    CleaningGroup: row.CleaningGroup,
                     WorkPriority: row.WorkPriority,
                     RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
                     DepartmentCode: row.DepartmentCode,
@@ -242,7 +242,7 @@ function MainCleaningWork() {
                     id: index + 1,
                     RequestNumber: row.RequestNumber,
                     WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
-                    AssetItemTagID: row.AssetItemTagID,
+                    CleaningGroup: row.CleaningGroup,
                     WorkPriority: row.WorkPriority,
                     RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
                     DepartmentCode: row.DepartmentCode,
