@@ -35,9 +35,10 @@ function MainCleaningWork() {
         const printWindow = window.open('', '_blank');
         const selectedData = tableData.map((row, index) => ({
             'SEQ': index + 1,
-            'WORK REQUEST NUMBER': row.RequestNumber,
-            'WORK TYPE': row.WorkStatus,
-            'CLEANING GROUP': row.CleaningGroup,
+            'Work Request Number': row.RequestNumber,
+            "Employee id":row.EmployeeID,
+            'Work Type': row.WorkType,
+            'Cleaning Group': row.CleaningGroup,
             'Work Priority': row.WorkPriority,
             'Request Date': row.RequestDateTime,
             'Department Code': row.DepartmentCode,
@@ -50,6 +51,7 @@ function MainCleaningWork() {
         <tr>
           <th style="${headerStyle}">SEQ</th>
           <th style="${headerStyle}">Work Request Number</th>
+          <th style="${headerStyle}">Employee Id</th>
           <th style="${headerStyle}">Work Type</th>
           <th style="${headerStyle}">Cleaning Group</th>
           <th style="${headerStyle}">Work Priority</th>
@@ -60,7 +62,8 @@ function MainCleaningWork() {
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
-            <td>${row['Work Request Number<']}</td>
+            <td>${row['Work Request Number']}</td>
+            <td>${row['Employee id']}</td>
             <td>${row['Work Type']}</td>
             <td>${row['Cleaning Group']}</td>
             <td>${row['Work Priority']}</td>
@@ -158,6 +161,7 @@ function MainCleaningWork() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'RequestNumber', headerName: 'WORK REQUEST NUMBER#', width: 200 },
+        {field:"EmployeeID", headerName:"EMPLOYEE ID" , width:160},
         { field: 'WorkType', headerName: 'WORK TYPE', width: 160 },
         { field: 'CleaningGroup', headerName: 'CLEANING GROUP#', width: 160 },
         { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
