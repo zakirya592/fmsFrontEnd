@@ -20,7 +20,7 @@ function Updataorderwork() {
     const navigate = useNavigate();
     let { userId } = useParams();
     const [value, setvalue] = useState({
-        orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
+        orderNumber: '', RequestNumber: null, RequestStatus:'', workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
         solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName: '',
         costWork: '', AppointmentDateTime: "", ScheduledDateTime: '', WorkCategoryDiscriptionmain: '',
         EmployeeID: '', Firstname: '',
@@ -59,10 +59,11 @@ function Updataorderwork() {
     const abortControllerRefEI = useRef(null);
     function GetgetworkRequest() {
         axios.get(`/api/WorkOrders_GET_BYID/${userId}`).then((res) => {
-            console.log('asdfaf=====================================', res);
+            console.log('asdfaf=============++++====----=============', res);
 
             const orderNumber = res.data.recordset[0].WorkOrderNumber
             const RequestNumber = res.data.recordset[0].WorkRequestNumber
+            const RequestStatus=res.data.recordset[0].workStatus
             const costWork= res.data.recordset[0].TotalCostofWork;
             const assignEmployee = res.data.recordset[0].AssignedtoEmployeeID
             const completeEmployee = res.data.recordset[0].CompletedByEmployeeID
@@ -111,7 +112,7 @@ function Updataorderwork() {
                 // assignEmployee: defaultEmployeeOption,
                 // completeEmployee: defaultcomplempeOption,
                 ScheduledDateTime,
-                AppointmentDateTime
+                AppointmentDateTime,
             }));
 
             axios.post(`/api/getworkRequest`, {
@@ -245,7 +246,7 @@ function Updataorderwork() {
                 // console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
-                    RequestStatus: requestdata?.RequestStatus,
+                    workStatus: requestdata?.RequestStatus,
                 }));
                 setUnitCode(unitNameList)
 
@@ -346,7 +347,7 @@ function Updataorderwork() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                RequestStatus: []
+                workStatus: []
             }));
         }
 
@@ -355,7 +356,7 @@ function Updataorderwork() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: value.RequestNumber,
-                RequestStatus: value.RequestStatus
+                workStatus: value.workStatus
             }));
             console.log('Received value----------:', value);
         } else {
@@ -894,17 +895,16 @@ function Updataorderwork() {
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
                                                 options={unitCode} // Use the formattedGpcList here
-                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber
-                                                        ? option.RequestNumber + ' - ' + option.RequestStatus
+                                                        ? option.RequestNumber + ' - ' + option.workStatus
                                                         : ''
                                                 }
                                                 getOptionSelected={(option, value) => option.RequestNumber === value.RequestNumber} // This determines which value gets sent to the API
                                                 onChange={handleGPCAutoCompleteChange}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.RequestNumber} - {option.RequestStatus}
+                                                        {option.RequestNumber} - {option.workStatus}
                                                     </li>
                                                 )}
                                                 value={value}

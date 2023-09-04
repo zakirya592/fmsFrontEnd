@@ -309,7 +309,7 @@ function Viewworkorder() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                RequestStatus: []
+                workStatus: []
             }));
         }
 
@@ -318,7 +318,7 @@ function Viewworkorder() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: value.RequestNumber,
-                RequestStatus: value.RequestStatus
+                workStatus: value.workStatus
             }));
             console.log('Received value----------:', value);
         } else {
@@ -433,7 +433,7 @@ function Viewworkorder() {
                 console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
-                    RequestStatus: requestdata?.RequestStatus,
+                    workStatus: requestdata?.RequestStatus,
                 }));
                 // setUnitCodeID(dataget)
                 setOpenID(false)
@@ -625,7 +625,7 @@ function Viewworkorder() {
                 console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
-                    RequestStatus: requestdata?.RequestStatus,
+                    workStatus: requestdata?.RequestStatus,
                 }));
                 // setUnitCodeID(dataget)
                 setOpencompleteemployee(false)
@@ -818,14 +818,14 @@ function Viewworkorder() {
                                                 // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber
-                                                        ? option.RequestNumber + ' - ' + option.RequestStatus
+                                                        ? option.RequestNumber + ' - ' + option.workStatus
                                                         : ''
                                                 }
                                                 getOptionSelected={(option, value) => option.RequestNumber === value.RequestNumber} // This determines which value gets sent to the API
                                                 onChange={handleGPCAutoCompleteChange}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.RequestNumber} - {option.RequestStatus}
+                                                        {option.RequestNumber} - {option.workStatus}
                                                     </li>
                                                 )}
                                                 value={value}
