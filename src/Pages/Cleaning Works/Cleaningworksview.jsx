@@ -42,6 +42,7 @@ function Cleaningworksview() {
         Intruction_Remarks: '',
         Scheduleendtime: "",
         Schedulestarttime: "",
+        workStatus:'',
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -506,7 +507,7 @@ function Cleaningworksview() {
                     WorkTrade,
                     WorkPriority,
                     ProblemDescription,
-                    RequestStatus,
+                    workStatus,
                     ProblemCategory,
                     RequestDateTime,
                     AssetItemTagID,
@@ -519,7 +520,7 @@ function Cleaningworksview() {
                     WorkTrade,
                     WorkPriority,
                     ProblemDescription,
-                    RequestStatus,
+                    workStatus,
                     ProblemCategory,
                     RequestDateTime,
                     AssetItemTagID,
@@ -566,7 +567,7 @@ function Cleaningworksview() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                RequestStatus: []
+                workStatus: []
             }))
             return;
         }
@@ -608,7 +609,7 @@ function Cleaningworksview() {
                 setvalue(prevValue => ({
                     ...prevValue,
                     RequestNumber: [],
-                    RequestStatus: []
+                    workStatus: []
                 }))
                 console.log(error)
                 return;
@@ -628,7 +629,7 @@ function Cleaningworksview() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                RequestStatus: []
+                workStatus: []
             }));
         }
 
@@ -637,7 +638,7 @@ function Cleaningworksview() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: value.RequestNumber,
-                RequestStatus: value.RequestStatus
+                workStatus: value.workStatus
             }));
             console.log('Received value----------:', value);
         } else {
@@ -765,14 +766,14 @@ function Cleaningworksview() {
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber
-                                                        ? option.RequestNumber + ' - ' + option.RequestStatus
+                                                        ? option.RequestNumber + ' - ' + option.workStatus
                                                         : ''
                                                 }
                                                 getOptionSelected={(option, value) => option.RequestNumber === value.RequestNumber}
                                                 onChange={handleGPCAutoCompleteChangecompleteemployee}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.RequestNumber} - {option.RequestStatus}
+                                                        {option.RequestNumber} - {option.workStatus}
                                                     </li>
                                                 )}
                                                 value={value}
