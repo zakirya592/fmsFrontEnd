@@ -42,8 +42,8 @@ function CreateCleaningWorks() {
         WorkTradeCode: "Select Work Trade",
         SchedPriorityCode: "Select Scheduling",
         Intruction_Remarks: '',
-        Scheduleendtime:"",
-        Schedulestarttime:""
+        Scheduleendtime: "",
+        Schedulestarttime: ""
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -379,25 +379,25 @@ function CreateCleaningWorks() {
                 }));
             }
         });
-    }    
+    }
     const [selectedOption, setSelectedOption] = useState(null);
     const Createapi = async () => {
         await axios.post(`/api/CleaningWorks_post`, {
-            RequestNumber: value.RequestNumber,
+            RequestNumber: value.RequestNumber, 
             EmployeeID: value.EmployeeID,
             RequestDateTime: value.RequestDateTime,
             WorkType: value.WorkType,
             CleaningGroup: value.CleaningGroupCode,
             WorkPriority: value.WorkPriority,
-            Intruction_Remarks:value.Intruction_Remarks,
+            Intruction_Remarks: value.Intruction_Remarks,
             AssetItemTagID: value.AssetItemTagID,
             DepartmentCode: value.DepartmentCode,
             BuildingCode: value.BuildingCode,
             LocationCode: value.LocationCode,
             MaintenanceDescription: value.maindescript,
             Frequency: selectedOption,
-            ScheduleStartDateTime: value.Schedulestarttime,
-            ScheduleEndDateTime: value.Scheduleendtime,
+            ScheduleStartDateTime: Schedulestarttime,
+            ScheduleEndDateTime: Scheduleendtime,
             SchedulingPriority: value.schedulingpriority,
 
         },)
@@ -416,7 +416,7 @@ function CreateCleaningWorks() {
                         }
                     });
                 }
-                if (res.status == 404){
+                if (res.status == 404) {
                     Swal.fire({
                         title: "Error",
                         text: "RequestNumber is required",
@@ -436,11 +436,11 @@ function CreateCleaningWorks() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setvalue((prevValue) => ({
-          ...prevValue,
-          [name]: value,
+            ...prevValue,
+            [name]: value,
         }));
-      };
-      const handleRadioChange = (event) => {
+    };
+    const handleRadioChange = (event) => {
         setSelectedOption(event.target.value);
     };
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
@@ -524,7 +524,7 @@ function CreateCleaningWorks() {
         }
 
     }
-                const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
+    const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
@@ -547,6 +547,40 @@ function CreateCleaningWorks() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+
+
+    const [Schedulestarttime, setSchedulestarttime] = useState('0');
+    const [Scheduleendtime, setScheduleendtime] = useState('');
+
+    const handleStartDateChange = (event) => {
+        const selectedStartDate = new Date(event.target.value);
+        const nextDay = new Date(selectedStartDate);
+        nextDay.setDate(selectedStartDate.getDate() + 1);
+
+        setSchedulestarttime(event.target.value);
+        setScheduleendtime(nextDay);
+
+        // Ensure end date is never before the selected start date
+        if (nextDay < new Date(Scheduleendtime)) {
+            setScheduleendtime(nextDay);
+        } else {
+            setScheduleendtime('');
+        }
+
+    };
+    const handleEndDateChange = (event) => {
+        const selectedEndDate = new Date(event.target.value);
+
+        // Ensure end date is never before the selected start date
+        if (selectedEndDate < new Date(Schedulestarttime)) {
+            setScheduleendtime(new Date(Schedulestarttime));
+        } else {
+            // setScheduleendtime(selectedEndDate);
+            setScheduleendtime(event.target.value);
+
+        }
+    };
+
     return (
         <>
             <div className='bg'>
@@ -1039,18 +1073,18 @@ function CreateCleaningWorks() {
 
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-    Instructions/Remarks
-</label>
-<div className="form-floating inputsectiondropdpwn">
-    <textarea
-        className='rounded inputsectiondropdpwn w-100 color2 py-2'
-        placeholder="Describe the cleaning works"
-        id="ProblemDescription"
-        name="Intruction_Remarks" // Add a name attribute to the textarea
-        value={value.Intruction_Remarks} // Ensure it's bound to the value in your state
-        onChange={handleInputChange} // Include this if you want to update the state on input changes
-    ></textarea>
+                                            <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
+                                                Instructions/Remarks
+                                            </label>
+                                            <div className="form-floating inputsectiondropdpwn">
+                                                <textarea
+                                                    className='rounded inputsectiondropdpwn w-100 color2 py-2'
+                                                    placeholder="Describe the cleaning works"
+                                                    id="ProblemDescription"
+                                                    name="Intruction_Remarks" // Add a name attribute to the textarea
+                                                    value={value.Intruction_Remarks} // Ensure it's bound to the value in your state
+                                                    onChange={handleInputChange} // Include this if you want to update the state on input changes
+                                                ></textarea>
 
                                             </div>
                                         </div>
@@ -1065,33 +1099,25 @@ function CreateCleaningWorks() {
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
                                                 Schedule-Start Date/Time*
                                             </label>
                                             <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Schedulestarttime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Schedulestarttime: e.target.value
-                                                    }))
-                                                }} />
+                                                value={Schedulestarttime}
+                                                onChange={handleStartDateChange}
+                                                min={new Date()} />
                                         </div>
                                     </div>
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='Scheduleend' className='lablesection color3 text-start mb-1'>
                                                 Schedule-End Date/Time*
                                             </label>
                                             <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Scheduleendtime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Scheduleendtime: e.target.value
-                                                    }))
-                                                }} />
+                                                value={Scheduleendtime}
+                                                onChange={handleEndDateChange}
+                                                min={Schedulestarttime} />
                                         </div>
                                     </div>
 
@@ -1147,7 +1173,7 @@ function CreateCleaningWorks() {
                                 {/* 6th row */}
                                 <div className="formsection mx-auto p-2 mt-2 ">
                                     <div className=' rounded inputsection py-2 text-start '>
-                                    <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
+                                        <label htmlFor='Frequency' className='lablesection ms-3 color3 text-start mb-1'>
                                             Frequency
                                         </label>
 
@@ -1185,7 +1211,7 @@ function CreateCleaningWorks() {
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className="d-flex">
 
-                                        <button type="button" class="border-0 px-3 mx-2  savebtn py-2"onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
+                                        <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
                                         <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2"><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
                                     </div>
 
