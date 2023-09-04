@@ -50,20 +50,20 @@ function PreventiveView() {
             'EmployeeID': userId,
         }).then((res) => {
             // console.log(res.data)
-           const {
-                    Firstname,
-                    Lastname,
-                    Middlename,
-                    MobileNumber,
-                    // RequestNumber
-                } = res.data.recordsets[0][0];
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    Firstname,
-                    Lastname,
-                    Middlename,
-                    // RequestNumber
-                }));
+            const {
+                Firstname,
+                Lastname,
+                Middlename,
+                MobileNumber,
+                // RequestNumber
+            } = res.data.recordsets[0][0];
+            setvalue((prevValue) => ({
+                ...prevValue,
+                Firstname,
+                Lastname,
+                Middlename,
+                // RequestNumber
+            }));
         })
             .catch((err) => {
                 //// console.log(err);;
@@ -73,7 +73,7 @@ function PreventiveView() {
     useEffect(() => {
         postapisas()
     }, [])
-    
+
 
     function GetgetworkRequest() {
         axios.get(`/api/PreventiveMaintenance_GET_BYID/${userId}`).then((res) => {
@@ -95,7 +95,7 @@ function PreventiveView() {
                 WorkPriority,
                 AssetItemTagID
             } = res.data.recordsets[0][0];
-            
+
 
             setvalue((prevValue) => ({
                 ...prevValue,
@@ -115,6 +115,14 @@ function PreventiveView() {
                 SchedulingPriority,
                 AssetItemTagID,
             }));
+
+            // work type
+            axios.get(`/api/WorkType_LIST`).then((res) => {
+                setdropdownworktypesLIST(res.data.recordsets[0])
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
 
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
@@ -158,7 +166,7 @@ function PreventiveView() {
                 ...prevValue,
                 Schedulestarttime: startdat
             }))
-            
+
 
             // End Data
             const enddata = res.data.recordsets[0][0].ScheduleEndDateTime
@@ -182,7 +190,7 @@ function PreventiveView() {
                     console.log(err);;
                 });
             const workaout = res.data.recordsets[0][0].WorkType
-         axios.get(`/api/WorkType_descri_LIST/${workaout}`)
+            axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                 .then((res) => {
                     // console.log(res.data);
                     setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
@@ -705,7 +713,7 @@ function PreventiveView() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Preventive Maintenance - View*<span className='star'>*</span></p>
+                                    <p className='color1 workitoppro my-auto'>Preventive Maintenance - View<span className='star'>*</span></p>
                                     <div className="d-flex">
                                         {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
                                         {/* <Create /> */}
@@ -891,19 +899,19 @@ function PreventiveView() {
                                                 />
 
                                             ) : (
-                                                    <input
-                                                        type="datetime-local"
-                                                        id="Employdata"
-                                                        value={value.RequestDateTime}
-                                                        onChange={e => {
-                                                            setvalue(prevValue => ({
-                                                                ...prevValue,
-                                                                RequestDateTime: e.target.value
-                                                            }))
-                                                        }}
-                                                        name="RequestDateTime"
-                                                        className='rounded inputsection py-2'
-                                                    />
+                                                <input
+                                                    type="datetime-local"
+                                                    id="Employdata"
+                                                    value={value.RequestDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            RequestDateTime: e.target.value
+                                                        }))
+                                                    }}
+                                                    name="RequestDateTime"
+                                                    className='rounded inputsection py-2'
+                                                />
 
                                             )}
 
@@ -1312,7 +1320,7 @@ function PreventiveView() {
                                             <label htmlFor='ScheduleStart' className='lablesection color3 text-start mb-1'>
                                                 Schedule-Start Date/Time*
                                             </label>
-                                      {bdata !== 'Invalid date' ? (
+                                            {bdata !== 'Invalid date' ? (
                                                 <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
                                                     value={value.Schedulestarttime}
                                                     onChange={e => {
@@ -1323,14 +1331,14 @@ function PreventiveView() {
                                                     }} />
 
                                             ) : (
-                                               <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Schedulestarttime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Schedulestarttime: e.target.value
-                                                    }))
-                                                }} />
+                                                <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={value.Schedulestarttime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            Schedulestarttime: e.target.value
+                                                        }))
+                                                    }} />
 
                                             )}
 
@@ -1354,14 +1362,14 @@ function PreventiveView() {
                                                     }} />
 
                                             ) : (
-                                                    <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
-                                                        value={value.Scheduleendtime}
-                                                        onChange={e => {
-                                                            setvalue(prevValue => ({
-                                                                ...prevValue,
-                                                                Scheduleendtime: e.target.value
-                                                            }))
-                                                        }} />
+                                                <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={value.Scheduleendtime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            Scheduleendtime: e.target.value
+                                                        }))
+                                                    }} />
 
                                             )}
 
@@ -1488,7 +1496,7 @@ function PreventiveView() {
                                         navigate('/preventive')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <div className="d-flex">
-                                     </div>
+                                    </div>
 
                                 </div>
                             </div>

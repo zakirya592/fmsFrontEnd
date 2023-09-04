@@ -45,12 +45,12 @@ function UpdatePreventive() {
     const [bdata, setbata] = useState([])
     const [edata, setedata] = useState([])
     const [requestdata, setrequestdata] = useState([])
-const [emplid, setemplid] = useState()
+    const [emplid, setemplid] = useState()
     function postapisas() {
         axios.post(`/api/getworkRequest_by_EPID`, {
             'EmployeeID': emplid,
         }).then((res) => {
-            console.log('======++++',res.data)
+            console.log('======++++', res.data)
             const {
                 Firstname,
                 Lastname,
@@ -139,9 +139,19 @@ const [emplid, setemplid] = useState()
                 .catch((err) => {
                     //// console.log(err);;
                 });
-           
+
             setemplid(Emplid)
-            console.log('EmployeeIDEmployeeID', Emplid);
+            const woektred = res.data.recordsets[0][0].WorkType
+            axios.get(`/api/WorkTrade_LIST/${woektred}`).then((res) => {
+                console.log('__+++____', res.data.recordsets[0]);
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    WorkTrade: res.data.recordsets[0].WorkTradeCode
+                }))
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
             // requestdata
             const requestda = res.data.recordsets[0][0].RequestDateTime
             const reqdata = moment(requestda).format('YYYY-MM-DD h:mm A')
@@ -687,7 +697,7 @@ const [emplid, setemplid] = useState()
     const Createapi = async () => {
         await axios.put(`/api/PreventiveMaintenance_Put/${userId}`, {
             RequestNumber: value.RequestNumber,
-            EmployeeID: value.EmployeeID, 
+            EmployeeID: value.EmployeeID,
             RequestDateTime: value.RequestDateTime,
             WorkType: value.WorkType,
             WorkPriority: value.WorkPriority,
@@ -748,7 +758,7 @@ const [emplid, setemplid] = useState()
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Preventive Maintenance - View*<span className='star'>*</span></p>
+                                    <p className='color1 workitoppro my-auto'>Preventive Maintenance - Modify<span className='star'>*</span></p>
                                     <div className="d-flex">
                                         {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
                                         {/* <Create /> */}

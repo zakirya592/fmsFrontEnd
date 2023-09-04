@@ -535,8 +535,8 @@ function CreatePreventiveMaintainance() {
             LocationCode: value.LocationCode,
             MaintenanceDescription: value.maindescript,
             Frequency: selectedOption,
-            ScheduleStartDateTime: value.Schedulestarttime,
-            ScheduleEndDateTime: value.Scheduleendtime,
+            ScheduleStartDateTime: Schedulestarttime,
+            ScheduleEndDateTime: Scheduleendtime,
             SchedulingPriority: value.schedulingpriority,
         },)
             .then((res) => {
@@ -568,6 +568,38 @@ function CreatePreventiveMaintainance() {
 
     const handleRadioChange = (event) => {
         setSelectedOption(event.target.value);
+    };
+
+    const [Schedulestarttime, setSchedulestarttime] = useState('0');
+    const [Scheduleendtime, setScheduleendtime] = useState('');
+
+    const handleStartDateChange = (event) => {
+        const selectedStartDate = new Date(event.target.value);
+        const nextDay = new Date(selectedStartDate);
+        nextDay.setDate(selectedStartDate.getDate() + 1);
+
+        setSchedulestarttime(event.target.value);
+        setScheduleendtime(nextDay);
+
+        // Ensure end date is never before the selected start date
+        if (nextDay < new Date(Scheduleendtime)) {
+            setScheduleendtime(nextDay);
+        } else {
+            setScheduleendtime('');
+        }
+
+    };
+    const handleEndDateChange = (event) => {
+        const selectedEndDate = new Date(event.target.value);
+
+        // Ensure end date is never before the selected start date
+        if (selectedEndDate < new Date(Schedulestarttime)) {
+            setScheduleendtime(new Date(Schedulestarttime));
+        } else {
+            // setScheduleendtime(selectedEndDate);
+            setScheduleendtime(event.target.value);
+
+        }
     };
 
     return (
@@ -1180,13 +1212,10 @@ function CreatePreventiveMaintainance() {
                                                 Schedule-Start Date/Time*
                                             </label>
                                             <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Schedulestarttime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Schedulestarttime: e.target.value
-                                                    }))
-                                                }} />
+                                                value={Schedulestarttime}
+                                                onChange={handleStartDateChange}
+                                                min={new Date()}
+                                            />
 
 
                                         </div>
@@ -1198,13 +1227,9 @@ function CreatePreventiveMaintainance() {
                                                 Schedule-End Date/Time*
                                             </label>
                                             <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Scheduleendtime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Scheduleendtime: e.target.value
-                                                    }))
-                                                }} />
+                                                value={Scheduleendtime}
+                                                onChange={handleEndDateChange}
+                                                min={Schedulestarttime} />
 
 
                                         </div>
