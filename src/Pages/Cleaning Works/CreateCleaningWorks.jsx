@@ -43,7 +43,8 @@ function CreateCleaningWorks() {
         SchedPriorityCode: "Select Scheduling",
         Intruction_Remarks: '',
         Scheduleendtime: "",
-        Schedulestarttime: ""
+        Schedulestarttime: "",
+        RequestNumber:''
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -428,7 +429,7 @@ function CreateCleaningWorks() {
                 console.log(err);
                 Swal.fire({
                     title: "Error",
-                    text: "RequestNumber is required",
+                    text: `${err.response.data.error}`,
                     icon: "error",
                 })
             });

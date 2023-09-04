@@ -46,7 +46,7 @@ function CreatePreventiveMaintainance() {
     };
 
     const [value, setvalue] = useState({
-        EmployeeID: null, RequestNumber: null, RequestStatus: '', WorkPriority: '', DepartmentCode: '', LocationCode: '',
+        EmployeeID: null, RequestNumber: "", RequestStatus: '', WorkPriority: '', DepartmentCode: '', LocationCode: '',
         WorkTrade: '', BuildingCode: '', WorkType: '', maindescript: '', Schedulestarttime: '', Scheduleendtime: '', RequestDateTime: getCurrentDateTimeString(),
         schedulingpriority: '', AssetItemTagID: '',
     })
@@ -540,7 +540,7 @@ function CreatePreventiveMaintainance() {
             SchedulingPriority: value.schedulingpriority,
         },)
             .then((res) => {
-                console.log('Add work api first api', res.data);
+                console.log('Add work api first api-------------', res.data);
                 if (res.status == 201) {
                     Swal.fire({
                         title: "Success",
@@ -560,7 +560,7 @@ function CreatePreventiveMaintainance() {
                 console.log(err.response.data.error);
                 Swal.fire({
                     title: "Error",
-                    text: "RequestNumber is required",
+                    text: `${err.response.data.error}`,
                     icon: "error",
                 })
             });
