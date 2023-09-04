@@ -554,16 +554,10 @@ function CreatePreventiveMaintainance() {
                         }
                     });
                 }
-                if (res.status == 404){
-                    Swal.fire({
-                        title: "Error",
-                        text: "RequestNumber is required",
-                        icon: "error",
-                    })
-                }
+                console.log(res.data.error);
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err.response.data.error);
                 Swal.fire({
                     title: "Error",
                     text: "RequestNumber is required",

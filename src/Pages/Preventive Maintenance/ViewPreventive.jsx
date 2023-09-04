@@ -116,6 +116,30 @@ function PreventiveView() {
                 AssetItemTagID,
             }));
 
+            const Emplid = res.data.recordsets[0][0].EmployeeID
+            axios.post(`/api/getworkRequest_by_EPID`, {
+                'EmployeeID': Emplid,
+            }).then((res) => {
+                console.log('======++++', res.data)
+                const {
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    MobileNumber,
+                    // RequestNumber
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    Firstname,
+                    Lastname,
+                    Middlename,
+                    // RequestNumber
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+
             // requestdata
             const requestda = res.data.recordsets[0][0].RequestDateTime
             const reqdata = moment(requestda).format('YYYY-MM-DD h:mm A')

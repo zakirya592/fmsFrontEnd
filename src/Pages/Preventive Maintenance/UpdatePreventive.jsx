@@ -686,8 +686,8 @@ const [emplid, setemplid] = useState()
 
     const Createapi = async () => {
         await axios.put(`/api/PreventiveMaintenance_Put/${userId}`, {
-            RequestNumber: value.EmployeeID,
-            EmployeeID: value.RequestNumber,
+            RequestNumber: value.RequestNumber,
+            EmployeeID: value.EmployeeID, 
             RequestDateTime: value.RequestDateTime,
             WorkType: value.WorkType,
             WorkPriority: value.WorkPriority,
