@@ -348,10 +348,10 @@ function MainCleaningWork() {
     const handleAddToWorkRequest = () => {
         console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
         if (!selectedRow || selectedRow.length === 0) {
-            console.log('Select a Work Order by checking the check box');
+            console.log('Select a Cleaning Work by checking the check box');
             Swal.fire({
                 title: "Error",
-                text: `Select a Work Order by checking the check box`,
+                text: `Select a Cleaning Work  by checking the check box`,
                 icon: "error",
                 confirmButtonText: "OK",
             })
@@ -374,7 +374,7 @@ function MainCleaningWork() {
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
             console.log('Post the Data:', firstSelectedRow.WorkStatus);
-            navigate(`/Workorder/Updata/${firstSelectedRow.RequestNumber}`);
+            navigate(`/Cleaning/update/${firstSelectedRow.RequestNumber}`);
         }
 
 
