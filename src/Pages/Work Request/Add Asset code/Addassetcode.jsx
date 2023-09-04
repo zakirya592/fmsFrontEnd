@@ -112,7 +112,7 @@ function Addassetcode() {
         { field: 'workTypeDesc', headerName: 'LAST PURCHASE DATE', width: 200 },
         { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
         { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
-        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
     // Deleted api section

@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 function WorkOrder() {
     const navigate = useNavigate();
     const [value, setvalue] = useState({
-        orderNumber: '', RequestNumber: null, workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
+        orderNumber: '', RequestNumber: null, workStatus: 'open', workPriority: '', WorkCategory: "", failureCode: '',
         solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName:'',
         costWork: '0', appiontment: "", scheduled: '', WorkCategoryDiscriptionmain:'',
     })
