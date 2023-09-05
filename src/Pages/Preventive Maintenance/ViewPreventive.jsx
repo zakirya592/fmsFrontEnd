@@ -127,11 +127,7 @@ function PreventiveView() {
             const woektred = res.data.recordsets[0][0].WorkType
             console.log('__++ + ____', woektred)
             axios.get(`/api/WorkTrade_LIST/${woektred}`).then((res) => {
-                setvalue(prevValue => ({
-                    ...prevValue,
-                    WorkTradeCode: res.data.recordsets[0][0].WorkTradeCode
-                }))
-                setdropdownWorkTradeLIST(res.data.recordsets[0])
+             setdropdownWorkTradeLIST(res.data.recordsets[0])
             })
                 .catch((err) => {
                     console.log(err);
