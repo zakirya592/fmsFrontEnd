@@ -44,7 +44,7 @@ function UpdateCleaningWork() {
         Intruction_Remarks: '',
         Scheduleendtime: "",
         Schedulestarttime: "",
-        workStatus:''
+        RequestStatus:''
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -114,7 +114,8 @@ function UpdateCleaningWork() {
                 Intruction_Remarks,
                 SchedulingPriority
             }));
-            setScheduleendtime(res.data.recordsets[0][0].ScheduleEndDateTime)
+
+          setScheduleendtime(res.data.recordsets[0][0].ScheduleEndDateTime)
             setSchedulestarttime(res.data.recordsets[0][0].ScheduleStartDateTime)
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
@@ -569,7 +570,7 @@ function UpdateCleaningWork() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                workStatus: []
+                RequestStatus: []
             }))
             return;
         }
@@ -611,7 +612,7 @@ function UpdateCleaningWork() {
                 setvalue(prevValue => ({
                     ...prevValue,
                     RequestNumber: [],
-                    workStatus: []
+                    RequestStatus: []
                 }))
                 console.log(error)
                 return;
@@ -631,7 +632,7 @@ function UpdateCleaningWork() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
-                workStatus: []
+                RequestStatus: []
             }));
         }
 
@@ -640,7 +641,7 @@ function UpdateCleaningWork() {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: value.RequestNumber,
-                workStatus: value.workStatus
+                RequestStatus: value.RequestStatus
             }));
             console.log('Received value----------:', value);
         } else {
@@ -845,14 +846,14 @@ function UpdateCleaningWork() {
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber
-                                                        ? option.RequestNumber + ' - ' + option.workStatus
+                                                        ? option.RequestNumber + ' - ' + option.RequestStatus
                                                         : ''
                                                 }
                                                 getOptionSelected={(option, value) => option.RequestNumber === value.RequestNumber}
                                                 onChange={handleGPCAutoCompleteChangecompleteemployee}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.RequestNumber} - {option.workStatus}
+                                                        {option.RequestNumber} - {option.RequestStatus}
                                                     </li>
                                                 )}
                                                 value={value}
