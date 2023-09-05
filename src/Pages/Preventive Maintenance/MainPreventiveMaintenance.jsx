@@ -158,6 +158,7 @@ function Mainworkordeer() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'RequestNumber', headerName: 'WORK REQUEST NUMBER#', width: 200 },
+        { field: "EmployeeID", headerName: "EMPLOYEE ID", width: 160 },
         { field: 'WorkType', headerName: 'WORK TYPE', width: 160 },
         { field: 'AssetItemTagID', headerName: 'ASSET ITEM TAG#', width: 160 },
         { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
@@ -229,6 +230,7 @@ function Mainworkordeer() {
                     ...row,
                     id: index + 1,
                     RequestNumber: row.RequestNumber,
+                    EmployeeID: row.EmployeeID,
                     WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
                     AssetItemTagID: row.AssetItemTagID,
                     WorkPriority: row.WorkPriority,
@@ -242,6 +244,7 @@ function Mainworkordeer() {
                     ...row,
                     id: index + 1,
                     RequestNumber: row.RequestNumber,
+                    EmployeeID: row.EmployeeID,
                     WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
                     AssetItemTagID: row.AssetItemTagID,
                     WorkPriority: row.WorkPriority,

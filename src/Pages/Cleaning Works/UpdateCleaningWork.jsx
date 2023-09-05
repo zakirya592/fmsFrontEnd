@@ -35,11 +35,11 @@ function UpdateCleaningWork() {
     const [dropdownSchedPriorityCode, setdropdownSchedPriorityCode] = useState([])
     const [value, setvalue] = useState({
         EmployeeID: null,
-        DepartmentCode: 'Select Dept Code',
-        BuildingCode: 'Select Building',
-        LocationCode: 'Select Location',
-        CleaningGroup: "Select Cleaning Group",
-        WorkTradeCode: "Select Work Trade",
+        DepartmentCode: '',
+        BuildingCode: '',
+        LocationCode: '',
+        CleaningGroup: "",
+        WorkTradeCode: "",
         SchedulingPriority: "",
         Intruction_Remarks: '',
         Scheduleendtime: "",
@@ -114,6 +114,7 @@ function UpdateCleaningWork() {
                 Intruction_Remarks,
                 SchedulingPriority
             }));
+
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
                 'EmployeeID': Emplid,
@@ -741,7 +742,7 @@ function UpdateCleaningWork() {
                                             options={unitCode} // Use the formattedGpcList here
                                             // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
                                             getOptionLabel={(option) =>
-                                                option?.EmployeeID
+                                                option?.EmployeeID 
                                                     ? option.EmployeeID + ' - ' + option.Firstname
                                                     : ''
                                             }
