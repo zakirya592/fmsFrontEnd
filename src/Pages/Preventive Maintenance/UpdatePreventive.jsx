@@ -37,7 +37,7 @@ function UpdatePreventive() {
 
     const [value, setvalue] = useState({
         EmployeeID: null, RequestNumber: null, RequestStatus: '', WorkPriority: '', DepartmentCode: '', LocationCode: '',
-        WorkTrade: '', BuildingCode: '', WorkType: '', MaintenanceDescription: '', Schedulestarttime: '', Scheduleendtime: '',
+        WorkTradeCode: '', BuildingCode: '', WorkType: '', MaintenanceDescription: '', Schedulestarttime: '', Scheduleendtime: '',
         RequestDateTime: '', SchedulingPriority: '', AssetItemTagID: '',
     })
 
@@ -145,12 +145,13 @@ function UpdatePreventive() {
 
             setemplid(Emplid)
             const woektred = res.data.recordsets[0][0].WorkType
+            console.log('__++ + ____', woektred)
             axios.get(`/api/WorkTrade_LIST/${woektred}`).then((res) => {
-                console.log('__+++____', res.data.recordsets[0]);
                 setvalue(prevValue => ({
                     ...prevValue,
-                    WorkTrade: res.data.recordsets[0].WorkTradeCode
+                    WorkTradeCode: res.data.recordsets[0][0].WorkTradeCode
                 }))
+                setdropdownWorkTradeLIST(res.data.recordsets[0])
             })
                 .catch((err) => {
                     console.log(err);
@@ -254,13 +255,7 @@ function UpdatePreventive() {
             .catch((err) => {
                 // console.log(err);;
             });
-        axios.get(`/api/WorkTRADE_GET_LIST`).then((res) => {
-            // console.log("Loaction list", res.data.recordset);
-            setdropdownWorkTradeLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                // console.log(err);;
-            });
+
         // asset type
         axios.get(`/api/AssetType_GET_LIST`).then((res) => {
             setassetTypelist(res.data.recordsets[0])
@@ -315,7 +310,6 @@ function UpdatePreventive() {
     }
     const [WorkTypedesc, setWorkTypedesc] = useState('')
     const Workypesdesc = (e) => {
-        localStorage.setItem('WorkType', e.target.value)
         const Deptnale = e.target.value;
         setvalue(prevValue => ({
             ...prevValue,
@@ -451,7 +445,7 @@ function UpdatePreventive() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTrade,
+                    WorkTradeCode,
                     // RequestNumber
                 } = res.data.recordsets[0][0];
                 setvalue((prevValue) => ({
@@ -464,7 +458,7 @@ function UpdatePreventive() {
                     DepartmentCode,
                     BuildingCode,
                     LocationCode,
-                    WorkTrade,
+                    WorkTradeCode,
                     // RequestNumber
                 }));
                 console.log('-------------------', res.data.recordsets[0][0]);
@@ -525,7 +519,7 @@ function UpdatePreventive() {
                 console.log(res.data);
                 const {
                     WorkType,
-                    WorkTrade,
+                    WorkTradeCode,
                     WorkPriority,
                     ProblemDescription,
                     RequestStatus,
@@ -537,7 +531,7 @@ function UpdatePreventive() {
                 setvalue((prevValue) => ({
                     ...prevValue,
                     WorkType,
-                    WorkTrade,
+                    WorkTradeCode,
                     WorkPriority,
                     ProblemDescription,
                     RequestStatus,
@@ -1440,12 +1434,12 @@ function UpdatePreventive() {
                                                 Work Trade
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
-                                                value={value.WorkTrade}
+                                                value={value.WorkTradeCode}
                                                 // onChange={Worktrandedesc}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        WorkTrade: e.target.value
+                                                        WorkTradeCode: e.target.value
                                                     }))
                                                 }}
                                             >

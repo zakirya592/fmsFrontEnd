@@ -36,7 +36,7 @@ function PreventiveView() {
 
     const [value, setvalue] = useState({
         EmployeeID: null, RequestNumber: null, RequestStatus: '', WorkPriority: '', DepartmentCode: '', LocationCode: '',
-        WorkTrade: '', BuildingCode: '', WorkType: '', MaintenanceDescription: '', Schedulestarttime: '', Scheduleendtime: '',
+        WorkTradeCode: '', BuildingCode: '', WorkType: '', MaintenanceDescription: '', Schedulestarttime: '', Scheduleendtime: '',
         RequestDateTime: '', SchedulingPriority: '', AssetItemTagID: '',
     })
 
@@ -89,7 +89,7 @@ function PreventiveView() {
                 DepartmentCode,
                 BuildingCode,
                 LocationCode,
-                WorkTrade,
+                WorkType,
                 MaintenanceDescription,
                 SchedulingPriority,
                 WorkPriority,
@@ -109,7 +109,7 @@ function PreventiveView() {
                 DepartmentCode,
                 BuildingCode,
                 LocationCode,
-                WorkTrade,
+                WorkType,
                 MaintenanceDescription,
                 WorkPriority,
                 SchedulingPriority,
@@ -119,6 +119,19 @@ function PreventiveView() {
             // work type
             axios.get(`/api/WorkType_LIST`).then((res) => {
                 setdropdownworktypesLIST(res.data.recordsets[0])
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            const woektred = res.data.recordsets[0][0].WorkType
+            console.log('__++ + ____', woektred)
+            axios.get(`/api/WorkTrade_LIST/${woektred}`).then((res) => {
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    WorkTradeCode: res.data.recordsets[0][0].WorkTradeCode
+                }))
+                setdropdownWorkTradeLIST(res.data.recordsets[0])
             })
                 .catch((err) => {
                     console.log(err);
@@ -1383,12 +1396,12 @@ function PreventiveView() {
                                                 Work Trade
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="workTrade" aria-label="Floating label select example"
-                                                value={value.WorkTrade}
+                                                value={value.WorkTradeCode}
                                                 // onChange={Worktrandedesc}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        WorkTrade: e.target.value
+                                                        WorkTradeCode: e.target.value
                                                     }))
                                                 }}
                                             >
