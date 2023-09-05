@@ -114,7 +114,8 @@ function UpdateCleaningWork() {
                 Intruction_Remarks,
                 SchedulingPriority
             }));
-
+            setScheduleendtime(res.data.recordsets[0][0].ScheduleEndDateTime)
+            setSchedulestarttime(res.data.recordsets[0][0].ScheduleStartDateTime)
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
                 'EmployeeID': Emplid,
@@ -649,8 +650,8 @@ function UpdateCleaningWork() {
 
     const updataapi = async () => {
         await axios.put(`/api/CleaningWorks_Put/${userId}`, {
-            RequestNumber: value.EmployeeID,
-            EmployeeID: value.RequestNumber,
+            RequestNumber: value.RequestNumber,
+            EmployeeID: value.EmployeeID, 
             RequestDateTime: value.RequestDateTime,
             WorkType: value.WorkType,
             WorkPriority: value.WorkPriority,
@@ -660,8 +661,8 @@ function UpdateCleaningWork() {
             LocationCode: value.LocationCode,
             Intruction_Remarks: value.Intruction_Remarks,
             Frequency: selectedOption,
-            ScheduleStartDateTime: value.Schedulestarttime,
-            ScheduleEndDateTime: value.Scheduleendtime,
+            ScheduleStartDateTime: Schedulestarttime,
+            ScheduleEndDateTime: Scheduleendtime,
             SchedulingPriority: value.SchedulingPriority,
             CleaningGroup: value.CleaningGroup,
         },)
@@ -691,7 +692,38 @@ function UpdateCleaningWork() {
             });
     };
 
+    const [Schedulestarttime, setSchedulestarttime] = useState('');
+    const [Scheduleendtime, setScheduleendtime] = useState('');
 
+    const handleStartDateChange = (event) => {
+        const selectedStartDate = new Date(event.target.value);
+        const nextDay = new Date(selectedStartDate);
+        nextDay.setDate(selectedStartDate.getDate() + 1);
+
+        setSchedulestarttime(event.target.value);
+        setScheduleendtime(nextDay);
+
+        // Ensure end date is never before the selected start date
+        if (nextDay < new Date(Scheduleendtime)) {
+            setScheduleendtime(nextDay);
+        } else {
+            setScheduleendtime('');
+        }
+
+    };
+    const handleEndDateChange = (event) => {
+        const selectedEndDate = new Date(event.target.value);
+
+        // Ensure end date is never before the selected start date
+        if (selectedEndDate < new Date(Schedulestarttime)) {
+            setScheduleendtime(new Date(Schedulestarttime));
+        } else {
+            // setScheduleendtime(selectedEndDate);
+            setScheduleendtime(event.target.value);
+
+        }
+    };
+    
     return (
         <>
             <div className='bg'>
@@ -1215,13 +1247,9 @@ function UpdateCleaningWork() {
                                                 Schedule-Start Date/Time*
                                             </label>
                                             <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Schedulestarttime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Schedulestarttime: e.target.value
-                                                    }))
-                                                }} />
+                                                value={Schedulestarttime}
+                                                onChange={handleStartDateChange}
+                                                min={new Date()} />
                                         </div>
                                     </div>
 
@@ -1231,13 +1259,10 @@ function UpdateCleaningWork() {
                                                 Schedule-End Date/Time*
                                             </label>
                                             <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.Scheduleendtime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Scheduleendtime: e.target.value
-                                                    }))
-                                                }} />
+                                                value={Scheduleendtime}
+                                                onChange={handleEndDateChange}
+                                                min={Schedulestarttime} 
+                                                 />
                                         </div>
                                     </div>
 

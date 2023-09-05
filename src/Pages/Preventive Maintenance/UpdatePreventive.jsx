@@ -116,6 +116,9 @@ function UpdatePreventive() {
                 SchedulingPriority,
                 AssetItemTagID,
             }));
+            // setScheduleendtime(res.data.recordsets[0][0].ScheduleEndDateTime)
+            // setSchedulestarttime(res.data.recordsets[0][0].ScheduleStartDateTime)
+
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
                 'EmployeeID': Emplid,
@@ -166,20 +169,13 @@ function UpdatePreventive() {
             const startdat = res.data.recordsets[0][0].ScheduleStartDateTime
             const sdata = moment(startdat).format('YYYY-MM-DD h:mm A')
             setbata(sdata)
-            setvalue(prevValue => ({
-                ...prevValue,
-                Schedulestarttime: startdat
-            }))
-
+            setSchedulestarttime(startdat)
 
             // End Data
             const enddata = res.data.recordsets[0][0].ScheduleEndDateTime
             const edata = moment(enddata).format('YYYY-MM-DD h:mm A')
             setedata(edata)
-            setvalue(prevValue => ({
-                ...prevValue,
-                Scheduleendtime: enddata
-            }))
+            setScheduleendtime(enddata)
 
             setSelectedOption(res.data.recordsets[0][0].Frequency)
 
@@ -707,8 +703,8 @@ function UpdatePreventive() {
             LocationCode: value.LocationCode,
             MaintenanceDescription: value.MaintenanceDescription,
             Frequency: selectedOption,
-            ScheduleStartDateTime: value.Schedulestarttime,
-            ScheduleEndDateTime: value.Scheduleendtime,
+            ScheduleStartDateTime: Schedulestarttime,
+            ScheduleEndDateTime: Scheduleendtime,
             SchedulingPriority: value.SchedulingPriority,
         },)
             .then((res) => {
@@ -735,6 +731,38 @@ function UpdatePreventive() {
                     icon: "error",
                 })
             });
+    };
+
+    const [Schedulestarttime, setSchedulestarttime] = useState('');
+    const [Scheduleendtime, setScheduleendtime] = useState('');
+
+    const handleStartDateChange = (event) => {
+        const selectedStartDate = new Date(event.target.value);
+        const nextDay = new Date(selectedStartDate);
+        nextDay.setDate(selectedStartDate.getDate() + 1);
+
+        setSchedulestarttime(event.target.value);
+        setScheduleendtime(nextDay);
+
+        // Ensure end date is never before the selected start date
+        if (nextDay < new Date(Scheduleendtime)) {
+            setScheduleendtime(nextDay);
+        } else {
+            setScheduleendtime('');
+        }
+
+    };
+    const handleEndDateChange = (event) => {
+        const selectedEndDate = new Date(event.target.value);
+
+        // Ensure end date is never before the selected start date
+        if (selectedEndDate < new Date(Schedulestarttime)) {
+            setScheduleendtime(new Date(Schedulestarttime));
+        } else {
+            // setScheduleendtime(selectedEndDate);
+            setScheduleendtime(event.target.value);
+
+        }
     };
 
     return (
@@ -1367,23 +1395,15 @@ function UpdatePreventive() {
                                             </label>
                                             {bdata !== 'Invalid date' ? (
                                                 <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
-                                                    value={value.Schedulestarttime}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            Schedulestarttime: e.target.value
-                                                        }))
-                                                    }} />
+                                                    value={Schedulestarttime}
+                                                    onChange={handleStartDateChange}
+                                                    min={new Date()}/>
 
                                             ) : (
                                                 <input type="datetime-local" id="ScheduleStart" name="birthdaytime" className='rounded inputsection py-2'
-                                                    value={value.Schedulestarttime}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            Schedulestarttime: e.target.value
-                                                        }))
-                                                    }} />
+                                                   value={Schedulestarttime}
+                                                onChange={handleStartDateChange}
+                                                min={new Date()} />
 
                                             )}
 
@@ -1398,23 +1418,15 @@ function UpdatePreventive() {
                                             </label>
                                             {edata !== 'Invalid date' ? (
                                                 <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
-                                                    value={value.Scheduleendtime}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            Scheduleendtime: e.target.value
-                                                        }))
-                                                    }} />
+                                                    value={Scheduleendtime}
+                                                    onChange={handleEndDateChange}
+                                                    min={Schedulestarttime} />
 
                                             ) : (
                                                 <input type="datetime-local" id="Scheduleend" name="birthdaytime" className='rounded inputsection py-2'
-                                                    value={value.Scheduleendtime}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            Scheduleendtime: e.target.value
-                                                        }))
-                                                    }} />
+                                                   value={Scheduleendtime}
+                                                onChange={handleEndDateChange}
+                                                min={Schedulestarttime}  />
 
                                             )}
 
