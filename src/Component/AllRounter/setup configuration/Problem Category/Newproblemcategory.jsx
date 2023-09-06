@@ -104,7 +104,7 @@ function Newproblemcategory() {
                         <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7">
                             <div className='emailsection position-relative d-grid my-1'>
                                 <label htmlFor='ProblemCategoryDesc' className='lablesection color3 text-start mb-1'>
-                                    Location Desc <span className='star'>*</span>
+                                    ProblemCategory Desc <span className='star'>*</span>
                                 </label>
 
                                 <input
