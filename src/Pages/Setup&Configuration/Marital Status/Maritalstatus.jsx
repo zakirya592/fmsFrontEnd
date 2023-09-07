@@ -16,10 +16,10 @@ import Siderbar from '../../../Component/Siderbar/Siderbar';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
-import NewWorkcatagres from '../../../Component/AllRounter/setup configuration/Work Catagres/NewWorkcatagres';
 import { CSVLink } from "react-csv";
-import Newtitle from '../../../Component/AllRounter/setup configuration/Prm Title/Newtitle';
 import NewMaritalstatus from '../../../Component/AllRounter/setup configuration/Marital status/NewMaritalstatus';
+import * as XLSX from 'xlsx';
+
 function Maritalstatus() {
 
     const ref = useRef(null)
@@ -90,12 +90,12 @@ function Maritalstatus() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
-        { field: 'MaritalCode', headerName: 'MARITAL STATUS CODE', width: 200 },
-        { field: 'MaritalDesc', headerName: 'DESCRIPTION', width: 350 },
+        { field: 'MaritalCode', headerName: 'MARITAL STATUS CODE', width: 220 },
+        { field: 'MaritalDesc', headerName: 'DESCRIPTION', width: 370 },
         {
             field: 'action',
             headerName: 'ACTION',
-            width: 170,
+            width: 180,
             renderCell: (params) => (
                 <div>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.MaritalCode)}>
@@ -172,6 +172,50 @@ function Maritalstatus() {
                 console.log(err);
             });
     };
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log(file.type);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0]; // Assuming you have data in the first sheet
+                const sheet = workbook.Sheets[sheetName];
+                const json = XLSX.utils.sheet_to_json(sheet);
+                json.forEach((item) => {
+                    console.log(item.WorkTradeDesc);
+                    axios.post(`/api/MaritalStatus_post`, {
+                        MaritalCode: item.MaritalCode, // Adjust property names as needed
+                        MaritalDesc: item.MaritalDesc,
+                    })
+                        .then((res) => {
+                            console.log('Add', res.data);
+                            // Handle success
+                            Swal.fire(
+                                'Add!',
+                                `Marital has been created`,
+                                'success'
+                            )
+                            getapi()
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            Swal.fire(
+                                'Error!',
+                                `Some Marital already exist`,
+                                'error'
+                            )
+                            // Handle errors
+                        });
+                });
+            };
+            reader.readAsArrayBuffer(file);
+
+        }
+    };
+
     return (
         <>
             <div className="bg">
@@ -195,10 +239,12 @@ function Maritalstatus() {
                                 </p>
                                 <div className="d-flex">
                                     <NewMaritalstatus />
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                    <label type="button" className="btn btn-outline-primary mx-1 color2 btnwork" htmlFor="Importdata">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
-                                    </button>
+                                    </label>
+                                    <input type="file" accept=".xlsx" onChange={handleFileUpload} className='d-none' id='Importdata' />
+
                                     <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
                                     </CSVLink>
                                 </div>

@@ -18,6 +18,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { CSVLink } from "react-csv";
 import NewAssetSubCategory from '../../../Component/AllRounter/setup configuration/AssetSubCategory/NewAssetSubCategory';
+import * as XLSX from 'xlsx';
+
 function AssetSubCategory() {
 
     const ref = useRef(null)
@@ -87,13 +89,13 @@ function AssetSubCategory() {
     };
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 100 },
-        { field: 'AssetSubCategoryCode', headerName: 'ASSET-SUB CATEGORY', width: 200 },
-        { field: 'AssetSubCategoryDesc', headerName: 'DESCRIPTION', width: 350 },
+        { field: 'id', headerName: 'SEQ.', width: 110 },
+        { field: 'AssetSubCategoryCode', headerName: 'ASSET-SUB CATEGORY', width: 210 },
+        { field: 'AssetSubCategoryDesc', headerName: 'DESCRIPTION', width: 370 },
         {
             field: 'action',
             headerName: 'ACTION',
-            width: 170,
+            width: 180,
             renderCell: (params) => (
                 <div>
                     <button type="button" className="btn  mx-1 color2 btnwork" onClick={() => updata(params.row.AssetSubCategoryCode)}>
@@ -170,6 +172,50 @@ function AssetSubCategory() {
                 console.log(err);
             });
     };
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log(file.type);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0]; // Assuming you have data in the first sheet
+                const sheet = workbook.Sheets[sheetName];
+                const json = XLSX.utils.sheet_to_json(sheet);
+                json.forEach((item) => {
+                    axios.post(`/api/AssetSubCategory_post`, {
+                        AssetSubCategoryCode: item.AssetSubCategoryCode, // Adjust property names as needed
+                        AssetSubCategoryDesc: item.AssetSubCategoryDesc,
+                    })
+                        .then((res) => {
+                            console.log('Add', res.data);
+                            // Handle success
+                            Swal.fire(
+                                'Add!',
+                                `Asset SubCategory has been created`,
+                                'success'
+                            )
+                            getapi()
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            Swal.fire(
+                                'Error!',
+                                `Some Asset SubCategory already exist`,
+                                'error'
+                            )
+                            // Handle errors
+                        });
+                });
+            };
+            reader.readAsArrayBuffer(file);
+
+        }
+    };
+
+
     return (
         <>
             <div className="bg">
@@ -193,10 +239,12 @@ function AssetSubCategory() {
                                 </p>
                                 <div className="d-flex">
                                     <NewAssetSubCategory />
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                    <label type="button" className="btn btn-outline-primary mx-1 color2 btnwork" htmlFor="Importdata">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
-                                    </button>
+                                    </label>
+                                    <input type="file" accept=".xlsx" onChange={handleFileUpload} className='d-none' id='Importdata' />
+
                                     <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
                                     </CSVLink>
                                 </div>

@@ -203,7 +203,7 @@ function Workpriority() {
                             // Handle success
                             Swal.fire(
                                 'Add!',
-                                `Work Trade has been created`,
+                                `Work Priority has been created`,
                                 'success'
                             )
                             getapi()
@@ -212,7 +212,7 @@ function Workpriority() {
                             console.log(err);
                             Swal.fire(
                                 'Error!',
-                                `Some Work Trade already exist`,
+                                `Some Work Priority already exist`,
                                 'error'
                             )
                             // Handle errors

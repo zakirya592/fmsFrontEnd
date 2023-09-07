@@ -18,6 +18,8 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { CSVLink } from "react-csv";
+import * as XLSX from 'xlsx';
+
 function RequestStatus() {
     const ref = useRef(null)
     const [itemCode, setItemCode] = useState(null);
@@ -169,6 +171,50 @@ function RequestStatus() {
             });
     };
 
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log(file.type);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0]; // Assuming you have data in the first sheet
+                const sheet = workbook.Sheets[sheetName];
+                const json = XLSX.utils.sheet_to_json(sheet);
+                json.forEach((item) => {
+                    console.log(item.WorkTradeDesc);
+                    axios.post(`/api/RequestStatus_post`, {
+                        RequestStatusCode: item.RequestStatusCode, // Adjust property names as needed
+                        RequestStatusDesc: item.RequestStatusDesc,
+                    })
+                        .then((res) => {
+                            console.log('Add', res.data);
+                            // Handle success
+                            Swal.fire(
+                                'Add!',
+                                `Work Trade has been created`,
+                                'success'
+                            )
+                            getapi()
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            Swal.fire(
+                                'Error!',
+                                `Some Work Trade already exist`,
+                                'error'
+                            )
+                            // Handle errors
+                        });
+                });
+            };
+            reader.readAsArrayBuffer(file);
+
+        }
+    };
+
+
     return (
         <>
             <div className="bg">
@@ -190,10 +236,12 @@ function RequestStatus() {
                                 </p>
                                 <div className="d-flex">
                                     <Newreaueststatus/>
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                    <label type="button" className="btn btn-outline-primary mx-1 color2 btnwork" htmlFor="Importdata">
                                         <img src={excel} alt="export" className='me-1' />
                                         Import <GetAppIcon />
-                                    </button>
+                                    </label>
+                                    <input type="file" accept=".xlsx" onChange={handleFileUpload} className='d-none' id='Importdata' />
+
                                     <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
                                     </CSVLink>
                                 </div>
