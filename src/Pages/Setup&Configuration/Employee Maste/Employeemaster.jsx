@@ -228,6 +228,42 @@ function Employeemaster() {
         };
     });
 
+    const [statuscheck, setstatuscheck] = useState()
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const [selectedRow, setSelectedRow] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+    const handleAddToWorkRequest = () => {
+        console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
+        if (!selectedRow || selectedRow.length === 0) {
+            console.log('Select a Employee Master by checking the check box');
+            Swal.fire({
+                title: "Error",
+                text: `Select a Employee Master by checking the check box`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
+
+            return;
+        }
+
+        // Assuming you want to navigate to the update page of the first selected row
+        if (selectedRow.length > 0) {
+            const firstSelectedRow = selectedRow[0];
+            console.log('Post the Data:', firstSelectedRow.EmployeeID);
+            navigate(`/Updata/Employeemaster/${firstSelectedRow.EmployeeID}`)
+        }
+
+
+        const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
+        console.log('Selected Row Data:', selectedRowData);
+
+        setSelectedRowIds(selectedRowData);
+
+
+        // Perform your logic to add to work request using selectedRowData
+        // Example: sendToWorkRequest(selectedRowData);
+    };
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
@@ -258,6 +294,8 @@ function Employeemaster() {
                                         <p className="color1 workitoppro my-auto">
                                             Employee Master </p>
                                         <div className="d-flex">
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Request is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/Employeemaster')
                                             })}><AddCircleOutlineIcon className='me-1' />Create</button>
@@ -283,6 +321,18 @@ function Employeemaster() {
                                             checkboxSelection
                                             disableRowSelectionOnClick
                                             disableMultipleSelection
+                                            selectionModel={selectedRowIds}
+                                            onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                            rowSelectionModel={rowSelectionModel}
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                                // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                                const selectedRows = filteredData.filter((row) => newRowSelectionModel.includes(row.id));
+                                                console.log(selectedRows)
+                                                setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                                // handleRowClick(selectedRows);
+
+                                            }}
                                         />
 
                                     </div>
