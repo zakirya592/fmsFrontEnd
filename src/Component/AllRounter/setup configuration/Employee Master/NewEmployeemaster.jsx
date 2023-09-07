@@ -321,10 +321,10 @@ function NewEmployeemaster() {
                                         </div>
 
                                         <div className="row " htmlFor="file-inputs">
-                                            <div className="col camera1">
+                                            {/* <div className="col camera1"> */}
                                                 {/* <img src={Camera1} alt="" /> */}
                                                 <label htmlFor="file-inputs">
-                                                    <img src={Camera1} />
+                                                    <img src={BrowserFolder} />
                                                 </label>
                                                 {/* <img src={selectedFile ? URL.createObjectURL(selectedFile) : Camera1} alt="" /> */}
           <input
@@ -334,10 +334,10 @@ function NewEmployeemaster() {
                                                     style={{ display: 'none' }}
                                                 />
 
-                                            </div>
-                                            <div className="col">
+                                            {/* </div> */}
+                                            {/* <div className="col">
                                                 <img src={BrowserFolder} alt="" className="browserfolder" />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
 
