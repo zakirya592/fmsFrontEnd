@@ -333,12 +333,7 @@ const handleProvinceChangeDes = (e) => {
                                                         types='text'
                                                         id='EmployeeID'
                                                         value={value.EmployeeID}
-                                                        onChange={e => {
-                                                            setvalue(prevValue => ({
-                                                                ...prevValue,
-                                                                EmployeeID: e.target.value
-                                                            }))
-                                                        }}
+                                                       
                                                         className='rounded inputsection py-2'
                                                         placeholder='Enter Employee Number'
                                                         required
