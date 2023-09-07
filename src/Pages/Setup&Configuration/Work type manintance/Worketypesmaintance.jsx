@@ -87,9 +87,9 @@ function Worketypesmaintance() {
     };
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 100 },
-        { field: 'workTrade', headerName: 'WORK TYPE', width: 200 },
-        { field: 'description', headerName: 'DESCRIPTION', width: 350 },
+        { field: 'id', headerName: 'SEQ.', width: 150 },
+        { field: 'workTrade', headerName: 'WORK TYPE', width: 220 },
+        { field: 'description', headerName: 'DESCRIPTION', width: 340 },
         {
             field: 'action', headerName: 'ACTION', width: 170,
             renderCell: (params) => (
