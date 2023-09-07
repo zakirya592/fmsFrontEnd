@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React,{ useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Siderbar from "../../../../Component/Siderbar/Siderbar";
 import AppBar from "@mui/material/AppBar";
@@ -27,6 +27,7 @@ function NewEmployeemaster() {
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
+    const [EmployeeImage, setEmployeeImage] = useState()
 
     const [value, setvalue] = useState({
         EmployeeID: '', EmployeeStatus: '',
@@ -200,30 +201,40 @@ function NewEmployeemaster() {
                 // console.log(err);;
             });
     }
+    const [selectedFile, setSelectedFile] = useState(null);
+
+
+    function handleChangeback(e) {
+        setEmployeeImage(e.target.files[0]);
+        setSelectedFile(e.target.files[0]);
+    }
+
+    const formData = new FormData();
+    formData.append('EmployeeID', value.EmployeeID);
+    formData.append('Gender', value.Gender);
+    formData.append('Title', value.Title);
+    formData.append('BirthDate', value.BirthDate);
+    formData.append('Age', value.Age);
+    formData.append('Lastname', value.Lastname);
+    formData.append('Middlename', value.Middlename);
+    formData.append('Firstname', value.Firstname);
+    formData.append('NationalityCode', value.NationalityCode);
+    formData.append('MaritalStatus', value.MaritalStatus);
+    formData.append('NationalID', value.NationalID);
+    formData.append('PassportNumber', value.PassportNumber);
+    formData.append('MobileNumber', value.MobileNumber);
+    formData.append('LandlineNumber', value.LandlineNumber);
+    formData.append('DesignationCode', value.DesignationCode);
+    formData.append('Email', value.Email);
+    formData.append('DepartmentCode', value.DepartmentCode);
+    formData.append('BuildingCode', value.BuildingCode);
+    formData.append('LocationCode', value.LocationCode);
+    formData.append('JoiningDate', value.JoiningDate);
+    formData.append('EmployeeImage', EmployeeImage);
+    
 
     const addemploymaster = async () => {
-        axios.post(`/api/EmployeeMaster_post`, {
-            EmployeeID: value.EmployeeID,
-            Gender: value.Gender,
-            Title: value.Title,
-            BirthDate: value.BirthDate,
-            Age: value.Age,
-            Lastname: value.Lastname,
-            Middlename: value.Middlename,
-            Firstname: value.Firstname,
-            NationalityCode: value.NationalityCode,
-            MaritalStatus: value.MaritalStatus,
-            NationalID: value.NationalID,
-            PassportNumber: value.PassportNumber,
-            MobileNumber: value.MobileNumber,
-            LandlineNumber: value.LandlineNumber,
-            DesignationCode: value.DesignationCode,
-            Email: value.Email,
-            DepartmentCode: value.DepartmentCode,
-            BuildingCode: value.BuildingCode,
-            LocationCode: value.LocationCode,
-            JoiningDate: value.JoiningDate
-        },)
+        axios.post(`/api/EmployeeMaster_post`, formData)
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
@@ -296,20 +307,33 @@ function NewEmployeemaster() {
 
                                 {/* Rows sections  */}
                                 <div className="row mx-auto formsection">
+                                  
 
                                     <div className="printerPic col-sm-12 col-md-4 col-lg-4 col-xl-3 ">
                                         <div className="row">
                                             <div className="col">
-                                                <img src={Printer} alt="" className="printerpic" />
+                                                {/* <img src={Printer} alt="" className="printerpic" /> */}
+                                                <img src={selectedFile ? URL.createObjectURL(selectedFile) : Printer} alt="" className="printerpic" />
                                             </div>
                                             <div className="col">
                                                 <img src={Barcode} alt="" className="barcodepic" />
                                             </div>
                                         </div>
 
-                                        <div className="row ">
+                                        <div className="row " htmlFor="file-inputs">
                                             <div className="col camera1">
-                                                <img src={Camera1} alt="" />
+                                                {/* <img src={Camera1} alt="" /> */}
+                                                <label htmlFor="file-inputs">
+                                                    <img src={Camera1} />
+                                                </label>
+                                                {/* <img src={selectedFile ? URL.createObjectURL(selectedFile) : Camera1} alt="" /> */}
+          <input
+                                                    id="file-inputs"
+                                                    type="file"
+                                                    onChange={handleChangeback}
+                                                    style={{ display: 'none' }}
+                                                />
+
                                             </div>
                                             <div className="col">
                                                 <img src={BrowserFolder} alt="" className="browserfolder" />
