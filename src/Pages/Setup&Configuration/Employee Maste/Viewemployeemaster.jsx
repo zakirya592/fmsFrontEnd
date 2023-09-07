@@ -47,12 +47,15 @@ function Viewemployeemaster() {
     const [bdata, setbata] = useState([])
     const [desnation, setdesnation] = useState([]);
     const [desig, setdesig] = useState([]);
-    
+
+    const [imageshow, setimageshow] = useState()
     const getapi = () => {
         axios.get(`/api/EmployeeMaster_GET_BYID/${userId}`, {
         },)
             .then((res) => {
                 console.log('TO Assets Master By ID', res.data);
+
+                setimageshow(res.data.recordsets[0][0].EmployeeImage)
                 const {
                     Firstname,
                     Lastname,
@@ -300,7 +303,8 @@ const handleProvinceChangeDes = (e) => {
                                     <div className="printerPic col-sm-12 col-md-4 col-lg-4 col-xl-3 ">
                                         <div className="row">
                                             <div className="col">
-                                                <img src={Printer} alt="" className="printerpic" />
+                                                {/* <img src={Printer} alt="" className="printerpic" /> */}
+                                                <img src={imageshow != null ? imageshow : Printer} alt="" className="printerpic" />
                                             </div>
                                             <div className="col">
                                                 <img src={Barcode} alt="" className="barcodepic" />

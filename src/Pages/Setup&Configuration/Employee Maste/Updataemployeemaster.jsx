@@ -24,7 +24,7 @@ function Updataemployeemaster() {
 
     let { userId } = useParams();
     const navigate = useNavigate();
-
+const [imageshow, setimageshow] = useState()
     const [value, setvalue] = useState({
         EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
         DepartmentCode: 'Select Dept Code', Departmentname: '',//Department api input 
@@ -36,7 +36,7 @@ function Updataemployeemaster() {
         NationalityCode: '', MaritalStatus: '', NationalityDescription: '',
         NationalIQAMANumber: '', PassportNumber: '',
         DesignationCode: '', DesignationName: '', Email: '',
-        JoiningDate: ''
+        JoiningDate: '',
     })
 
     const [dropdownLocation, setdropdownLocation] = useState([])
@@ -81,6 +81,8 @@ function Updataemployeemaster() {
                     JoiningDate,
                     BirthDate
                 } = res.data.recordsets[0][0];
+                setimageshow(res.data.recordsets[0][0].EmployeeImage)
+                
                 setvalue((prevValue) => ({
                     ...prevValue,
                     EmployeeStatus,
@@ -259,29 +261,39 @@ function Updataemployeemaster() {
                 // console.log(err);;
             });
     }
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    function handleChangeback(e) {
+        setEmployeeImage(e.target.files[0]);
+        setSelectedFile(e.target.files[0]);
+    }
+
+    const [EmployeeImage, setEmployeeImage] = useState()
+
+    const formData = new FormData();
+    formData.append('Gender', value.Gender);
+    formData.append('Title', value.Title);
+    formData.append('BirthDate', value.BirthDate);
+    formData.append('Age', value.Age);
+    formData.append('Lastname', value.Lastname);
+    formData.append('Middlename', value.Middlename);
+    formData.append('Firstname', value.Firstname);
+    formData.append('NationalityCode', value.NationalityCode);
+    formData.append('MaritalStatus', value.MaritalStatus);
+    formData.append('NationalID', value.NationalID);
+    formData.append('PassportNumber', value.PassportNumber);
+    formData.append('MobileNumber', value.MobileNumber);
+    formData.append('LandlineNumber', value.LandlineNumber);
+    formData.append('DesignationCode', value.DesignationCode);
+    formData.append('Email', value.Email);
+    formData.append('DepartmentCode', value.DepartmentCode);
+    formData.append('BuildingCode', value.BuildingCode);
+    formData.append('LocationCode', value.LocationCode);
+    formData.append('JoiningDate', value.JoiningDate);
+    formData.append('EmployeeImage', EmployeeImage);
     function postapi(e) {
-        axios.put(`/api/EmployeeMaster_Put/${userId}`, {
-            // EmployeeStatus: value.EmployeeStatus,
-            Gender: value.Gender,
-            Title: value.Title,
-            BirthDate: value.BirthDate,
-            Age: value.Age,
-            Lastname: value.Lastname,
-            Middlename: value.Middlename,
-            Firstname: value.Firstname,
-            NationalityCode: value.NationalityCode,
-            MaritalStatus: value.MaritalStatus,
-            NationalID: value.NationalID,
-            PassportNumber: value.PassportNumber,
-            MobileNumber: value.MobileNumber,
-            LandlineNumber: value.LandlineNumber,
-            DesignationCode: value.DesignationCode,
-            Email: value.Email,
-            DepartmentCode: value.DepartmentCode,
-            BuildingCode: value.BuildingCode,
-            LocationCode: value.LocationCode,
-            JoiningDate: value.JoiningDate
-        })
+        axios.put(`/api/EmployeeMaster_Put/${userId}`, formData)
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
@@ -338,7 +350,10 @@ function Updataemployeemaster() {
                                     <div className="printerPic col-sm-12 col-md-4 col-lg-4 col-xl-3 ">
                                         <div className="row">
                                             <div className="col">
-                                                <img src={Printer} alt="" className="printerpic" />
+                                                {/* <img src={Printer} alt="" className="printerpic" /> */}
+                                                <img src={selectedFile ? URL.createObjectURL(selectedFile) : imageshow != null ? imageshow : Printer} alt="" className="printerpic" />
+
+
                                             </div>
                                             <div className="col">
                                                 <img src={Barcode} alt="" className="barcodepic" />
@@ -346,12 +361,22 @@ function Updataemployeemaster() {
                                         </div>
 
                                         <div className="row ">
-                                            <div className="col camera1">
-                                                <img src={Camera1} alt="" />
-                                            </div>
-                                            <div className="col">
+                                            {/* <div className="col camera1"> */}
+                                                {/* <img src={Camera1} alt="" /> */}
+                                                <label htmlFor="file-inputs">
+                                                    <img src={BrowserFolder} />
+                                                </label>
+                                                {/* <img src={selectedFile ? URL.createObjectURL(selectedFile) : Camera1} alt="" /> */}
+                                                <input
+                                                    id="file-inputs"
+                                                    type="file"
+                                                    onChange={handleChangeback}
+                                                    style={{ display: 'none' }}
+                                                />
+                                            {/* </div> */}
+                                            {/* <div className="col" htmlFor="file-inputs">
                                                 <img src={BrowserFolder} alt="" className="browserfolder" />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
 
