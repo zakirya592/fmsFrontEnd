@@ -25,7 +25,7 @@ function WarrantyPeriod() {
     const navigate = useNavigate()
     const [getdata, setgetdata] = useState([])
     const getapi = () => {
-        axios.get(`/api/WarrantyPeriod_GET_LIST`, {
+        axios.get(`/api/WarrantyPeriod_GET_LISTS`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
