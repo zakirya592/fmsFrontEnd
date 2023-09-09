@@ -167,7 +167,7 @@ function CreateSupplier() {
 
                                 </p>
                                 <div className="d-flex">
-                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                    {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <AddCircleOutlineIcon />
                                         Create
                                     </button>
@@ -178,7 +178,7 @@ function CreateSupplier() {
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                         <GetAppIcon />
                                         Export
-                                    </button>
+                                    </button> */}
 
                                 </div>
                             </div>

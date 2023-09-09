@@ -430,7 +430,7 @@ function Mainworkordeer() {
                     <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
                       <div className='emailsection position-relative d-grid my-2'>
                         <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Work Request Numbe</label>
+                          Work Request Number</label>
 
                         <input
                           types='text'
