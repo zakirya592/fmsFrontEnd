@@ -110,21 +110,6 @@ function Maintransactiontable() {
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
-    // const filteredRows = getdata && getdata.filter(row => (
-    //   (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-    //   (!requestByEmployee || row.EmployeeID === requestByEmployee) 
-    // )).map((row, indes) => ({
-    //   ...row,
-    //   id: indes + 1,
-    //   RequestNumber: row.RequestNumber,
-    //   RequestStatus: row.RequestStatus ,
-    //   EmployeeID: row.EmployeeID,
-    //   WorkPriority: row.WorkPriority,
-    //   RequestDateTime:row.RequestDateTime,
-    //   WorkType: row.WorkType,
-    //   workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
-    // }))
-
     const filteredRows = Array.from({ length: 100 }).map((_, index) => {
         return {
             id: index + 1,
@@ -170,9 +155,11 @@ function Maintransactiontable() {
                                         <p className="color1 workitoppro my-auto">
                                            Asset Transactions<span className='star'>*</span></p>
                                         <div className="d-flex">
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                                navigate('/createworkrequest')
-                                            })}><AddCircleOutlineIcon className='me-1' />Create</button>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
+                                            //  onClick={(() => {
+                                            //     navigate('/createworkrequest')
+                                            // })}
+                                            ><AddCircleOutlineIcon className='me-1' />Create</button>
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
                                                 <PrintIcon className="me-1" />
                                                 Print

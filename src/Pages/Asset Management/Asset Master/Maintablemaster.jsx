@@ -28,6 +28,66 @@ function Maintablemaster() {
     const [selectedRow, setSelectedRow] = useState([]);
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'SEQ': index + 1,
+            'Asset Item Description': row.AssetItemDescription,
+            "AssetItem Group": row.AssetItemGroup,
+            'Asset Category': row.AssetCategory,
+            'Asset SubCategory': row.AssetSubCategory,
+            'OnHandQty': row.OnHandQty,
+            'LastPurchase Date': row.LastPurchaseDate,
+        }));
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">Asset Item Description</th>
+          <th style="${headerStyle}">AssetItem Group</th>
+          <th style="${headerStyle}">Asset Category</th>
+          <th style="${headerStyle}">'Asset SubCategory</th>
+          <th style="${headerStyle}">OnHandQty</th>
+          <th style="${headerStyle}">LastPurchase Date</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['Asset Item Description']}</td>
+            <td>${row['AssetItem Group']}</td>
+            <td>${row['Asset Category']}</td>
+            <td>${row['Asset SubCategory']}</td>
+            <td>${row['OnHandQty']}</td>
+            <td>${row['LastPurchase Date']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+
     useEffect(() => {
         console.log("Testing.....")
         console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
@@ -279,9 +339,7 @@ function Maintablemaster() {
         page: 0,
     });
 
-    const handlePrint = () => {
-        window.print(); // This triggers the browser's print dialog
-    };
+    
     return (
         <>
             <div className="bg">
@@ -310,10 +368,8 @@ function Maintablemaster() {
                                                 navigate('/createAssetMaster')
                                             })}><AddCircleOutlineIcon className='me-1' />Create</button>
 
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}>
-                                                <PrintIcon className="me-1" />
-                                                Print
-                                            </button>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
+
                                             <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                             </CSVLink>
                                         </div>

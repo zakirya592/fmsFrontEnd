@@ -468,8 +468,8 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                           {/* Top Section */}
                           <div className="d-flex justify-content-between my-auto">
                               <p className="color1 workitoppro my-auto">
-                                  Asset Masterlist - Updata
-                                  <span className="star">*</span>
+                                  Asset Masterlist - Update
+                                  
                               </p>
                           </div>
                           <hr className="color3 line" />
@@ -506,7 +506,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 ">
                                   <div className='emailsection position-relative d-grid my-2'>
                                       <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                          Asset Category<span className="star">*</span>
+                                          Asset Category
                                       </label>
                                       <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example"
                                           value={value.AssetCategory}
@@ -523,7 +523,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                   </div>
                                   <div className='emailsection position-relative d-grid my-2'>
                                       <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                          Asset Sub-Category <span className="star">*</span>
+                                          Asset Sub-Category 
                                       </label>
                                       <select className='rounded inputsectiondropdpwn color2 py-2' id="subCategory" aria-label="Floating label select example"
                                           value={value.assetSubCategory}
@@ -567,7 +567,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Asset Sub-Category Discription<span className="star">*</span>
+                                          Asset Sub-Category Discription
                                       </label>
                                       <input
                                           types='text'
@@ -594,7 +594,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Asset Item Discription<span className="star">*</span>
+                                          Asset Item Discription <span className="star">*</span>
                                       </label>
                                       <input
                                           type='text'
@@ -624,7 +624,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                   <div className='emailsection position-relative d-grid my-2'>
                                       <label htmlFor='AssetItemGroup' className='lablesection color3 text-start mb-1'>
-                                          Asset Item Group<span className="star">*</span>
+                                          Asset Item Group
                                       </label>
                                       <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemGroup" aria-label="Floating label select example"
                                           value={value.AssetItemGroup}
@@ -645,7 +645,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="AssetitemGroupDescription"
                                           className="lablesection color3 text-start mb-1">
-                                          Asset Item Group Description<span className="star">*</span>
+                                          Asset Item Group Description
                                       </label>
                                       <input
                                           types='text'
@@ -670,7 +670,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                   <div className='emailsection position-relative d-grid my-2'>
                                       <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                          Asset Type <span className="star">*</span>
+                                          Asset Type 
                                       </label>
                                       <select className='rounded inputsectiondropdpwn color2 py-2' id="assettype" aria-label="Floating label select example"
                                           value={value.AssetType}
@@ -692,7 +692,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Asset type Discription<span className="star">*</span>
+                                          Asset type Discription
                                       </label>
                                       <input
                                           types='text'
@@ -721,7 +721,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Manufacturer<span className="star">*</span>
+                                          Manufacturer
                                       </label>
                                       <input
                                           types='text'
@@ -742,7 +742,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Model<span className="star">*</span>
+                                          Model
                                       </label>
                                       <input
                                           types='text'
@@ -763,7 +763,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Brand<span className="star">*</span>
+                                          Brand
                                       </label>
                                       <input
                                           types='text'
@@ -784,7 +784,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                   <div className='emailsection d-grid my-2'>
                                       <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                          Purchase Date<span className="star">*</span>
+                                          Purchase Date
                                       </label>
                                       {bdata !== 'Invalid date' ? (
                                           <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
@@ -814,7 +814,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="PurchaseAmount"
                                           className="lablesection color3 text-start mb-1">
-                                          Purchase Amount<span className="star">*</span>
+                                          Purchase Amount
                                       </label>
                                       <input
                                           type='number'
@@ -835,7 +835,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
                                   <div className='emailsection position-relative d-grid my-2'>
                                       <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                          Warrenty Period <span className="star">*</span>
+                                          Warrenty Period 
                                       </label>
                                       <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example"
                                           value={value.WarrentyPeriod}
@@ -861,7 +861,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                   <div className='emailsection d-grid my-2'>
                                       <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                          Warrenty Start Date<span className="star">*</span>
+                                          Warrenty Start Date
                                       </label>
                                     
                                       {WarrantystartDatevalid !== 'Invalid date' ? (
@@ -882,7 +882,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                   <div className='emailsection d-grid my-2'>
                                       <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                          Warrenty End Date<span className="star">*</span>
+                                          Warrenty End Date
                                       </label>
 
                                      
@@ -909,7 +909,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="OnHandQty"
                                           className="lablesection color3 text-start mb-1">
-                                          on-Hand Qty.<span className="star">*</span>
+                                          on-Hand Qty.
                                       </label>
                                       <input
                                           type='number'
@@ -932,7 +932,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="ReOrderLevel"
                                           className="lablesection color3 text-start mb-1">
-                                          Re-Order Qty Level<span className="star">*</span>
+                                          Re-Order Qty Level
                                       </label>
                                       <input
                                           type='number'
@@ -955,7 +955,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="MinimumOrderLevel"
                                           className="lablesection color3 text-start mb-1">
-                                          Minimum Level<span className="star">*</span>
+                                          Minimum Level
                                       </label>
                                       <input
                                           type='number'
@@ -978,7 +978,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="MaximumOrderLevel"
                                           className="lablesection color3 text-start mb-1">
-                                          Maximum Level<span className="star">*</span>
+                                          Maximum Level
                                       </label>
                                       <input
                                           type='number'
@@ -1000,7 +1000,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                   <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
                                       <div className='emailsection position-relative d-grid my-2'>
                                           <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                              Units <span className="star">*</span>
+                                              Units 
                                           </label>
                                           <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example"
                                               value={value.Unitscode}
@@ -1023,7 +1023,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                           <label
                                               htmlFor="UnitsDescriptions"
                                               className="lablesection color3 text-start mb-1">
-                                              Units Descriptions<span className="star">*</span>
+                                              Units Descriptions
                                           </label>
                                           <input
                                               types='text'
@@ -1047,7 +1047,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="lastPurchaseDate"
                                           className="lablesection color3 text-start mb-1">
-                                          last purchase date<span className="star">*</span>
+                                          last purchase date
                                       </label>
 
 
@@ -1080,7 +1080,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="LastPOReference"
                                           className="lablesection color3 text-start mb-1">
-                                          Po Referencell<span className="star">*</span>
+                                          Po Referencell
                                       </label>
                                       <input
                                           types='text'
@@ -1104,7 +1104,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="LastPOAmount"
                                           className="lablesection color3 text-start mb-1">
-                                          Purchase Amount<span className="star">*</span>
+                                          Purchase Amount
                                       </label>
                                       <input
                                           type='number'
@@ -1128,7 +1128,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="LastPOQty"
                                           className="lablesection color3 text-start mb-1">
-                                          PO Qty. Units<span className="star">*</span>
+                                          PO Qty. Units
                                       </label>
                                       <input
                                           type='text'
@@ -1151,7 +1151,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="Warranty"
                                           className="lablesection color3 text-start mb-1">
-                                          Warrenty End<span className="star">*</span>
+                                          Warrenty End
                                       </label>
                                       <input
                                           type='number'
@@ -1176,7 +1176,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                               <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
                                   <div className='emailsection position-relative d-grid my-2'>
                                       <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                          Vendor Code <span className="star">*</span>
+                                          Vendor Code 
                                       </label>
                                       <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example"
                                           value={value.Vendorcode}
@@ -1199,7 +1199,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label
                                           htmlFor="workCategoryDiscription"
                                           className="lablesection color3 text-start mb-1">
-                                          Vendor Name<span className="star">*</span>
+                                          Vendor Name
                                       </label>
                                       <input
                                           types='text'
