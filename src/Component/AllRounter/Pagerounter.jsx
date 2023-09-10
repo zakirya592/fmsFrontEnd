@@ -200,8 +200,8 @@ function Pagerounter() {
 
           <Route exact path='AssetTransaction' element={<Maintransactiontable />} />
           <Route exact path='/Create/Transaction' element={<Createtransaction />} />
-          <Route exact path='/View/transaction' element={<Viewtransaction />} />
-          <Route exact path='/Updata/transaction' element={<Updatatransaction />} />
+          <Route exact path='/View/transaction/:userId' element={<Viewtransaction />} />
+          <Route exact path='/Updata/transaction/:userId' element={<Updatatransaction />} />
 
           {/* System Modules */}
           <Route exact path="/systemmodules" element={<SystemModules />} />

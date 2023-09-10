@@ -1,42 +1,365 @@
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from 'react'
 import Box from "@mui/material/Box";
 import Siderbar from "../../../Component/Siderbar/Siderbar";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import Printer from "../../../Image/printer.jpeg"
-import Barcode from "../../../Image/barcode.png"
-import Camera1 from "../../../Image/camera 1.png"
-import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
-import PhoneInput from "react-phone-number-input";
-import { useNavigate } from 'react-router-dom';
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios'
+import Autocomplete from '@mui/material/Autocomplete';
+import { CircularProgress } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Swal from "sweetalert2";
+
+
 function Viewtransaction() {
+
+    let { userId } = useParams();
     const navigate = useNavigate();
-    const [assetCategory, setassetCategory] = useState("");
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
-    const [assetSubCategory, setassetSubCategory] = useState("");
     const [assetSubCategoryDiscription, setassetSubCategoryDiscription] = useState("");
-    const [assetItemDiscription, setassetItemDiscription] = useState("");
     const [manufacturer, setmanufacturer] = useState("");
     const [Model, setModel] = useState("");
     const [Brand, setBrand] = useState("");
-    const [purchaseAmount, setpurchaseAmount] = useState("");
-    const [WarrentyPeriod, setWarrentyPeriod] = useState("");
 
     const [value, setvalue] = useState({
-        Emailaddress: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
-        Vendorcode: '', Vendorname:'',
-        poUnite: '', poReference:'',
-        DepartmentCode: 'Select Dept Code', Departmentname: '',
-        BuildingCode: 'Select Building', 
-        Location: 'Select Location',
-        Unites: '', UnitesDescription:"",
-        OnhandQty: '', ReOrderQtyLevel: '', Minimumlevel: '', Maximumlevel:''
-
+        Vendorcode: '', Vendorname: '',
+        poUnite: '', poReference: '',
+        DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '',
+        Unites: '', UnitesDescription: "",
+        AssetType: '', SerialNumber: '',
+        EmployeeID: null, Firstname: '', AssetItemDescription: '', AssetItemTagID: '', AssetCondition: '', AssetCondition: ''
     })
+    const getapi = () => {
+        axios.get(`/api/AssetTransactions_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Assets Master By ID', res.data);
+
+                const Departmentcode = res.data.recordset[0].DepartmentCode
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    AssetItemTagID: res.data.recordset[0].AssetItemTagID,
+                    AssetCondition: res.data.recordset[0].AssetCondition,
+                    AssetItemDescription: res.data.recordset[0].AssetItemDescription,
+                    SerialNumber: res.data.recordset[0].SerialNumber,
+                    LocationCode: res.data.recordset[0].LocationCode,
+                    BuildingCode: res.data.recordset[0].BuildingCode,
+                    DepartmentCode: Departmentcode,
+                    EmployeeID: res.data.recordset[0].EmployeeID
+                }));
+                // Department_desc_LIST
+                axios.get(`/api/Department_desc_LIST/${Departmentcode}`)
+                    .then((res) => {
+                        setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
+    const [assetCategorylist, setassetCategorylist] = useState("");
+    const [AssetItemGrouplist, setAssetItemGrouplist] = useState("");
+    const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState("");
+    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
+    const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
+    const [dropdownLocation, setdropdownLocation] = useState([])
+    const [listAssetCondition, setlistAssetCondition] = useState([])
+
+    useEffect(() => {
+        // AssetCondition_GET_LIST
+        axios.get(`/api/AssetCondition_GET_LIST`).then((res) => {
+            console.log('======', res.data);
+            setlistAssetCondition(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        axios.get(`/api/AssetType_GET_LIST`).then((res) => {
+            setassetTypelist(res.data.recordsets[0])
+            console.log(res.data);
+        }).catch((err) => {
+            console.log(err);
+        });
+
+        axios.get(`/api/AssetCategory_GET_LIST`).then((res) => {
+            setassetCategorylist(res.data.recordsets[0])
+            //  console.log(res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`/api/AssetSubCategory_GET_LIST`).then((res) => {
+            setassetSubCategorylist(res.data.recordsets[0])
+            //  console.log(res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`/api/AssetItemGroup_GET_LIST`).then((res) => {
+            setAssetItemGrouplist(res.data.recordsets[0])
+            console.log(res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // dropdownDepartmentLIST
+        axios.get(`/api/Department_LIST`).then((res) => {
+            setdropdownDepartmentLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // Building_LIST
+        axios.get(`/api/Building_LIST`).then((res) => {
+            setdropdownBuildingLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // Location_LIST
+        axios.get(`/api/Location_LIST`).then((res) => {
+            setdropdownLocation(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+    const [assetTypelist, setassetTypelist] = useState("");
+    const [assetCategoryDiscription, setassetCategoryDiscription] = useState("");
+    const [assetSubCategorylist, setassetSubCategorylist] = useState("");
+    // handleProvinceChangeassetType
+    const handleProvinceChangeassetType = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            AssetType: e.target.value,
+        }));
+        axios.get(`/api/AssetType_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+    // handleProvinceChangeasassetCategory
+    const handleProvinceChangeasassetCategory = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            assetCategory: e.target.value,
+        }));
+        axios.get(`/api/AssetCategory_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setassetCategoryDiscription(res.data.recordset[0].AssetCategoryDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+    // AssetSubCategory_GET_BYID
+    const handleProvinceChangeassetSubCategory = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            assetSubCategory: e.target.value,
+        }));
+        axios.get(`/api/AssetSubCategory_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:', res.data);
+                setassetSubCategoryDiscription(res.data.recordset[0].AssetSubCategoryDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+    // handleProvinceChangeAssetItemGroup
+    const handleProvinceChangeAssetItemGroup = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            AssetItemGroup: e.target.value,
+        }));
+        axios.get(`/api/AssetItemGroup_GET_BYID/${Deptnale}`)
+            .then((res) => {
+                setAssetitemGroupDescription(res.data.recordset[0].AssetItemGroupCodeDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+    }
+    // Department
+    const [DeptDesc, setDeptDesc] = useState('')
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            DepartmentCode: e.target.value,
+        }));
+        axios.get(`/api/Department_desc_LIST/${Deptnale}`)
+            .then((res) => {
+                setDeptDesc(res.data.recordset[0].DepartmentDesc)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    // Employe ID
+    const [unitCode, setUnitCode] = useState([]);
+    const [dropname, setdropname] = useState([])
+    const [open, setOpen] = useState(false);
+    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
+    const [gpcList, setGpcList] = useState([]); // gpc list
+    const abortControllerRef = useRef(null);
+
+    useEffect(() => {
+
+        // const handleOnBlurCall = () => {
+
+        axios.get('/api/EmployeeID_GET_LIST')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                const unitNameList = data.map((unitData) => unitData?.EmployeeID);
+                const NAmese = data.map((namedata) => namedata?.Firstname);
+                // setdropname(NAmese)
+                setdropname(data)
+                setUnitCode(unitNameList)
+
+            })
+            .catch((error) => {
+                console.log('-----', error);
+            }
+            );
+        // }
+
+    }, [])
+
+    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+        if (reason === 'reset' || reason === 'clear') {
+            setGpcList([]); // Clear the data list if there is no input
+            setUnitCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            return;
+        }
+        if (newInputValue === null) {
+
+            // perform operation when input is cleared
+            setGpcList([]);
+            setUnitCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoading(true);
+        setOpen(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRef.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCode(data ?? [])
+                    setOpen(true);
+                    setAutocompleteLoading(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    EmployeeID: []
+                }))
+                setAutocompleteLoading(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCode([])
+            setOpen(false);
+            setAutocompleteLoading(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChange = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === ' -') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: []
+            }));
+        }
+        if (value && value.EmployeeID) {
+            setvalue(prevValue => ({
+                ...prevValue,
+                EmployeeID: value.EmployeeID,
+                Firstname: value.Firstname
+            }));
+            console.log('Received value----------:', value.EmployeeID);
+            localStorage.setItem('EmployeeIDset', value.EmployeeID);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
 
     return (
         <>
@@ -61,8 +384,8 @@ function Viewtransaction() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        Asset Transaction - View
-                                        <span className="star">*</span>
+                                        Asset Transaction - Update
+
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -70,28 +393,6 @@ function Viewtransaction() {
                                 {/* Rows sections  */}
                                 <div className="row mx-auto formsection">
 
-                                    <div className="printerPic col-sm-12 col-md-12 col-lg-4 col-xl-3 ">
-                                     <center>
-
-                                        <div className="row">
-                                            <div className="col">
-                                                <img src={Printer} alt="" className="printerpic" />
-                                            </div>
-                                            <div className="col">
-                                                <img src={Barcode} alt="" className="barcodepic" />
-                                            </div>
-                                        </div>
-                                     </center>
-
-                                        {/* <div className="row ">
-                                            <div className="col camera1">
-                                                <img src={Camera1} alt="" />
-                                            </div>
-                                            <div className="col">
-                                                <img src={BrowserFolder} alt="" className="browserfolder" />
-                                            </div>
-                                        </div> */}
-                                    </div>
                                     {/*  Asset / Stock Number */}
                                     <div className="col-sm-12 col-md-7 col-lg-7 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
@@ -101,9 +402,12 @@ function Viewtransaction() {
                                             <input
                                                 types='text'
                                                 id='EmployeeID'
-                                                value={assetSubCategory}
-                                                onChange={(event) => {
-                                                    setassetSubCategory(event.target.value)
+                                                value={value.AssetItemTagID}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        AssetItemTagID: e.target.value
+                                                    }))
                                                 }}
                                                 // onKeyDown={handleKeyPress}
                                                 className='rounded inputsection py-2'
@@ -119,40 +423,93 @@ function Viewtransaction() {
 
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee ID<span className='star'>*</span>
+                                                Employee ID
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={assetSubCategory}
-                                                onChange={(event) => {
-                                                    setassetSubCategory(event.target.value)
-                                                }}
-                                                // onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee ID'
+                                            <Autocomplete
+                                                id="serachGpc"
+                                                className='rounded inputsection py-0 mt-0'
                                                 required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
+                                                options={unitCode} // Use the formattedGpcList here
+                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                                getOptionLabel={(option) =>
+                                                    option?.EmployeeID
+                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                        : ''
+                                                }
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                                onChange={handleGPCAutoCompleteChange}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.EmployeeID} - {option.Firstname}
+                                                    </li>
+                                                )}
+                                                value={value}
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChange(event, newInputValue, params)}
+                                                loading={autocompleteLoading}
+                                                open={open}
+                                                onOpen={() => {
+                                                    // setOpen(true);
+                                                }}
+                                                onClose={() => {
+                                                    setOpen(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Employee Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoading ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-4 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Condition <span className="star">*</span>
+                                                Asset Condition
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example" value={assetCategory}
-                                                onChange={(event) => {
-                                                    setassetCategory(event.target.value)
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.AssetCondition}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        AssetCondition: e.target.value
+                                                    }))
                                                 }}>
-                                                <option selected className='inputsectiondropdpwn'>Select Asset Condition</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
+                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                {
+                                                    listAssetCondition && listAssetCondition.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.AssetConditionCode}>{itme.AssetConditionCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                         {/* Employee Name */}
@@ -160,15 +517,12 @@ function Viewtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Employee Name<span className="star">*</span>
+                                                Employee Name
                                             </label>
                                             <input
                                                 types='text'
                                                 id='assetsubcategorydiscription'
-                                                value={assetSubCategoryDiscription}
-                                                onChange={e => {
-                                                    setassetSubCategoryDiscription(e.target.value)
-                                                }}
+                                                value={value.Firstname}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Employee Name'
                                                 required
@@ -186,19 +540,23 @@ function Viewtransaction() {
                                     <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
-                                                htmlFor="workCategoryDiscription"
+                                                htmlFor="AssetItemDescription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Item Discription<span className="star">*</span>
+                                                Asset Item Discription
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="workCategoryDiscription" aria-label="Floating label select example" value={assetItemDiscription}
-                                                onChange={(event) => {
-                                                    setassetItemDiscription(event.target.value)
-                                                }}>
-                                                <option selected className='inputsectiondropdpwn'>Select Asset Condition</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
-                                            </select>
+                                            <input
+                                                type='text'
+                                                id='AssetItemDescription'
+                                                value={value.AssetItemDescription}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        AssetItemDescription: e.target.value
+                                                    }))
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Enter Asset Item Discription'
+                                            ></input>
                                             <p
                                                 className='position-absolute text-end serachicon'
                                             >
@@ -212,20 +570,20 @@ function Viewtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor=' AssetIteGroup' className='lablesection color3 text-start mb-1'>
-                                                Asset Item Group <span className="star">*</span>
+                                                Asset Item Group
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='AssetIteGroup'
-                                                value={assetSubCategory}
-                                                onChange={(event) => {
-                                                    setassetSubCategory(event.target.value)
-                                                }}
-                                                // onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Asset Item Group'
-                                                required
-                                            ></input>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemGroup" aria-label="Floating label select example"
+                                                value={value.AssetItemGroup}
+                                                onChange={handleProvinceChangeAssetItemGroup}>
+                                                <option selected className='inputsectiondropdpwn'>Select Asset type</option>
+                                                {
+                                                    AssetItemGrouplist && AssetItemGrouplist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.AssetItemGroupCode}>{itme.AssetItemGroupCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="col-sm-6 col-md-6 col-lg-5 col-xl-5 ">
@@ -233,18 +591,14 @@ function Viewtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Item Group Discription<span className="star">*</span>
+                                                Asset Item Group Discription
                                             </label>
                                             <input
                                                 types='text'
                                                 id='assetsubcategorydiscription'
-                                                value={assetTypeDiscription}
-                                                onChange={e => {
-                                                    setassetTypeDiscription(e.target.value)
-                                                }}
+                                                value={AssetitemGroupDescription}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Item Group Discription'
-                                                required
                                             ></input>
                                             <p
                                                 className='position-absolute text-end serachicon'
@@ -259,20 +613,21 @@ function Viewtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Type <span className="star">*</span>
+                                                Asset Type
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='AssetIteGroup'
-                                                value={assetSubCategory}
-                                                onChange={(event) => {
-                                                    setassetSubCategory(event.target.value)
-                                                }}
-                                                // onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Asset Type '
-                                                required
-                                            ></input>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="assettype" aria-label="Floating label select example"
+                                                value={value.AssetType}
+                                                onChange={handleProvinceChangeassetType}
+                                            >
+                                                <option selected className='inputsectiondropdpwn'>Select Asset type</option>
+                                                {
+                                                    assetTypelist && assetTypelist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.AssetTypeCode}>{itme.AssetTypeCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="col-sm-6 col-md-6 col-lg-5 col-xl-5 ">
@@ -280,7 +635,7 @@ function Viewtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset type Discription<span className="star">*</span>
+                                                Asset type Discription
                                             </label>
                                             <input
                                                 types='text'
@@ -306,20 +661,20 @@ function Viewtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Category <span className="star">*</span>
+                                                Asset Category
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='AssetIteGroup'
-                                                value={assetSubCategory}
-                                                onChange={(event) => {
-                                                    setassetSubCategory(event.target.value)
-                                                }}
-                                                // onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Asset Category'
-                                                required
-                                            ></input>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example"
+                                                value={value.assetCategory}
+                                                onChange={handleProvinceChangeasassetCategory}>
+                                                <option selected className='inputsectiondropdpwn'>Select Asset Category</option>
+                                                {
+                                                    assetCategorylist && assetCategorylist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.AssetCategoryCode}>{itme.AssetCategoryCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="col-sm-6 col-md-6 col-lg-5 col-xl-5 ">
@@ -327,15 +682,13 @@ function Viewtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Category Discription<span className="star">*</span>
+                                                Asset Category Discription
                                             </label>
                                             <input
                                                 types='text'
                                                 id='assetsubcategorydiscription'
-                                                value={assetTypeDiscription}
-                                                onChange={e => {
-                                                    setassetTypeDiscription(e.target.value)
-                                                }}
+                                                value={assetCategoryDiscription}
+
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Category Discription'
                                                 required
@@ -353,20 +706,20 @@ function Viewtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Sub-Category <span className="star">*</span>
+                                                Asset Sub-Category
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='AssetIteGroup'
-                                                value={assetSubCategory}
-                                                onChange={(event) => {
-                                                    setassetSubCategory(event.target.value)
-                                                }}
-                                                // onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Asset Sub-Category'
-                                                required
-                                            ></input>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="subCategory" aria-label="Floating label select example"
+                                                value={value.assetSubCategory}
+                                                onChange={handleProvinceChangeassetSubCategory}>
+                                                <option selected className='inputsectiondropdpwn'>Select Asset Sub-Category</option>
+                                                {
+                                                    assetSubCategorylist && assetSubCategorylist.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.AssetSubCategoryCode}>{itme.AssetSubCategoryCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="col-sm-6 col-md-6 col-lg-5 col-xl-5 ">
@@ -374,15 +727,12 @@ function Viewtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Sub-Category Discription<span className="star">*</span>
+                                                Asset Sub-Category Discription
                                             </label>
                                             <input
                                                 types='text'
                                                 id='assetsubcategorydiscription'
-                                                value={assetTypeDiscription}
-                                               onChange ={e => {
-                                                    setassetTypeDiscription(e.target.value)
-                                                }}
+                                                value={assetSubCategoryDiscription}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Sub-Category Discription'
                                                 required
@@ -399,181 +749,27 @@ function Viewtransaction() {
                                 {/* Break Line */}
                                 <hr className="color3 line" />
 
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="OnhandQty"
-                                                className="lablesection color3 text-center mb-1">
-                                                On-hand Qty <span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='OnhandQty'
-                                                value={value.OnhandQty}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        OnhandQty: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded text-center inputsection py-2'
-                                                placeholder='999999'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="ReOrderQtyLevel "
-                                                className="lablesection color3 text-center mb-1">
-                                                Re-Order Qty Level <span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='ReOrderQtyLevel'
-                                                value={value.ReOrderQtyLevel}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        ReOrderQtyLevel: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded text-center inputsection py-2'
-                                                placeholder='999999'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="Minimumlevel "
-                                                className="lablesection color3 text-center mb-1">
-                                               Minimum Level <span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='Minimumlevel'
-                                                value={value.Minimumlevel}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Minimumlevel: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded text-center inputsection py-2'
-                                                placeholder='999999'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="Maximumlevel "
-                                                className="lablesection color3 text-center mb-1">
-                                                Maximum Level <span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='Maximumlevel'
-                                                value={value.Maximumlevel}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Maximumlevel: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded text-center inputsection py-2'
-                                                placeholder='999999'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                  <div className="row mx-auto formsection">
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Unites' className='lablesection color3 text-start mb-1'>
-                                                Unites <span className="star">*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Unites" aria-label="Floating label select example" value={value.Vendorcode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Unites: e.target.value
-                                                    }))
-                                                }}>
-                                                <option selected className='inputsectiondropdpwn'>Unites code</option>
-                                                <option value="Unites1">One</option>
-                                                <option value="Unites2">Two</option>
-                                                <option value="Unites3">Three</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="UnitesDescription"
-                                                className="lablesection color3 text-start mb-1">
-                                                Unites Description<span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='UnitesDescription'
-                                                value={value.UnitesDescription}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        UnitesDescription: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Unites Description'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div className="row mx-auto formsection">
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
-                                                Department Code<span className='star'>*</span>
+                                                Department Code
                                             </label>
-                                            <select
-                                                className='rounded inputsectiondropdpwn color2 py-2'
-                                                id='DepartmentCode'
-                                                aria-label='Floating label select example'
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
                                                 value={value.DepartmentCode}
-                                                o
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        DepartmentCode: e.target.value
-                                                    }))
-                                                }}
+                                                onChange={handleProvinceChange}
                                             >
-                                                <option value=''>Select Department code</option>
-                                                <option value='12'> Department 1</option>
-                                                <option value='qew'>Department 2</option>
-                                                      
+
+                                                <option className='inputsectiondropdpwn' >Select Dept Code</option>
+                                                {
+                                                    dropdownDepartmentLIST && dropdownDepartmentLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.DepartmentCode}>{itme.DepartmentCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -581,19 +777,13 @@ function Viewtransaction() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                                Department Name<span className='star'>*</span>
+                                                Department Name
                                             </label>
 
                                             <input
                                                 types='text'
                                                 id='Departmentname'
-                                                value={value.Departmentname}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Departmentname: e.target.value
-                                                    }))
-                                                }}
+                                                value={DeptDesc}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Department Name'
                                                 required
@@ -604,20 +794,23 @@ function Viewtransaction() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                Building<span className='star'>*</span>
+                                                Building
                                             </label>
-                                            <select className='roundedinputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
-
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
                                                         BuildingCode: e.target.value
                                                     }))
                                                 }}>
-                                                <option value=''>Select Building</option>
-                                                <option  value='wer'>BuildingCodess</option>
-                                                    
-                                             
+                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                {
+                                                    dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -625,21 +818,27 @@ function Viewtransaction() {
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                Location<span className='star'>*</span>
+                                                Location
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example" value={value.LocationCode}
-
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
+                                                value={value.LocationCode}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
                                                         LocationCode: e.target.value
                                                     }))
-                                                }}>
-                                                <option className='inputsectiondropdpwn' value=''>Select Location</option>
-                                              
-                                                 <option value='LocationCode12'> Location12</option>
-                                                <option value='LocationCode23'> 23</option>
-                                               
+                                                    localStorage.setItem('LocationCode', e.target.value)
+
+                                                }}
+                                            >
+                                                <option className='inputsectiondropdpwn'>Select Location</option>
+                                                {
+                                                    dropdownLocation && dropdownLocation.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.LocationCode}>{itme.LocationCode}</option>
+                                                        )
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -647,12 +846,12 @@ function Viewtransaction() {
                                 </div>
 
                                 <div className="row mx-auto formsection">
-                                    <div className="col-sm-7 col-md-4 col-lg-4 col-xl-4 ">
+                                    <div className="col-sm-6 col-md-4 col-lg-4 col-xl-3 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Manufacturer<span className="star">*</span>
+                                                Manufacturer
                                             </label>
                                             <input
                                                 types='text'
@@ -668,12 +867,12 @@ function Viewtransaction() {
 
                                         </div>
                                     </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                    <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Model<span className="star">*</span>
+                                                Model
                                             </label>
                                             <input
                                                 types='text'
@@ -689,12 +888,12 @@ function Viewtransaction() {
 
                                         </div>
                                     </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                    <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Brand<span className="star">*</span>
+                                                Brand
                                             </label>
                                             <input
                                                 types='text'
@@ -710,327 +909,37 @@ function Viewtransaction() {
 
                                         </div>
                                     </div>
-                                </div>
-
-                                <hr className='color3 line' />
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                               Last Purchase Date<span className="star">*</span>
-                                            </label>
-                                            <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2' />
-
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
+                                    <div className="col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className="emailsection position-relative d-grid my-2">
                                             <label
-                                                htmlFor="PO Reference"
+                                                htmlFor="SerialNumber"
                                                 className="lablesection color3 text-start mb-1">
-                                                PO Reference# <span className="star">*</span>
+                                                Serial Number
                                             </label>
                                             <input
                                                 types='text'
-                                                id='poReference'
-                                                value={value.poReference}
+                                                id='SerialNumber'
+                                                value={value.SerialNumber}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        poReference: e.target.value
+                                                        SerialNumber: e.target.value
                                                     }))
                                                 }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='xxxxxxxxxxxxxxx'
+                                                placeholder='Serial Number'
                                                 required
                                             ></input>
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="workCategoryDiscription"
-                                                className="lablesection color3 text-start mb-1">
-                                                Purchase Amount<span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='Brand'
-                                                value={purchaseAmount}
-                                                onChange={e => {
-                                                    setpurchaseAmount(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Purchase Amount'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="PO Reference"
-                                                className="lablesection color3 text-start mb-1">
-                                                PO Qty./Unite <span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='poUnite'
-                                                value={value.poUnite}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        poUnite: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='999999'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Warrenty Period <span className="star">*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="warrentyperiod" aria-label="Floating label select example" value={WarrentyPeriod}
-                                                onChange={(event) => {
-                                                    setWarrentyPeriod(event.target.value)
-                                                }}>
-                                                <option selected className='inputsectiondropdpwn'>Warrenty Period</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
-                                                Warrenty End Date<span className="star">*</span>
-                                            </label>
-                                            <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2' />
-
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-6 col-md-4 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Vendorcode' className='lablesection color3 text-start mb-1'>
-                                                Vendor Code <span className="star">*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Vendorcode" aria-label="Floating label select example" value={value.Vendorcode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Vendorcode: e.target.value
-                                                    }))
-                                                }}>
-                                                <option selected className='inputsectiondropdpwn'>Vendor code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="Vendorname"
-                                                className="lablesection color3 text-start mb-1">
-                                                Vendor Name<span className="star">*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='Vendorname'
-                                                value={value.Vendorname}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Vendorname: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Vendor Name'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
 
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* Row Two */}
-                                <div className="row mx-auto formsection">
+                                <div className="d-flex justify-content-between mt-3">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/AssetTransaction')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                  
 
-                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Firstname' className='lablesection color3 text-start mb-1'>
-                                                First Name<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Firstname'
-                                                value={value.Firstname}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Firstname: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter First Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
-                                                Middle Name<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Middlename'
-                                                value={value.Middlename}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Middlename: e.target.value
-                                                    }))
-                                                }}
-
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Middle Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Last Name<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Lastname'
-                                                value={value.Lastname}
-
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Lastname: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Last Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Row Three */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='MobileNumber' className='lablesection color3 text-start mb-1'>
-                                                Mobile Number<span className='star'>*</span>
-                                            </label>
-
-                                            <PhoneInput
-                                                placeholder="+966   500000000"
-                                                id='MobileNumber'
-                                                value={value.MobileNumber}
-                                                onChange={(phoneNumber) =>
-                                                    setvalue((prevValue) => ({
-                                                        ...prevValue,
-                                                        MobileNumber: phoneNumber,
-                                                    }))
-                                                }
-                                                className='rounded inputsection custom-phone-input py-2'
-                                                defaultCountry="SA"
-                                                dropdownClass='custom-phone-dropdown'
-                                            />
-
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Landlinenumber' className='lablesection color3 text-start mb-1'>
-                                                Landline Number<span className='star'>*</span>
-                                            </label>
-
-                                            <PhoneInput
-                                                placeholder="+966  0100000000"
-                                                id='Landlinenumber'
-                                                value={value.LandlineNumber}
-                                                onChange={(LandlineNumber) =>
-                                                    setvalue((prevValue) => ({
-                                                        ...prevValue,
-                                                        LandlineNumber: LandlineNumber,
-                                                    }))
-                                                }
-                                                className='rounded inputsection py-2'
-                                                defaultCountry="SA" />
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Emailaddress' className='lablesection color3 text-start mb-1'>
-                                                Email Address<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='email'
-                                                id='Emailaddress'
-                                                value={value.Emailaddress}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Emailaddress: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder=' Email Address'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 formsection ms-3 col-md-8 col-lg-8 col-xl-8 ">
-                                    <div className='emailsection d-grid my-2'>
-                                        <label htmlFor='ProblemDescription' className='lablesection color3 text-start mb-1'>
-                                            Remarks /  Notes<span className="star">*</span>
-                                        </label>
-                                        <div className="form-floating inputsectiondropdpwn">
-                                            <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Remarks /  Additional Notes " id="Remarks"></textarea>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex justify-content-start mt-3">
-                                    <button type="button" className="border-0 px-3 savebtn py-2" onClick={() => navigate('/AssetTransaction')}>
-                                        <ArrowCircleLeftOutlinedIcon className="me-2" />
-                                        Back
-                                    </button>
                                 </div>
                             </div>
                         </div>

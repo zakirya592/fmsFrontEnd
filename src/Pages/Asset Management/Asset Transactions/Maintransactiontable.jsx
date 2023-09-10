@@ -20,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { CSVLink } from "react-csv";
+import Swal from "sweetalert2";
 
 function Maintransactiontable() {
     const navigate = useNavigate();
@@ -118,6 +119,55 @@ function Maintransactiontable() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    // Deleted api section
+    const Deletedapi = (AssetItemTagID) => {
+        console.log(AssetItemTagID);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `You want to delete this ${AssetItemTagID} workRequest`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/AssetTransactions_DELETE_BYID/${AssetItemTagID}`)
+                    .then((res) => {
+                        getapi()
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            `workrequest ${AssetItemTagID} has been deleted.`,
+                            'success'
+                        )
+                        getapi()
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    });
+
+            }
+        })
+
+    };
+
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
 
@@ -151,15 +201,18 @@ function Maintransactiontable() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
+                    <MenuItem onClick={() => navigate(`/View/transaction/${params.row.AssetItemTagID}`)} >
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => navigate('/Updata/transaction')}>
+                    <MenuItem onClick={() => navigate(`/Updata/transaction/${params.row.AssetItemTagID}`)}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
+                    <MenuItem onClick={() => {
+                        Deletedapi(params.row.AssetItemTagID)
+                        handleMenuClose();
+                    }}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -170,11 +223,11 @@ function Maintransactiontable() {
         );
     }
     const [requestByEmployee, setrequestByEmployee] = useState('');
-    const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
+    const [AssetItemDescriptionfilter, setAssetItemDescriptionfilter] = useState('')
 
     const filteredRows = getdata && getdata.filter(row => (
-        // (!RequestStatusFilterValue || row.EmployeeID === RequestStatusFilterValue) &&
-        (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
+        (!requestByEmployee || (row.AssetItemTagID && row.AssetItemTagID.includes(requestByEmployee)))  &&
+        (!AssetItemDescriptionfilter || row.AssetItemDescription.toLowerCase().includes(AssetItemDescriptionfilter.toLowerCase()))
     )).map((row, index) => ({
         ...row,
         id: index + 1,
@@ -239,15 +292,15 @@ function Maintransactiontable() {
                                         <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                   EMPLOYEE ID#<span className='star'>*</span>
+                                                  AssetItem TagID
                                                 </label>
                                                 <input
                                                     types='text'
                                                     id='Employeenumber'
-                                                    placeholder="Select filter Asset Item Description"
-                                                    // value={RequestStatusFilterValue}
+                                                    placeholder="Select AssetItemTagID"
+                                                    value={requestByEmployee}
                                                     className='rounded inputsection py-2'
-                                                    // onChange={(e) => RequestStatusFilterValue(e.target.value)}
+                                                    onChange={(e) => setrequestByEmployee(e.target.value)}
                                                 ></input>
                                                 <p
                                                     className='position-absolute text-end serachicon'
@@ -259,15 +312,15 @@ function Maintransactiontable() {
                                         <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                    Asset Item Description<span className='star'>*</span>                                        </label>
+                                                    Asset Item Description   </label>
 
                                                 <input
                                                     types='text'
-                                                    id='Employeenumber'
+                                                    id='Asset'
                                                     placeholder="Select filter Asset Item Description"
-                                                    value={requestByEmployee}
+                                                    value={AssetItemDescriptionfilter}
                                                     className='rounded inputsection py-2'
-                                                    onChange={(e) => setrequestByEmployee(e.target.value)}
+                                                    onChange={(e) => setAssetItemDescriptionfilter(e.target.value)}
                                                 ></input>
                                                 <p
                                                     className='position-absolute text-end serachicon'

@@ -351,7 +351,7 @@ function Createtransaction() {
                 console.log(res.data);
                 Swal.fire(
                     'Created!',
-                    `Transaction ${value.EmployeeID} has been created successfully`,
+                    `Transaction ${value.AssetItemTagID} has been created successfully`,
                     'success'
                 )
                 navigate('/AssetTransaction')
@@ -394,7 +394,7 @@ function Createtransaction() {
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
                                         Asset Transaction - Create
-                                        <span className="star">*</span>
+                                        
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -458,7 +458,7 @@ function Createtransaction() {
 
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee ID<span className='star'>*</span>
+                                                Employee ID
                                             </label>
                                             <Autocomplete
                                                 id="serachGpc"
@@ -528,7 +528,7 @@ function Createtransaction() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-4 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Condition <span className="star">*</span>
+                                                Asset Condition 
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.AssetCondition}
                                                 onChange={e => {
@@ -552,7 +552,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Employee Name<span className="star">*</span>
+                                                Employee Name
                                             </label>
                                             <input
                                                 types='text'
@@ -577,7 +577,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="AssetItemDescription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Item Discription<span className="star">*</span>
+                                                Asset Item Discription
                                             </label>
                                             <input
                                                 type='text'
@@ -605,7 +605,7 @@ function Createtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor=' AssetIteGroup' className='lablesection color3 text-start mb-1'>
-                                                Asset Item Group <span className="star">*</span>
+                                                Asset Item Group 
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="AssetItemGroup" aria-label="Floating label select example"
                                                 value={value.AssetItemGroup}
@@ -626,7 +626,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Item Group Discription<span className="star">*</span>
+                                                Asset Item Group Discription
                                             </label>
                                             <input
                                                 types='text'
@@ -648,7 +648,7 @@ function Createtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Type <span className="star">*</span>
+                                                Asset Type 
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="assettype" aria-label="Floating label select example"
                                                 value={value.AssetType}
@@ -670,7 +670,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset type Discription<span className="star">*</span>
+                                                Asset type Discription
                                             </label>
                                             <input
                                                 types='text'
@@ -696,7 +696,7 @@ function Createtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Category <span className="star">*</span>
+                                                Asset Category 
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="asset Category" aria-label="Floating label select example"
                                                 value={value.assetCategory}
@@ -717,7 +717,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Category Discription<span className="star">*</span>
+                                                Asset Category Discription
                                             </label>
                                             <input
                                                 types='text'
@@ -741,7 +741,7 @@ function Createtransaction() {
                                     <div className="col-sm-6 col-md-6 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='workCategory' className='lablesection color3 text-start mb-1'>
-                                                Asset Sub-Category <span className="star">*</span>
+                                                Asset Sub-Category 
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="subCategory" aria-label="Floating label select example"
                                                 value={value.assetSubCategory}
@@ -762,7 +762,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Asset Sub-Category Discription<span className="star">*</span>
+                                                Asset Sub-Category Discription
                                             </label>
                                             <input
                                                 types='text'
@@ -790,7 +790,7 @@ function Createtransaction() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
-                                                Department Code<span className='star'>*</span>
+                                                Department Code
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
                                                 value={value.DepartmentCode}
@@ -812,7 +812,7 @@ function Createtransaction() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                                Department Name<span className='star'>*</span>
+                                                Department Name
                                             </label>
 
                                             <input
@@ -829,7 +829,7 @@ function Createtransaction() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                Building<span className='star'>*</span>
+                                                Building
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
                                                 onChange={e => {
@@ -853,7 +853,7 @@ function Createtransaction() {
                                     <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                Location<span className='star'>*</span>
+                                                Location
                                             </label>
                                             <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
                                                 value={value.LocationCode}
@@ -886,7 +886,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Manufacturer<span className="star">*</span>
+                                                Manufacturer
                                             </label>
                                             <input
                                                 types='text'
@@ -907,7 +907,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Model<span className="star">*</span>
+                                                Model
                                             </label>
                                             <input
                                                 types='text'
@@ -928,7 +928,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="workCategoryDiscription"
                                                 className="lablesection color3 text-start mb-1">
-                                                Brand<span className="star">*</span>
+                                                Brand
                                             </label>
                                             <input
                                                 types='text'
@@ -949,7 +949,7 @@ function Createtransaction() {
                                             <label
                                                 htmlFor="SerialNumber"
                                                 className="lablesection color3 text-start mb-1">
-                                                Serial Number<span className="star">*</span>
+                                                Serial Number
                                             </label>
                                             <input
                                                 types='text'
