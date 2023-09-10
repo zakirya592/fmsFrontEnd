@@ -636,7 +636,7 @@ function CreateAssetMaster() {
                                             <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                                 Purchase Date<span className="star">*</span>
                                             </label>
-                                            <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                            <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
                                              value={value.PurchaseDate} 
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -699,10 +699,10 @@ function CreateAssetMaster() {
                                     </div>
                                     <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='Warrentystart' className='lablesection color3 text-start mb-1'>
                                                 Warrenty Start Date<span className="star">*</span>
                                             </label>
-                                            <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                            <input type="date" id="Warrentystart" name="birthdaytime" className='rounded inputsection py-2'
                                                 value={WarrantyStartDate}
                                                 onChange={handleStartDateChange}
                                                 min={new Date()} />
@@ -712,10 +712,10 @@ function CreateAssetMaster() {
                                     </div>
                                     <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
+                                            <label htmlFor='Warrentyend' className='lablesection color3 text-start mb-1'>
                                                 Warrenty End Date<span className="star">*</span>
                                             </label>
-                                            <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2' 
+                                            <input type="date" id="Warrentyend" name="birthdaytime" className='rounded inputsection py-2' 
                                                 value={WarrantyEndDate}
                                                 onChange={handleEndDateChange}
                                                 min={WarrantyStartDate}/>
@@ -949,31 +949,6 @@ function CreateAssetMaster() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='999,999'
-                                            ></input>
-
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
-                                        <div className="emailsection position-relative d-grid my-2">
-                                            <label
-                                                htmlFor="workCategoryDiscription"
-                                                className="lablesection color3 text-start mb-1">
-                                                Warrenty Period<span className="star">*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Brand'
-                                                value={value.WarrantyPeriod}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        WarrantyPeriod: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='years'
-                                                required
                                             ></input>
 
                                         </div>

@@ -1,6 +1,9 @@
 .loginimg{
-    width: 90%;
-    cursor: pointer;
+       width: 92%;
+       margin-top: 12px;
+       cursor: pointer;
+       height: 135px;
+       margin: 10px 22px
 }
 
 .toperheaderside{

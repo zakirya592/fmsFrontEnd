@@ -8,12 +8,12 @@ import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutl
 import "./assetManagement.css"
 import Printer from "../../../Image/printer.jpeg"
 import Barcode from "../../../Image/barcode.png"
-import Camera1 from "../../../Image/camera 1.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
 import SaveIcon from '@mui/icons-material/Save';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'
 import Swal from "sweetalert2";
+import moment from 'moment';
 
 function UpdataAssetmaster() {
     let { userId } = useParams();
@@ -25,6 +25,9 @@ function UpdataAssetmaster() {
         LastPOAmount: '', LastPOQty: '', AssetItemDescription: '', Warranty: '',
 
     })
+
+    const [WarrantyStartDate, setWarrantyStartDate] = useState('');
+    const [WarrantyEndDate, setWarrantyEndDate] = useState('');
 
     const [assetSubCategorylist, setassetSubCategorylist] = useState("");
     const [assetCategorylist, setassetCategorylist] = useState("");
@@ -46,6 +49,10 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
 
 
     const [imageshow, setimageshow] = useState()
+    const [bdata, setbata] = useState([])
+    const [Purchaselasdatass, setPurchaselasdatass] = useState([])
+    const [WarrantyEndDatevalid, setWarrantyEndDatevalid] = useState([])
+    const [WarrantystartDatevalid, setWarrantystartDatevalid] = useState([])
     const getapi = () => {
         axios.get(`/api/AssetsMaster_GET_BYID/${userId}`, {
         },)
@@ -64,6 +71,39 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                 const PurchaseAmount = res.data.recordset[0].PurchaseAmount
                 const WarrantyPeriod = res.data.recordset[0].WarrantyPeriod
                 const LastVendorID = res.data.recordset[0].LastVendorID
+                const MaterialUnitCode = res.data.recordset[0].MaterialUnitCode
+                const OnHandQty = res.data.recordset[0].OnHandQty
+                const ReOrderLevel = res.data.recordset[0].ReOrderLevel
+                const MinimumOrderLevel = res.data.recordset[0].MinimumOrderLevel
+                const MaximumOrderLevel = res.data.recordset[0].MaximumOrderLevel
+                const LastPOReference = res.data.recordset[0].LastPOReference
+                const LastPOQty = res.data.recordset[0].LastPOQty
+                const Warranty = res.data.recordset[0].Warranty
+                const PurchaseDate = res.data.recordset[0].PurchaseDate
+                const lastPurchaselaat = res.data.recordset[0].LastPurchaseDate
+                const WarrantyStartDate = res.data.recordset[0].WarrantyStartDate
+                const WarrantyEndDate = res.data.recordset[0].WarrantyEndDate
+                const LastPOAmount = res.data.recordset[0].LastPOAmount
+
+                const data = moment(PurchaseDate).format('YYYY-MM-DD')
+                const birthDate = moment(PurchaseDate).format('YYYY-MM-DD')
+                setbata(birthDate)
+
+                const Purdata = moment(lastPurchaselaat).format('YYYY-MM-DD')
+                const Purchasedatas = moment(lastPurchaselaat).format('YYYY-MM-DD')
+                setPurchaselasdatass(Purchasedatas)
+
+                const WarrantyendDate = moment(WarrantyEndDate).format('YYYY-MM-DD')
+                const WarrantyendDatese = moment(WarrantyEndDate).format('YYYY-MM-DD')
+                setWarrantyEndDatevalid(WarrantyendDatese)
+                setWarrantyEndDate(WarrantyendDate)
+
+                const WarrantystartsDate = moment(WarrantyStartDate).format('YYYY-MM-DD')
+                const WarrantystartDatese = moment(WarrantyStartDate).format('YYYY-MM-DD')
+                setWarrantyEndDatevalid(WarrantystartDatese)
+                setWarrantyStartDate(WarrantystartsDate)
+                console.log(WarrantyStartDate);
+
                 setvalue((prevValue) => ({
                     ...prevValue,
                     AssetCategory: AssetCategory,
@@ -74,7 +114,17 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                     PurchaseAmount: PurchaseAmount,
                     WarrentyPeriod: WarrantyPeriod,
                     Vendorcode: LastVendorID,
-                    
+                    Unitscode: MaterialUnitCode,
+                    OnHandQty: OnHandQty,
+                    ReOrderLevel: ReOrderLevel,
+                    MinimumOrderLevel: MinimumOrderLevel,
+                    MaximumOrderLevel: MaximumOrderLevel,
+                    LastPOReference: LastPOReference,
+                    LastPOQty: LastPOQty,
+                    Warranty: Warranty,
+                    PurchaseDate: data,
+                    LastPurchaseDate: Purdata,
+                    LastPOAmount: LastPOAmount
                 }));
 
                 axios.get(`/api/AssetSubCategory_GET_BYID/${AssetSubCategory}`)
@@ -120,6 +170,16 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                     .then((res) => {
                         console.log('-----:', res.data);
                         setVendorName(res.data.recordset[0].VendorName)
+
+                    })
+                    .catch((err) => {
+                        console.log(err);;
+                    });
+
+                axios.get(`/api/MaterialUnits_GET_BYID/${MaterialUnitCode}`)
+                    .then((res) => {
+                        console.log('-----:', res.data);
+                        setUnitsDescriptions(res.data.recordset[0].MaterialUnitDesc)
 
                     })
                     .catch((err) => {
@@ -298,8 +358,6 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
             });
     }
 
-    const [WarrantyStartDate, setWarrantyStartDate] = useState('0');
-    const [WarrantyEndDate, setWarrantyEndDate] = useState('');
     const handleStartDateChange = (event) => {
         const selectedStartDate = new Date(event.target.value);
         const nextDay = new Date(selectedStartDate);
@@ -339,7 +397,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
     }
 
     const formData = new FormData();
-    formData.append('AssetItemDescription', value.AssetItemDescription);
+    // formData.append('AssetItemDescription', value.AssetItemDescription);
     formData.append('AssetItemGroup', value.AssetItemGroup);
     formData.append('AssetType', value.AssetType);
     formData.append('AssetCategory', value.AssetCategory);
@@ -366,9 +424,8 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
     formData.append('Details_Remarks_Notes', 'sjdksd');
     formData.append('AssetImage', AssetImage);
 
-
     const postapi = (e) => {
-        axios.put(`/api/AssetsMaster_Put`, formData)
+        axios.put(`/api/AssetsMaster_Put/${userId}`, formData)
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
@@ -411,7 +468,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                           {/* Top Section */}
                           <div className="d-flex justify-content-between my-auto">
                               <p className="color1 workitoppro my-auto">
-                                  Asset Masterlist - Create
+                                  Asset Masterlist - Updata
                                   <span className="star">*</span>
                               </p>
                           </div>
@@ -549,7 +606,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                                   AssetItemDescription: e.target.value
                                               }))
                                           }}
-
+                                          disabled
                                           className='rounded inputsection py-2'
                                           placeholder='Enter Asset Item Discription'
                                           required
@@ -729,14 +786,25 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                           Purchase Date<span className="star">*</span>
                                       </label>
-                                      <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
-                                          value={value.PurchaseDate}
-                                          onChange={e => {
-                                              setvalue(prevValue => ({
-                                                  ...prevValue,
-                                                  PurchaseDate: e.target.value
-                                              }))
-                                          }} />
+                                      {bdata !== 'Invalid date' ? (
+                                          <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                              value={value.PurchaseDate}
+                                              onChange={e => {
+                                                  setvalue(prevValue => ({
+                                                      ...prevValue,
+                                                      PurchaseDate: e.target.value
+                                                  }))
+                                              }} />
+                                      ) : (
+                                              <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                              value={value.PurchaseDate}
+                                              onChange={e => {
+                                                  setvalue(prevValue => ({
+                                                      ...prevValue,
+                                                      PurchaseDate: e.target.value
+                                                  }))
+                                              }} />
+                                      )}
 
 
                                   </div>
@@ -795,10 +863,18 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                           Warrenty Start Date<span className="star">*</span>
                                       </label>
-                                      <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                    
+                                      {WarrantystartDatevalid !== 'Invalid date' ? (
+                                          <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                              value={WarrantyStartDate}
+                                              onChange={handleStartDateChange}
+                                              min={new Date()} />
+                                      ) : (
+                                              <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
                                           value={WarrantyStartDate}
                                           onChange={handleStartDateChange}
                                           min={new Date()} />
+                                      )}
 
 
                                   </div>
@@ -808,11 +884,20 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                       <label htmlFor='apointementdate' className='lablesection color3 text-start mb-1'>
                                           Warrenty End Date<span className="star">*</span>
                                       </label>
-                                      <input type="datetime-local" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+
+                                     
+                                      {WarrantyEndDatevalid !== 'Invalid date' ? (
+                                          <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
+                                              value={WarrantyEndDate}
+                                              onChange={handleEndDateChange}
+                                              min={WarrantyStartDate} />
+                                      ) : (
+
+                                          <input type="date" id="purchasedate" name="birthdaytime" className='rounded inputsection py-2'
                                           value={WarrantyEndDate}
                                           onChange={handleEndDateChange}
                                           min={WarrantyStartDate} />
-
+                                      )}
 
                                   </div>
                               </div>
@@ -965,6 +1050,9 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                           last purchase date<span className="star">*</span>
                                       </label>
 
+
+                                      {Purchaselasdatass !== 'Invalid date' ? (
+                                        
                                       <input type="date" id="lastPurchaseDate" name="birthdaytime" className='rounded inputsection py-2'
                                           value={value.LastPurchaseDate}
                                           onChange={e => {
@@ -973,6 +1061,17 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                                   LastPurchaseDate: e.target.value
                                               }))
                                           }} />
+                                      ) : (
+                                         
+                                      <input type="date" id="lastPurchaseDate" name="birthdaytime" className='rounded inputsection py-2'
+                                          value={value.LastPurchaseDate}
+                                          onChange={e => {
+                                              setvalue(prevValue => ({
+                                                  ...prevValue,
+                                                  LastPurchaseDate: e.target.value
+                                              }))
+                                          }} />
+                                      )}
 
                                   </div>
                               </div>
@@ -1023,6 +1122,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
 
                                   </div>
                               </div>
+
                               <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
                                   <div className="emailsection position-relative d-grid my-2">
                                       <label
@@ -1042,31 +1142,6 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                           }}
                                           className='rounded inputsection py-2'
                                           placeholder='999,999'
-                                      ></input>
-
-                                  </div>
-                              </div>
-                              <div className="col-sm-6 col-md-4 col-lg-2 col-xl-2 ">
-                                  <div className="emailsection position-relative d-grid my-2">
-                                      <label
-                                          htmlFor="workCategoryDiscription"
-                                          className="lablesection color3 text-start mb-1">
-                                          Warrenty Period<span className="star">*</span>
-                                      </label>
-
-                                      <input
-                                          types='text'
-                                          id='Brand'
-                                          value={value.WarrantyPeriod}
-                                          onChange={e => {
-                                              setvalue(prevValue => ({
-                                                  ...prevValue,
-                                                  WarrantyPeriod: e.target.value
-                                              }))
-                                          }}
-                                          className='rounded inputsection py-2'
-                                          placeholder='years'
-                                          required
                                       ></input>
 
                                   </div>

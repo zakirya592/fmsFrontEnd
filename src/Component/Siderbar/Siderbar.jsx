@@ -11,7 +11,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from "react-router-dom";
-import logo from '../../Image/log.png'
+import logo from '../../Image/log1-removebg-preview.png'
 import WorkOrder from "../../Image/WorkOrder.png"
 import WorkRequest from "../../Image/WorkRequest.png"
 import Logout from "../../Image/Logout.png"

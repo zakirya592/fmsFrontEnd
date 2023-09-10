@@ -108,10 +108,10 @@ function Addassetcode() {
         { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
         { field: 'AssetCategory', headerName: 'ASSET CATGORY', width: 180 },
         { field: 'AssetSubCategory', headerName: 'ASSET SUB_CATGORY', width: 180 },
-        { field: 'RequestDateTime', headerName: 'ON-HAND QTY', width: 150 },
-        { field: 'workTypeDesc', headerName: 'LAST PURCHASE DATE', width: 200 },
-        { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
-        { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
+        { field: 'OnHandQty', headerName: 'ON-HAND QTY', width: 150 },
+        { field: 'LastPurchaseDate', headerName: 'LAST PURCHASE DATE', width: 200 },
+        { field: 'Manufacturer', headerName: 'MANUFACTURE', width: 200 },
+        { field: 'Model', headerName: 'MODEL', width: 200 },
         // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -281,9 +281,10 @@ function Addassetcode() {
         AssetItemGroup: row.AssetItemGroup,
         AssetCategory: row.AssetCategory,
         AssetSubCategory: row.AssetSubCategory,
-        RequestDateTime: row.RequestDateTime,
-        WorkType: row.WorkType,
-        workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
+        OnHandQty: row.OnHandQty,
+        LastPurchaseDate: row.LastPurchaseDate,
+        Manufacturer: row.Manufacturer ,//this Both id  is to display a work types desc //ok
+        Model: row.Model
     }))
 
     const [paginationModel, setPaginationModel] = React.useState({
