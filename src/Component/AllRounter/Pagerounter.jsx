@@ -76,6 +76,7 @@ import Mainworkordeer from '../../Pages/WorkOrder/Mainworkordeer'
 import Updataorderwork from '../../Pages/WorkOrder/Updataorderwork'
 import Viewworkorder from '../../Pages/WorkOrder/Viewworkorder'
 import Testing from '../../Pages/WorkOrder/Testing'
+import Createtransaction from '../../Pages/Asset Management/Asset Transactions/Createtransaction'
 function Pagerounter() {
 
   return (
@@ -198,6 +199,7 @@ function Pagerounter() {
           <Route exact path='/Updata/Assetmaster/:userId' element={<UpdataAssetmaster />} />
 
           <Route exact path='AssetTransaction' element={<Maintransactiontable />} />
+          <Route exact path='/Create/Transaction' element={<Createtransaction />} />
           <Route exact path='/View/transaction' element={<Viewtransaction />} />
           <Route exact path='/Updata/transaction' element={<Updatatransaction />} />
 

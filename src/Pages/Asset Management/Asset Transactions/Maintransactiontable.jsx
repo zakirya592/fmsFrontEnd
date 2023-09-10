@@ -19,21 +19,84 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
+import { CSVLink } from "react-csv";
 
 function Maintransactiontable() {
     const navigate = useNavigate();
+    // print button
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'SEQ': index + 1,
+            'AssetItemTag ID': row.AssetItemTagID,
+            'AssetItem Description': row.AssetItemDescription,
+            'Serial Number': row.SerialNumber,
+            'Employee ID': row.EmployeeID,
+            'AssetCondition': row.AssetCondition,
+            'BuildingCode': row.BuildingCode,
+            'LocationCode': row.LocationCode,
+        }));
+
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">AssetItemTag ID</th>
+          <th style="${headerStyle}">AssetItem Description</th>
+          <th style="${headerStyle}">Serial Number</th>
+          <th style="${headerStyle}">EmployeeID</th>
+          <th style="${headerStyle}">AssetCondition</th>
+          <th style="${headerStyle}">BuildingCode</th>
+          <th style="${headerStyle}">LocationCode</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['AssetItemTag ID']}</td>
+            <td>${row['AssetItem Description']}</td>
+            <td>${row['Serial Number']}</td>
+            <td>${row['Employee ID']}</td>
+            <td>${row['AssetCondition']}</td>
+            <td>${row['BuildingCode']}</td>
+            <td>${row['LocationCode']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/workRequest_GET_LIST`, {
+        axios.get(`/api/AssetTransactions_GET_LIST`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
-                // setWorkTypes(res.data.recordset.map((item,ind)=>{
-                //   console.log("work desc sing",item.WorkType);
-                //   setwordecss(item.WorkType)
-                // }));
             })
             .catch((err) => {
                 console.log(err);
@@ -45,14 +108,13 @@ function Maintransactiontable() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'ASSETITEMDESCRIPTION', headerName: 'ASSET TAG/STOCK NUMBER', width: 220 },
-        { field: 'ASSETITEMGROUP', headerName: 'ASSET ITEM GROUP', width: 160 },
-        { field: 'ASSETCATGORY', headerName: 'ASSET CATGORY', width: 180 },
-        { field: 'ASSETsbuCATGORY', headerName: 'ASSET SUB_CATGORY', width: 180 },
-        { field: 'RequestDateTime', headerName: 'ON-HAND QTY', width: 150 },
-        { field: 'workTypeDesc', headerName: 'LAST PURCHASE DATE', width: 200 },
-        { field: 'BUILDING', headerName: 'BUILDING', width: 200 },
-        { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
+        { field: 'AssetItemTagID', headerName: 'ASSET TAG/STOCK NUMBER', width: 200 },
+        { field: 'SerialNumber', headerName: 'SERIAL NUMBER', width: 160 },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 200 },
+        { field: 'EmployeeID', headerName: 'EMPLOYEE ID', width: 180 },
+        { field: 'AssetCondition', headerName: 'ASSET CONDITION', width: 150 },
+        { field: 'BuildingCode', headerName: 'BUILDING', width: 200 },
+        { field: 'LocationCode', headerName: 'LOACTION', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -110,20 +172,22 @@ function Maintransactiontable() {
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
-    const filteredRows = Array.from({ length: 100 }).map((_, index) => {
-        return {
-            id: index + 1,
-            ASSETITEMDESCRIPTION: `ASSET ITEM DESCRIPTION-${index + 1}`,
-            ASSETITEMGROUP: `ASSET ITEM GROUP-${index + 1}`,
-            ASSETCATGORY: `ASSET CATGORY-${index + 1}`,
-            ASSETsbuCATGORY: `ASSET SUB-CATGORY-${index + 1}`,
-            RequestDateTime: `ASSET ITEM GROUP-${index + 1}`,
-            WorkType: `ASSET ITEM GROUP-${index + 1}`,
-            workTypeDesc: `Work Type Desc ${index + 1}`,
-            BUILDING: `BUILDING-${index + 1}`,
-            LOACTION: `LOACTION ${index + 1}`,
-        };
-    });
+    const filteredRows = getdata && getdata.filter(row => (
+        // (!RequestStatusFilterValue || row.EmployeeID === RequestStatusFilterValue) &&
+        (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
+    )).map((row, index) => ({
+        ...row,
+        id: index + 1,
+        AssetItemTagID: row.AssetItemTagID,
+        SerialNumber: row.SerialNumber,
+        AssetItemDescription: row.AssetItemDescription,
+        EmployeeID: row.EmployeeID,
+        AssetCondition: row.AssetCondition,
+        BuildingCode: row.BuildingCode,
+        LocationCode: row.LocationCode, //this Both id  is to display a work types desc //ok
+        LastPurchaseDate: row.LastPurchaseDate,
+        PurchaseAmount: row.PurchaseAmount,
+    }))
 
 
     const [paginationModel, setPaginationModel] = React.useState({
@@ -156,17 +220,16 @@ function Maintransactiontable() {
                                            Asset Transactions<span className='star'>*</span></p>
                                         <div className="d-flex">
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
-                                            //  onClick={(() => {
-                                            //     navigate('/createworkrequest')
-                                            // })}
+                                             onClick={(() => {
+                                                 navigate('/Create/Transaction')
+                                            })}
                                             ><AddCircleOutlineIcon className='me-1' />Create</button>
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork">
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
-                                            <button type="button" className="btn btn-outline-primary color2">
-                                                <img src={excel} alt="export" /> Export
-                                            </button>
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                            </CSVLink>
                                         </div>
                                     </div>
 
@@ -178,19 +241,19 @@ function Maintransactiontable() {
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                    EMPLOYEE ID#<span className='star'>*</span>
                                                 </label>
-
-                                                <select
-                                                    id='RequestStatus'
-                                                    value={RequestStatusFilterValue}
+                                                <input
+                                                    types='text'
+                                                    id='Employeenumber'
+                                                    placeholder="Select filter Asset Item Description"
+                                                    // value={RequestStatusFilterValue}
                                                     className='rounded inputsection py-2'
-                                                    onChange={(e) => setRequestStatusFilterValue(e.target.value)}
+                                                    // onChange={(e) => RequestStatusFilterValue(e.target.value)}
+                                                ></input>
+                                                <p
+                                                    className='position-absolute text-end serachicon'
                                                 >
-                                                    <option value=''>Select Status</option>
-                                                    <option value='Open'>Open</option>
-                                                    <option value='Closed'>Closed</option>
-                                                    <option value='Cancelled'>Cancelled</option>
-                                                </select>
-
+                                                    <SearchOutlined className=' serachicon' />
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
