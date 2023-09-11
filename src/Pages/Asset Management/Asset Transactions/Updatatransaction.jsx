@@ -690,7 +690,7 @@ function Updatatransaction() {
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
-                    'Created!',
+                    'Success!',
                     `Asset Transactions  ${userId} has been been updated`,
                     'success'
                 )
