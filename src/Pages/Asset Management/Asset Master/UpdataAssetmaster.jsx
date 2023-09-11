@@ -429,7 +429,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
-                    'Updata!',
+                    'Success!',
                     `Assets Master ${userId} has been  been updated`,
                     'success'
                 ).then(() => {
