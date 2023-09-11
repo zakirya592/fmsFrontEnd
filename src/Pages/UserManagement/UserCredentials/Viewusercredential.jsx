@@ -21,7 +21,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 function Viewusercredential() {
 
     let { userId } = useParams();
-    const [EmployeeStatus, setEmployeeStatus] = useState("")
     const [Title, setTitle] = useState("")
     const [userRoleDiscription, setuserRoleDiscription] = useState('')
     const navigate = useNavigate();
@@ -49,8 +48,7 @@ function Viewusercredential() {
         },)
             .then((res) => {
                 console.log('TO Assets Master By ID', res.data);
-
-                const Departmentcode = res.data.recordset[0].DepartmentCode
+                
                 setvalue((prevValue) => ({
                     ...prevValue,
                     userId: res.data.recordset[0].UserID,
@@ -394,31 +392,6 @@ function Viewusercredential() {
                                                     />
                                                 )}
                                             />
-                                        </div>
-                                    </div>
-                                    {/* Employee Status */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee Status
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={EmployeeStatus}
-                                                onChange={e => {
-                                                    setEmployeeStatus(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Status'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
                                         </div>
                                     </div>
                                     {/* Mobile Number */}

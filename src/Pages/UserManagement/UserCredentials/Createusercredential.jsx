@@ -23,9 +23,7 @@ import './Usecredential.css'
 import Swal from "sweetalert2";
 
 function Createusercredential() {
-    const [EmployeeStatus, setEmployeeStatus] = useState("")
     const [Title, setTitle] = useState("")
-    const [userRole, setuserRole] = useState('')
     const [userRoleDiscription, setuserRoleDiscription] = useState('')
     const navigate = useNavigate();
 
@@ -369,31 +367,6 @@ function Createusercredential() {
                                                     />
                                                 )}
                                             />
-                                        </div>
-                                    </div>
-                                    {/* Employee Status */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee Status
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={EmployeeStatus}
-                                                onChange={e => {
-                                                    setEmployeeStatus(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Status'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
                                         </div>
                                     </div>
                                     {/* Mobile Number */}
