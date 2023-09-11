@@ -248,6 +248,44 @@ function Maintransactiontable() {
         page: 0,
     });
 
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const [selectedRow, setSelectedRow] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+    useEffect(() => {
+        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
+        console.log(rowSelectionModel)  // ....clear....???
+    }, [])
+
+    const [statuscheck, setstatuscheck] = useState()
+    
+    const handleAddToWorkRequest = () => {
+        console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
+        if (!selectedRow || selectedRow.length === 0) {
+            Swal.fire({
+                title: "Error",
+                text: `Select a Asset Transactions  by checking the check box`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
+
+            return;
+        }
+
+        // Assuming you want to navigate to the update page of the first selected row
+        if (selectedRow.length > 0) {
+            const firstSelectedRow = selectedRow[0];
+            console.log('Post the Data:', firstSelectedRow.AssetItemTagID); 
+            navigate(`/Updata/transaction/${firstSelectedRow.AssetItemTagID}`);
+        }
+
+
+        const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
+        console.log('Selected Row Data:', selectedRowData);
+
+        setSelectedRowIds(selectedRowData);
+    };
+
     return (
         <>
             <div className="bg">
@@ -272,6 +310,8 @@ function Maintransactiontable() {
                                         <p className="color1 workitoppro my-auto">
                                            Asset Transactions<span className='star'>*</span></p>
                                         <div className="d-flex">
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
                                              onClick={(() => {
                                                  navigate('/Create/Transaction')
@@ -343,6 +383,18 @@ function Maintransactiontable() {
                                             checkboxSelection
                                             disableRowSelectionOnClick
                                             disableMultipleSelection
+                                            selectionModel={selectedRowIds}
+                                            onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                            rowSelectionModel={rowSelectionModel}
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                                // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                                const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                                                console.log(selectedRows)
+                                                setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                                // handleRowClick(selectedRows);
+
+                                            }}
                                         />
 
                                     </div>

@@ -117,14 +117,10 @@ function Maintablemaster() {
     const handleCellClick = (params, event) => {
         const columnField = params.field;
         if (columnField === '__check__') {
-            // This condition checks if the clicked cell is a checkbox cell
-            // Retrieve the entire data of the clicked row using its ID
             const clickedRow = filteredRows.find((row) => row.id === params.id);
             console.log(params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
-                // setSelectedRowIds([params.id])
-                // setSelectedRowIds(clickedRow) 
             }
             //    =======
             if (clickedRow) {
@@ -135,25 +131,33 @@ function Maintablemaster() {
             }
         }
     };
+
+    const [statuscheck, setstatuscheck] = useState()
+
     const handleAddToWorkRequest = () => {
-        // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
+        console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
+        if (!selectedRow || selectedRow.length === 0) {
+            Swal.fire({
+                title: "Error",
+                text: `Select a Asset Master  by checking the check box`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
 
-        const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
-        console.log("selectedRowData")
-        console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
-        // const selectedRowData = getdata.map((row, index) => ({
-        //     ...row,
-        //     id: index,
-        //     AssetItemDescription: row.AssetItemDescription,
-        // }))
-        console.log('Selected Row Data for Work Request:', selectedRowIds);
-        setSelectedRowIds(selectedRowData)
-        // TO GET ONLY ONE DESCRIPTION
-        let oneDesc=selectedRowData[selectedRowData.length-1]
-        putapi(oneDesc)
+            return;
+        }
 
-        // Perform your logic to add to work request using selectedRowData
-        // Example: sendToWorkRequest(selectedRowData);
+        // Assuming you want to navigate to the update page of the first selected row
+        if (selectedRow.length > 0) {
+            const firstSelectedRow = selectedRow[0];
+            navigate(`/Updata/Assetmaster/${firstSelectedRow.AssetItemDescription}`);
+        }
+
+
+        const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
+        console.log('Selected Row Data:', selectedRowData);
+
+        setSelectedRowIds(selectedRowData);
     };
 
     // const handleRowClick = (selectedRows) => {
@@ -364,6 +368,8 @@ function Maintablemaster() {
                                         <p className="color1 workitoppro my-auto">
                                             Asset Master List</p>
                                         <div className="d-flex">
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+
                                          <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/createAssetMaster')
                                             })}><AddCircleOutlineIcon className='me-1' />Create</button>
@@ -404,35 +410,8 @@ function Maintablemaster() {
                                                 </p>
                                             </div>
                                         </div>
-                                        {/* <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
-                                            <div className='emailsection position-relative d-grid my-2'>
-                                                <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                    Asset Item Group<span className='star'>*</span>
-                                                </label>
-
-                                                <select
-                                                    id='RequestStatus'
-                                                    value={RequestStatusFilterValue}
-                                                    className='rounded inputsection py-2'
-                                                    onChange={(e) => setRequestStatusFilterValue(e.target.value)}
-                                                >
-                                                    <option value=''>Select Status</option>
-                                                    <option value='Open'>Open</option>
-                                                    <option value='Closed'>Closed</option>
-                                                    <option value='Cancelled'>Cancelled</option>
-                                                </select>
-
-                                            </div>
-                                        </div> */}
 
                                     </div>
-                                    {/* <button
-                                        type="button"
-                                        className="border-0 px-3 savebtn py-2"
-                                        onClick={handleAddToWorkRequest} // Call the function when the button is clicked
-                                    >
-                                        Add Selected To Work Request
-                                    </button> */}
                                     <div style={{ height: 420, width: '100%' }}>
                                         <div style={{ height: 420, width: '100%' }}>
                                             <DataGrid
