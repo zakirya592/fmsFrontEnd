@@ -80,6 +80,8 @@ import Createtransaction from '../../Pages/Asset Management/Asset Transactions/C
 import Createusercredential from '../../Pages/UserManagement/UserCredentials/Createusercredential'
 import Updateusercredential from '../../Pages/UserManagement/UserCredentials/Updateusercredential'
 import Viewusercredential from '../../Pages/UserManagement/UserCredentials/Viewusercredential'
+import Createusersystem from '../../Pages/UserManagement/UserSystemAccess/Createusersystem'
+import Updateusersystemasset from '../../Pages/UserManagement/UserSystemAccess/Updateusersystemasset'
 function Pagerounter() {
 
   return (
@@ -222,6 +224,8 @@ function Pagerounter() {
 
           {/* userSystemAccess */}
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
+          <Route exact path="/Create/usersystemaccess" element={<Createusersystem />} />
+          <Route exact path='/Update/usersystemaccess/:userId' element={<Updateusersystemasset />} />
           {/* ===================== Asset Management=====================  */}
           {/* <Route exact path='/assetmanagement' element={<AssetManagement />} /> */}
 
