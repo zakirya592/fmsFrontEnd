@@ -14,6 +14,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
+import Printer from "../../../Image/printer.jpeg"
+import Barcode from "../../../Image/barcode.png"
+import BrowserFolder from "../../../Image/browsefolder 3.png"
 
 function Updatatransaction() {
 
@@ -46,11 +49,42 @@ function Updatatransaction() {
                     AssetCondition: res.data.recordset[0].AssetCondition,
                     AssetItemDescription: res.data.recordset[0].AssetItemDescription,
                     SerialNumber: res.data.recordset[0].SerialNumber,
-                    LocationCode: res.data.recordset[0].LocationCode,
-                    BuildingCode: res.data.recordset[0].BuildingCode,
-                    DepartmentCode: Departmentcode,
+                    // LocationCode: res.data.recordset[0].LocationCode,
+                    // BuildingCode: res.data.recordset[0].BuildingCode,
+                    // DepartmentCode: Departmentcode,
                     EmployeeID: res.data.recordset[0].EmployeeID
                 }));
+
+                const EmployeeID = res.data.recordset[0].EmployeeID
+                axios.post(`/api/getworkRequest_by_EPID`, {
+                    EmployeeID,
+                }).then((res) => {
+
+                    const {
+                        Firstname,
+                        DepartmentCode,
+                        BuildingCode,
+                        LocationCode,
+                    } = res.data.recordsets[0][0];
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        Firstname,
+                        DepartmentCode,
+                        BuildingCode,
+                        LocationCode,
+                    })); console.log('-------------------', res.data.recordsets[0][0]);
+                    const Depauto = res.data.recordsets[0][0].DepartmentCode
+                    console.log('-------------------------------------------', Depauto);
+                    axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                        .then((res) => {
+                            setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                        })
+                        .catch((err) => {
+                        });
+                })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
                 // Department_desc_LIST
                 axios.get(`/api/Department_desc_LIST/${Departmentcode}`)
                     .then((res) => {
@@ -59,6 +93,72 @@ function Updatatransaction() {
                     .catch((err) => {
                         console.log(err);
                     });
+
+                const AssetItemDescriptionss = res.data.recordset[0].AssetItemDescription
+                axios.get(`/api/AssetsMaster_GET_BYID/${AssetItemDescriptionss}`).then((res) => {
+                    console.log('-----', res.data);
+
+                    console.log(res.data.recordset[0].AssetImage);
+                    const AssetType = res.data.recordset[0].AssetType
+                    const AssetItemGroup = res.data.recordset[0].AssetItemGroup
+                    const AssetCategory = res.data.recordset[0].AssetCategory
+                    const AssetSubCategory = res.data.recordset[0].AssetSubCategory
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        AssetType: AssetType,
+                        AssetItemGroup: AssetItemGroup,
+                        assetCategory: AssetCategory,
+                        assetSubCategory: AssetSubCategory,
+                    }));
+                    setmanufacturer(res.data.recordset[0].Manufacturer)
+                    setModel(res.data.recordset[0].Model)
+                    setBrand(res.data.recordset[0].Brand)
+                    setimageshow(res.data.recordset[0].AssetImage)
+
+                    // AssetItemGroup_GET_BYID
+                    axios.get(`/api/AssetItemGroup_GET_BYID/${AssetItemGroup}`)
+                        .then((res) => {
+                            setAssetitemGroupDescription(res.data.recordset[0].AssetItemGroupCodeDesc)
+
+                        })
+                        .catch((err) => {
+                            console.log(err);;
+                        });
+                    // AssetType_GET_BYID
+                    axios.get(`/api/AssetType_GET_BYID/${AssetType}`)
+                        .then((res) => {
+                            setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+                        })
+                        .catch((err) => {
+                            console.log(err);;
+                        });
+                    // AssetCategory_GET_BYID
+                    axios.get(`/api/AssetCategory_GET_BYID/${AssetCategory}`)
+                        .then((res) => {
+                            setassetCategoryDiscription(res.data.recordset[0].AssetCategoryDesc)
+
+                        })
+                        .catch((err) => {
+                            console.log(err);;
+                        });
+                    // AssetSubCategory_GET_BYID
+                    axios.get(`/api/AssetSubCategory_GET_BYID/${AssetSubCategory}`)
+                        .then((res) => {
+                            setassetSubCategoryDiscription(res.data.recordset[0].AssetSubCategoryDesc)
+
+                        })
+                        .catch((err) => {
+                            console.log(err);;
+                        });
+
+
+                })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
+
+
 
             })
             .catch((err) => {
@@ -257,6 +357,40 @@ function Updatatransaction() {
         // }
 
     }, [])
+    // EmployeeID
+    function postapi(EmployeeID) {
+        axios.post(`/api/getworkRequest_by_EPID`, {
+            EmployeeID,
+        }).then((res) => {
+
+            const {
+                Firstname,
+                DepartmentCode,
+                BuildingCode,
+                LocationCode,
+            } = res.data.recordsets[0][0];
+            setvalue((prevValue) => ({
+                ...prevValue,
+                Firstname,
+                DepartmentCode,
+                BuildingCode,
+                LocationCode,
+            }));
+            console.log('-------------------', res.data.recordsets[0][0]);
+            const Depauto = res.data.recordsets[0][0].DepartmentCode
+            console.log('-------------------------------------------', Depauto);
+            axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                .then((res) => {
+                    setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
+    }
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
@@ -348,6 +482,7 @@ function Updatatransaction() {
             }));
         }
         if (value && value.EmployeeID) {
+            postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
                 EmployeeID: value.EmployeeID,
@@ -359,6 +494,184 @@ function Updatatransaction() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+
+    const [imageshow, setimageshow] = useState()
+    // Assign to Employee Logic.
+    function getAssetItemDescriptionapi(AssetItemDescription) {
+        axios.get(`/api/AssetsMaster_GET_BYID/${AssetItemDescription}`).then((res) => {
+            console.log('-----', res.data);
+
+            console.log(res.data.recordset[0].AssetImage);
+            const AssetType = res.data.recordset[0].AssetType
+            const AssetItemGroup = res.data.recordset[0].AssetItemGroup
+            const AssetCategory = res.data.recordset[0].AssetCategory
+            const AssetSubCategory = res.data.recordset[0].AssetSubCategory
+            setvalue((prevValue) => ({
+                ...prevValue,
+                AssetType: AssetType,
+                AssetItemGroup: AssetItemGroup,
+                AssetCategory: AssetCategory,
+                AssetSubCategory: AssetSubCategory,
+            }));
+            setmanufacturer(res.data.recordset[0].Manufacturer)
+            setModel(res.data.recordset[0].Model)
+            setBrand(res.data.recordset[0].Brand)
+            setimageshow(res.data.recordset[0].AssetImage)
+
+            // AssetItemGroup_GET_BYID
+            axios.get(`/api/AssetItemGroup_GET_BYID/${AssetItemGroup}`)
+                .then((res) => {
+                    setAssetitemGroupDescription(res.data.recordset[0].AssetItemGroupCodeDesc)
+
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
+            // AssetType_GET_BYID
+            axios.get(`/api/AssetType_GET_BYID/${AssetType}`)
+                .then((res) => {
+                    setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
+            // AssetCategory_GET_BYID
+            axios.get(`/api/AssetCategory_GET_BYID/${AssetCategory}`)
+                .then((res) => {
+                    setassetCategoryDiscription(res.data.recordset[0].AssetCategoryDesc)
+
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
+            // AssetSubCategory_GET_BYID
+            axios.get(`/api/AssetSubCategory_GET_BYID/${AssetSubCategory}`)
+                .then((res) => {
+                    setassetSubCategoryDiscription(res.data.recordset[0].AssetSubCategoryDesc)
+
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
+
+
+        })
+            .catch((err) => {
+                //// console.log(err);;
+            });
+    }
+    const [unitCodeID, setUnitCodeID] = useState([]);
+    const [openID, setOpenID] = useState(false);
+    const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
+    const abortControllerRefID = useRef(null);
+
+
+    const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
+        console.log('==========+++++++======', newInputValueID)
+
+        if (reason === 'reset' || reason === 'clear') {
+            setUnitCodeID([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValueID || newInputValueID.trim() === '') {
+            setUnitCodeID([])
+            return;
+        }
+        if (newInputValueID === null) {
+
+            setUnitCodeID([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                AssetItemDescription: [],
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoadingID(true);
+        setOpenID(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRefID.current) {
+                abortControllerRefID.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRefID.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/Filter_AssetsMaster')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCodeID(data ?? [])
+                    setOpenID(true);
+                    setUnitCodeID(data)
+                    setAutocompleteLoadingID(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    AssetItemDescription: [],
+                }))
+                setAutocompleteLoadingID(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCodeID([])
+            setOpenID(false);
+            setAutocompleteLoadingID(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChangeID = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                AssetItemDescription: [],
+            }));
+        }
+
+        if (value && value.AssetItemDescription) {
+            getAssetItemDescriptionapi(value.AssetItemDescription);
+            setvalue(prevValue => ({
+                ...prevValue,
+                AssetItemDescription: value.AssetItemDescription,
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    function handleChangeback(e) {
+        setSelectedFile(e.target.files[0]);
+    }
+
 
 
     const addtransaction = async () => {
@@ -419,7 +732,7 @@ function Updatatransaction() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        Asset Transaction - View
+                                        Asset Transaction - Update
 
                                     </p>
                                 </div>
@@ -427,7 +740,31 @@ function Updatatransaction() {
 
                                 {/* Rows sections  */}
                                 <div className="row mx-auto formsection">
+                                    <div className="printerPic col-sm-12 col-md-12 col-lg-4 col-xl-3 ">
+                                        {/* <center> */}
+                                        <div className="row">
+                                            <div className="col">
+                                                <img src={selectedFile ? URL.createObjectURL(selectedFile) : imageshow != null ? imageshow : Printer} alt="" className="printerpic" />
+                                            </div>
+                                            <div className="col">
+                                                <img src={Barcode} alt="" className="barcodepic" />
+                                            </div>
+                                        </div>
 
+                                        <div className="row " htmlFor="file-inputs">
+                                            <label htmlFor="file-inputs">
+                                                <img src={BrowserFolder} />
+                                            </label>
+                                            <input
+                                                id="file-inputs"
+                                                type="file"
+                                                onChange={handleChangeback}
+                                                style={{ display: 'none' }}
+                                            />
+                                        </div>
+                                        {/* </center> */}
+
+                                    </div>
                                     {/*  Asset / Stock Number */}
                                     <div className="col-sm-12 col-md-7 col-lg-7 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
@@ -444,6 +781,7 @@ function Updatatransaction() {
                                                         AssetItemTagID: e.target.value
                                                     }))
                                                 }}
+                                                disabled
                                                 // onKeyDown={handleKeyPress}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter/Generate Tag Number'
@@ -579,24 +917,72 @@ function Updatatransaction() {
                                                 className="lablesection color3 text-start mb-1">
                                                 Asset Item Discription
                                             </label>
-                                            <input
-                                                type='text'
-                                                id='AssetItemDescription'
-                                                value={value.AssetItemDescription}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        AssetItemDescription: e.target.value
-                                                    }))
+                                            <Autocomplete
+                                                id="serachGpcid"
+                                                className='rounded inputsection py-0 mt-0'
+                                                required
+                                                options={unitCodeID}
+                                                getOptionLabel={(option) =>
+                                                    option?.AssetItemDescription
+                                                        ? option.AssetItemDescription
+                                                        : ''
+                                                }
+                                                getOptionSelected={(option, value) => option.AssetItemDescription === value.AssetItemDescription}
+                                                onChange={handleGPCAutoCompleteChangeID}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.AssetItemDescription}
+                                                    </li>
+                                                )}
+                                                value={value}
+                                                onInputChange={(eventID, newInputValueID, params) =>
+                                                    handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
+                                                }
+                                                loading={autocompleteLoadingID}
+                                                open={openID} // Control open state based on selected value
+                                                onOpen={() => {
+                                                    // setOpenID(true);
                                                 }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Asset Item Discription'
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-
-                                            </p>
+                                                onClose={() => {
+                                                    setOpenID(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Employee Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoadingID ? (
+                                                                        <CircularProgress style={{ color: 'black' }} size={20} />
+                                                                    ) : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
                                         </div>
                                     </div>
                                 </div>
