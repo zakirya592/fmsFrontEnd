@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
@@ -15,6 +15,8 @@ import "react-phone-number-input/style.css";
 import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import axios from 'axios'
+
 function UserCredentials() {
     const [EmployeeID, setEmployeeID] = useState("")
     const [EmployeeStatus, setEmployeeStatus] = useState("")
@@ -24,10 +26,6 @@ function UserCredentials() {
     const [Firstname, setFirstname] = useState("")
     const [Middlename, setMiddlename] = useState("")
     const [Lastname, setLastname] = useState("")
-    const [DepartmentCode, setDepartmentCode] = useState("")
-    const [DepartmentName, setDepartmentName] = useState("")
-    const [Building, setBuilding] = useState("")
-    const [Location, setLocation] = useState("")
     const [userRole, setuserRole] = useState('')
     const [userRoleDiscription, setuserRoleDiscription] = useState('')
     const [userId, setuserId] = useState("")
@@ -36,6 +34,57 @@ function UserCredentials() {
     const [userIdPassword, setuserIdPassword] = useState("")
     const [emailAddress, setemailAddress] = useState("")
     const navigate = useNavigate();
+
+    const [value, setvalue] = useState({
+        DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '',
+    })
+
+    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
+    const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
+    const [dropdownLocation, setdropdownLocation] = useState([])
+
+    useEffect(() => {
+        // AssetCondition_GET_LIST
+        // dropdownDepartmentLIST
+        axios.get(`/api/Department_LIST`).then((res) => {
+            setdropdownDepartmentLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // Building_LIST
+        axios.get(`/api/Building_LIST`).then((res) => {
+            setdropdownBuildingLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // Location_LIST
+        axios.get(`/api/Location_LIST`).then((res) => {
+            setdropdownLocation(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+    // Department
+    const [DeptDesc, setDeptDesc] = useState('')
+    const handleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            DepartmentCode: e.target.value,
+        }));
+        axios.get(`/api/Department_desc_LIST/${Deptnale}`)
+            .then((res) => {
+                setDeptDesc(res.data.recordset[0].DepartmentDesc)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
 
     return (
         <div>
@@ -46,9 +95,9 @@ function UserCredentials() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                      navigate('/')
-                    })} />                                    <p className="text-center my-auto ms-5">User Management</p>
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                                        navigate('/')
+                                    })} />                                    <p className="text-center my-auto ms-5">User Management</p>
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -61,7 +110,7 @@ function UserCredentials() {
                                     <p className='color1 workitoppro my-auto'>View/Modify User Credentials <span className='star'>*</span>
                                     </p>
                                     <div className="d-flex">
-                                        <img src={pagepin} className='me-2' alt='' />
+                                        {/* <img src={pagepin} className='me-2' alt='' /> */}
                                         <Create />
                                         <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
                                         <button type="button" className="btn btn-outline-primary color2"><img src={excel} alt='' /> Export</button>
@@ -133,10 +182,7 @@ function UserCredentials() {
                                                 placeholder="+966   500000000"
                                                 value={MobileNumber}
                                                 onChange={e => {
-                                                    setMobileNumber
-                                                        (
-                                                            e.target.value
-                                                        )
+                                                    setMobileNumber(e.target)
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 country="US" />
@@ -154,7 +200,7 @@ function UserCredentials() {
                                                 placeholder="+966  0100000000"
                                                 value={LandlineNumber}
                                                 onChange={e => {
-                                                    setLandlineNumber(e.target.value)
+                                                    setLandlineNumber(e.target)
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 country="US" />
@@ -175,7 +221,7 @@ function UserCredentials() {
                                                 placeholder="Enter Title"
                                                 value={Title}
                                                 onChange={e => {
-                                                    setTitle(e.target.value)
+                                                    setTitle(e.target)
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 country="US" />
@@ -238,89 +284,110 @@ function UserCredentials() {
                                     </div>
                                 </div>
                                 {/* third Line */}
+
                                 <div className="row mx-auto formsection">
-                                    {/* Departement code  */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Departement Code<span className='star'>*</span>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
+                                                Department Code
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
+                                                value={value.DepartmentCode}
+                                                onChange={handleProvinceChange}
+                                            >
+
+                                                <option className='inputsectiondropdpwn' >Select Dept Code</option>
+                                                {
+                                                    dropdownDepartmentLIST && dropdownDepartmentLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.DepartmentCode}>{itme.DepartmentCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
+                                                Department Name
                                             </label>
 
                                             <input
-                                                placeholder="Enter Departement Code"
-                                                value={DepartmentCode}
-                                                onChange={e => {
-                                                    setDepartmentCode(e.target.value)
-                                                }}
+                                                types='text'
+                                                id='Departmentname'
+                                                value={DeptDesc}
                                                 className='rounded inputsection py-2'
-                                            />
-
+                                                placeholder='Department Name'
+                                                required
+                                            ></input>
                                         </div>
                                     </div>
-                                    {/* Dept name */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='deptname' className='lablesection color3 text-start mb-1'>
-                                                Departement Name<span className='star'>*</span>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
+                                                Building
                                             </label>
-
-                                            <input
-                                                placeholder="Enter Departement Name"
-                                                value={DepartmentName}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
                                                 onChange={e => {
-                                                    setDepartmentName(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                            />
-
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        BuildingCode: e.target.value
+                                                    }))
+                                                }}>
+                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
+                                                {
+                                                    dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
-                                    {/* building  */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='building' className='lablesection color3 text-start mb-1'>
-                                                Building<span className='star'>*</span>
+
+                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
+                                                Location
                                             </label>
-
-                                            <input
-                                                placeholder="Enter Building"
-                                                value={Building}
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
+                                                value={value.LocationCode}
                                                 onChange={e => {
-                                                    setBuilding(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                            />
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        LocationCode: e.target.value
+                                                    }))
+                                                    localStorage.setItem('LocationCode', e.target.value)
 
+                                                }}
+                                            >
+                                                <option className='inputsectiondropdpwn'>Select Location</option>
+                                                {
+                                                    dropdownLocation && dropdownLocation.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.LocationCode}>{itme.LocationCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
-                                    {/* location */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='location' className='lablesection color3 text-start mb-1'>
-                                                Location<span className='star'>*</span>
-                                            </label>
 
-                                            <input
-                                                placeholder="Enter Location"
-                                                value={Location}
-                                                onChange={e => {
-                                                    setLocation(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                            />
-
-                                        </div>
-                                    </div>
                                 </div>
                                 {/* break line */}
                                 <hr className='color3 line' />
                                 <Toolbar>
-  <Typography variant="h6" noWrap component="div" className="d-flex py-2 userCredentials" style={{ justifyContent: 'center' }}>
-    <p className="text-center my-auto" style={{ color: 'white', textAlign: 'center' }}>
-      User Credentials <span className='star'>*</span>
-    </p>
-  </Typography>
-</Toolbar>
+                                    <Typography variant="h6" noWrap component="div" className="d-flex py-2 userCredentials" style={{ justifyContent: 'center' }}>
+                                        <p className="text-center my-auto" style={{ color: 'white', textAlign: 'center' }}>
+                                            User Credentials <span className='star'>*</span>
+                                        </p>
+                                    </Typography>
+                                </Toolbar>
 
 
                                 {/* line four */}
@@ -368,7 +435,7 @@ function UserCredentials() {
                                 {/* line five */}
                                 {/* userID */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
                                                 User-ID<span className='star'>*</span>
@@ -413,7 +480,7 @@ function UserCredentials() {
 
                                 {/* line six */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
                                                 Window User-ID<span className='star'>*</span>
@@ -457,7 +524,7 @@ function UserCredentials() {
                                 </div>
                                 {/* Line seven */}
                                 <div className="row mx-auto formsection">
-                                <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
                                                 Email Address<span className='star'>*</span>
@@ -480,9 +547,9 @@ function UserCredentials() {
                                 </div>
                                 {/* below Buttons */}
                                 <div className="d-flex justify-content-between mt-3">
-                                <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                      navigate('/')
-                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                                        navigate('/')
+                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" className="border-0 px-3  savebtn py-2" ><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
