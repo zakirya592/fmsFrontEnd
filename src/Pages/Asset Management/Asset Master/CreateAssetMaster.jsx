@@ -280,7 +280,7 @@ function CreateAssetMaster() {
             .then((res) => {
                 console.log('Add', res.data);
                 Swal.fire(
-                    'Updata!',
+                    'Created!',
                     'Assets Master has been created successfully.',
                     'success'
                 ).then(() => {
