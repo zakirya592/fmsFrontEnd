@@ -192,7 +192,7 @@ function Maintablemaster() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this AssetCode",
+            text: "You want to delete this Asset Master",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -214,7 +214,7 @@ function Maintablemaster() {
                     });
                 swalWithBootstrapButtons.fire(
                     'Deleted!',
-                    'User has been deleted.',
+                    `Asset Master ${AssetItemDescription} has been deleted.`,
                     'success'
                 )
             }

@@ -133,7 +133,7 @@ function Maintransactiontable() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: `You want to delete this ${AssetItemTagID} workRequest`,
+            text: `You want to delete this ${AssetItemTagID} Asset Transactions `,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -148,7 +148,7 @@ function Maintransactiontable() {
                         console.log('Deleted successfully', res);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            `workrequest ${AssetItemTagID} has been deleted.`,
+                            `Asset Transactions  ${AssetItemTagID} has been deleted.`,
                             'success'
                         )
                         getapi()

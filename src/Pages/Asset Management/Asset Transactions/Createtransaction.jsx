@@ -553,7 +553,7 @@ function Createtransaction() {
                 console.log(res.data);
                 Swal.fire(
                     'Created!',
-                    `Transaction ${value.AssetItemTagID} has been created successfully`,
+                    `Asset Transactions ${value.AssetItemTagID} has been created successfully`,
                     'success'
                 )
                 navigate('/AssetTransaction')

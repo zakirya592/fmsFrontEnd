@@ -691,7 +691,7 @@ function Updatatransaction() {
                 console.log(res.data);
                 Swal.fire(
                     'Created!',
-                    `Transaction ${userId} has been been updated`,
+                    `Asset Transactions  ${userId} has been been updated`,
                     'success'
                 )
                 navigate('/AssetTransaction')
