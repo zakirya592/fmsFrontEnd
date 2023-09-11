@@ -77,6 +77,9 @@ import Updataorderwork from '../../Pages/WorkOrder/Updataorderwork'
 import Viewworkorder from '../../Pages/WorkOrder/Viewworkorder'
 import Testing from '../../Pages/WorkOrder/Testing'
 import Createtransaction from '../../Pages/Asset Management/Asset Transactions/Createtransaction'
+import Createusercredential from '../../Pages/UserManagement/UserCredentials/Createusercredential'
+import Updateusercredential from '../../Pages/UserManagement/UserCredentials/Updateusercredential'
+import Viewusercredential from '../../Pages/UserManagement/UserCredentials/Viewusercredential'
 function Pagerounter() {
 
   return (
@@ -209,8 +212,13 @@ function Pagerounter() {
           {/* User Authourity Levels */}
           <Route exact path="/userauthority" element={<UserAuthority />} />
 
+
           {/* User Credentials  */}
+          <Route exact path="/Create/userauthority" element={<Createusercredential />} />
           <Route exact path="/userCredentials" element={<UserCredentials />} />
+          <Route exact path='/Updata/usercredential/:userId' element={<Updateusercredential />} />
+          <Route exact path='/View/usercredential/:userId' element={<Viewusercredential />} />
+
 
           {/* userSystemAccess */}
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />

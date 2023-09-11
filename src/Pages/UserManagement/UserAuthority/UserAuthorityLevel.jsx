@@ -235,7 +235,7 @@ function UserAuthority() {
             <div className="py-3">
               <div className="d-flex justify-content-between my-auto">
                 <p className="color1 workitoppro my-auto">USER AUTHORITY LEVELS MAINTENANCE
-                  <span className='star'>*</span>
+                  
                 </p>
                 <div className="d-flex">
                   <Newuserauthority/>
@@ -284,7 +284,7 @@ function UserAuthority() {
 
                 <div className='emailsection position-relative d-grid my-3'>
                   <label htmlFor='UserAuthoritySeq' className='lablesection color3 text-start mb-1'>
-                    UserAuthority Seq<span className='star'>*</span>
+                    UserAuthority Seq
                   </label>
 
                   <input
@@ -301,7 +301,7 @@ function UserAuthority() {
                 </div>
                 <div className='emailsection position-relative d-grid my-3'>
                   <label htmlFor='UserAuthorityDesc' className='lablesection color3 text-start mb-1'>
-                    UserAuthority Desc<span className='star'>*</span>
+                    UserAuthority Desc
                   </label>
 
                   <input

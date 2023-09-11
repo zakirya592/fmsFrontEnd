@@ -1,564 +1,380 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Siderbar from '../../../Component/Siderbar/Siderbar'
-import Box from '@mui/material/Box'
-import AppBar from '@mui/material/AppBar'
-import excel from "../../../Image/excel.png"
-import pagepin from "../../../Image/pagepin.png"
-import PrintIcon from '@mui/icons-material/Print';
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import { useNavigate } from 'react-router-dom';
-
-import { SearchOutlined } from '@ant-design/icons';
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
-import Create from '../../../Component/View work/Create'
+import React, { useState, useEffect, useRef } from 'react';
+import Box from '@mui/material/Box';
+import Siderbar from '../../../Component/Siderbar/Siderbar';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import axios from 'axios'
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import PrintIcon from '@mui/icons-material/Print';
+import { SearchOutlined } from '@ant-design/icons';
+import excel from '../../../Image/excel.png';
+import { DataGrid } from '@mui/x-data-grid';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
+import { CSVLink } from "react-csv";
+import Swal from "sweetalert2";
 
 function UserCredentials() {
-    const [EmployeeID, setEmployeeID] = useState("")
-    const [EmployeeStatus, setEmployeeStatus] = useState("")
-    const [MobileNumber, setMobileNumber] = useState("")
-    const [LandlineNumber, setLandlineNumber] = useState("")
-    const [Title, setTitle] = useState("")
-    const [Firstname, setFirstname] = useState("")
-    const [Middlename, setMiddlename] = useState("")
-    const [Lastname, setLastname] = useState("")
-    const [userRole, setuserRole] = useState('')
-    const [userRoleDiscription, setuserRoleDiscription] = useState('')
-    const [userId, setuserId] = useState("")
-    const [windowuserid, setwindowuserid] = useState("")
-    const [windowuserpassword, setwindowuserpassword] = useState("")
-    const [userIdPassword, setuserIdPassword] = useState("")
-    const [emailAddress, setemailAddress] = useState("")
     const navigate = useNavigate();
-
-    const [value, setvalue] = useState({
-        DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '',
-    })
-
-    const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
-    const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
-    const [dropdownLocation, setdropdownLocation] = useState([])
-
-    useEffect(() => {
-        // AssetCondition_GET_LIST
-        // dropdownDepartmentLIST
-        axios.get(`/api/Department_LIST`).then((res) => {
-            setdropdownDepartmentLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
-        // Building_LIST
-        axios.get(`/api/Building_LIST`).then((res) => {
-            setdropdownBuildingLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
-        // Location_LIST
-        axios.get(`/api/Location_LIST`).then((res) => {
-            setdropdownLocation(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
-
-    }, [])
-    // Department
-    const [DeptDesc, setDeptDesc] = useState('')
-    const handleProvinceChange = (e) => {
-        const Deptnale = e.target.value;
-        setvalue((prevValue) => ({
-            ...prevValue,
-            DepartmentCode: e.target.value,
+    // print button
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'SEQ': index + 1,
+            'Employee ID': row.EmployeeID,
+            'User ID': row.UserID,
+            'Windows ID': row.WindowsID,
+            'CreatedByAdmin ID': row.CreatedByAdminID,
+            'UserAuthorityCode': row.UserAuthorityCode,
         }));
-        axios.get(`/api/Department_desc_LIST/${Deptnale}`)
+
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">EmployeeID</th>
+          <th style="${headerStyle}">User ID</th>
+          <th style="${headerStyle}">Windows ID</th>
+          <th style="${headerStyle}">CreatedByAdmin ID</th>
+          <th style="${headerStyle}">UserAuthorityCode</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['Employee ID']}</td>
+            <td>${row['User ID']}</td>
+            <td>${row['Windows ID']}</td>
+            <td>${row['CreatedByAdmin ID']}</td>
+            <td>${row['UserAuthorityCode']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+    const [getdata, setgetdata] = useState([])
+    // List a data thougth api 
+    const getapi = () => {
+        axios.get(`/api/UserCredentials_GET_LIST`, {
+        },)
             .then((res) => {
-                setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
             })
             .catch((err) => {
                 console.log(err);
             });
     }
+    useEffect(() => {
+        getapi()
+    }, [])
 
+    const columns = [
+        { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'EmployeeID', headerName: 'Employee ID', width: 200 },
+        { field: 'UserID', headerName: 'UserID', width: 160 },
+        { field: 'WindowsID', headerName: 'WindowsID', width: 170 },
+        { field: 'CreatedByAdminID', headerName: 'CreatedByAdminID', width: 220 },
+        { field: 'UserAuthorityCode', headerName: 'UserAuthorityCode', width: 200 },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+    ];
+
+    // Deleted api section
+    const Deletedapi = (EmployeeID) => {
+        console.log(EmployeeID);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `You want to delete this ${EmployeeID} User Credentials `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/UserCredentials_DELETE_BYID/${EmployeeID}`)
+                    .then((res) => {
+                        getapi()
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            `User Credentials ${EmployeeID} has been deleted.`,
+                            'success'
+                        )
+                        getapi()
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    });
+
+            }
+        })
+
+    };
+
+    function ActionButtons(params) {
+        const [anchorEl, setAnchorEl] = useState(null);
+
+        const handleMenuOpen = (event) => {
+            setAnchorEl(event.currentTarget);
+        };
+
+        const handleMenuClose = () => {
+            setAnchorEl(null);
+        };
+
+        const handleUpdate = () => {
+            // Handle update action
+            navigate('/Updata/Assetmaster')
+            handleMenuClose();
+        };
+
+        const handleDeleteButtonClick = () => {
+            // Handle delete action
+            handleMenuClose();
+        };
+
+        return (
+            <div>
+                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
+                    <span style={{ paddingRight: '10px' }}>Action</span>
+                    <ArrowDropDownIcon />
+                </Button>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem onClick={() => navigate(`/View/usercredential/${params.row.EmployeeID}`)} >
+                        <span style={{ paddingRight: '18px' }} >View</span>
+                        <VisibilityIcon />
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate(`/Updata/usercredential/${params.row.EmployeeID}`)}>
+                        <span style={{ paddingRight: '3px' }}>Update</span>
+                        <EditIcon />
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                        Deletedapi(params.row.EmployeeID)
+                        handleMenuClose();
+                    }}>
+                        <span style={{ paddingRight: '10px' }}>Delete</span>
+                        <DeleteIcon />
+                    </MenuItem>
+                </Menu>
+            </div>
+
+
+        );
+    }
+    const [requestByEmployee, setrequestByEmployee] = useState('');
+
+    const filteredRows = getdata && getdata.filter(row => (
+        (!requestByEmployee || (row.EmployeeID && row.EmployeeID.includes(requestByEmployee)))
+    )).map((row, index) => ({
+        ...row,
+        id: index + 1,
+        EmployeeID: row.EmployeeID,
+        UserID: row.UserID,
+        WindowsID: row.WindowsID,
+        CreatedByAdminID: row.CreatedByAdminID,
+        UserAuthorityCode: row.UserAuthorityCode,
+    }))
+
+
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: 25,
+        page: 0,
+    });
+
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const [selectedRow, setSelectedRow] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+    useEffect(() => {
+        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
+        console.log(rowSelectionModel)  // ....clear....???
+    }, [])
+
+    const [statuscheck, setstatuscheck] = useState()
+
+    const handleAddToWorkRequest = () => {
+        if (!selectedRow || selectedRow.length === 0) {
+            Swal.fire({
+                title: "Error",
+                text: `Select a User Credentials  by checking the check box`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
+
+            return;
+        }
+
+        // Assuming you want to navigate to the update page of the first selected row
+        if (selectedRow.length > 0) {
+            const firstSelectedRow = selectedRow[0];
+            navigate(`/Updata/usercredential/${firstSelectedRow.EmployeeID}`);
+        }
+
+
+        const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
+        console.log('Selected Row Data:', selectedRowData);
+
+        setSelectedRowIds(selectedRowData);
+    };
 
     return (
-        <div>
-            <div className='bg'>
-                <div className=''>
-                    <Box sx={{ display: 'flex' }}>
-                        <Siderbar />
-                        <AppBar className="fortrans locationfortrans" position="fixed">
-                            <Toolbar>
-                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                        navigate('/')
-                                    })} />                                    <p className="text-center my-auto ms-5">User Management</p>
-                                </Typography>
-                            </Toolbar>
-                        </AppBar>
-                        <div className="topermaringpage mb-4 container">
-                            <div className="py-3">
-
-
-                                {/* Top section */}
-                                <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View/Modify User Credentials <span className='star'>*</span>
-                                    </p>
-                                    <div className="d-flex">
-                                        {/* <img src={pagepin} className='me-2' alt='' /> */}
-                                        <Create />
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel} alt='' /> Export</button>
-                                    </div>
-                                </div>
-
-                                <hr className='color3 line' />
-                                {/* Row section */}
-                                {/* line one */}
-                                <div className="row mx-auto formsection">
-                                    {/* Employee name  */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee Number<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={EmployeeID}
-                                                onChange={e => {
-                                                    setEmployeeID(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* Employee Status */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                Employee Status<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={EmployeeStatus}
-                                                onChange={e => {
-                                                    setEmployeeStatus(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Status'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* Mobile Number */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Mobile Number<span className='star'>*</span>
-                                            </label>
-
-                                            <PhoneInput
-                                                placeholder="+966   500000000"
-                                                value={MobileNumber}
-                                                onChange={e => {
-                                                    setMobileNumber(e.target)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-                                    {/* Landline Number */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Landline Number<span className='star'>*</span>
-                                            </label>
-
-                                            <PhoneInput
-                                                placeholder="+966  0100000000"
-                                                value={LandlineNumber}
-                                                onChange={e => {
-                                                    setLandlineNumber(e.target)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* line two  */}
-                                <div className="row mx-auto formsection">
-                                    {/* Title */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Lastname' className='lablesection color3 text-start mb-1'>
-                                                Title<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                placeholder="Enter Title"
-                                                value={Title}
-                                                onChange={e => {
-                                                    setTitle(e.target)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-                                    {/* Firstname */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='firstname' className='lablesection color3 text-start mb-1'>
-                                                First Name<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                placeholder="Enter First Name"
-                                                value={Firstname}
-                                                onChange={e => {
-                                                    setFirstname(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-                                    {/* MiddleName */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='Middlename' className='lablesection color3 text-start mb-1'>
-                                                Middle Name<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                placeholder="Enter Middle Name"
-                                                value={Middlename}
-                                                onChange={e => {
-                                                    setMiddlename(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                country="US" />
-
-                                        </div>
-                                    </div>
-                                    {/* Lastname */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection  d-grid my-2'>
-                                            <label htmlFor='lastname' className='lablesection color3 text-start mb-1'>
-                                                Last Name<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                placeholder="Enter Last Name"
-                                                value={Lastname}
-                                                onChange={e => {
-                                                    setLastname(e.target.value)
-                                                }}
-                                                className='rounded inputsection py-2'
-                                            />
-
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* third Line */}
-
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='DepartmentCode' className='lablesection color3 text-start mb-1'>
-                                                Department Code
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example"
-                                                value={value.DepartmentCode}
-                                                onChange={handleProvinceChange}
-                                            >
-
-                                                <option className='inputsectiondropdpwn' >Select Dept Code</option>
-                                                {
-                                                    dropdownDepartmentLIST && dropdownDepartmentLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.DepartmentCode}>{itme.DepartmentCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='Departmentname' className='lablesection color3 text-start mb-1'>
-                                                Department Name
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Departmentname'
-                                                value={DeptDesc}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Department Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                Building
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example" value={value.BuildingCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        BuildingCode: e.target.value
-                                                    }))
-                                                }}>
-                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
-                                                {
-                                                    dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                Location
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
-                                                value={value.LocationCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        LocationCode: e.target.value
-                                                    }))
-                                                    localStorage.setItem('LocationCode', e.target.value)
-
-                                                }}
-                                            >
-                                                <option className='inputsectiondropdpwn'>Select Location</option>
-                                                {
-                                                    dropdownLocation && dropdownLocation.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.LocationCode}>{itme.LocationCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                {/* break line */}
-                                <hr className='color3 line' />
+        <>
+            <div className="bg">
+                <div className="bg">
+                    <div className="">
+                        <Box sx={{ display: 'flex' }}>
+                            <Siderbar />
+                            <AppBar className="fortrans locationfortrans" position="fixed">
                                 <Toolbar>
-                                    <Typography variant="h6" noWrap component="div" className="d-flex py-2 userCredentials" style={{ justifyContent: 'center' }}>
-                                        <p className="text-center my-auto" style={{ color: 'white', textAlign: 'center' }}>
-                                            User Credentials <span className='star'>*</span>
-                                        </p>
+                                    <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                        <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                                            navigate('/')
+                                        })} />
+                                        <p className="text-center my-auto ms-5">User Management</p>
                                     </Typography>
                                 </Toolbar>
+                            </AppBar>
 
+                            <div className="topermaringpage mb- container">
+                                <div className="py-3">
+                                    <div className="d-flex justify-content-between my-auto">
+                                        <p className="color1 workitoppro my-auto">
+                                            User Credentials View<span className='star'>*</span></p>
+                                        <div className="d-flex">
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
-                                {/* line four */}
-                                {/* userrole */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Departmentcode' className='lablesection color3 text-start mb-1'>
-                                                User Role<span className='star'>*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Departmentcode" aria-label="Floating label select example" value={userRole}
-                                                onChange={e => {
-                                                    setuserRole(e.target.value)
-                                                }}>
-
-                                                <option className='inputsectiondropdpwn'>Select Dept Code</option>
-                                                <option value={"First"}>One</option>
-                                                <option value={"Second"}>Two</option>
-                                                <option value={"three"}>Three</option>
-                                            </select>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
+                                                onClick={(() => {
+                                                    navigate('/Create/userauthority')
+                                                })}
+                                            ><AddCircleOutlineIcon className='me-1' />Create</button>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
+                                                <PrintIcon className="me-1" />
+                                                Print
+                                            </button>
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                            </CSVLink>
                                         </div>
                                     </div>
-                                    {/* user role discription  */}
-                                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                                User Role Discription<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='userrolediscription'
-                                                value={userRoleDiscription}
-                                                onChange={e => {
-                                                    setuserRoleDiscription(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter User Role Discription '
-                                                required
-                                            ></input>
 
+                                    <hr className="color3 line" />
+                                    {/* Search Fields */}
+                                    <div className="row mx-auto formsection">
+                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                                            <div className='emailsection position-relative d-grid my-2'>
+                                                <label className='lablesection color3 text-start mb-1 filter-label'>
+                                                    Employee ID
+                                                </label>
+                                                <input
+                                                    types='text'
+                                                    id='Employeenumber'
+                                                    placeholder="Select Employee ID"
+                                                    value={requestByEmployee}
+                                                    className='rounded inputsection py-2'
+                                                    onChange={(e) => setrequestByEmployee(e.target.value)}
+                                                ></input>
+                                                <p
+                                                    className='position-absolute text-end serachicon'
+                                                >
+                                                    <SearchOutlined className=' serachicon' />
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                {/* line five */}
-                                {/* userID */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
-                                                User-ID<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='userrolediscription'
-                                                value={userId}
-                                                onChange={e => {
-                                                    setuserId(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter User ID'
-                                                required
-                                            ></input>
 
-                                        </div>
-                                    </div>
-                                    {/* userpassowrd */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
-                                                Password<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='password'
-                                                id='userpassword'
-                                                value={userIdPassword}
-                                                onChange={e => {
-                                                    setuserIdPassword(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='*********'
-                                                required
-                                            ></input>
 
-                                        </div>
                                     </div>
-                                </div>
+                                    <div style={{ height: 420, width: '100%' }}>
+                                        <DataGrid
+                                            rows={filteredRows}
+                                            columns={columns}
+                                            pagination
+                                            rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                            paginationModel={paginationModel}
+                                            onPaginationModelChange={setPaginationModel}
+                                            checkboxSelection
+                                            disableRowSelectionOnClick
+                                            disableMultipleSelection
+                                            selectionModel={selectedRowIds}
+                                            onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                            rowSelectionModel={rowSelectionModel}
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                                // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                                const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                                                console.log(selectedRows)
+                                                setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                                // handleRowClick(selectedRows);
 
-                                {/* line six */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
-                                                Window User-ID<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='userrolediscription'
-                                                value={windowuserid}
-                                                onChange={e => {
-                                                    setwindowuserid(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Window User ID'
-                                                required
-                                            ></input>
+                                            }}
+                                        />
 
-                                        </div>
                                     </div>
-                                    {/* userpassowrd */}
-                                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
-                                                Password<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='password'
-                                                id='userpassword'
-                                                value={windowuserpassword}
-                                                onChange={e => {
-                                                    setwindowuserpassword(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='*************'
-                                                required
-                                            ></input>
-
-                                        </div>
+                                    <div className="d-flex justify-content-between mt-3">
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                                            navigate('/')
+                                        })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     </div>
-                                </div>
-                                {/* Line seven */}
-                                <div className="row mx-auto formsection">
-                                    <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='userid' className='lablesection color3 text-start mb-1'>
-                                                Email Address<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='email'
-                                                id='emailaddress'
-                                                value={emailAddress}
-                                                onChange={e => {
-                                                    setemailAddress(e.target.value
-                                                    )
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Window User ID'
-                                                required
-                                            ></input>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* below Buttons */}
-                                <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                        navigate('/')
-                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" className="border-0 px-3  savebtn py-2" ><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
-                        </div>
-                    </Box>
+                        </Box>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        </>
+    );
 }
 
-export default UserCredentials
+export default UserCredentials;
