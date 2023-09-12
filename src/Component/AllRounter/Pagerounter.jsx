@@ -82,6 +82,7 @@ import Updateusercredential from '../../Pages/UserManagement/UserCredentials/Upd
 import Viewusercredential from '../../Pages/UserManagement/UserCredentials/Viewusercredential'
 import Createusersystem from '../../Pages/UserManagement/UserSystemAccess/Createusersystem'
 import Updateusersystemasset from '../../Pages/UserManagement/UserSystemAccess/Updateusersystemasset'
+import Viewusersystemaccess from '../../Pages/UserManagement/UserSystemAccess/Viewusersystemaccess'
 function Pagerounter() {
 
   return (
@@ -226,6 +227,7 @@ function Pagerounter() {
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
           <Route exact path="/Create/usersystemaccess" element={<Createusersystem />} />
           <Route exact path='/Update/usersystemaccess/:userId' element={<Updateusersystemasset />} />
+          <Route exact path='/View/usersystemaccess/:userId' element={<Viewusersystemaccess />} />
           {/* ===================== Asset Management=====================  */}
           {/* <Route exact path='/assetmanagement' element={<AssetManagement />} /> */}
 

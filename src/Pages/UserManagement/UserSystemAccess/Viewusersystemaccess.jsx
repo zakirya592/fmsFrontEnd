@@ -2,15 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
-import excel from "../../../Image/excel.png"
-import pagepin from "../../../Image/pagepin.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import axios from 'axios'
@@ -20,11 +16,12 @@ import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import SaveIcon from '@mui/icons-material/Save';
 
-function Createusersystem() {
+function Viewusersystemaccess() {
 
-    const [getdata, setgetdata] = useState([])
+    let { userId } = useParams();
     const navigate = useNavigate();
 
+    const [getdata, setgetdata] = useState([])
     const getapitable = () => {
         axios.get(`/api/SystemModules_GET_LIST`, {
         },)
@@ -52,10 +49,70 @@ function Createusersystem() {
 
     }))
 
+
     const [value, setvalue] = useState({
         EmployeeID: null, DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '', MobileNumber: '', LandlineNumber: '', Firstname: '', Middlename: '', Lastname: '',
         windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '', Title: '', UserAuthorityCode: null
     })
+
+    const getapi = () => {
+        axios.get(`/api/UserSystemAccess_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Assets Master By ID', res.data);
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    EmployeeID: res.data.recordset[0].EmployeeID,
+                    UserAuthorityCode: res.data.recordset[0].UserAuthorityCode
+                }));
+
+                const EmployeeID = res.data.recordset[0].EmployeeID
+                axios.post(`/api/getworkRequest_by_EPID`, {
+                    EmployeeID,
+                }).then((res) => {
+
+                    const {
+                        Firstname,
+                        Lastname,
+                        Middlename,
+                        LandlineNumber,
+                        MobileNumber,
+                        DepartmentCode,
+                        BuildingCode,
+                        LocationCode,
+                    } = res.data.recordsets[0][0];
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        Firstname,
+                        Lastname,
+                        Middlename,
+                        LandlineNumber,
+                        MobileNumber,
+                        DepartmentCode,
+                        BuildingCode,
+                        LocationCode,
+                    })); console.log('-------------------', res.data.recordsets[0][0]);
+                    const Depauto = res.data.recordsets[0][0].DepartmentCode
+                    console.log('-------------------------------------------', Depauto);
+                    axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                        .then((res) => {
+                            setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                        })
+                        .catch((err) => {
+                        });
+                })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
@@ -340,37 +397,6 @@ function Createusersystem() {
         }
     }
 
-    const Createapi = async () => {
-        axios.post(`/api/UserSystemAccess_post`, {
-            EmployeeID: value.EmployeeID,
-            UserAuthorityCode: value.UserAuthorityCode,
-            UserAuthorityAccessYN: 'dhfd',
-            AddedByAdminID: 'nu',
-            AddedDateTime: '0',
-
-        })
-            .then((res) => {
-                console.log(res.data);
-                Swal.fire(
-                    'Created!',
-                    `User SystemAccess ${value.EmployeeID} has been created successfully`,
-                    'success'
-                )
-                navigate('/usersystemaccess')
-
-            })
-            .catch((err) => {
-                console.log(err);
-                const statuss = err.response.data.error
-
-                Swal.fire(
-                    'Error!',
-                    ` ${statuss} `,
-                    'error'
-                )
-            });
-
-    };
 
     return (
         <div>
@@ -394,8 +420,9 @@ function Createusersystem() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create User Access
+                                    <p className='color1 workitoppro my-auto'>User Access View
                                     </p>
+
                                 </div>
 
                                 <hr className='color3 line' />
@@ -782,7 +809,7 @@ function Createusersystem() {
                                 {/* break line */}
                                 <hr className='color3 line' />
                                 {/* Table */}
-                                <div style={{ height: 420, width: '50%', margin: 'auto' }} className='tableleft'>
+                                <div style={{ height: 420, width: '53%', margin: 'auto' }} className='tableleft'>
                                     <DataGrid
                                         rows={filteredData}
                                         columns={columns}
@@ -797,8 +824,7 @@ function Createusersystem() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/usersystemaccess')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
-                                </div>
+                                   </div>
                             </div>
                         </div>
                     </Box>
@@ -808,4 +834,4 @@ function Createusersystem() {
     )
 }
 
-export default Createusersystem
+export default Viewusersystemaccess

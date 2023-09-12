@@ -2,15 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
-import excel from "../../../Image/excel.png"
-import pagepin from "../../../Image/pagepin.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate, useParams } from 'react-router-dom';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import axios from 'axios'
@@ -23,24 +19,36 @@ import SaveIcon from '@mui/icons-material/Save';
 function Updateusersystemasset() {
 
     let { userId } = useParams();
+    const navigate = useNavigate();
+
+    const [getdata, setgetdata] = useState([])
+    const getapitable = () => {
+        axios.get(`/api/SystemModules_GET_LIST`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapitable()
+    }, [])
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 160 },
-        { field: 'systemmodule', headerName: 'SYSTEM MODULES', width: 400 },
+        { field: 'SystemModuleCode', headerName: 'SYSTEM MODULES', width: 400 },
     ];
 
-    const generateRandomData = () => {
-        const rows = [];
-        for (let i = 1; i <= 10; i++) {
-            rows.push({
-                id: i,
-                systemmodule: `SYSTEM MODULES
-        ${i}`,
-            });
-        }
-        return rows;
-    };
-    const navigate = useNavigate();
-    const rows = generateRandomData();
+    const filteredData = getdata && getdata.map((row, indes) => ({
+        ...row,
+        id: indes + 1,
+        SystemModuleCode: row.SystemModuleCode,
+
+    }))
+
 
     const [value, setvalue] = useState({
         EmployeeID: null, DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '', MobileNumber: '', LandlineNumber: '', Firstname: '', Middlename: '', Lastname: '',
@@ -441,7 +449,7 @@ function Updateusersystemasset() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create User Access
+                                    <p className='color1 workitoppro my-auto'>User Access Update
                                     </p>
                                     
                                 </div>
@@ -830,9 +838,9 @@ function Updateusersystemasset() {
                                 {/* break line */}
                                 <hr className='color3 line' />
                                 {/* Table */}
-                                <div style={{ height: 420, width: '50%', margin: 'auto' }} className='tableleft'>
+                                <div style={{ height: 420, width: '53%', margin: 'auto' }} className='tableleft'>
                                     <DataGrid
-                                        rows={rows}
+                                        rows={filteredData}
                                         columns={columns}
                                         pageSize={5}
                                         checkboxSelection

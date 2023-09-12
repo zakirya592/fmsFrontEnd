@@ -30,9 +30,6 @@ function UserSystemAccess() {
         const selectedData = tableData.map((row, index) => ({
             'SEQ': index + 1,
             'Employee ID': row.EmployeeID,
-            'User ID': row.UserID,
-            'Windows ID': row.WindowsID,
-            'CreatedByAdmin ID': row.CreatedByAdminID,
             'UserAuthorityCode': row.UserAuthorityCode,
         }));
 
@@ -44,18 +41,12 @@ function UserSystemAccess() {
         <tr>
           <th style="${headerStyle}">SEQ</th>
           <th style="${headerStyle}">EmployeeID</th>
-          <th style="${headerStyle}">User ID</th>
-          <th style="${headerStyle}">Windows ID</th>
-          <th style="${headerStyle}">CreatedByAdmin ID</th>
           <th style="${headerStyle}">UserAuthorityCode</th>
         </tr>
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
             <td>${row['Employee ID']}</td>
-            <td>${row['User ID']}</td>
-            <td>${row['Windows ID']}</td>
-            <td>${row['CreatedByAdmin ID']}</td>
             <td>${row['UserAuthorityCode']}</td>
           </tr>`).join('')}
       </table>`;
@@ -102,12 +93,9 @@ function UserSystemAccess() {
     }, [])
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
         { field: 'EmployeeID', headerName: 'Employee ID', width: 200 },
-        { field: 'UserID', headerName: 'UserID', width: 160 },
-        { field: 'WindowsID', headerName: 'WindowsID', width: 170 },
-        { field: 'CreatedByAdminID', headerName: 'CreatedByAdminID', width: 220 },
-        { field: 'UserAuthorityCode', headerName: 'UserAuthorityCode', width: 200 },
+        { field: 'UserAuthorityCode', headerName: 'UserAuthorityCode', width: 330 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -182,7 +170,7 @@ function UserSystemAccess() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate(`/View/usercredential/${params.row.EmployeeID}`)} >
+                    <MenuItem onClick={() => navigate(`/View/usersystemaccess/${params.row.EmployeeID}`)} >
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
@@ -231,7 +219,7 @@ function UserSystemAccess() {
         if (!selectedRow || selectedRow.length === 0) {
             Swal.fire({
                 title: "Error",
-                text: `Select a User Access System  by checking the check box`,
+                text: `Select a User Access  by checking the check box`,
                 icon: "error",
                 confirmButtonText: "OK",
             })
@@ -274,7 +262,7 @@ function UserSystemAccess() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                            User Access View<span className='star'>*</span></p>
+                                            User Access<span className='star'>*</span></p>
                                         <div className="d-flex">
                                             <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
@@ -295,7 +283,7 @@ function UserSystemAccess() {
                                     <hr className="color3 line" />
                                     {/* Search Fields */}
                                     <div className="row mx-auto formsection">
-                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-4 tableleft">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                     Employee ID
@@ -318,7 +306,7 @@ function UserSystemAccess() {
 
 
                                     </div>
-                                    <div style={{ height: 420, width: '100%' }}>
+                                    <div style={{ height: 400, width: '70%' }} className='tableleft'>
                                         <DataGrid
                                             rows={filteredRows}
                                             columns={columns}
