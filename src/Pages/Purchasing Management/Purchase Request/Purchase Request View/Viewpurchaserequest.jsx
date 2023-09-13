@@ -412,7 +412,7 @@ function Viewpurchaserequest() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Purchase Requests</p>
+                                    <p className='color1 workitoppro my-auto'>View Purchase Requests</p>
                                 </div>
 
                                 <hr className='color3 line' />
