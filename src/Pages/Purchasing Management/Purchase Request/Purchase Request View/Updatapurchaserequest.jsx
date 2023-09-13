@@ -47,11 +47,15 @@ function Updatapurchaserequest() {
         },)
             .then((res) => {
                 console.log('TO Assets Master By ID', res.data);
+
+                const assignEmployee = res.data.recordset[0].VerifiedByEmpl
+                const completeEmployee = res.data.recordset[0].RequestByEmployeeID
                 setvalue((prevValue) => ({
                     ...prevValue,
                     EmployeeID: res.data.recordset[0].RequestByEmployeeID,
                     Purpose: res.data.recordset[0].Purpose,
-                    assignEmployee: res.data.recordset[0].VerifiedByEmpl,
+                    assignEmployee,
+                    completeEmployee,
                     VATInclusive: res.data.recordset[0].VATInclude,
                     PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
                     VendorID: res.data.recordset[0].VendorID,
@@ -72,19 +76,42 @@ function Updatapurchaserequest() {
                     ...prevValue,
                     DateRequired : RequestedDateverered
                 }));
-
-                const EmployeeID = res.data.recordset[0].RequestByEmployeeID
-                axios.post(`/api/getworkRequest_by_EPID`, {
-                    EmployeeID,
+                axios.post(`/api/getworkRequest`, {
+                    "EmployeeID": completeEmployee
                 }).then((res) => {
-
+                    console.log('asdfaf=====================================', res);
+                    const CompleteddEmployeeName = res.data.recordset[0].Firstname
                     const {
-                        Firstname,
+                        EmployeeID,
+                        Firstname
                     } = res.data.recordsets[0][0];
+
                     setvalue((prevValue) => ({
                         ...prevValue,
+                        EmployeeID,
                         Firstname,
-                    })); 
+                        CompleteEmployeeName: CompleteddEmployeeName,
+                    }));
+
+                })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
+
+                axios.post(`/api/getworkRequest`, {
+                    "EmployeeID": assignEmployee
+                }).then((res) => {
+                    console.log('asdfaf=====================================', res);
+                    const Employee = res.data.recordsets[0][0].EmployeeID
+                    const CompleteEmployee = res.data.recordsets[0][0].Firstname
+                    console.log(Employee);
+
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        assignEmployee: Employee,
+                        EmployeeName: CompleteEmployee,
+                    }));
+
                 })
                     .catch((err) => {
                         //// console.log(err);;
@@ -291,7 +318,12 @@ function Updatapurchaserequest() {
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
                     console.log('Dropdown me', response.data.recordset)
-                    const data = response?.data?.recordset;
+                    // const data = response?.data?.recordset;
+                    const data = response?.data?.recordset.map(item => ({
+                        ...item,
+                        completeEmployee: item.EmployeeID, // Change EmployeeID to assignEmployee
+                        CompleteEmployeeName: item.Firstname
+                    }));
                     //name state da setdropname
                     //or Id state da setGpcList da 
                     setUnitCodecompleteemployee(data ?? [])
@@ -341,11 +373,11 @@ function Updatapurchaserequest() {
             }));
         }
 
-        if (value && value.EmployeeID) {
+        if (value && value.completeEmployee) {
             // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                completeEmployee: value.EmployeeID,
+                completeEmployee: value.completeEmployee,
                 CompleteEmployeeName: value.Firstname
             }));
             console.log('Received value----------:', value);
@@ -422,9 +454,12 @@ function Updatapurchaserequest() {
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
                     console.log('Dropdown me', response.data.recordset)
-                    const data = response?.data?.recordset;
-                    //name state da setdropname
-                    //or Id state da setGpcList da 
+                    // const data = response?.data?.recordset;
+                    const data = response?.data?.recordset.map(item => ({
+                        ...item,
+                        assignEmployee: item.EmployeeID, // Change EmployeeID to assignEmployee
+                        EmployeeName: item.Firstname
+                    }));
                     setUnitCodeID(data ?? [])
                     setOpenID(true);
                     setUnitCodeID(data)
@@ -472,11 +507,11 @@ function Updatapurchaserequest() {
             }));
         }
 
-        if (value && value.EmployeeID) {
+        if (value && value.assignEmployee) {
             // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                assignEmployee: value.EmployeeID,
+                assignEmployee: value.assignEmployee,
                 EmployeeName: value.Firstname
             }));
             console.log('Received value----------:', value);
@@ -484,7 +519,7 @@ function Updatapurchaserequest() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
-    
+
     const [getdata, setgetdata] = useState([])
     const [datanumber, setdatanumber] = useState([])
     const columns = [
@@ -867,18 +902,18 @@ function Updatapurchaserequest() {
                                                 required
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
-                                                    option?.EmployeeID
-                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                    option?.completeEmployee
+                                                        ? option.completeEmployee + ' - ' + option.CompleteEmployeeName
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
+                                                getOptionSelected={(option, value) => option.completeEmployee === value.completeEmployee}
                                                 onChange={handleGPCAutoCompleteChangecompleteemployee}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.EmployeeID} - {option.Firstname}
+                                                        {option.completeEmployee} - {option.CompleteEmployeeName}
                                                     </li>
                                                 )}
-                                                value={value.EmployeeID}
+                                                value={value}
                                                 onInputChange={(eventcompleteemployee, newInputValuecompleteemployee, params) =>
                                                     handleAutoCompleteInputChangecompleteemployee(eventcompleteemployee, newInputValuecompleteemployee, params)
                                                 }
@@ -1195,18 +1230,18 @@ function Updatapurchaserequest() {
                                                 required
                                                 options={unitCodeID}
                                                 getOptionLabel={(option) =>
-                                                    option?.EmployeeID
-                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                    option?.assignEmployee
+                                                        ? option.assignEmployee + ' - ' + option.EmployeeName
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
+                                                getOptionSelected={(option, value) => option.assignEmployee === value.assignEmployee}
                                                 onChange={handleGPCAutoCompleteChangeID}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.EmployeeID} - {option.Firstname}
+                                                        {option.assignEmployee} - {option.EmployeeName}
                                                     </li>
                                                 )}
-                                                value={value.EmployeeID}
+                                                value={value}
                                                 onInputChange={(eventID, newInputValueID, params) =>
                                                     handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
                                                 }
