@@ -1,47 +1,162 @@
-import React, { useState, useEffect } from 'react'
-import Siderbar from '../../../../Component/Siderbar/Siderbar'
-import Box from '@mui/material/Box'
-import AppBar from '@mui/material/AppBar'
-import { useNavigate } from "react-router-dom";
-import excel from "../../../../Image/excel.png"
-import PrintIcon from '@mui/icons-material/Print';
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { SearchOutlined, CaretDownOutlined, PlusOutlined } from '@ant-design/icons';
-import "react-phone-number-input/style.css";
+import React, { useState, useEffect, useRef } from 'react';
+import Box from '@mui/material/Box';
+import Siderbar from '../../../../Component/Siderbar/Siderbar';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Typography from '@mui/material/Typography';
-import 'react-phone-input-2/lib/style.css'
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import PrintIcon from '@mui/icons-material/Print';
+import { SearchOutlined } from '@ant-design/icons';
+import excel from '../../../../Image/excel.png';
+import { DataGrid } from '@mui/x-data-grid';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import SaveIcon from '@mui/icons-material/Save';
-import MenuItem from '@mui/material/MenuItem';
-function PurchaserequestView() {
+import axios from 'axios';
+import { CSVLink } from "react-csv";
+import Swal from "sweetalert2";
+import moment from 'moment'
 
+function PurchaserequestView() {
     const navigate = useNavigate();
-    const [value, setvalue] = useState({
-        PurchaseRequest:'', RequestDate: '', DateRequired: '',
-        Requestedby: '', EmployeeName:'',
-        Purpose:'', VATInclusive:'',
-        UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT:'',
-        VendorCode:'', VendorName:'',
-        Verifiedby: '', EmployeeName2: '',
-    })
+    // print button
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'SEQ': index + 1,
+            'VerifiedByEmpl': row.VerifiedByEmpl,
+            'VendorID': row.VendorID,
+            'PurchaseRequestNumber': row.PurchaseRequestNumber,
+            'RequestByEmployeeID': row.RequestByEmployeeID,
+        }));
+
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">VerifiedByEmpl</th>
+          <th style="${headerStyle}">VendorID</th>
+           <th style="${headerStyle}">PurchaseRequestNumber</th>
+          <th style="${headerStyle}">RequestByEmployeeID</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['VerifiedByEmpl']}</td>
+            <td>${row['VendorID']}</td>
+             <td>${row['PurchaseRequestNumber']}</td>
+            <td>${row['RequestByEmployeeID']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+    const [getdata, setgetdata] = useState([])
+    // List a data thougth api 
+    const getapi = () => {
+        axios.get(`/api/PurchaseRequest_GET_List`, {
+        },)
+            .then((res) => {
+                console.log('TO get the list', res);
+                setgetdata(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'PurchaseRequest', headerName: 'Purchase Request', width: 200 },
-        { field: 'PurchaseRequestDetail', headerName: 'Purchase RequestDetail', width: 200 },
-        { field: 'MaterialMaster', headerName: 'Material Master', width: 180 },
-        { field: 'VendorMaster', headerName: 'Vendor Master', width: 200 },
-        { field: 'EmployeeMaster', headerName: 'Employee Master', width: 180 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
+        { field: 'VerifiedByEmpl', headerName: 'Verified By Employee', width: 200 },
+        { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
+        { field: 'PurchaseRequestNumber', headerName: 'Purchase Request Number', width: 200 },
+        { field: 'RequestByEmployeeID', headerName: 'Request By EmployeeID', width: 200 },
+        { field: 'RequestDate', headerName: 'Request Date', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
+
+    // Deleted api section
+    const Deletedapi = (PurchaseRequestNumber) => {
+        console.log(PurchaseRequestNumber);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `You want to delete this ${PurchaseRequestNumber} Purchase Request Number  `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/PurchaseRequest_DELETE_BYID/${PurchaseRequestNumber}`)
+                    .then((res) => {
+                        getapi()
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            `Purchase Request Number ${PurchaseRequestNumber} has been deleted.`,
+                            'success'
+                        )
+                        getapi()
+                    })
+                    .catch((err) => {
+                        // Handle delete error
+                        console.log('Error deleting', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    });
+
+            }
+        })
+
+    };
 
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
@@ -52,11 +167,6 @@ function PurchaserequestView() {
 
         const handleMenuClose = () => {
             setAnchorEl(null);
-        };
-
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
         };
 
         return (
@@ -70,15 +180,18 @@ function PurchaserequestView() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
+                    <MenuItem onClick={() => navigate(`/View/Purchaserequest/${params.row.PurchaseRequestNumber}`)} >
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => navigate('/Updata/transaction')}>
+                    <MenuItem onClick={() => navigate(`/Update/Purchaserequest/${params.row.PurchaseRequestNumber}`)}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
+                    <MenuItem onClick={() => {
+                        Deletedapi(params.row.PurchaseRequestNumber)
+                        handleMenuClose();
+                    }}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -88,16 +201,19 @@ function PurchaserequestView() {
 
         );
     }
-    const filteredRows = Array.from({ length: 100 }).map((_, index) => {
-        return {
-            id: index + 1,
-            PurchaseRequest: `PurchaseRequest-${index + 1}`,
-            PurchaseRequestDetail: `PurchaseRequestDetail-${index + 1}`,
-            MaterialMaster: `MaterialMaster-${index + 1}`,
-            VendorMaster: `VendorMaster-${index + 1}`,
-            EmployeeMaster: `EmployeeMaster-${index + 1}`,
-        };
-    });
+    const [requestByEmployee, setrequestByEmployee] = useState('');
+
+    const filteredRows = getdata && getdata.filter(row => (
+        (!requestByEmployee || (row.EmployeeID && row.EmployeeID.includes(requestByEmployee)))
+    )).map((row, index) => ({
+        ...row,
+        id: index + 1,
+        VerifiedByEmpl: row.VerifiedByEmpl,
+        VendorID: row.VendorID,
+        PurchaseRequestNumber: row.PurchaseRequestNumber,
+        RequestByEmployeeID: row.RequestByEmployeeID,
+        RequestDate: moment(row.RequestDate).isValid() ? moment(row.RequestDate).format('DD/MM/YYYY') : ''
+    }))
 
 
     const [paginationModel, setPaginationModel] = React.useState({
@@ -105,418 +221,109 @@ function PurchaserequestView() {
         page: 0,
     });
 
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const [selectedRow, setSelectedRow] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+    const [statuscheck, setstatuscheck] = useState()
+    const handleAddToWorkRequest = () => {
+        if (!selectedRow || selectedRow.length === 0) {
+            Swal.fire({
+                title: "Error",
+                text: `Select a Purchase Requests  by checking the check box`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
+
+            return;
+        }
+        // Assuming you want to navigate to the update page of the first selected row
+        if (selectedRow.length > 0) {
+            const firstSelectedRow = selectedRow[0];
+            navigate(`/Update/Purchaserequest/${firstSelectedRow.PurchaseRequestNumber}`);
+        }
+    };
+
     return (
-        <div>
-            <div className='bg'>
-                <div className=''>
-                    <Box sx={{ display: 'flex' }}>
-                        <Siderbar />
-                        <AppBar className="fortrans locationfortrans" position="fixed">
-                            <Toolbar>
-                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" />
-                                    <p className="text-center my-auto mx-auto">Purchasing Management </p>
-                                </Typography>
-                            </Toolbar>
-                        </AppBar>
-                        <div className="topermaringpage mb-4 container">
-                            <div className="py-3">
+        <>
+            <div className="bg">
+                <div className="bg">
+                    <div className="">
+                        <Box sx={{ display: 'flex' }}>
+                            <Siderbar />
+                            <AppBar className="fortrans locationfortrans" position="fixed">
+                                <Toolbar>
+                                    <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                        <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
+                                            navigate('/')
+                                        })} />
+                                        <p className="text-center my-auto ms-5">Purchasing Management </p>
+                                    </Typography>
+                                </Toolbar>
+                            </AppBar>
 
+                            <div className="topermaringpage mb- container">
+                                <div className="py-3">
+                                    <div className="d-flex justify-content-between my-auto">
+                                        <p className="color1 workitoppro my-auto">
+                                            Purchase Requests<span className='star'>*</span></p>
+                                        <div className="d-flex">
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
-                                {/* Top section */}
-                                <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View/Modify Purchase Requests</p>
-                                    <div className="d-flex">
-                                        
-                                        {/* create */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                            navigate('/createworkrequest')
-                                        })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                                        {/* print  */}
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                        {/* excel  */}
-                                        <button type="button" className="btn btn-outline-primary color2"><img src={excel} /> Export</button>
-                                    </div>
-                                </div>
-
-                                <hr className='color3 line' />
-                                {/* Row section */}
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='PurchaseRequest' className='lablesection color3 text-start mb-1'>
-                                                Purchase Request #<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='PurchaseRequest'
-                                                value={value.PurchaseRequest}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        PurchaseRequest: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter PR Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
+                                                onClick={(() => {
+                                                    navigate('/Create/Purchaserequest')
+                                                })}
+                                            ><AddCircleOutlineIcon className='me-1' />Create</button>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
+                                                <PrintIcon className="me-1" />
+                                                Print
+                                            </button>
+                                            <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                            </CSVLink>
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='RequestDate' className='lablesection color3 text-start mb-1'>
-                                                Request Date<span className='star'>*</span>
-                                            </label>
-                                            <input type="date" id="RequestDate"
+                                    <hr className="color3 line" />
+                                    {/* Search Fields */}
+                                    <div style={{ height: 400, width: '100%' }} className=' mt-5'>
+                                        <DataGrid
+                                            rows={filteredRows}
+                                            columns={columns}
+                                            pagination
+                                            rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                            paginationModel={paginationModel}
+                                            onPaginationModelChange={setPaginationModel}
+                                            checkboxSelection
+                                            disableRowSelectionOnClick
+                                            disableMultipleSelection
+                                            selectionModel={selectedRowIds}
+                                            onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                            rowSelectionModel={rowSelectionModel}
+                                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                                setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                                // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                                const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                                                console.log(selectedRows)
+                                                setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                                // handleRowClick(selectedRows);
 
-                                                value={value.RequestDate}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        RequestDate: e.target.value
-                                                    }))
-                                                }}
-                                                name="RequestDate" className='rounded inputsection py-2' />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='DateRequired' className='lablesection color3 text-start mb-1'>
-                                                Date Required<span className='star'>*</span>
-                                            </label>
-                                            <input type="date" id="Employdata"
-
-                                                value={value.DateRequired}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        DateRequired: e.target.value
-                                                    }))
-                                                }}
-                                                name="DateRequired" className='rounded inputsection py-2' />
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                {/* Row Two */}
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Requestedby' className='lablesection color3 text-start mb-1'>
-                                                Requested by<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Requestedby'
-                                                value={value.Requestedby}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Requestedby: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeName' className='lablesection color3 text-start mb-1'>
-                                                Employee Name<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeName'
-                                                value={value.EmployeeName}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeName: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Employee Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="row mx-auto formsection justify-content-between">
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
-                                        <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='Purpose' className='lablesection color3 text-start mb-1'>
-                                                Purpose<span className='star'>*</span>
-                                            </label>
-                                            <div className="form-floating inputsectiondropdpwn">
-                                                <textarea className='rounded inputsectiondropdpwn w-100 color2 py-2' placeholder="Please provide nature or purpose of the request " id="Purpose"
-                                                    value={value.Purpose}
-                                                    onChange={e => {
-                                                        setvalue(prevValue => ({
-                                                            ...prevValue,
-                                                            Purpose: e.target.value
-                                                        }))
-                                                    }}
-                                                ></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-auto">
-                                        <div className='emailsection d-flex my-2'>
-                                            <label htmlFor='VATInclusive' className='lablesection my-auto color3 text-start mb-1'>
-                                                VAT Inclusive(Y/N)?<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='VATInclusive'
-                                                value={value.VATInclusive}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        VATInclusive: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection w-25 py-2'
-                                                placeholder='Y'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <hr className='color3 line' />
-{/* table section */}
-                                <div style={{ height: 350, width: '100%' }}>
-                                    <DataGrid
-                                        rows={filteredRows}
-                                        columns={columns}
-                                        pagination
-                                        rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
-                                        paginationModel={paginationModel}
-                                        onPaginationModelChange={setPaginationModel}
-                                        checkboxSelection
-                                        disableRowSelectionOnClick
-                                        disableMultipleSelection
-                                    />
-
-                                </div>
-
-                                <div className="d-flex justify-content-end">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
-                                            SUB TOTAL AMOUNT<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
                                             }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='SUB TOTAL AMOUNT'
-                                            required
-                                        ></input>
+                                        />
 
                                     </div>
-                                    <span className='my-auto mx-3'>
-                                        <PlusOutlined className='mt-3'/>
-                                    </span>
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
-                                            VAT<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='VAT'
-                                            value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='VAT'
-                                            required
-                                        ></input>
-
+                                    <div className="d-flex justify-content-between mt-3">
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
+                                            navigate('/')
+                                        })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     </div>
-                                    <span className='my-auto mx-3'>
-                                        =
-                                    </span>
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
-                                            TOTAL AMOUNT<span className='star'>*</span>
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    TOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='TOTAL AMOUNT'
-                                            required
-                                        ></input>
-
-                                    </div>
-                                </div>
-
-
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='VendorCode' className='lablesection color3 text-start mb-1'>
-                                                Vendor Code<span className='star'>*</span>
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn   color2 py-2' id="VendorCode" aria-label="Floating label select example" value={value.VendorCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        VendorCode: e.target.value
-                                                    }))
-                                                }}
-                                                // dropdownIcon={<CaretDownOutlined />}
-                                                suffixIcon={<CaretDownOutlined style={{ color: 'red' }} />}
-                                            >
-                                                <option className='inputsectiondropdpwn'>Vendor Code</option>
-                                             
-                                                            <option value='1'>Vendor Code1</option>
-                                                            <option value='2'>Vendor Code1w</option>
-                                                     
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='VendorName' className='lablesection color3 text-start mb-1'>
-                                                Vendor Name<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='VendorName'
-                                                value={value.VendorName}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        VendorName: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Vendor Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="row mx-auto formsection">
-
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Verifiedby' className='lablesection color3 text-start mb-1'>
-                                                Verified by<span className='star'>*</span>
-                                            </label>
-
-                                            <input
-                                                types='text'
-                                                id='Verifiedby'
-                                                value={value.Verifiedby}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Verifiedby: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='EmployeeName2' className='lablesection color3 text-start mb-1'>
-                                                Employee Name<span className='star'>*</span>
-                                            </label>
-                                            <input
-                                                types='text'
-                                                id='EmployeeName2'
-                                                value={value.EmployeeName2}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeName2: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Employee Name'
-                                                required
-                                            ></input>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/AssetTransaction')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                   
-                                        <button type="button" class="border-0 px-3 mx-2  savebtn py-2"><SaveIcon className='me-2' />SAVE</button>
-                                      
                                 </div>
                             </div>
-                        </div>
-                    </Box>
+                        </Box>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        </>
+    );
 }
 
-export default PurchaserequestView
+export default PurchaserequestView;
