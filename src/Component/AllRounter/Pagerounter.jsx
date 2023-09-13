@@ -86,6 +86,8 @@ import Viewusersystemaccess from '../../Pages/UserManagement/UserSystemAccess/Vi
 import Createpurchaserequest from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/Createpurchaserequest'
 import Updatapurchaserequest from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/Updatapurchaserequest'
 import Viewpurchaserequest from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/Viewpurchaserequest'
+import MainPurachase from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/MainPurachase'
+import Createpurachaseorder from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Createpurachaseorder'
 function Pagerounter() {
 
   return (
@@ -241,7 +243,9 @@ function Pagerounter() {
           <Route exact path="/View/Purchaserequest/:userId" element={<Viewpurchaserequest />} />
 
           {/* Purachaseview */}
-          <Route exact path="/Purachaseorderview" element={<Purachaseview />} />
+          <Route exact path="/Purachaseorderview" element={<MainPurachase />} />
+          <Route exact path="/Create/Purachaseorder" element={<Createpurachaseorder />} />
+          <Route exact path="/Purachaseorder" element={< Purachaseview />} />
 
           {/* Purachaseview */}
           <Route exact path="/Goodsreceiptsview" element={<Goodsreceiptsview />} />
