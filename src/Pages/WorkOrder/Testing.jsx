@@ -8,185 +8,141 @@ import { ToastContainer, toast } from 'react-toastify';
 import Toolbar from '@mui/material/Toolbar';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Typography from '@mui/material/Typography';
-
+import Autocomplete from '@mui/material/Autocomplete';
+import { CircularProgress } from '@mui/material';
+import TextField from '@mui/material/TextField';
 function CreateWorkRequest() {
  //   Table section 
-    const [getdata, setgetdata] = useState([])
-    const [datanumber, setdatanumber] = useState([])
-    // List a data thougth api 
-    const getapi = () => {
-        // const empid = localStorage.getItem('postemployid',)
-        const empid = localStorage.getItem('requestnumber',)
-        axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
-            .then((res) => {
-                console.log('assetworkrequest  GET  BYID', res.data.recordset);
-                console.log('length', res.data.recordset.length);
-                const AssetItemDescriptionsssss = res.data.recordset
-                // setgetdata(res.data.recordset);
-                const SAQ = res.data.recordset.map((item) => item.seq);
-                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
+    // Employe ID
+    const [value, setvalue] = useState({
+        VendorID: null, VendorName:''
+    })
 
-                const promises = res.data.recordset.map((item) => {
-                    const itid = item.AssetItemDescription;
-                    console.log(itid);
+    //VendorCode
+    const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
+    const [openVendorCode, setOpenVendorCode] = useState(false);
+    const [autocompleteLoadingVendorCode, setAutocompleteLoadingVendorCode] = useState(false);
+    const abortControllerRefVendorCode = useRef(null);
 
-                    return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
-                        .then((res) => {
-                            console.log('=====', res.data.recordset);
-                            return {
-                                item,
-                                data: res.data.recordset,// Store API response data here
-                            };
-
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            return {
-                                item,
-                                data: null // Handle error case here
-                            };
-                        });
-
-                });
-
-                const assetItemTagIDs = [];
-
-                // Create an array of promises for fetching data and updating assetItemTagIDs
-                const promisesNumber = res.data.recordset.map((item) => {
-                    const itid = item.AssetItemDescription;
-                    console.log(itid);
-
-                    return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
-                        .then((res) => {
-                            console.log('=====------', res.data.recordset[0].AssetItemTagID);
-                            return {
-                                item,
-                                data: res.data.recordset,// Store API response data here
-                            };
-
-                        })
-
-                       
-                        .catch((err) => {
-                            console.log(err);
-                            return {
-                                item,
-                                data: null // Handle error case here
-                            };
-                        });
-                });
-
-                Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
-                    .then(([results1, results2]) => {
-                       
-
-                        // console.log('dfrfdf---------------------',results1);
-                        // console.log('-------------------------------', results2);
-                        results1.forEach((itemRecords, index) => {
-                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
-                            // setgetdata(results);
-                            const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
-                                description: description,
-                                records: results1[index],
-                                saq: SAQ[index],
-                            }));
-
-                            const recordsWithSAQ = SAQ.map((saq, index) => ({
-                                saq: SAQ[index],
-                                records: results1[index],
-                            }));
-
-                            
-                            setgetdata(recordsWithDescriptions, recordsWithSAQ);
-                          
-                            
-                        });
-                        results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
-                            const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
-                                assetItemTagID: assetItemTagID,
-                                records: results2[index],
-                                saq: SAQ[index],
-                            }));
-                            setdatanumber(assetItemTagID);
-
-                    });
-                        
-                    });
-
-
-
-
+    useEffect(() => {
+        // const handleOnBlurCall = () => {
+        axios.get('/api/Filter_WR')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                console.log("----------------------------", data);
+                const unitNameList = data.map((requestdata) => ({
+                    VendorID: requestdata?.VendorID,
+                    VendorName: requestdata?.VendorName,
+                }));
+                setUnitCodeVendorCode(unitNameList)
 
             })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-    useEffect(() => {
-        getapi()
+            .catch((error) => {
+                console.log('-----', error);
+            }
+            );
+        // }
+
     }, [])
 
-    const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'AssetItemTagID', headerName: 'ASSET/STOCK NUMBER', width: 220 },
-        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
-        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
-        { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
-        { field: 'Model', headerName: 'MODEL', width: 200 },
-        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 },
-    ];
+    const handleAutoCompleteInputVendorCode = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
 
-    const countDuplicates = (array, key) => {
-        const counts = {};
-        array.forEach(item => {
-            const value = item[key];
-            counts[value] = (counts[value] || 0) + 1;
-        });
-        return counts;
-    };
+        if (reason === 'reset' || reason === 'clear') {
+            setUnitCodeVendorCode([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
 
-    // Get the data first
-    const duplicatesCount = countDuplicates(getdata, 'description');
-   
+        if (!newInputValue || newInputValue.trim() === '') {
+            setUnitCodeVendorCode([])
+            return;
+        }
+        if (newInputValue === null) {
+            setUnitCodeVendorCode([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                VendorID: []
+            }))
+            return;
+        }
 
-    // Extract unique descriptions
-    const uniqueDescriptions = Array.from(new Set(getdata.map(row =>  row.description)));
-    // const uniqueDesID = Array.from(new Set(datanumber.map(row => row.AssetItemTagID)));
-    // console.log('uniqueDescriptions-------------------------', uniqueDesID);
-   
-    // Create filteredRows with unique descriptions and counts
-    const filteredRows = uniqueDescriptions.map((description, index) => ({
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoadingVendorCode(true);
+        setOpenVendorCode(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRefVendorCode.current) {
+                abortControllerRefVendorCode.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRefVendorCode.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/Filter_VendorMaster')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    setUnitCodeVendorCode(data ?? [])
+                    setOpenVendorCode(true);
+                    setAutocompleteLoadingVendorCode(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
 
-        id: index + 1,
-        AssetItemDescription: description,
-        AssetItemTagID: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '', 
-        ASQS: getdata.find(row => row.description === description)?.saq || 0,
-        AssetQty: duplicatesCount[description] || 0,
-        AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
-        AssetCategory: getdata[index].records ? getdata[index].records.data[0].AssetCategory : '',
-        AssetSubCategory: getdata[index].records ? getdata[index].records.data[0].AssetSubCategory : '',
-        RequestDateTime: getdata[index].records ? getdata[index].records.data[0].RequestDateTime : '',
-        Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
-        Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
-    }));
+                }
+                );
 
-    // Now you can loop through the filteredRows and access duplicatesCount to display counts alongside entries
-    filteredRows.forEach(row => {
-        const description = row.AssetItemDescription;
-        const count = row.AssetQty;
-        const AssetItemTagID = "sdf";
+        }
 
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
 
-    });
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    VendorID: []
+                }))
+                setAutocompleteLoadingVendorCode(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCodeVendorCode([])
+            setOpenVendorCode(false);
+            setAutocompleteLoadingVendorCode(false);
+        }
 
-    const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 25,
-        page: 0,
-    });
+    }
+
+    const handleGPCAutoVendorCode = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                VendorID: [],
+                VendorName: []
+            }));
+        }
+
+        if (value && value.VendorID) {
+            // postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                VendorID: value.VendorID,
+                VendorName: value.VendorName
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
 
     return (
         <div>
@@ -203,27 +159,68 @@ function CreateWorkRequest() {
                         </AppBar>
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
-                                {/* Top section */}
-                                <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Work  Request</p>
-                                    
-                                </div>
-                                {/* Table section */}
-                                <div style={{ height: 300, width: '100%' }}>
-                                    <DataGrid
-                                        rows={filteredRows}
-                                        columns={columns}
-                                        pagination
-                                        rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
-                                        paginationModel={paginationModel}
-                                        onPaginationModelChange={setPaginationModel}
-                                        checkboxSelection
-                                        disableRowSelectionOnClick
-                                        disableMultipleSelection
-                                    />
+                                <Autocomplete
+                                    id="serachGpc"
+                                    className='rounded inputsection py-0 mt-0'
+                                    required
+                                    options={unitCodeVendorCode} // Use the formattedGpcList here
+                                    getOptionLabel={(option) =>
+                                        option?.VendorID
+                                            ? option.VendorID + ' - ' + option.VendorName
+                                            : ''
+                                    }
+                                    onChange={handleGPCAutoVendorCode}
+                                    renderOption={(props, option) => (
+                                        <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                            {option.VendorID} - {option.VendorName}
+                                        </li>
+                                    )}
+                                    value={value}
+                                    onInputChange={(event, newInputValue, params) => handleAutoCompleteInputVendorCode(event, newInputValue, params)}
+                                    loading={autocompleteLoadingVendorCode}
+                                    open={openVendorCode}
+                                    onOpen={() => {
+                                        // setOpen(true);
+                                    }}
+                                    onClose={() => {
+                                        setOpenVendorCode(false);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            placeholder='Employee Number'
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                endAdornment: (
+                                                    <React.Fragment>
+                                                        {autocompleteLoadingVendorCode ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                        {params.InputProps.endAdornment}
+                                                    </React.Fragment>
+                                                ),
+                                            }}
+                                            sx={{
+                                                '& label.Mui-focused': {
+                                                    color: '#000000',
+                                                },
+                                                '& .MuiInput-underline:after': {
+                                                    borderBottomColor: '#00006a',
+                                                    color: '#000000',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    '&:hover fieldset': {
+                                                        borderColor: '#00006a',
+                                                        color: '#000000',
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: '#00006a',
+                                                        color: '#000000',
+                                                    },
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                />
 
-                                </div>
-                                {/*Button section*/}
                             </div>
                         </div>
                     </Box>

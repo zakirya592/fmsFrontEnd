@@ -27,43 +27,117 @@ import TextField from '@mui/material/TextField';
 function Createpurchaserequest() {
 
     const navigate = useNavigate();
+
+    const getRequestDate = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const getDateRequired = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    // Usestatus
     const [value, setvalue] = useState({
-        PurchaseRequest: '', RequestDate: '', DateRequired: '',
-        EmployeeID: null, Firstname: '',
+        PurchaseRequest: '', RequestDate: getRequestDate(), DateRequired: getDateRequired(),
+         Firstname: '',
         Purpose: '', VATInclusive: '',
         UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
         VendorID: null, VendorName: '',
-        Verifiedby: '', EmployeeName2: '',
+        Verifiedby: null,
+        assignEmployee: null, EmployeeName: '',
+        completeEmployee: null, CompleteEmployeeName:''
     })
 
-    // Employe ID
-    const [unitCode, setUnitCode] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [autocompleteLoading, setAutocompleteLoading] = useState(false);
-    const abortControllerRef = useRef(null);
-
-    // EmployeeID
-    function postapi(EmployeeID) {
-        axios.post(`/api/getworkRequest_by_EPID`, {
-            EmployeeID,
-        }).then((res) => {
-
-            const {
-                Firstname,
-            } = res.data.recordsets[0][0];
-            setvalue((prevValue) => ({
-                ...prevValue,
-                Firstname,
-            }));
-        })
+    // Auto iccreas
+    // purchase numebr auto increament no
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].PurchaseOrderNumber;
+                // const reqput=1000
+                let formattedRequestNumber;
+                if (reqput >= 1 && reqput <= 9) {
+                    formattedRequestNumber = `000-000-00${reqput}`;
+                } else if (reqput >= 10 && reqput <= 99) {
+                    formattedRequestNumber = `000-000-0${reqput}`;
+                } else if (reqput >= 100 && reqput <= 999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else if (reqput >= 1000 && reqput <= 9999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                }
+                // localStorage.setItem('Requestnumbers', reqput)
+                setvalue(prevState => ({ ...prevState, PurchaseRequest: formattedRequestNumber }));
+            })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
-    const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
+
+    useEffect(() => {
+        Requestnumberapi()
+    }, [])
+
+    const requestincreas = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].PurchaseOrderNumber + 1;
+                axios.put(`/api/PurchaseOrderNumber_Put/1`, {
+                    PurchaseOrderNumber: reqput
+                })
+                    .then((res) => {
+                        const reqput = res.data.recordset[0].PurchaseOrderNumber + 1;
+                        setvalue(prevState => ({ ...prevState, PurchaseRequest: '000-000-' + '0' + `${reqput}` }));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    //VendorCode
+    const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
+    const [openVendorCode, setOpenVendorCode] = useState(false);
+    const [autocompleteLoadingVendorCode, setAutocompleteLoadingVendorCode] = useState(false);
+    const abortControllerRefVendorCode = useRef(null);
+    useEffect(() => {
+        // const handleOnBlurCall = () => {
+        axios.get('/api/Filter_WR')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                console.log("----------------------------", data);
+                const unitNameList = data.map((requestdata) => ({
+                    VendorID: requestdata?.VendorID,
+                    VendorName: requestdata?.VendorName,
+                }));
+                setUnitCodeVendorCode(unitNameList)
+
+            })
+            .catch((error) => {
+                console.log('-----', error);
+            }
+            );
+        // }
+
+    }, [])
+
+    const handleAutoCompleteInputVendorCode = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
+
         if (reason === 'reset' || reason === 'clear') {
-            setUnitCode([])
+            setUnitCodeVendorCode([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
         if (reason === 'option') {
@@ -71,38 +145,37 @@ function Createpurchaserequest() {
         }
 
         if (!newInputValue || newInputValue.trim() === '') {
-            // perform operation when input is cleared
-            setUnitCode([])
+            setUnitCodeVendorCode([])
             return;
         }
         if (newInputValue === null) {
-            setUnitCode([])
+            setUnitCodeVendorCode([])
             setvalue(prevValue => ({
                 ...prevValue,
-                EmployeeID: []
+                VendorID: []
             }))
             return;
         }
 
         // postapi(newInputValue.EmployeeID);
-        setAutocompleteLoading(true);
-        setOpen(true);
+        setAutocompleteLoadingVendorCode(true);
+        setOpenVendorCode(true);
         try {
             // Cancel any pending requests
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
+            if (abortControllerRefVendorCode.current) {
+                abortControllerRefVendorCode.current.abort();
             }
             // Create a new AbortController
-            abortControllerRef.current = new AbortController();
+            abortControllerRefVendorCode.current = new AbortController();
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
-            axios.get('/api/EmployeeID_GET_LIST')
+            axios.get('/api/Filter_VendorMaster')
                 .then((response) => {
                     console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
-                    setUnitCode(data ?? [])
-                    setOpen(true);
-                    setAutocompleteLoading(false);
+                    setUnitCodeVendorCode(data ?? [])
+                    setOpenVendorCode(true);
+                    setAutocompleteLoadingVendorCode(false);
                     // 
                 })
                 .catch((error) => {
@@ -119,49 +192,53 @@ function Createpurchaserequest() {
                 // Ignore abort errors
                 setvalue(prevValue => ({
                     ...prevValue,
-                    EmployeeID: []
+                    VendorID: []
                 }))
-                setAutocompleteLoading(true);
+                setAutocompleteLoadingVendorCode(true);
                 console.log(error)
                 return;
             }
             console.error(error);
             console.log(error)
-            setUnitCode([])
-            setOpen(false);
-            setAutocompleteLoading(false);
+            setUnitCodeVendorCode([])
+            setOpenVendorCode(false);
+            setAutocompleteLoadingVendorCode(false);
         }
 
     }
 
-    const handleGPCAutoCompleteChange = (event, value) => {
+    const handleGPCAutoVendorCode = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
-        if (value === null || value === ' -') {
+        if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
-                EmployeeID: []
+                VendorID: [],
+                VendorName: []
             }));
         }
-        if (value && value.EmployeeID) {
-            postapi(value.EmployeeID);
+
+        if (value && value.VendorID) {
+            // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                EmployeeID: value.EmployeeID,
-                Firstname: value.Firstname
+                VendorID: value.VendorID,
+                VendorName: value.VendorName
             }));
-            console.log('Received value----------:', value.EmployeeID);
+            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
 
-
     const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
-    const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
     const [opencompleteemployee, setOpencompleteemployee] = useState(false);
+    const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
     const abortControllerRefcompleteemployee = useRef(null);
+
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
+        console.log('==========+++++++======', newInputValuecompleteemployee)
+
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -178,12 +255,13 @@ function Createpurchaserequest() {
             setUnitCodecompleteemployee([])
             setvalue(prevValue => ({
                 ...prevValue,
-                VendorID: [],
-                VendorName:[],
+                completeEmployee: [],
+                CompleteEmployeeName: []
             }))
             return;
         }
 
+        // postapi(newInputValue.EmployeeID);
         setAutocompleteLoadingcompleteemployee(true);
         setOpencompleteemployee(true);
         try {
@@ -194,8 +272,9 @@ function Createpurchaserequest() {
             // Create a new AbortController
             abortControllerRefcompleteemployee.current = new AbortController();
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
-            axios.get('/api/Filter_VendorMaster')
+            axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -219,9 +298,10 @@ function Createpurchaserequest() {
                 // Ignore abort errors
                 setvalue(prevValue => ({
                     ...prevValue,
-                    VendorID: [],
-                    VendorName:[]
+                    completeEmployee: [],
+                    CompleteEmployeeName: []
                 }))
+                setAutocompleteLoadingID(true);
                 console.log(error)
                 return;
             }
@@ -233,22 +313,154 @@ function Createpurchaserequest() {
         }
 
     }
+
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
-                VendorID: [],
-                VendorName:[]
+                completeEmployee: [],
+                CompleteEmployeeName: []
             }));
         }
 
-        if (value && value.VendorID) {
+        if (value && value.EmployeeID) {
+            // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                VendorID: value.VendorID,
-                VendorName:value.VendorName
+                completeEmployee: value.EmployeeID,
+                CompleteEmployeeName: value.Firstname
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+        
+    // Assign to Employee Logic.
+    const [unitCodeID, setUnitCodeID] = useState([]);
+    const [openID, setOpenID] = useState(false);
+    const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
+    const abortControllerRefID = useRef(null);
+
+    useEffect(() => {
+        // const handleOnBlurCall = () => {
+        axios.get('/api/EmployeeID_GET_LIST')
+            .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
+                const data = response?.data?.recordset;
+                console.log("----------------------------", data);
+                const dataget = data.map((requestdata) => ({
+                    RequestNumber: requestdata?.RequestNumber,
+                    RequestStatus: requestdata?.RequestStatus,
+                }));
+                // setUnitCodeID(dataget)
+                setOpenID(false)
+            })
+            .catch((error) => {
+                console.log('-----', error);
+            }
+            );
+        // }
+
+    }, [])
+
+    const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
+        console.log('==========+++++++======', newInputValueID)
+
+        if (reason === 'reset' || reason === 'clear') {
+            setUnitCodeID([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValueID || newInputValueID.trim() === '') {
+            setUnitCodeID([])
+            return;
+        }
+        if (newInputValueID === null) {
+            setUnitCodeID([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                assignEmployee: [],
+                EmployeeName: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoadingID(true);
+        setOpenID(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRefID.current) {
+                abortControllerRefID.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRefID.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/EmployeeID_GET_LIST')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
+                    setUnitCodeID(data ?? [])
+                    setOpenID(true);
+                    setUnitCodeID(data)
+                    setAutocompleteLoadingID(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    assignEmployee: [],
+                    EmployeeName: []
+                }))
+                setAutocompleteLoadingID(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCodeID([])
+            setOpenID(false);
+            setAutocompleteLoadingID(false);
+        }
+
+    }
+
+    const handleGPCAutoCompleteChangeID = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                assignEmployee: [],
+                EmployeeName: []
+            }));
+        }
+
+        if (value && value.EmployeeID) {
+            // postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                assignEmployee: value.EmployeeID,
+                EmployeeName: value.Firstname
             }));
             console.log('Received value----------:', value);
         } else {
@@ -256,13 +468,16 @@ function Createpurchaserequest() {
         }
     }
 
+    const [getdata, setgetdata] = useState([])
+    const [datanumber, setdatanumber] = useState([])
+
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'PurchaseRequest', headerName: 'Purchase Request', width: 200 },
-        { field: 'PurchaseRequestDetail', headerName: 'Purchase RequestDetail', width: 200 },
-        { field: 'MaterialMaster', headerName: 'Material Master', width: 180 },
-        { field: 'VendorMaster', headerName: 'Vendor Master', width: 200 },
-        { field: 'EmployeeMaster', headerName: 'Employee Master', width: 180 },
+        { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetQty', headerName: 'QAT', width: 180 },
+        { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
+        { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -297,10 +512,6 @@ function Createpurchaserequest() {
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => navigate('/Updata/transaction')}>
-                        <span style={{ paddingRight: '3px' }}>Update</span>
-                        <EditIcon />
-                    </MenuItem>
                     <MenuItem onClick={handleDeleteButtonClick}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
@@ -312,33 +523,174 @@ function Createpurchaserequest() {
         );
     }
 
-    const filteredRows = Array.from({ length: 100 }).map((_, index) => {
+    const apiget=()=>{
+        axios.get(`/api/AssetsMaster_GET_LIST`)
+            .then((res) => {
+                console.log('AssetsMaster_GET_LIST', res.data.recordset);
+                console.log('length', res.data.recordset.length);
+                const AssetItemDescriptionsssss = res.data.recordset
+                // setgetdata(res.data.recordset);
+                const SAQ = res.data.recordset.map((item) => item.seq);
+                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
+
+                const promises = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
+
+                    return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                        .then((res) => {
+                            console.log('=====', res.data.recordset);
+                            return {
+                                item,
+                                data: res.data.recordset,// Store API response data here
+                            };
+
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
+
+                });
+
+                const assetItemTagIDs = [];
+
+                // Create an array of promises for fetching data and updating assetItemTagIDs
+                const promisesNumber = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
+
+                    return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                        .then((res) => {
+                            return {
+                                item,
+                                data: res.data.recordset,// Store API response data here
+                            };
+
+                        })
+
+
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
+                });
+
+                Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+                    .then(([results1, results2]) => {
+
+
+                        // console.log('dfrfdf---------------------',results1);
+                        // console.log('-------------------------------', results2);
+                        results1.forEach((itemRecords, index) => {
+                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                            // setgetdata(results);
+                            const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                description: description,
+                                records: results1[index],
+                                saq: SAQ[index],
+                            }));
+
+                            const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                saq: SAQ[index],
+                                records: results1[index],
+                            }));
+
+
+                            setgetdata(recordsWithDescriptions, recordsWithSAQ);
+
+
+                        });
+                        results2.forEach((itemRecords, index) => {
+                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                            // console.log("---------------------------------",assetItemTagID);
+                            const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                                assetItemTagID: assetItemTagID,
+                                records: results2[index],
+                                saq: SAQ[index],
+                            }));
+                            setdatanumber(assetItemTagID);
+
+                        });
+
+                    });
+
+
+
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        apiget()
+    }, [])
+    
+    const countDuplicates = (array, key) => {
+        const counts = {};
+        array.forEach(item => {
+            const value = item[key];
+            counts[value] = (counts[value] || 0) + 1;
+        });
+        return counts;
+    };
+
+    const duplicatesCount = countDuplicates(getdata, 'description');
+    // Extract unique descriptions
+    const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
+   // Create filteredRows with unique descriptions and counts
+    const filteredRows = uniqueDescriptions.map((description, index) => {
+        const assetQty = duplicatesCount[description] || 0;
+        const purchaseAmount = getdata[index].records ? parseFloat(getdata[index].records.data[0].PurchaseAmount) : '';
+        let totalPrice;
+
+        if (!isNaN(purchaseAmount)) {
+            if (assetQty === 1) {
+                totalPrice = purchaseAmount;
+            } else if (assetQty > 1) {
+                totalPrice = purchaseAmount * assetQty;
+            } else {
+                totalPrice = 0; // Handle cases where AssetQty is negative or invalid
+            }
+        } else {
+            totalPrice = 0; // Handle cases where PurchaseAmount is not a valid number
+        }
+
         return {
             id: index + 1,
-            PurchaseRequest: `PurchaseRequest-${index + 1}`,
-            PurchaseRequestDetail: `PurchaseRequestDetail-${index + 1}`,
-            MaterialMaster: `MaterialMaster-${index + 1}`,
-            VendorMaster: `VendorMaster-${index + 1}`,
-            EmployeeMaster: `EmployeeMaster-${index + 1}`,
+            AssetItemDescription: description,
+            PurchaseRequest: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '',
+            ASQS: getdata.find(row => row.description === description)?.saq || 0,
+            AssetQty: assetQty,
+            PurchaseAmount: purchaseAmount,
+            TOTAL_PRICE: totalPrice,
         };
     });
-
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
 
-    const Createapi = async () => {
+    const udataapi = async () => {
         axios.post(`/api/PurchaseRequest_post`, {
             PurchaseRequestNumber: value.PurchaseRequest,
             RequestDate: value.RequestDate,
             RequiredDate: value.DateRequired,
-            RequestByEmployeeID: value.EmployeeID,
+            RequestByEmployeeID: value.completeEmployee,
             Purpose: value.Purpose,
             VATInclude: value.VATInclusive,
             VendorID: value.VendorID,
-            VerifiedByEmpl: value.Verifiedby,
+            VerifiedByEmpl: value.assignEmployee,
 
         })
             .then((res) => {
@@ -363,6 +715,11 @@ function Createpurchaserequest() {
             });
 
     };
+
+    const Createapi = () => {
+        udataapi()
+        requestincreas()
+    }
 
     return (
         <div>
@@ -401,13 +758,7 @@ function Createpurchaserequest() {
                                                 types='text'
                                                 id='PurchaseRequest'
                                                 value={value.PurchaseRequest}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        PurchaseRequest: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
+                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PR Number'
                                                 required
                                             ></input>
@@ -469,42 +820,45 @@ function Createpurchaserequest() {
                                             </label>
 
                                             <Autocomplete
-                                                id="EmployeeID"
+                                                id="completeemployee"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
-                                                options={unitCode} // Use the formattedGpcList here
-                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                                options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.EmployeeID
                                                         ? option.EmployeeID + ' - ' + option.Firstname
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
-                                                onChange={handleGPCAutoCompleteChange}
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
+                                                onChange={handleGPCAutoCompleteChangecompleteemployee}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
                                                         {option.EmployeeID} - {option.Firstname}
                                                     </li>
                                                 )}
-                                                value={value}
-                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputChange(event, newInputValue, params)}
-                                                loading={autocompleteLoading}
-                                                open={open}
+                                                value={value.EmployeeID}
+                                                onInputChange={(eventcompleteemployee, newInputValuecompleteemployee, params) =>
+                                                    handleAutoCompleteInputChangecompleteemployee(eventcompleteemployee, newInputValuecompleteemployee, params)
+                                                }
+                                                loading={autocompleteLoadingcompleteemployee}
+                                                open={opencompleteemployee} // Control open state based on selected value
                                                 onOpen={() => {
-                                                    // setOpen(true);
+                                                    // setOpenID(true);
                                                 }}
                                                 onClose={() => {
-                                                    setOpen(false);
+                                                    setOpencompleteemployee(false);
                                                 }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='complete employee Number'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
                                                                 <React.Fragment>
-                                                                    {autocompleteLoading ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                    {autocompleteLoadingcompleteemployee ? (
+                                                                        <CircularProgress style={{ color: 'black' }} size={20} />
+                                                                    ) : null}
                                                                     {params.InputProps.endAdornment}
                                                                 </React.Fragment>
                                                             ),
@@ -543,7 +897,7 @@ function Createpurchaserequest() {
                                             <input
                                                 types='text'
                                                 id='EmployeeName'
-                                                value={value.Firstname}
+                                                value={value.CompleteEmployeeName}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Employee Name'
                                                 required
@@ -578,9 +932,9 @@ function Createpurchaserequest() {
                                             <label htmlFor='VATInclusive' className='lablesection my-auto color3 text-start mb-1'>
                                                 VAT Inclusive(Y/N)?
                                             </label>
-                                           
+
                                             <select className='rounded inputsectiondropdpwn py-2 color2 ' id="VendorConfirm" aria-label="Floating label select example"
-                                            value={value.VATInclusive}
+                                                value={value.VATInclusive}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
@@ -698,45 +1052,40 @@ function Createpurchaserequest() {
                                                 Vendor Code
                                             </label>
                                             <Autocomplete
-                                                id="UserAuthority"
+                                                id="serachGpc"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
-                                                options={unitCodecompleteemployee}
+                                                options={unitCodeVendorCode} // Use the formattedGpcList here
                                                 getOptionLabel={(option) =>
                                                     option?.VendorID
                                                         ? option.VendorID + ' - ' + option.VendorName
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.VendorID === value.VendorID}
-                                                onChange={handleGPCAutoCompleteChangecompleteemployee}
+                                                onChange={handleGPCAutoVendorCode}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.VendorID}- {option.VendorName}
+                                                        {option.VendorID} - {option.VendorName}
                                                     </li>
                                                 )}
                                                 value={value}
-                                                onInputChange={(eventcompleteemployee, newInputValuecompleteemployee, params) =>
-                                                    handleAutoCompleteInputChangecompleteemployee(eventcompleteemployee, newInputValuecompleteemployee, params)
-                                                }
-                                                loading={autocompleteLoadingcompleteemployee}
-                                                open={opencompleteemployee} // Control open state based on selected value
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputVendorCode(event, newInputValue, params)}
+                                                loading={autocompleteLoadingVendorCode}
+                                                open={openVendorCode}
                                                 onOpen={() => {
-                                                    // setOpenID(true);
+                                                    // setOpen(true);
                                                 }}
                                                 onClose={() => {
-                                                    setOpencompleteemployee(false);
+                                                    setOpenVendorCode(false);
                                                 }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='User Authority'
+                                                        placeholder='Employee Number'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
                                                                 <React.Fragment>
-                                                                    {autocompleteLoadingcompleteemployee ? (
-                                                                        <CircularProgress style={{ color: 'black' }} size={20} />
-                                                                    ) : null}
+                                                                    {autocompleteLoadingVendorCode ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
                                                                     {params.InputProps.endAdornment}
                                                                 </React.Fragment>
                                                             ),
@@ -798,26 +1147,72 @@ function Createpurchaserequest() {
                                             <label htmlFor='Verifiedby' className='lablesection color3 text-start mb-1'>
                                                 Verified by
                                             </label>
-
-                                            <input
-                                                types='text'
-                                                id='Verifiedby'
-                                                value={value.Verifiedby}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Verifiedby: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
+                                            <Autocomplete
+                                                id="serachGpcid"
+                                                className='rounded inputsection py-0 mt-0'
                                                 required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
+                                                options={unitCodeID}
+                                                getOptionLabel={(option) =>
+                                                    option?.EmployeeID
+                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                        : ''
+                                                }
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
+                                                onChange={handleGPCAutoCompleteChangeID}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.EmployeeID} - {option.Firstname}
+                                                    </li>
+                                                )}
+                                                value={value.EmployeeID}
+                                                onInputChange={(eventID, newInputValueID, params) =>
+                                                    handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
+                                                }
+                                                loading={autocompleteLoadingID}
+                                                open={openID} // Control open state based on selected value
+                                                onOpen={() => {
+                                                    // setOpenID(true);
+                                                }}
+                                                onClose={() => {
+                                                    setOpenID(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Employee Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoadingID ? (
+                                                                        <CircularProgress style={{ color: 'black' }} size={20} />
+                                                                    ) : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
                                         </div>
                                     </div>
 
@@ -829,13 +1224,7 @@ function Createpurchaserequest() {
                                             <input
                                                 types='text'
                                                 id='EmployeeName2'
-                                                value={value.EmployeeName2}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeName2: e.target.value
-                                                    }))
-                                                }}
+                                                value={value.EmployeeName}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Employee Name'
                                                 required
