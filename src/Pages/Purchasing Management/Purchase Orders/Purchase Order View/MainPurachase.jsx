@@ -102,9 +102,9 @@ function MainPurachase() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
         { field: 'PurchaseOrderNumber', headerName: 'Purchase Order Number', width: 200 },
-        { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
         { field: 'PurchaseRequestNumber', headerName: 'Purchase Request Number', width: 200 },
         { field: 'ApprovedByEmpl', headerName: 'Approved ByEmployeeID', width: 200 },
+        { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
         { field: 'RequestDate', headerName: 'Request Date', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
@@ -180,11 +180,11 @@ function MainPurachase() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate(`/View/Purchaserequest/${params.row.PurchaseOrderNumber}`)} >
+                    <MenuItem onClick={() => navigate(`/View/Purachaseorder/${params.row.PurchaseOrderNumber}`)} >
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => navigate(`/Update/Purchaserequest/${params.row.PurchaseOrderNumber}`)}>
+                    <MenuItem onClick={() => navigate(`/Update/Purachaseorder/${params.row.PurchaseOrderNumber}`)}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
@@ -239,7 +239,7 @@ function MainPurachase() {
         // Assuming you want to navigate to the update page of the first selected row
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
-            navigate(`/Update/Purchaserequest/${firstSelectedRow.PurchaseRequestNumber}`);
+            navigate(`/Update/Purachaseorder/${firstSelectedRow.PurchaseOrderNumber}`);
         }
     };
 

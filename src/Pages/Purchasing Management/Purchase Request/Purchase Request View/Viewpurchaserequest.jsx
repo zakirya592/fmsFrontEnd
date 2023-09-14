@@ -650,7 +650,7 @@ function Viewpurchaserequest() {
         return {
             id: index + 1,
             AssetItemDescription: description,
-            PurchaseRequest: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '',
+            PurchaseRequest: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
             ASQS: getdata.find(row => row.description === description)?.saq || 0,
             AssetQty: assetQty,
             PurchaseAmount: purchaseAmount,

@@ -88,6 +88,7 @@ import Updatapurchaserequest from '../../Pages/Purchasing Management/Purchase Re
 import Viewpurchaserequest from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/Viewpurchaserequest'
 import MainPurachase from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/MainPurachase'
 import Createpurachaseorder from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Createpurachaseorder'
+import Updatapurachaseorder from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Updatapurachaseorder'
 function Pagerounter() {
 
   return (
@@ -245,7 +246,8 @@ function Pagerounter() {
           {/* Purachaseview */}
           <Route exact path="/Purachaseorderview" element={<MainPurachase />} />
           <Route exact path="/Create/Purachaseorder" element={<Createpurachaseorder />} />
-          <Route exact path="/Purachaseorder" element={< Purachaseview />} />
+          <Route exact path="/View/Purachaseorder/:userId" element={< Purachaseview />} />
+          <Route exact path="/Update/Purachaseorder/:userId" element={< Updatapurachaseorder />} />
 
           {/* Purachaseview */}
           <Route exact path="/Goodsreceiptsview" element={<Goodsreceiptsview />} />

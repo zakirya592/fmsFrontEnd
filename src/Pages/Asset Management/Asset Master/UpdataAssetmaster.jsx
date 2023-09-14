@@ -277,7 +277,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
         const Deptnale = e.target.value;
         setvalue((prevValue) => ({
             ...prevValue,
-            assetCategory: e.target.value,
+            AssetCategory: e.target.value,
         }));
         axios.get(`/api/AssetCategory_GET_BYID/${Deptnale}`)
             .then((res) => {

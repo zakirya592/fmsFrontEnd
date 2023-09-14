@@ -101,10 +101,10 @@ function PurchaserequestView() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 100 },
-        { field: 'VerifiedByEmpl', headerName: 'Verified By Employee', width: 200 },
-        { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
         { field: 'PurchaseRequestNumber', headerName: 'Purchase Request Number', width: 200 },
         { field: 'RequestByEmployeeID', headerName: 'Request By EmployeeID', width: 200 },
+        { field: 'VerifiedByEmpl', headerName: 'Verified By Employee', width: 200 },
+        { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
         { field: 'RequestDate', headerName: 'Request Date', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
