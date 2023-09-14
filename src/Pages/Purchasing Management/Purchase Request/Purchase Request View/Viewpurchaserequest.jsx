@@ -75,6 +75,7 @@ function Viewpurchaserequest() {
                     DateRequired: RequestedDateverered
                 }));
 
+
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": completeEmployee
                 }).then((res) => {
@@ -115,6 +116,18 @@ function Viewpurchaserequest() {
                 })
                     .catch((err) => {
                         //// console.log(err);;
+                    });
+
+                const vendorcode = res.data.recordset[0].VendorID
+                axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`).then((res) => {
+                    console.log('asdfaf=====================================', res.data.recordset[0].VendorName);
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        VendorName: res.data.recordset[0].VendorName
+                    }));
+                })
+                    .catch((err) => {
+                        console.log(err);
                     });
 
 
