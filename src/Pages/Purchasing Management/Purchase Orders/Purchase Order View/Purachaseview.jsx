@@ -757,7 +757,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='PurchaseRequest' className='lablesection color3 text-start mb-1'>
-                                                Purchase Request #<span className='star'>*</span>
+                                                Purchase Request #
                                             </label>
 
                                             <input
@@ -785,7 +785,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='PurchaseOrder' className='lablesection color3 text-start mb-1'>
-                                                Purchase Order#<span className='star'>*</span>
+                                                Purchase Order# <span className='star'>*</span>
                                             </label>
 
                                             <input
@@ -798,6 +798,7 @@ function Purachaseview() {
                                                         PurchaseOrder: e.target.value
                                                     }))
                                                 }}
+                                                disabled
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PO Number'
                                                 required
@@ -813,7 +814,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='PODate' className='lablesection color3 text-start mb-1'>
-                                                PO Date<span className='star'>*</span>
+                                                PO Date
                                             </label>
                                             <input type="date" id="PODate"
 
@@ -832,7 +833,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='ProposedDeliveryDate' className='lablesection color3 text-start mb-1'>
-                                                Proposed Delivery Date<span className='star'>*</span>
+                                                Proposed Delivery Date
                                             </label>
                                             <input type="date" id="ProposedDeliveryDate"
 
@@ -856,7 +857,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='ReviewProcessedby' className='lablesection color3 text-start mb-1'>
-                                                Review/Processed by<span className='star'>*</span>
+                                                Review/Processed by
                                             </label>
 
                                             <Autocomplete
@@ -931,7 +932,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeName' className='lablesection color3 text-start mb-1'>
-                                                Employee Name<span className='star'>*</span>
+                                                Employee Name
                                             </label>
                                             <input
                                                 types='text'
@@ -977,7 +978,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Approvedby' className='lablesection color3 text-start mb-1'>
-                                                RApproved by<span className='star'>*</span>
+                                                RApproved by
                                             </label>
                                             <Autocomplete
                                                 id="serachGpcid"
@@ -1051,7 +1052,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='EmployeeName2' className='lablesection color3 text-start mb-1'>
-                                                Employee Name<span className='star'>*</span>
+                                                Employee Name
                                             </label>
                                             <input
                                                 types='text'
@@ -1067,7 +1068,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-auto">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='ApprovalDate' className='lablesection color3 text-start mb-1'>
-                                                Approval Date<span className='star'>*</span>
+                                                Approval Date
                                             </label>
                                             <input type="date" id="PODate"
 
@@ -1105,7 +1106,7 @@ function Purachaseview() {
                                 <div className="d-flex justify-content-end">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
-                                            SUB TOTAL AMOUNT<span className='star'>*</span>
+                                            SUB TOTAL AMOUNT
                                         </label>
 
                                         <input
@@ -1129,7 +1130,7 @@ function Purachaseview() {
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
-                                            VAT<span className='star'>*</span>
+                                            VAT
                                         </label>
 
                                         <input
@@ -1153,7 +1154,7 @@ function Purachaseview() {
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
-                                            TOTAL AMOUNT<span className='star'>*</span>
+                                            TOTAL AMOUNT
                                         </label>
 
                                         <input
@@ -1270,7 +1271,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='VendorConfirm' className='lablesection color3 text-start mb-1'>
-                                                Vendor Confirm<span className='star'>*</span>
+                                                Vendor Confirm
                                             </label>
                                             <select className='rounded inputsectiondropdpwn   color2 py-2' id="VendorConfirm" aria-label="Floating label select example" value={value.VendorConfirm}
                                                 onChange={e => {
@@ -1295,7 +1296,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='ConfirmationDate' className='lablesection color3 text-start mb-1'>
-                                                Confirmation Date<span className='star'>*</span>
+                                                Confirmation Date
                                             </label>
                                             <input type="date" id="ConfirmationDate"
 
@@ -1314,7 +1315,7 @@ function Purachaseview() {
                                     <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Comments' className='lablesection color3 text-start mb-1'>
-                                                Comments<span className='star'>*</span>
+                                                Comments
                                             </label>
                                             <input
                                                 types='text'

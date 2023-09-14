@@ -2,15 +2,20 @@ import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
+import { useNavigate } from "react-router-dom";
+import excel from "../../../../Image/excel.png"
+import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { SearchOutlined, CaretDownOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -21,69 +26,24 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
-import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
 
-function Goodsreceiptsview() {
+function Creategoodreturn() {
 
-    let { userId } = useParams();
     const navigate = useNavigate();
-
+    const getRequestDate = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
     const [value, setvalue] = useState({
-        PurchaseOrder: '', InvoiceDate: '', ActualDeliveryDate: '', InvoiceNumber: '',
+        PurchaseOrder: '', InvoiceDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
         UBTOTALAMOUNT: '', VAT: '', Discounts: '', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '',
     })
-    const getapi = () => {
-        axios.get(`/api/GoodsReceipt_GET_BYID/${userId}`, {
-        },)
-            .then((res) => {
-                const Recievedby = res.data.recordset[0].RecievedByEmployeeID
-                const InvoiceDatevalid = res.data.recordset[0].InvoiceDate
-                const ActualDeliveryDatevalid = res.data.recordset[0].ActualDeliveryDate
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    FeedbackComments: res.data.recordset[0].FeedbackOrComments,
-                    Discounts: res.data.recordset[0].DiscountAmount,
-                    PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
-                    InvoiceNumber: res.data.recordset[0].InvoiceNumber,
-                    VendorID: res.data.recordset[0].VendorID,
-                    PurchaseOrder: res.data.recordset[0].PurchaseOrderNumber,
-                    Recievedby,
-                    InvoiceDate: InvoiceDatevalid,
-                    ActualDeliveryDate: ActualDeliveryDatevalid,
-                }));
-
-
-                axios.post(`/api/getworkRequest`, {
-                    "EmployeeID": Recievedby
-                }).then((res) => {
-                    console.log('asdfaf=====================================', res);
-                    const Employee = res.data.recordsets[0][0].EmployeeID
-                    const CompleteEmployee = res.data.recordsets[0][0].Firstname
-                    setvalue((prevValue) => ({
-                        ...prevValue,
-                        Recievedby: Employee,
-                        EmployeeName: CompleteEmployee,
-                    }));
-
-                })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-
-
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-    useEffect(() => {
-        getapi()
-    }, [])
 
     // Table section 
     const [getdata, setgetdata] = useState([])
@@ -300,6 +260,7 @@ function Goodsreceiptsview() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
+                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
@@ -415,14 +376,16 @@ function Goodsreceiptsview() {
         }
     }
 
-
+    
     // Recievedby to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
     const [openID, setOpenID] = useState(false);
     const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
     const abortControllerRefID = useRef(null);
 
+
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
+        console.log('==========+++++++======', newInputValueID)
 
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodeID([])
@@ -459,11 +422,10 @@ function Goodsreceiptsview() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    const data = response?.data?.recordset.map(item => ({
-                        ...item,
-                        Recievedby: item.EmployeeID, // Change EmployeeID to assignEmployee
-                        EmployeeName: item.Firstname
-                    }));
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    //or Id state da setGpcList da 
                     setUnitCodeID(data ?? [])
                     setOpenID(true);
                     setUnitCodeID(data)
@@ -472,6 +434,7 @@ function Goodsreceiptsview() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
+
                 }
                 );
 
@@ -500,6 +463,8 @@ function Goodsreceiptsview() {
     }
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -521,6 +486,42 @@ function Goodsreceiptsview() {
         }
     }
 
+    
+    const Postapi = async () => {
+        axios.post(`/api/GoodsReceipt_post`, {
+            PurchaseOrderNumber: value.PurchaseOrder,
+            InvoiceNumber: value.InvoiceNumber,
+            InvoiceDate: value.InvoiceDate,
+            ActualDeliveryDate: value.ActualDeliveryDate,
+            RecievedByEmployeeID: value.Recievedby,
+            VendorID: value.VendorID,
+            FeedbackOrComments: value.FeedbackComments,
+            DiscountAmount: value.Discounts,
+
+        })
+            .then((res) => {
+                console.log(res.data);
+                Swal.fire(
+                    'Created!',
+                    ` Goods Receipts ${value.PurchaseOrder} has been created successfully`,
+                    'success'
+                )
+                navigate('/Goodsreceiptsview')
+
+            })
+            .catch((err) => {
+                console.log(err);
+                const statuss = err.response.data.error
+
+                Swal.fire(
+                    'Error!',
+                    ` ${statuss} `,
+                    'error'
+                )
+            });
+
+    };
+
     return (
         <div>
             <div className='bg'>
@@ -541,7 +542,7 @@ function Goodsreceiptsview() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View Goods Receipts</p>
+                                    <p className='color1 workitoppro my-auto'>Create Goods Receipts</p>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -564,7 +565,6 @@ function Goodsreceiptsview() {
                                                         PurchaseOrder: e.target.value
                                                     }))
                                                 }}
-                                                disabled
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PR Number'
                                                 required
@@ -660,18 +660,18 @@ function Goodsreceiptsview() {
                                                 required
                                                 options={unitCodeID}
                                                 getOptionLabel={(option) =>
-                                                    option?.Recievedby
-                                                        ? option.Recievedby + ' - ' + option.EmployeeName
+                                                    option?.EmployeeID
+                                                        ? option.EmployeeID + ' - ' + option.Firstname
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.Recievedby === value.Recievedby}
+                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
                                                 onChange={handleGPCAutoCompleteChangeID}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.Recievedby} - {option.EmployeeName}
+                                                        {option.EmployeeID} - {option.Firstname}
                                                     </li>
                                                 )}
-                                                value={value}
+                                                value={value.EmployeeID}
                                                 onInputChange={(eventID, newInputValueID, params) =>
                                                     handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
                                                 }
@@ -732,6 +732,12 @@ function Goodsreceiptsview() {
                                                 types='text'
                                                 id='EmployeeName'
                                                 value={value.EmployeeName}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        EmployeeName: e.target.value
+                                                    }))
+                                                }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Employee Name'
                                                 required
@@ -973,7 +979,9 @@ function Goodsreceiptsview() {
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Goodsreceiptsview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
-                             </div>
+                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Postapi}><SaveIcon className='me-2' />SAVE</button>
+
+                                </div>
                             </div>
                         </div>
                     </Box>
@@ -983,4 +991,4 @@ function Goodsreceiptsview() {
     )
 }
 
-export default Goodsreceiptsview
+export default Creategoodreturn

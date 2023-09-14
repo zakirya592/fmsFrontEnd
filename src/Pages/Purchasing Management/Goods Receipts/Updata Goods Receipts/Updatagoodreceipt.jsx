@@ -24,7 +24,7 @@ import Swal from "sweetalert2";
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 
-function Goodsreceiptsview() {
+function Updatagoodreceipt() {
 
     let { userId } = useParams();
     const navigate = useNavigate();
@@ -521,6 +521,41 @@ function Goodsreceiptsview() {
         }
     }
 
+
+    const Postapi = async () => {
+        axios.put(`/api/GoodsReceipt_Put/${userId}`, {
+            InvoiceNumber: value.InvoiceNumber,
+            InvoiceDate: value.InvoiceDate,
+            ActualDeliveryDate: value.ActualDeliveryDate,
+            RecievedByEmployeeID: value.Recievedby,
+            VendorID: value.VendorID,
+            FeedbackOrComments: value.FeedbackComments,
+            DiscountAmount: value.Discounts,
+
+        })
+            .then((res) => {
+                console.log(res.data);
+                Swal.fire(
+                    'Success!',
+                    ` Goods Receipts ${userId} has been updated`,
+                    'success'
+                )
+                navigate('/Goodsreceiptsview')
+
+            })
+            .catch((err) => {
+                console.log(err);
+                const statuss = err.response.data.error
+
+                Swal.fire(
+                    'Error!',
+                    ` ${statuss} `,
+                    'error'
+                )
+            });
+
+    };
+
     return (
         <div>
             <div className='bg'>
@@ -541,7 +576,7 @@ function Goodsreceiptsview() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View Goods Receipts</p>
+                                    <p className='color1 workitoppro my-auto'>Modify Goods Receipts</p>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -973,7 +1008,9 @@ function Goodsreceiptsview() {
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Goodsreceiptsview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
-                             </div>
+                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Postapi}><SaveIcon className='me-2' />SAVE</button>
+
+                                </div>
                             </div>
                         </div>
                     </Box>
@@ -983,4 +1020,4 @@ function Goodsreceiptsview() {
     )
 }
 
-export default Goodsreceiptsview
+export default Updatagoodreceipt
