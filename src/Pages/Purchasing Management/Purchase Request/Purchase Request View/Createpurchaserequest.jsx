@@ -55,12 +55,12 @@ function Createpurchaserequest() {
         completeEmployee: null, CompleteEmployeeName:''
     })
 
-    // Auto iccreas
     // purchase numebr auto increament no
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                const reqput = res.data.recordset[0].PurchaseOrderNumber;
+                console.log("=====++++----",res.data);
+                const reqput = res.data.recordset[0].PurchaseRequestNumber;
                 // const reqput=1000
                 let formattedRequestNumber;
                 if (reqput >= 1 && reqput <= 9) {
@@ -87,14 +87,14 @@ function Createpurchaserequest() {
     }, [])
 
     const requestincreas = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
+        axios.get(`/api/PurchaseRequestNumber_Put/1`)
             .then((res) => {
-                const reqput = res.data.recordset[0].PurchaseOrderNumber + 1;
+                const reqput = res.data.recordset[0].PurchaseRequestNumber + 1;
                 axios.put(`/api/PurchaseOrderNumber_Put/1`, {
-                    PurchaseOrderNumber: reqput
+                    'PurchaseRequestNumber': reqput
                 })
                     .then((res) => {
-                        const reqput = res.data.recordset[0].PurchaseOrderNumber + 1;
+                        const reqput = res.data.recordset[0].PurchaseRequestNumber + 1;
                         setvalue(prevState => ({ ...prevState, PurchaseRequest: '000-000-' + '0' + `${reqput}` }));
                     })
                     .catch((err) => {
@@ -115,9 +115,7 @@ function Createpurchaserequest() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     VendorID: requestdata?.VendorID,
                     VendorName: requestdata?.VendorName,
@@ -170,7 +168,6 @@ function Createpurchaserequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_VendorMaster')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCodeVendorCode(data ?? [])
@@ -274,7 +271,6 @@ function Createpurchaserequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -348,9 +344,7 @@ function Createpurchaserequest() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -404,7 +398,6 @@ function Createpurchaserequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -526,8 +519,6 @@ function Createpurchaserequest() {
     const apiget=()=>{
         axios.get(`/api/AssetsMaster_GET_LIST`)
             .then((res) => {
-                console.log('AssetsMaster_GET_LIST', res.data.recordset);
-                console.log('length', res.data.recordset.length);
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
@@ -536,11 +527,8 @@ function Createpurchaserequest() {
 
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
                     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                         .then((res) => {
-                            console.log('=====', res.data.recordset);
                             return {
                                 item,
                                 data: res.data.recordset,// Store API response data here
@@ -562,8 +550,6 @@ function Createpurchaserequest() {
                 // Create an array of promises for fetching data and updating assetItemTagIDs
                 const promisesNumber = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
                     return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                         .then((res) => {
                             return {
@@ -585,12 +571,7 @@ function Createpurchaserequest() {
 
                 Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
                     .then(([results1, results2]) => {
-
-
-                        // console.log('dfrfdf---------------------',results1);
-                        // console.log('-------------------------------', results2);
                         results1.forEach((itemRecords, index) => {
-                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                             // setgetdata(results);
                             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                 description: description,

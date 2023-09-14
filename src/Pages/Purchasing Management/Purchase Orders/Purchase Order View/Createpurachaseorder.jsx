@@ -44,6 +44,56 @@ function Createpurachaseorder() {
         completeEmployee: null, CompleteEmployeeName: ''
     })
 
+    // purchase numebr auto increament no
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].PurchaseOrderNumber;
+                // const reqput=1000
+                let formattedRequestNumber;
+                if (reqput >= 1 && reqput <= 9) {
+                    formattedRequestNumber = `000-000-00${reqput}`;
+                } else if (reqput >= 10 && reqput <= 99) {
+                    formattedRequestNumber = `000-000-0${reqput}`;
+                } else if (reqput >= 100 && reqput <= 999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else if (reqput >= 1000 && reqput <= 9999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                }
+                console.log('----++++',res.data);
+                setvalue(prevState => ({ ...prevState, PurchaseOrder: formattedRequestNumber }));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        Requestnumberapi()
+    }, [])
+
+    const requestincreas = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].PurchaseOrderNumber + 1;
+                axios.put(`/api/PurchaseOrderNumber_Put/1`, {
+                    PurchaseOrderNumber: reqput
+                })
+                    .then((res) => {
+                        const reqput = res.data.recordset[0].PurchaseOrderNumber + 1;
+                        setvalue(prevState => ({ ...prevState, PurchaseOrder: '000-000-' + '0' + `${reqput}` }));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     const [getdata, setgetdata] = useState([])
     const [datanumber, setdatanumber] = useState([])
 
@@ -660,6 +710,7 @@ function Createpurachaseorder() {
 
     const Createapi = () => {
         Postapi()
+        requestincreas()
     }
 
     return (
@@ -728,12 +779,6 @@ function Createpurachaseorder() {
                                                 types='text'
                                                 id='PurchaseOrder'
                                                 value={value.PurchaseOrder}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        PurchaseOrder: e.target.value
-                                                    }))
-                                                }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PO Number'
                                                 required
