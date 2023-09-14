@@ -31,6 +31,7 @@ import "./Sidebar.css"
 import UserManagementSidebar from '../../Pages/UserManagement/UserManagementSidebar';
 import Assetmanagement from './Assetmanagement';
 import Purchasingsidbard from './Purchasing siderbar/Purchasingsidbard';
+import { MenuItem, Menu } from "@mui/material"
 const drawerWidth = 250;
 
 
@@ -52,7 +53,21 @@ function Siderbar(props) {
     const handerPurchasingmanagmentsidebar = () => {
         setPurchasingmanagment(!Purchasingmanagment)
     }
+    const [anchorEl, setAnchorEl] = useState(null);
 
+    const handleClicked = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+        navigate('/workrequest')
+    };
+
+    const handleNewTabClick = () => {
+        window.open('/workrequest', '_blank');
+        handleClose();
+    };
     const navigate = useNavigate();
     return (
 
@@ -90,9 +105,9 @@ function Siderbar(props) {
                     {/* Work Request */}
                     <List>
                         {['Work Request'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/workrequest')
-                            })}>
+                            <ListItem key={text} disablePadding 
+                                onClick={handleClicked}
+                            >
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index % 2 === 0 ? <img src={WorkRequest} className="sidebaricon my-auto" /> : <img src={WorkRequest} className="sidebaricon my-auto" />}
@@ -102,7 +117,14 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
-
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        <MenuItem onClick={handleClose}>Close</MenuItem>
+                        <MenuItem onClick={handleNewTabClick}>New Tab</MenuItem>
+                    </Menu>
                     {/* Work Order */}
                     <List>
                         {['Work Order'].map((text, index) => (
