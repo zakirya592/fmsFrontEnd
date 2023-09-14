@@ -787,7 +787,7 @@ function Updatapurachaseorder() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Purchase Orders</p>
+                                    <p className='color1 workitoppro my-auto'>Modify Purchase Orders</p>
 
                                 </div>
 

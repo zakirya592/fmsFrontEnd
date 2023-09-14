@@ -647,7 +647,7 @@ function Viewwork() {
                                 console.log(err);
                                 return {
                                     item,
-                                    data: null // Handle error case here
+                                    data: [] // Handle error case here
                                 };
                             });
                     });
@@ -874,7 +874,7 @@ function Viewwork() {
     const filteredRows = uniqueDescriptions.map((description, index) => ({
         id: index + 1,
         AssetItemDescription: description,
-        AssetItemTagID: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '',
+        AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
         ASQS: getdata.find(row => row.description === description)?.saq || 0,
         AssetQty: duplicatesCount[description] || 0,
         AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
@@ -889,9 +889,6 @@ function Viewwork() {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
         const AssetItemTagID = "sdf";
-
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
     });
 
     const [paginationModel, setPaginationModel] = React.useState({

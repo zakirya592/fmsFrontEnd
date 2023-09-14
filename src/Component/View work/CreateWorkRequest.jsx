@@ -748,12 +748,11 @@ function CreateWorkRequest() {
 
                         })
 
-
                         .catch((err) => {
                             console.log(err);
                             return {
                                 item,
-                                data: null // Handle error case here
+                                data: [] // Handle error case here
                             };
                         });
                 });
@@ -761,9 +760,6 @@ function CreateWorkRequest() {
                 Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
                     .then(([results1, results2]) => {
 
-
-                        // console.log('dfrfdf---------------------',results1);
-                        // console.log('-------------------------------', results2);
                         results1.forEach((itemRecords, index) => {
                             console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                             // setgetdata(results);
@@ -902,7 +898,7 @@ function CreateWorkRequest() {
 
         id: index + 1,
         AssetItemDescription: description,
-        AssetItemTagID: datanumber[index].records ? datanumber[index].records.data[0].AssetItemTagID : '',
+        AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
         ASQS: getdata.find(row => row.description === description)?.saq || 0,
         AssetQty: duplicatesCount[description] || 0,
         AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
