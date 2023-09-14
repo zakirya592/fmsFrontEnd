@@ -56,10 +56,11 @@ function Createpurchaserequest() {
     })
 
     // purchase numebr auto increament no
+    // purchase numebr auto increament no
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                console.log("=====++++----",res.data);
+                console.log('+++++++++++++++',res.data);
                 const reqput = res.data.recordset[0].PurchaseRequestNumber;
                 // const reqput=1000
                 let formattedRequestNumber;
@@ -74,7 +75,7 @@ function Createpurchaserequest() {
                 } else {
                     formattedRequestNumber = `000-000-${reqput}`;
                 }
-                // localStorage.setItem('Requestnumbers', reqput)
+                console.log('----++++', res.data);
                 setvalue(prevState => ({ ...prevState, PurchaseRequest: formattedRequestNumber }));
             })
             .catch((err) => {
@@ -87,11 +88,11 @@ function Createpurchaserequest() {
     }, [])
 
     const requestincreas = () => {
-        axios.get(`/api/PurchaseRequestNumber_Put/1`)
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
                 const reqput = res.data.recordset[0].PurchaseRequestNumber + 1;
-                axios.put(`/api/PurchaseOrderNumber_Put/1`, {
-                    'PurchaseRequestNumber': reqput
+                axios.put(`/api/PurchaseRequestNumber_Put/1`, {
+                    PurchaseRequestNumber: reqput
                 })
                     .then((res) => {
                         const reqput = res.data.recordset[0].PurchaseRequestNumber + 1;
