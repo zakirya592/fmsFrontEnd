@@ -23,7 +23,7 @@ import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
 import moment from 'moment'
 
-function Tablegoodreturn() {
+function Maingoodreacpits() {
     const navigate = useNavigate();
     // print button
     const handlePrintTable = (tableData) => {
@@ -32,7 +32,9 @@ function Tablegoodreturn() {
             'SEQ': index + 1,
             'PurchaseOrderNumber': row.PurchaseOrderNumber,
             'VendorID': row.VendorID,
-            'ReturnDate': row.ReturnDate,
+            'DiscountAmount': row.DiscountAmount,
+            'InvoiceNumber': row.InvoiceNumber,
+            'InvoiceDate': row.InvoiceDate,
         }));
 
         // Create a bold style for header cells
@@ -44,14 +46,18 @@ function Tablegoodreturn() {
           <th style="${headerStyle}">SEQ</th>
           <th style="${headerStyle}">PurchaseOrderNumber</th>
           <th style="${headerStyle}">VendorID</th>
-           <th style="${headerStyle}">ReturnDate</th>
+           <th style="${headerStyle}">DiscountAmount</th>
+          <th style="${headerStyle}">InvoiceNumber</th>
+           <th style="${headerStyle}">InvoiceDate</th>
         </tr>
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
             <td>${row['PurchaseOrderNumber']}</td>
             <td>${row['VendorID']}</td>
-             <td>${row['ReturnDate']}</td>
+             <td>${row['DiscountAmount']}</td>
+            <td>${row['InvoiceNumber']}</td>
+             <td>${row['InvoiceDate']}</td>
           </tr>`).join('')}
       </table>`;
 
@@ -82,7 +88,7 @@ function Tablegoodreturn() {
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/GoodsReturn_GET_List`, {
+        axios.get(`/api/GoodsReceipt_GET_List`, {
         },)
             .then((res) => {
                 console.log('TO get the list', res);
@@ -97,11 +103,12 @@ function Tablegoodreturn() {
     }, [])
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 120 },
-        { field: 'PurchaseOrderNumber', headerName: 'Purchase Order Number', width: 220 },
-        { field: 'InvoiceNumber', headerName: 'Invoice Number', width: 210 },
-        { field: 'VendorID', headerName: 'Vendor ID', width: 210 },
-        { field: 'ReturnDate', headerName: 'Return Date', width: 220 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
+        { field: 'PurchaseOrderNumber', headerName: 'Purchase Order Number', width: 200 },
+        { field: 'InvoiceNumber', headerName: 'Invoice Number', width: 200 },
+        { field: 'DiscountAmount', headerName: 'Discount Amount', width: 200 },
+        { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
+        { field: 'InvoiceDate', headerName: 'Invoice Date', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -119,7 +126,7 @@ function Tablegoodreturn() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: `You want to delete this ${PurchaseOrderNumber} Good Return  `,
+            text: `You want to delete this ${PurchaseOrderNumber} Good Receipt  `,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -127,12 +134,14 @@ function Tablegoodreturn() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/GoodsReturn_DELETE_BYID/${PurchaseOrderNumber}`)
+                axios.delete(`/api/GoodsReceipt_DELETE_BYID/${PurchaseOrderNumber}`)
                     .then((res) => {
                         getapi()
+                        // Handle successful delete response
+                        console.log('Deleted successfully', res);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            `Good Return ${PurchaseOrderNumber} has been deleted.`,
+                            `Good Receipt ${PurchaseOrderNumber} has been deleted.`,
                             'success'
                         )
                         getapi()
@@ -174,11 +183,11 @@ function Tablegoodreturn() {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => navigate(`/View/GoodReturn/${params.row.PurchaseOrderNumber}`)} >
+                    <MenuItem onClick={() => navigate(`/View/Goodsreceipt/${params.row.PurchaseOrderNumber}`)} >
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => navigate(`/Update/GoodReturn/${params.row.PurchaseOrderNumber}`)}>
+                    <MenuItem onClick={() => navigate(`/Update/Goodsreceipt/${params.row.PurchaseOrderNumber}`)}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
@@ -205,7 +214,8 @@ function Tablegoodreturn() {
         PurchaseOrderNumber: row.PurchaseOrderNumber,
         VendorID: row.VendorID,
         InvoiceNumber: row.InvoiceNumber,
-        ReturnDate: moment(row.ReturnDate).isValid() ? moment(row.ReturnDate).format('DD/MM/YYYY') : ''
+        DiscountAmount: row.DiscountAmount,
+        InvoiceDate: moment(row.InvoiceDate).isValid() ? moment(row.InvoiceDate).format('DD/MM/YYYY') : ''
     }))
 
 
@@ -222,7 +232,7 @@ function Tablegoodreturn() {
         if (!selectedRow || selectedRow.length === 0) {
             Swal.fire({
                 title: "Error",
-                text: `Select a Good Return by checking the check box`,
+                text: `Select a Good Receipt by checking the check box`,
                 icon: "error",
                 confirmButtonText: "OK",
             })
@@ -232,7 +242,7 @@ function Tablegoodreturn() {
         // Assuming you want to navigate to the update page of the first selected row
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
-            navigate(`/Update/GoodReturn/${firstSelectedRow.PurchaseOrderNumber}`);
+            navigate(`/Update/Goodsreceipt/${firstSelectedRow.PurchaseOrderNumber}`);
         }
     };
 
@@ -258,13 +268,13 @@ function Tablegoodreturn() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                             Goods Return<span className='star'>*</span></p>
+                                            Goods Receipts<span className='star'>*</span></p>
                                         <div className="d-flex">
                                             <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
                                                 onClick={(() => {
-                                                    navigate('/Create/Goodsreturn')
+                                                    navigate('/Create/Goodsreceipts')
                                                 })}
                                             ><AddCircleOutlineIcon className='me-1' />Create</button>
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
@@ -319,4 +329,4 @@ function Tablegoodreturn() {
     );
 }
 
-export default Tablegoodreturn;
+export default Maingoodreacpits;

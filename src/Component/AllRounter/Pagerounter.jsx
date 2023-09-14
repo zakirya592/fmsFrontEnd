@@ -92,6 +92,10 @@ import Updatapurachaseorder from '../../Pages/Purchasing Management/Purchase Ord
 import Tablegoodreturn from '../../Pages/Purchasing Management/Goods Return/MainTable Good Return/Tablegoodreturn'
 import Creategoodreturn from '../../Pages/Purchasing Management/Goods Return/Good Return Create/Creategoodreturn'
 import Updatagoodreceipt from '../../Pages/Purchasing Management/Goods Receipts/Updata Goods Receipts/Updatagoodreceipt'
+import Createreceipte from '../../Pages/Purchasing Management/Goods Receipts/Create Good Reacition/Createreceipte'
+import Maingoodreacpits from '../../Pages/Purchasing Management/Goods Receipts/Main tabel good Receipts/Maingoodreacpits'
+import Updatagoodreturn from '../../Pages/Purchasing Management/Goods Return/Goods Return Updata/Updatagoodreturn'
+
 function Pagerounter() {
 
   return (
@@ -253,14 +257,17 @@ function Pagerounter() {
           <Route exact path="/Update/Purachaseorder/:userId" element={< Updatapurachaseorder />} />
 
           {/* Purachaseview */}
-          <Route exact path="/Goodsreceiptsview" element={<Tablegoodreturn />} />
-          <Route exact path="/Create/Goodsreceipts" element={<Creategoodreturn />} />
+          <Route exact path="/Goodsreceiptsview" element={<Maingoodreacpits />} />
+          <Route exact path="/Create/Goodsreceipts" element={<Createreceipte />} />
           <Route exact path="/View/Goodsreceipt/:userId" element={<Goodsreceiptsview />} />
           <Route exact path="/Update/Goodsreceipt/:userId" element={<Updatagoodreceipt />} />
 
 
           {/* GoodsreturnView */}
-          <Route exact path="/GoodsreturnView" element={<GoodsreturnView />} />
+          <Route exact path="/Create/Goodsreturn" element={<Creategoodreturn />} />
+          <Route exact path="/GoodsreturnView" element={<Tablegoodreturn />} />
+          <Route exact path="/Update/GoodReturn/:userId" element={<Updatagoodreturn />} />
+          <Route exact path="/View/GoodReturn/:userId" element={<GoodsreturnView />} />
         </Routes>
       </BrowserRouter>
     </>

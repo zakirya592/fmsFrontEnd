@@ -2,20 +2,15 @@ import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
-import { useNavigate } from "react-router-dom";
-import excel from "../../../../Image/excel.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { SearchOutlined, CaretDownOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -26,24 +21,68 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
+import { useNavigate, useParams } from 'react-router-dom';
+import moment from 'moment';
 
-function Creategoodreturn() {
+function Updatagoodreturn() {
 
+    let { userId } = useParams();
     const navigate = useNavigate();
-    const getRequestDate = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+
     const [value, setvalue] = useState({
-        PurchaseOrder: '', ReturnDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
+        PurchaseOrder: '', ReturnDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
         UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '',
     })
+
+    const getapi = () => {
+        axios.get(`/api/GoodsReturn_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log(res);
+                const Recievedby = res.data.recordset[0].RecievedByEmployeeID
+                const InvoiceDatevalid = res.data.recordset[0].ReturnDate
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    FeedbackComments: res.data.recordset[0].ReasonOrComments,
+                    PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
+                    InvoiceNumber: res.data.recordset[0].InvoiceNumber,
+                    VendorID: res.data.recordset[0].VendorID,
+                    PurchaseOrder: res.data.recordset[0].PurchaseOrderNumber,
+                    Recievedby,
+                    ReturnDate: InvoiceDatevalid,
+                }));
+
+
+                axios.post(`/api/getworkRequest`, {
+                    "EmployeeID": Recievedby
+                }).then((res) => {
+                    console.log('asdfaf=====================================', res);
+                    const Employee = res.data.recordsets[0][0].EmployeeID
+                    const CompleteEmployee = res.data.recordsets[0][0].Firstname
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        Recievedby: Employee,
+                        EmployeeName: CompleteEmployee,
+                    }));
+
+                })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
     // Table section 
     const [getdata, setgetdata] = useState([])
@@ -51,10 +90,10 @@ function Creategoodreturn() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 250 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 240 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
-        { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
+        { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 200 },
         // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -260,7 +299,6 @@ function Creategoodreturn() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
@@ -376,16 +414,14 @@ function Creategoodreturn() {
         }
     }
 
-    
+
     // Recievedby to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
     const [openID, setOpenID] = useState(false);
     const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
     const abortControllerRefID = useRef(null);
 
-
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
-        console.log('==========+++++++======', newInputValueID)
 
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodeID([])
@@ -422,10 +458,11 @@ function Creategoodreturn() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
-                    const data = response?.data?.recordset;
-                    //name state da setdropname
-                    //or Id state da setGpcList da 
+                    const data = response?.data?.recordset.map(item => ({
+                        ...item,
+                        Recievedby: item.EmployeeID, // Change EmployeeID to assignEmployee
+                        EmployeeName: item.Firstname
+                    }));
                     setUnitCodeID(data ?? [])
                     setOpenID(true);
                     setUnitCodeID(data)
@@ -434,7 +471,6 @@ function Creategoodreturn() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
 
@@ -463,8 +499,6 @@ function Creategoodreturn() {
     }
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -486,10 +520,9 @@ function Creategoodreturn() {
         }
     }
 
-    
+
     const Postapi = async () => {
-        axios.post(`/api/GoodsReturn_post`, {
-            PurchaseOrderNumber: value.PurchaseOrder,
+        axios.put(`/api/GoodsReturn_Put/${userId}`, {
             InvoiceNumber: value.InvoiceNumber,
             ReturnDate: value.ReturnDate,
             RecievedByEmployeeID: value.Recievedby,
@@ -500,8 +533,8 @@ function Creategoodreturn() {
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
-                    'Created!',
-                    ` Goods Return ${value.PurchaseOrder} has been created successfully`,
+                    'Success!',
+                    ` Goods Return ${userId} has been updated`,
                     'success'
                 )
                 navigate('/GoodsreturnView')
@@ -540,7 +573,7 @@ function Creategoodreturn() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Goods Return</p>
+                                    <p className='color1 workitoppro my-auto'>Modify Goods Return</p>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -563,6 +596,7 @@ function Creategoodreturn() {
                                                         PurchaseOrder: e.target.value
                                                     }))
                                                 }}
+                                                disabled
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PR Number'
                                                 required
@@ -621,7 +655,6 @@ function Creategoodreturn() {
                                         </div>
 
                                     </div>
-
                                 </div>
 
                                 {/* Row Two */}
@@ -639,18 +672,18 @@ function Creategoodreturn() {
                                                 required
                                                 options={unitCodeID}
                                                 getOptionLabel={(option) =>
-                                                    option?.EmployeeID
-                                                        ? option.EmployeeID + ' - ' + option.Firstname
+                                                    option?.Recievedby
+                                                        ? option.Recievedby + ' - ' + option.EmployeeName
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID}
+                                                getOptionSelected={(option, value) => option.Recievedby === value.Recievedby}
                                                 onChange={handleGPCAutoCompleteChangeID}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.EmployeeID} - {option.Firstname}
+                                                        {option.Recievedby} - {option.EmployeeName}
                                                     </li>
                                                 )}
-                                                value={value.EmployeeID}
+                                                value={value}
                                                 onInputChange={(eventID, newInputValueID, params) =>
                                                     handleAutoCompleteInputChangeID(eventID, newInputValueID, params)
                                                 }
@@ -711,12 +744,6 @@ function Creategoodreturn() {
                                                 types='text'
                                                 id='EmployeeName'
                                                 value={value.EmployeeName}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeName: e.target.value
-                                                    }))
-                                                }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Employee Name'
                                                 required
@@ -946,4 +973,4 @@ function Creategoodreturn() {
     )
 }
 
-export default Creategoodreturn
+export default Updatagoodreturn

@@ -27,7 +27,7 @@ import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 
-function Creategoodreturn() {
+function Createreceipte() {
 
     const navigate = useNavigate();
     const getRequestDate = () => {
@@ -38,9 +38,9 @@ function Creategoodreturn() {
         return `${year}-${month}-${day}`;
     };
     const [value, setvalue] = useState({
-        PurchaseOrder: '', ReturnDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
+        PurchaseOrder: '', InvoiceDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
-        UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '', Discounts: '', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '',
     })
@@ -51,11 +51,11 @@ function Creategoodreturn() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 250 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
-        // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
     function ActionButtons(params) {
@@ -376,7 +376,7 @@ function Creategoodreturn() {
         }
     }
 
-    
+
     // Recievedby to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
     const [openID, setOpenID] = useState(false);
@@ -486,25 +486,27 @@ function Creategoodreturn() {
         }
     }
 
-    
+
     const Postapi = async () => {
-        axios.post(`/api/GoodsReturn_post`, {
+        axios.post(`/api/GoodsReceipt_post`, {
             PurchaseOrderNumber: value.PurchaseOrder,
             InvoiceNumber: value.InvoiceNumber,
-            ReturnDate: value.ReturnDate,
+            InvoiceDate: value.InvoiceDate,
+            ActualDeliveryDate: value.ActualDeliveryDate,
             RecievedByEmployeeID: value.Recievedby,
             VendorID: value.VendorID,
-            ReasonOrComments: value.FeedbackComments,
+            FeedbackOrComments: value.FeedbackComments,
+            DiscountAmount: value.Discounts,
 
         })
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
                     'Created!',
-                    ` Goods Return ${value.PurchaseOrder} has been created successfully`,
+                    ` Goods Receipts ${value.PurchaseOrder} has been created successfully`,
                     'success'
                 )
-                navigate('/GoodsreturnView')
+                navigate('/Goodsreceiptsview')
 
             })
             .catch((err) => {
@@ -529,7 +531,7 @@ function Creategoodreturn() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/GoodsreturnView')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/Goodsreceiptsview')} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -540,7 +542,7 @@ function Creategoodreturn() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>Create Goods Return</p>
+                                    <p className='color1 workitoppro my-auto'>Create Goods Receipts</p>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -605,19 +607,38 @@ function Creategoodreturn() {
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection d-grid my-2'>
-                                            <label htmlFor='ReturnDate' className='lablesection color3 text-start mb-1'>
-                                                Return Date
+                                            <label htmlFor='InvoiceDate' className='lablesection color3 text-start mb-1'>
+                                                Invoice Date
                                             </label>
-                                            <input type="date" id="ReturnDate"
+                                            <input type="date" id="InvoiceDate"
 
-                                                value={value.ReturnDate}
+                                                value={value.InvoiceDate}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        ReturnDate: e.target.value
+                                                        InvoiceDate: e.target.value
                                                     }))
                                                 }}
                                                 name="RequestDate" className='rounded inputsection py-2' />
+                                        </div>
+
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                        <div className='emailsection d-grid my-2'>
+                                            <label htmlFor='ActualDeliveryDate' className='lablesection color3 text-start mb-1'>
+                                                Actual Delivery Date
+                                            </label>
+                                            <input type="date" id="ActualDeliveryDate"
+
+                                                value={value.ActualDeliveryDate}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        ActualDeliveryDate: e.target.value
+                                                    }))
+                                                }}
+                                                name="ActualDeliveryDate" className='rounded inputsection py-2' />
                                         </div>
 
                                     </div>
@@ -790,6 +811,30 @@ function Creategoodreturn() {
 
                                     </div>
                                     <span className='my-auto mx-3'>
+                                        <MinusOutlined className='mt-3' />
+                                    </span>
+                                    <div className='emailsection position-relative d-grid my-2'>
+                                        <label htmlFor='Discounts' className='lablesection color3 text-start'>
+                                            Discounts
+                                        </label>
+
+                                        <input
+                                            types='text'
+                                            id='Discounts'
+                                            value={value.Discounts}
+                                            onChange={e => {
+                                                setvalue(prevValue => ({
+                                                    ...prevValue,
+                                                    Discounts: e.target.value
+                                                }))
+                                            }}
+                                            className='rounded inputsection'
+                                            placeholder='Discounts'
+                                            required
+                                        ></input>
+
+                                    </div>
+                                    <span className='my-auto mx-3'>
                                         =
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
@@ -932,7 +977,7 @@ function Creategoodreturn() {
 
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/GoodsreturnView')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Goodsreceiptsview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Postapi}><SaveIcon className='me-2' />SAVE</button>
 
@@ -946,4 +991,4 @@ function Creategoodreturn() {
     )
 }
 
-export default Creategoodreturn
+export default Createreceipte
