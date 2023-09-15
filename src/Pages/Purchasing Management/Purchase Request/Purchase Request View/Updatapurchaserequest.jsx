@@ -768,7 +768,7 @@ function Updatapurchaserequest() {
         page: 0,
     });
 
-    const Createapi = async () => {
+    const postapi = async () => {
         axios.put(`/api/PurchaseRequest_Put/${userId}`, {
             RequestDate: value.RequestDate,
             RequiredDate: value.DateRequired,
@@ -802,6 +802,20 @@ function Updatapurchaserequest() {
 
     };
 
+    const Createapi=()=>{
+        postapi()
+        localStorage.removeItem('Updatapurachaserequest');
+        localStorage.clear();
+    }
+
+
+    const backbtn = (() => {
+        localStorage.removeItem('Updatapurachaserequest');
+        localStorage.clear();
+        navigate('/PurchaserequestView')
+
+    })
+
     return (
         <div>
             <div className='bg'>
@@ -811,7 +825,7 @@ function Updatapurchaserequest() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/PurchaserequestView')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -1342,7 +1356,7 @@ function Updatapurchaserequest() {
                                 </div>
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/PurchaserequestView')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 

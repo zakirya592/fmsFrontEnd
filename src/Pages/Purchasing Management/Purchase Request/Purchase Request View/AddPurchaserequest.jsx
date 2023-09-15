@@ -135,7 +135,8 @@ function AddPurchaserequest() {
 
     const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
-        const assetcodeid = localStorage.getItem('addpurachaserequest') || localStorage.getItem('Updatapurachaserequest');
+        
+        const assetcodeid = localStorage.getItem('Updatapurachaserequest') || localStorage.getItem('addpurachaserequest');
 
         console.log(AssetItemDescription);
         console.log(assetcodeid);
