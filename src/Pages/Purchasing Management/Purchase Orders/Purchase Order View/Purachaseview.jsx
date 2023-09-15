@@ -735,7 +735,34 @@ function Purachaseview() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+    // post api for the data  PurchaseRequestNumber
+    function postRequestNumber(PurchaseRequestNumber) {
+        axios.get(`/api/PurchaseRequest_GET_BYID/${PurchaseRequestNumber}`).then((res) => {
+            console.log(res.data)
+            setvalue((prevValue) => ({
+                ...prevValue,
+                VendorID: res.data.recordset[0].VendorID,
+            }));
+            const vendorcode = res.data.recordset[0].VendorID;
+            axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
+                .then((res) => {
+                    console.log('VendorName:', res.data.recordset[0].VendorName);
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        VendorName: res.data.recordset[0].VendorName
+                    }));
 
+                })
+                .catch((err) => {
+                    console.log(err);
+                    // Handle any errors that occur during the API request.
+                });
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
     const [unitCoderequestnumber, setUnitCoderequestnumber] = useState([]);
     const [openrequestnumber, setOpenrequestnumber] = useState(false);
     const [autocompleteLoadingrequestnumer, setAutocompleteLoadingrequestnumber] = useState(false);
@@ -826,7 +853,7 @@ function Purachaseview() {
         }
 
         if (value && value.PurchaseRequestNumber) {
-            // postapi(value.EmployeeID);
+            postRequestNumber(value.PurchaseRequestNumber);
             setvalue(prevValue => ({
                 ...prevValue,
                 PurchaseRequestNumber: value.PurchaseRequestNumber,
