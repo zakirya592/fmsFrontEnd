@@ -768,7 +768,7 @@ function Updatapurchaserequest() {
         page: 0,
     });
 
-    const postapi = async () => {
+    const Postapiadd = async () => {
         axios.put(`/api/PurchaseRequest_Put/${userId}`, {
             RequestDate: value.RequestDate,
             RequiredDate: value.DateRequired,
@@ -803,11 +803,10 @@ function Updatapurchaserequest() {
     };
 
     const Createapi=()=>{
-        postapi()
+        Postapiadd()
         localStorage.removeItem('Updatapurachaserequest');
         localStorage.clear();
     }
-
 
     const backbtn = (() => {
         localStorage.removeItem('Updatapurachaserequest');
