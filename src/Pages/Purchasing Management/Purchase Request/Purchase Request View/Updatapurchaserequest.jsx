@@ -24,6 +24,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import moment from 'moment';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Updatapurchaserequest() {
 
@@ -585,15 +586,13 @@ function Updatapurchaserequest() {
     }
 
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseRequestNumber/${userId}`)
             .then((res) => {
                 console.log('AssetsMaster_GET_LIST', res.data.recordset);
                 console.log('length', res.data.recordset.length);
                 const AssetItemDescriptionsssss = res.data.recordset
-                // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
 
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
@@ -737,6 +736,32 @@ function Updatapurchaserequest() {
         };
     });
 
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
+
+    const addpurachrequestbtn = (e) => {
+        localStorage.setItem('Updatapurachaserequest', userId)
+        navigate('/Addpurachrequest')
+    }
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
@@ -995,7 +1020,7 @@ function Updatapurchaserequest() {
                                 </div>
 
                                 <div className="row mx-auto formsection justify-content-between">
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Purpose' className='lablesection color3 text-start mb-1'>
                                                 Purpose
@@ -1014,8 +1039,8 @@ function Updatapurchaserequest() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-auto">
-                                        <div className='emailsection d-flex my-2'>
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-auto">
+                                        <div className='emailsection d-flex mt-1'>
                                             <label htmlFor='VATInclusive' className='lablesection my-auto color3 text-start mb-1'>
                                                 VAT Inclusive(Y/N)?
                                             </label>
@@ -1038,6 +1063,9 @@ function Updatapurchaserequest() {
 
                                             </select>
                                         </div>
+                                    </div>
+                                    <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Purachase Requests</button>
                                     </div>
                                 </div>
 
@@ -1067,13 +1095,9 @@ function Updatapurchaserequest() {
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
@@ -1089,15 +1113,10 @@ function Updatapurchaserequest() {
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
+                                            onChange={handleVATChange} // Use the updated VAT change handler
                                             className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
@@ -1115,13 +1134,14 @@ function Updatapurchaserequest() {
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required

@@ -23,6 +23,7 @@ import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Createpurchaserequest() {
 
@@ -48,7 +49,7 @@ function Createpurchaserequest() {
         PurchaseRequest: '', RequestDate: getRequestDate(), DateRequired: getDateRequired(),
          Firstname: '',
         Purpose: '', VATInclusive: '',
-        UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '0', TOTALAMOUNT: '',
         VendorID: null, VendorName: '',
         Verifiedby: null,
         assignEmployee: null, EmployeeName: '',
@@ -77,6 +78,7 @@ function Createpurchaserequest() {
                 }
                 console.log('----++++', res.data);
                 setvalue(prevState => ({ ...prevState, PurchaseRequest: formattedRequestNumber }));
+                localStorage.setItem('purachaserequest', formattedRequestNumber)
             })
             .catch((err) => {
                 console.log(err);
@@ -518,7 +520,9 @@ function Createpurchaserequest() {
     }
 
     const apiget=()=>{
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+
+        const empid = localStorage.getItem('purachaserequest',)
+        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseRequestNumber/${empid}`)
             .then((res) => {
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
@@ -657,11 +661,38 @@ function Createpurchaserequest() {
             TOTAL_PRICE: totalPrice,
         };
     });
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
+
+    const addpurachrequestbtn = (e) => {
+        localStorage.setItem('addpurachaserequest', value.PurchaseRequest)
+        navigate('/Addpurachrequest')
+    }
 
     const udataapi = async () => {
         axios.post(`/api/PurchaseRequest_post`, {
@@ -701,7 +732,17 @@ function Createpurchaserequest() {
     const Createapi = () => {
         udataapi()
         requestincreas()
+        localStorage.removeItem('addpurachaserequest');
+        localStorage.removeItem('purachaserequest');
+        localStorage.clear();
     }
+    const backbtn = (() => {
+        localStorage.removeItem('addpurachaserequest');
+        localStorage.removeItem('purachaserequest');
+        localStorage.clear();
+        navigate('/PurchaserequestView')
+
+    })
 
     return (
         <div>
@@ -712,7 +753,7 @@ function Createpurchaserequest() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/PurchaserequestView')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -890,7 +931,7 @@ function Createpurchaserequest() {
                                 </div>
 
                                 <div className="row mx-auto formsection justify-content-between">
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
+                                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Purpose' className='lablesection color3 text-start mb-1'>
                                                 Purpose
@@ -909,13 +950,13 @@ function Createpurchaserequest() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-auto">
-                                        <div className='emailsection d-flex my-2'>
+                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-auto">
+                                        <div className='emailsection d-flex mt-2'>
                                             <label htmlFor='VATInclusive' className='lablesection my-auto color3 text-start mb-1'>
                                                 VAT Inclusive(Y/N)?
                                             </label>
 
-                                            <select className='rounded inputsectiondropdpwn py-2 color2 ' id="VendorConfirm" aria-label="Floating label select example"
+                                            <select className='rounded inputsectiondropdpwn py-1 mt-2 color2 ' id="VendorConfirm" aria-label="Floating label select example"
                                                 value={value.VATInclusive}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -933,6 +974,9 @@ function Createpurchaserequest() {
 
                                             </select>
                                         </div>
+                                    </div>
+                                        <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Purachase Requests</button>
                                     </div>
                                 </div>
 
@@ -962,13 +1006,9 @@ function Createpurchaserequest() {
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
@@ -984,15 +1024,10 @@ function Createpurchaserequest() {
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
+                                            onChange={handleVATChange} // Use the updated VAT change handler
                                             className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
@@ -1010,13 +1045,14 @@ function Createpurchaserequest() {
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required
@@ -1024,7 +1060,6 @@ function Createpurchaserequest() {
 
                                     </div>
                                 </div>
-
 
                                 <div className="row mx-auto formsection">
 
@@ -1217,7 +1252,7 @@ function Createpurchaserequest() {
                                 </div>
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/PurchaserequestView')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 

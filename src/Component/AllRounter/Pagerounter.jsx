@@ -95,6 +95,7 @@ import Updatagoodreceipt from '../../Pages/Purchasing Management/Goods Receipts/
 import Createreceipte from '../../Pages/Purchasing Management/Goods Receipts/Create Good Reacition/Createreceipte'
 import Maingoodreacpits from '../../Pages/Purchasing Management/Goods Receipts/Main tabel good Receipts/Maingoodreacpits'
 import Updatagoodreturn from '../../Pages/Purchasing Management/Goods Return/Goods Return Updata/Updatagoodreturn'
+import AddPurchaserequest from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/AddPurchaserequest'
 
 function Pagerounter() {
 
@@ -249,6 +250,7 @@ function Pagerounter() {
           <Route exact path="Create/Purchaserequest" element={<Createpurchaserequest />} />
           <Route exact path="/Update/Purchaserequest/:userId" element={<Updatapurchaserequest />} />
           <Route exact path="/View/Purchaserequest/:userId" element={<Viewpurchaserequest />} />
+          <Route exact path="/Addpurachrequest" element={<AddPurchaserequest />} />
 
           {/* Purachaseview */}
           <Route exact path="/Purachaseorderview" element={<MainPurachase />} />

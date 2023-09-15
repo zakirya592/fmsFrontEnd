@@ -306,9 +306,8 @@ function Createpurachaseorder() {
 
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
-
     // Function to calculate the overallTotalPrice
-    function calculateOverallTotalPrice(rows) {
+ function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     }
     // Update overallTotalPrice when the VAT input changes
