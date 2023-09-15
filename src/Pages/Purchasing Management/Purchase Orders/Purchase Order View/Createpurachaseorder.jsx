@@ -300,6 +300,29 @@ function Createpurachaseorder() {
             TOTAL_PRICE: totalPrice,
         };
     });
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
 
     //VendorCode
     const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
@@ -1262,13 +1285,9 @@ function Createpurachaseorder() {
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
@@ -1284,15 +1303,10 @@ function Createpurachaseorder() {
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
+                                            onChange={handleVATChange} // Use the updated VAT change handler
                                             className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
@@ -1310,13 +1324,14 @@ function Createpurachaseorder() {
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required
