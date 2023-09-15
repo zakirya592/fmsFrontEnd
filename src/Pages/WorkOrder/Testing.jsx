@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
-import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import Toolbar from '@mui/material/Toolbar';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
@@ -15,42 +13,20 @@ function CreateWorkRequest() {
  //   Table section 
     // Employe ID
     const [value, setvalue] = useState({
-        VendorID: null, VendorName:''
+        PurchaseRequestNumber: null, VendorName:''
     })
 
     //VendorCode
-    const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
-    const [openVendorCode, setOpenVendorCode] = useState(false);
-    const [autocompleteLoadingVendorCode, setAutocompleteLoadingVendorCode] = useState(false);
-    const abortControllerRefVendorCode = useRef(null);
-
-    useEffect(() => {
-        // const handleOnBlurCall = () => {
-        axios.get('/api/Filter_WR')
-            .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
-                const data = response?.data?.recordset;
-                console.log("----------------------------", data);
-                const unitNameList = data.map((requestdata) => ({
-                    VendorID: requestdata?.VendorID,
-                    VendorName: requestdata?.VendorName,
-                }));
-                setUnitCodeVendorCode(unitNameList)
-
-            })
-            .catch((error) => {
-                console.log('-----', error);
-            }
-            );
-        // }
-
-    }, [])
-
-    const handleAutoCompleteInputVendorCode = async (event, newInputValue, reason) => {
+    const [unitCoderequestnumber, setUnitCoderequestnumber] = useState([]);
+    const [openrequestnumber, setOpenrequestnumber] = useState(false);
+    const [autocompleteLoadingrequestnumer, setAutocompleteLoadingrequestnumber] = useState(false);
+    const abortControllerRefrequestnumber = useRef(null);
+    
+    const handleAutoCompleteInputrequestnumber = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
 
         if (reason === 'reset' || reason === 'clear') {
-            setUnitCodeVendorCode([])
+            setUnitCoderequestnumber([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
         if (reason === 'option') {
@@ -58,37 +34,37 @@ function CreateWorkRequest() {
         }
 
         if (!newInputValue || newInputValue.trim() === '') {
-            setUnitCodeVendorCode([])
+            setUnitCoderequestnumber([])
             return;
         }
         if (newInputValue === null) {
-            setUnitCodeVendorCode([])
+            setUnitCoderequestnumber([])
             setvalue(prevValue => ({
                 ...prevValue,
-                VendorID: []
+                PurchaseRequestNumber: []
             }))
             return;
         }
 
         // postapi(newInputValue.EmployeeID);
-        setAutocompleteLoadingVendorCode(true);
-        setOpenVendorCode(true);
+        setAutocompleteLoadingrequestnumber(true);
+        setOpenrequestnumber(true);
         try {
             // Cancel any pending requests
-            if (abortControllerRefVendorCode.current) {
-                abortControllerRefVendorCode.current.abort();
+            if (abortControllerRefrequestnumber.current) {
+                abortControllerRefrequestnumber.current.abort();
             }
             // Create a new AbortController
-            abortControllerRefVendorCode.current = new AbortController();
+            abortControllerRefrequestnumber.current = new AbortController();
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
-            axios.get('/api/Filter_VendorMaster')
+            axios.get('/api/Filter_PurchaseRequestNumber')
                 .then((response) => {
                     console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
-                    setUnitCodeVendorCode(data ?? [])
-                    setOpenVendorCode(true);
-                    setAutocompleteLoadingVendorCode(false);
+                    setUnitCoderequestnumber(data ?? [])
+                    setOpenrequestnumber(true);
+                    setAutocompleteLoadingrequestnumber(false);
                     // 
                 })
                 .catch((error) => {
@@ -105,38 +81,36 @@ function CreateWorkRequest() {
                 // Ignore abort errors
                 setvalue(prevValue => ({
                     ...prevValue,
-                    VendorID: []
+                    PurchaseRequestNumber: []
                 }))
-                setAutocompleteLoadingVendorCode(true);
+                setAutocompleteLoadingrequestnumber(true);
                 console.log(error)
                 return;
             }
             console.error(error);
             console.log(error)
-            setUnitCodeVendorCode([])
-            setOpenVendorCode(false);
-            setAutocompleteLoadingVendorCode(false);
+            setUnitCoderequestnumber([])
+            setOpenrequestnumber(false);
+            setAutocompleteLoadingrequestnumber(false);
         }
 
     }
 
-    const handleGPCAutoVendorCode = (event, value) => {
+    const handleGPCAutorequestnumber = (event, value) => {
 
         console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
-                VendorID: [],
-                VendorName: []
+                PurchaseRequestNumber: [],
             }));
         }
 
-        if (value && value.VendorID) {
+        if (value && value.PurchaseRequestNumber) {
             // postapi(value.EmployeeID);
             setvalue(prevValue => ({
                 ...prevValue,
-                VendorID: value.VendorID,
-                VendorName: value.VendorName
+                PurchaseRequestNumber: value.PurchaseRequestNumber,
             }));
             console.log('Received value----------:', value);
         } else {
@@ -163,37 +137,37 @@ function CreateWorkRequest() {
                                     id="serachGpc"
                                     className='rounded inputsection py-0 mt-0'
                                     required
-                                    options={unitCodeVendorCode} // Use the formattedGpcList here
+                                    options={unitCoderequestnumber} // Use the formattedGpcList here
                                     getOptionLabel={(option) =>
-                                        option?.VendorID
-                                            ? option.VendorID + ' - ' + option.VendorName
+                                        option?.PurchaseRequestNumber
+                                            ? option.PurchaseRequestNumber
                                             : ''
                                     }
-                                    onChange={handleGPCAutoVendorCode}
+                                    onChange={handleGPCAutorequestnumber}
                                     renderOption={(props, option) => (
                                         <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                            {option.VendorID} - {option.VendorName}
+                                            {option.PurchaseRequestNumber}
                                         </li>
                                     )}
                                     value={value}
-                                    onInputChange={(event, newInputValue, params) => handleAutoCompleteInputVendorCode(event, newInputValue, params)}
-                                    loading={autocompleteLoadingVendorCode}
-                                    open={openVendorCode}
+                                    onInputChange={(event, newInputValue, params) => handleAutoCompleteInputrequestnumber(event, newInputValue, params)}
+                                    loading={autocompleteLoadingrequestnumer}
+                                    open={openrequestnumber}
                                     onOpen={() => {
                                         // setOpen(true);
                                     }}
                                     onClose={() => {
-                                        setOpenVendorCode(false);
+                                        setOpenrequestnumber(false);
                                     }}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            placeholder='Employee Number'
+                                            placeholder='Purchase Request Number'
                                             InputProps={{
                                                 ...params.InputProps,
                                                 endAdornment: (
                                                     <React.Fragment>
-                                                        {autocompleteLoadingVendorCode ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                        {autocompleteLoadingrequestnumer ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
                                                         {params.InputProps.endAdornment}
                                                     </React.Fragment>
                                                 ),

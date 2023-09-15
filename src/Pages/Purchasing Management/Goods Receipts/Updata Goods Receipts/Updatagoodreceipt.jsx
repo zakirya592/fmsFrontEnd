@@ -34,7 +34,7 @@ function Updatagoodreceipt() {
         Recievedby: '', EmployeeName: '',
         UBTOTALAMOUNT: '', VAT: '', Discounts: '', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
-        FeedbackComments: '',
+        FeedbackComments: '', PurchaseOrderNumber: null,
     })
     const getapi = () => {
         axios.get(`/api/GoodsReceipt_GET_BYID/${userId}`, {
@@ -50,7 +50,7 @@ function Updatagoodreceipt() {
                     PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
                     InvoiceNumber: res.data.recordset[0].InvoiceNumber,
                     VendorID: res.data.recordset[0].VendorID,
-                    PurchaseOrder: res.data.recordset[0].PurchaseOrderNumber,
+                    PurchaseOrderNumber: res.data.recordset[0].PurchaseOrderNumber,
                     Recievedby,
                     InvoiceDate: InvoiceDatevalid,
                     ActualDeliveryDate: ActualDeliveryDatevalid,
@@ -531,6 +531,106 @@ function Updatagoodreceipt() {
         }
     }
 
+    const [unitCodeordernumber, setUnitCodeordernumber] = useState([]);
+    const [openordernumber, setOpenordernumber] = useState(false);
+    const [autocompleteLoadingordernumer, setAutocompleteLoadingordernumber] = useState(false);
+    const abortControllerRefordernumber = useRef(null);
+
+    const handleAutoCompleteInputordernumber = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+
+        if (reason === 'reset' || reason === 'clear') {
+            setUnitCodeordernumber([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            setUnitCodeordernumber([])
+            return;
+        }
+        if (newInputValue === null) {
+            setUnitCodeordernumber([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                PurchaseOrderNumber: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoadingordernumber(true);
+        setOpenordernumber(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRefordernumber.current) {
+                abortControllerRefordernumber.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRefordernumber.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/Filter_PurchaseOrderNumber')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    setUnitCodeordernumber(data ?? [])
+                    setOpenordernumber(true);
+                    setAutocompleteLoadingordernumber(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    PurchaseOrderNumber: []
+                }))
+                setAutocompleteLoadingordernumber(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCodeordernumber([])
+            setOpenordernumber(false);
+            setAutocompleteLoadingordernumber(false);
+        }
+
+    }
+
+    const handleGPCAutoordernumber = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                PurchaseOrderNumber: [],
+            }));
+        }
+
+        if (value && value.PurchaseOrderNumber) {
+            // postapi(value.EmployeeID);
+            setvalue(prevValue => ({
+                ...prevValue,
+                PurchaseOrderNumber: value.PurchaseOrderNumber,
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
 
     const Postapi = async () => {
         axios.put(`/api/GoodsReceipt_Put/${userId}`, {
@@ -599,26 +699,67 @@ function Updatagoodreceipt() {
                                                 Purchase Order # <span className='star'>*</span>
                                             </label>
 
-                                            <input
-                                                types='text'
-                                                id='PurchaseOrder'
-                                                value={value.PurchaseOrder}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        PurchaseOrder: e.target.value
-                                                    }))
-                                                }}
-                                                disabled
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter PR Number'
+                                            <Autocomplete
+                                                id="serachGpc"
+                                                className='rounded inputsection py-0 mt-0'
                                                 required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
+                                                options={unitCodeordernumber} // Use the formattedGpcList here
+                                                getOptionLabel={(option) =>
+                                                    option?.PurchaseOrderNumber
+                                                        ? option.PurchaseOrderNumber
+                                                        : ''
+                                                }
+                                                onChange={handleGPCAutoordernumber}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.PurchaseOrderNumber}
+                                                    </li>
+                                                )}
+                                                value={value}
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputordernumber(event, newInputValue, params)}
+                                                loading={autocompleteLoadingordernumer}
+                                                open={openordernumber}
+                                                onOpen={() => {
+                                                    // setOpen(true);
+                                                }}
+                                                onClose={() => {
+                                                    setOpenordernumber(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Purchase Order Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoadingordernumer ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
                                         </div>
                                     </div>
 
