@@ -33,7 +33,7 @@ function Updatagoodreceipt() {
     const [value, setvalue] = useState({
         PurchaseOrder: '', InvoiceDate: '', ActualDeliveryDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
-        UBTOTALAMOUNT: '', VAT: '', Discounts: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '', Discounts: '0', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '', PurchaseOrderNumber: null,
     })
@@ -344,7 +344,7 @@ function Updatagoodreceipt() {
 
         setvalue(prevValue => ({
             ...prevValue,
-            Discounts: newdount,
+            Discounts: e.target.value,
         }));
     }
 

@@ -40,7 +40,7 @@ function Createreceipte() {
     const [value, setvalue] = useState({
         PurchaseOrder: '', InvoiceDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
-        UBTOTALAMOUNT: '', VAT: '', Discounts: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '', Discounts: '0', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '', PurchaseOrderNumber: null,
     })
@@ -178,6 +178,7 @@ function Createreceipte() {
             VAT: newVAT,
         }));
     }
+
     function handlediscountChange(e) {
         const newdount = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
         const newOverallTotalPricedis = toaldis - newdount;
@@ -188,7 +189,7 @@ function Createreceipte() {
 
         setvalue(prevValue => ({
             ...prevValue,
-            Discounts: newdount,
+            Discounts: e.target.value,
         }));
     }
 
@@ -533,6 +534,12 @@ function Createreceipte() {
         }
 
     }
+useEffect(() => {
+    setvalue(prevValue => ({
+        ...prevValue,
+        PurchaseOrderNumber: localStorage.getItem('Addgoodsreseciption'),
+    }));
+}, [])
 
     const handleGPCAutoordernumber = (event, value) => {
 

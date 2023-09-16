@@ -700,6 +700,13 @@ function Creategoodreturn() {
             });
 
     };
+    
+    useEffect(() => {
+        setvalue(prevValue => ({
+            ...prevValue,
+            PurchaseOrderNumber: localStorage.getItem('Addgoodreturn'),
+        }));
+    }, [])
 
     const addpurachrequestbtn = (e) => {
         localStorage.setItem('Addgoodreturn', value.PurchaseOrderNumber)

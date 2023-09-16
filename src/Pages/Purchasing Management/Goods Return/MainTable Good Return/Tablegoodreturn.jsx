@@ -136,6 +136,13 @@ function Tablegoodreturn() {
                             'success'
                         )
                         getapi()
+                        axios.delete(`/api/PurchaseOrderNumber_GOODSReturnAsset_DELETE_BYID/${PurchaseOrderNumber}`)
+                            .then((res) => {
+                                console.log("re", res);
+                            })
+                            .catch((err) => {
+                                console.log('Error deleting', err);
+                            });
                     })
                     .catch((err) => {
                         // Handle delete error
