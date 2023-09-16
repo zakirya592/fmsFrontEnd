@@ -58,50 +58,67 @@ function Createreceipte() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Purchase Order",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/PurchaseOrderAsset_DELETE_BYID/${ASQS}`)
+                    .then((res) => {
+                        PurchaseOrderNumberpostapi()
+                        // Workrequestget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Purchase Order has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+    // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
         const handleMenuClose = () => {
             setAnchorEl(null);
         };
 
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
-
-
         );
     }
 
-    const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+    const PurchaseOrderNumberpostapi = (PurchaseOrderNumber) => {
+        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseOrderNumber/${PurchaseOrderNumber}`)
             .then((res) => {
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
@@ -201,9 +218,7 @@ function Createreceipte() {
                 console.log(err);
             });
     }
-    useEffect(() => {
-        apiget()
-    }, [])
+
 
     const countDuplicates = (array, key) => {
         const counts = {};
@@ -244,12 +259,75 @@ function Createreceipte() {
             TOTAL_PRICE: totalPrice,
         };
     });
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    const [toaldis, settoaldis] = useState()
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+        settoaldis(newOverallTotalPrice)
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
+    function handlediscountChange(e) {
+        const newdount = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPricedis = toaldis - newdount;
+        console.log(newdount);
+        console.log('newdount', newOverallTotalPricedis);
+        setOverallTotalPricess(newOverallTotalPricedis);
+
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            Discounts: newdount,
+        }));
+    }
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
 
+    function PurchaseOrderNumbergetapi(PurchaseOrderNumber) {
+        axios.get(`/api/PurchaseOrder_GET_BYID/${PurchaseOrderNumber}`).then((res) => {
+            console.log(res.data)
+            setvalue((prevValue) => ({
+                ...prevValue,
+                VendorID: res.data.recordset[0].VendorID,
+            }));
+            const vendorcode = res.data.recordset[0].VendorID;
+            axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
+                .then((res) => {
+                    console.log('VendorName:', res.data.recordset[0].VendorName);
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        VendorName: res.data.recordset[0].VendorName
+                    }));
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                    // Handle any errors that occur during the API request.
+                });
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
     //VendorCode
     const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
     const [openVendorCode, setOpenVendorCode] = useState(false);
@@ -260,7 +338,6 @@ function Createreceipte() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
@@ -315,7 +392,6 @@ function Createreceipte() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_VendorMaster')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCodeVendorCode(data ?? [])
@@ -383,7 +459,6 @@ function Createreceipte() {
     const [autocompleteLoadingID, setAutocompleteLoadingID] = useState(false);
     const abortControllerRefID = useRef(null);
 
-
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
         console.log('==========+++++++======', newInputValueID)
 
@@ -422,7 +497,6 @@ function Createreceipte() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -529,7 +603,7 @@ function Createreceipte() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_PurchaseOrderNumber')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                    console.log('response', response);
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCodeordernumber(data ?? [])
@@ -577,7 +651,8 @@ function Createreceipte() {
         }
 
         if (value && value.PurchaseOrderNumber) {
-            // postapi(value.EmployeeID);
+            PurchaseOrderNumberpostapi(value.PurchaseOrderNumber);
+            PurchaseOrderNumbergetapi(value.PurchaseOrderNumber);
             setvalue(prevValue => ({
                 ...prevValue,
                 PurchaseOrderNumber: value.PurchaseOrderNumber,
@@ -586,6 +661,10 @@ function Createreceipte() {
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
+    }
+    const addpurachrequestbtn = (e) => {
+        // localStorage.setItem('addpurachasorder', value.PurchaseOrder)
+        // navigate('/Addpurchaseorder')
     }
 
     const Postapi = async () => {
@@ -887,6 +966,9 @@ function Createreceipte() {
                                             ></input>
                                         </div>
                                     </div>
+                                    <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Goods Receipts</button>
+                                    </div>
 
                                 </div>
 
@@ -907,23 +989,20 @@ function Createreceipte() {
 
                                 </div>
 
+
                                 <div className="d-flex justify-content-end">
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start'>
+                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
                                             SUB TOTAL AMOUNT
                                         </label>
 
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection '
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
+                                            className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
                                         ></input>
@@ -933,21 +1012,16 @@ function Createreceipte() {
                                         <PlusOutlined className='mt-3' />
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='VAT' className='lablesection color3 text-start'>
+                                        <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
                                             VAT
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection'
+                                            onChange={handleVATChange} // Use the updated VAT change handler
+                                            className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
                                         ></input>
@@ -965,12 +1039,7 @@ function Createreceipte() {
                                             types='text'
                                             id='Discounts'
                                             value={value.Discounts}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    Discounts: e.target.value
-                                                }))
-                                            }}
+                                            onChange={handlediscountChange}
                                             className='rounded inputsection'
                                             placeholder='Discounts'
                                             required
@@ -981,21 +1050,22 @@ function Createreceipte() {
                                         =
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start'>
+                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
                                             TOTAL AMOUNT
                                         </label>
 
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
-                                            className='rounded inputsection'
+                                            readOnly
+                                            className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required
                                         ></input>
@@ -1041,7 +1111,7 @@ function Createreceipte() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder=' Vendor Code'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (

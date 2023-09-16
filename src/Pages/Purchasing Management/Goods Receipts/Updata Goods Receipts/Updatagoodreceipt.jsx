@@ -295,10 +295,74 @@ function Updatagoodreceipt() {
         };
     });
 
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    const [toaldis, settoaldis] = useState()
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+        settoaldis(newOverallTotalPrice)
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
+    function handlediscountChange(e) {
+        const newdount = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPricedis = toaldis - newdount;
+        console.log(newdount);
+        console.log('newdount', newOverallTotalPricedis);
+        setOverallTotalPricess(newOverallTotalPricedis);
+
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            Discounts: newdount,
+        }));
+    }
+
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
     });
+    function PurchaseOrderNumbergetapi(PurchaseOrderNumber) {
+        axios.get(`/api/PurchaseOrder_GET_BYID/${PurchaseOrderNumber}`).then((res) => {
+            console.log(res.data)
+            setvalue((prevValue) => ({
+                ...prevValue,
+                VendorID: res.data.recordset[0].VendorID,
+            }));
+            const vendorcode = res.data.recordset[0].VendorID;
+            axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
+                .then((res) => {
+                    console.log('VendorName:', res.data.recordset[0].VendorName);
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        VendorName: res.data.recordset[0].VendorName
+                    }));
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                    // Handle any errors that occur during the API request.
+                });
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     //VendorCode
     const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
@@ -621,7 +685,8 @@ function Updatagoodreceipt() {
         }
 
         if (value && value.PurchaseOrderNumber) {
-            // postapi(value.EmployeeID);
+
+            PurchaseOrderNumbergetapi(value.PurchaseOrderNumber);
             setvalue(prevValue => ({
                 ...prevValue,
                 PurchaseOrderNumber: value.PurchaseOrderNumber,
@@ -946,21 +1011,17 @@ function Updatagoodreceipt() {
 
                                 <div className="d-flex justify-content-end">
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start'>
+                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
                                             SUB TOTAL AMOUNT
                                         </label>
 
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection '
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
+                                            className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
                                         ></input>
@@ -970,21 +1031,16 @@ function Updatagoodreceipt() {
                                         <PlusOutlined className='mt-3' />
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='VAT' className='lablesection color3 text-start'>
+                                        <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
                                             VAT
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection'
+                                            onChange={handleVATChange} // Use the updated VAT change handler
+                                            className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
                                         ></input>
@@ -1002,12 +1058,7 @@ function Updatagoodreceipt() {
                                             types='text'
                                             id='Discounts'
                                             value={value.Discounts}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    Discounts: e.target.value
-                                                }))
-                                            }}
+                                            onChange={handlediscountChange}
                                             className='rounded inputsection'
                                             placeholder='Discounts'
                                             required
@@ -1018,29 +1069,28 @@ function Updatagoodreceipt() {
                                         =
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start'>
+                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
                                             TOTAL AMOUNT
                                         </label>
 
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
-                                            className='rounded inputsection'
+                                            readOnly
+                                            className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required
                                         ></input>
 
                                     </div>
                                 </div>
-
-
 
                                 <div className="row mx-auto formsection">
 
