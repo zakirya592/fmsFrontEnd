@@ -22,6 +22,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Createpurachaseorder() {
 
@@ -64,6 +65,8 @@ function Createpurachaseorder() {
                 }
                 console.log('----++++',res.data);
                 setvalue(prevState => ({ ...prevState, PurchaseOrder: formattedRequestNumber }));
+
+                localStorage.setItem('addpurachasorderss', formattedRequestNumber)
             })
             .catch((err) => {
                 console.log(err);
@@ -107,50 +110,68 @@ function Createpurachaseorder() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Purchase Order",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/PurchaseOrderAsset_DELETE_BYID/${ASQS}`)
+                    .then((res) => {
+                        apiget()
+                        // Workrequestget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Purchase Order has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+    // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
         const handleMenuClose = () => {
             setAnchorEl(null);
         };
 
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
-
-
         );
     }
 
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        const empid = localStorage.getItem('addpurachasorderss',)
+        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseOrderNumber/${empid}`)
             .then((res) => {
                 console.log('AssetsMaster_GET_LIST', res.data.recordset);
                 console.log('length', res.data.recordset.length);
@@ -260,6 +281,11 @@ function Createpurachaseorder() {
     useEffect(() => {
         apiget()
     }, [])
+
+    const addpurachrequestbtn = (e) => {
+        localStorage.setItem('addpurachasorder', value.PurchaseOrder)
+        navigate('/Addpurchaseorder')
+    }
 
     const countDuplicates = (array, key) => {
         const counts = {};
@@ -861,7 +887,15 @@ function Createpurachaseorder() {
     const Createapi = () => {
         Postapi()
         requestincreas()
+        localStorage.removeItem('addpurachasorder');
+        localStorage.clear();
     }
+    const backbtn = (() => {
+        localStorage.removeItem('addpurachasorder');
+        localStorage.clear();
+        navigate('/Purachaseorderview')
+
+    })
 
     return (
         <div>
@@ -872,7 +906,7 @@ function Createpurachaseorder() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/Purachaseorderview')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -1275,6 +1309,16 @@ function Createpurachaseorder() {
 
                                 </div>
 
+                                <div className="d-flex justify-content-between">
+                                  <div className="d-flex">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='bt' className='lablesection color3 text-start mb-1'>
+                                            </label>
+                                            <button type="button" className="btn btn-outline-primary color2 btnwork btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Purachase Orders</button>
+                                        </div>
+                                  
+                                  </div>
+
                                 <div className="d-flex justify-content-end">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
@@ -1338,7 +1382,7 @@ function Createpurachaseorder() {
 
                                     </div>
                                 </div>
-
+                                </div>
 
                                 <div className="row mx-auto formsection">
 
@@ -1503,7 +1547,7 @@ function Createpurachaseorder() {
 
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Purachaseorderview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 

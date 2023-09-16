@@ -23,6 +23,7 @@ import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import moment from 'moment';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Updatapurachaseorder() {
     let { userId } = useParams();
@@ -46,7 +47,6 @@ function Updatapurachaseorder() {
         completeEmployee: null, CompleteEmployeeName: '', PurchaseRequestNumber:null
     })
 
-    const [DateRequiredvalid, setDateRequiredvalid] = useState([])
     const getapi = () => {
         axios.get(`/api/PurchaseOrder_GET_BYID/${userId}`, {
         },)
@@ -416,51 +416,67 @@ function Updatapurachaseorder() {
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
 
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Purchase Order",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/PurchaseOrderAsset_DELETE_BYID/${ASQS}`)
+                    .then((res) => {
+                        apiget()
+                        // Workrequestget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Purchase Order has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+    // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
         const handleMenuClose = () => {
             setAnchorEl(null);
         };
 
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
-
-
         );
     }
 
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseOrderNumber/${userId}`)
             .then((res) => {
                 console.log('AssetsMaster_GET_LIST', res.data.recordset);
                 console.log('length', res.data.recordset.length);
@@ -569,6 +585,11 @@ function Updatapurachaseorder() {
     useEffect(() => {
         apiget()
     }, [])
+    
+    const addpurachrequestbtn = (e) => {
+        localStorage.setItem('Updatapurachaseorder', userId)
+        navigate('/Addpurchaseorder')
+    }
 
     const countDuplicates = (array, key) => {
         const counts = {};
@@ -609,7 +630,28 @@ function Updatapurachaseorder() {
             TOTAL_PRICE: totalPrice,
         };
     });
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
 
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
     //VendorCode
     const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
     const [openVendorCode, setOpenVendorCode] = useState(false);
@@ -912,7 +954,15 @@ function Updatapurachaseorder() {
 
     const Createapi = () => {
         Postapi()
+        localStorage.removeItem('Updatapurachaseorder');
+        localStorage.clear();
     }
+    const backbtn = (() => {
+        localStorage.removeItem('Updatapurachaseorder');
+        localStorage.clear();
+        navigate('/Purachaseorderview')
+
+    })
 
     return (
         <div>
@@ -923,7 +973,7 @@ function Updatapurachaseorder() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/Purachaseorderview')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -1028,7 +1078,7 @@ function Updatapurachaseorder() {
                                                         PurchaseOrder: e.target.value
                                                     }))
                                                 }}
-                                                disabled
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PO Number'
                                                 required
@@ -1333,75 +1383,78 @@ function Updatapurachaseorder() {
 
                                 </div>
 
-                                <div className="d-flex justify-content-end">
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
-                                            SUB TOTAL AMOUNT
-                                        </label>
-
-                                        <input
-                                            types='text'
-                                            id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='SUB TOTAL AMOUNT'
-                                            required
-                                        ></input>
+                                <div className="d-flex justify-content-between">
+                                    <div className="d-flex">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='bt' className='lablesection color3 text-start mb-1'>
+                                            </label>
+                                            <button type="button" className="btn btn-outline-primary color2 btnwork btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Purachase Order</button>
+                                        </div>
 
                                     </div>
-                                    <span className='my-auto mx-3'>
-                                        <PlusOutlined className='mt-3' />
-                                    </span>
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
-                                            VAT
-                                        </label>
 
-                                        <input
-                                            types='text'
-                                            id='VAT'
-                                            value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='VAT'
-                                            required
-                                        ></input>
+                                    <div className="d-flex justify-content-end">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
+                                                SUB TOTAL AMOUNT
+                                            </label>
 
-                                    </div>
-                                    <span className='my-auto mx-3'>
-                                        =
-                                    </span>
-                                    <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
-                                            TOTAL AMOUNT
-                                        </label>
+                                            <input
+                                                types='text'
+                                                id='UBTOTALAMOUNT'
+                                                // value={value.UBTOTALAMOUNT}
+                                                value={overallTotalPrice}
+                                                readOnly
+                                                className='rounded inputsection py-2'
+                                                placeholder='SUB TOTAL AMOUNT'
+                                                required
+                                            ></input>
 
-                                        <input
-                                            types='text'
-                                            id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    TOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection py-2'
-                                            placeholder='TOTAL AMOUNT'
-                                            required
-                                        ></input>
+                                        </div>
+                                        <span className='my-auto mx-3'>
+                                            <PlusOutlined className='mt-3' />
+                                        </span>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
+                                                VAT
+                                            </label>
 
+                                            <input
+                                                type='number'
+                                                id='VAT'
+                                                value={value.VAT}
+                                                onChange={handleVATChange} // Use the updated VAT change handler
+                                                className='rounded inputsection py-2'
+                                                placeholder='VAT'
+                                                required
+                                            ></input>
+
+                                        </div>
+                                        <span className='my-auto mx-3'>
+                                            =
+                                        </span>
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
+                                                TOTAL AMOUNT
+                                            </label>
+
+                                            <input
+                                                types='text'
+                                                id='TOTALAMOUNT'
+                                                value={overallTotalPricess}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        TOTALAMOUNT: e.target.value
+                                                    }))
+                                                }}
+                                                readOnly
+                                                className='rounded inputsection py-2'
+                                                placeholder='TOTAL AMOUNT'
+                                                required
+                                            ></input>
+
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1569,7 +1622,7 @@ function Updatapurachaseorder() {
 
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Purachaseorderview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 
