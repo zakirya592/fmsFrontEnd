@@ -12,18 +12,16 @@ import 'react-phone-input-2/lib/style.css'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
-import SaveIcon from '@mui/icons-material/Save';
 import MenuItem from '@mui/material/MenuItem';
-import Swal from "sweetalert2";
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import moment from 'moment';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Viewpurchaserequest() {
 
@@ -363,7 +361,6 @@ function Viewpurchaserequest() {
     const abortControllerRefID = useRef(null);
 
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
-        console.log('==========+++++++======', newInputValueID)
 
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodeID([])
@@ -447,7 +444,6 @@ function Viewpurchaserequest() {
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
 
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -463,7 +459,6 @@ function Viewpurchaserequest() {
                 assignEmployee: value.assignEmployee,
                 EmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -524,7 +519,7 @@ function Viewpurchaserequest() {
     }
 
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseRequestNumber/${userId}`)
             .then((res) => {
                 console.log('AssetsMaster_GET_LIST', res.data.recordset);
                 console.log('length', res.data.recordset.length);
@@ -671,7 +666,27 @@ function Viewpurchaserequest() {
         };
     });
 
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
 
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
@@ -722,7 +737,7 @@ function Viewpurchaserequest() {
                                                         PurchaseRequest: e.target.value
                                                     }))
                                                 }}
-                                                disabled
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter PR Number'
                                                 required
@@ -897,7 +912,7 @@ function Viewpurchaserequest() {
                                 </div>
 
                                 <div className="row mx-auto formsection justify-content-between">
-                                    <div className="col-sm-12 col-md-7 col-lg-7 col-xl-7 ">
+                                    <div className="col-sm-12 col-md-10 col-lg-6 col-xl-6 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Purpose' className='lablesection color3 text-start mb-1'>
                                                 Purpose
@@ -916,13 +931,16 @@ function Viewpurchaserequest() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-auto">
-                                        <div className='emailsection d-flex my-2'>
+                                    <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
+                                        <button type="button" disabled className="btn btn-outline-primary color2 btnwork mt-3" > <AddCircleOutlineIcon className='me-1' />Purachase Requests</button>
+                                    </div>
+                                    <div className="col-sm-12 col-md-10 col-lg-3 col-xl-3 my-auto">
+                                        <div className='emailsection d-flex mt-2'>
                                             <label htmlFor='VATInclusive' className='lablesection my-auto color3 text-start mb-1'>
                                                 VAT Inclusive(Y/N)?
                                             </label>
 
-                                            <select className='rounded inputsectiondropdpwn py-2 color2 ' id="VendorConfirm" aria-label="Floating label select example"
+                                            <select className='rounded inputsectiondropdpwn py-1 mt-2 color2 ' id="VendorConfirm" aria-label="Floating label select example"
                                                 value={value.VATInclusive}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -941,6 +959,7 @@ function Viewpurchaserequest() {
                                             </select>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <hr className='color3 line' />
@@ -960,6 +979,7 @@ function Viewpurchaserequest() {
 
                                 </div>
 
+
                                 <div className="d-flex justify-content-end">
                                     <div className='emailsection position-relative d-grid my-2'>
                                         <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
@@ -969,13 +989,9 @@ function Viewpurchaserequest() {
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
@@ -991,15 +1007,10 @@ function Viewpurchaserequest() {
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
+                                            onChange={handleVATChange} // Use the updated VAT change handler
                                             className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
@@ -1017,13 +1028,14 @@ function Viewpurchaserequest() {
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
+                                            readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required

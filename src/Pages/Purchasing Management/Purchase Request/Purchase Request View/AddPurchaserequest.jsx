@@ -344,7 +344,7 @@ function AddPurchaserequest() {
                                         </div>
                                         <div className="col-sm-2 col-md-3 col-lg-3 col-xl-3 my-auto">
                                             {/* <p></p> */}
-                                            <button type="button" className="border-0 px-3 mt-4 savebtn py-2" onClick={handleAddToWorkRequest}><AddCircleOutlineIcon className='me-2' />Add To Work Request</button>
+                                            <button type="button" className="border-0 px-3 mt-4 savebtn py-2" onClick={handleAddToWorkRequest}><AddCircleOutlineIcon className='me-2' />Add To Purchase Requests</button>
                                         </div>
                                         <div className="col-sm-2 col-md-3 col-lg-3 text-end col-xl-3 my-auto">
                                             <p></p>

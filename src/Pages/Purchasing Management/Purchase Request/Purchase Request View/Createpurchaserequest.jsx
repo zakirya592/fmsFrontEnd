@@ -931,7 +931,7 @@ function Createpurchaserequest() {
                                 </div>
 
                                 <div className="row mx-auto formsection justify-content-between">
-                                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                                    <div className="col-sm-12 col-md-10 col-lg-6 col-xl-6 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Purpose' className='lablesection color3 text-start mb-1'>
                                                 Purpose
@@ -950,7 +950,10 @@ function Createpurchaserequest() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-auto">
+                                    <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Purachase Requests</button>
+                                    </div>
+                                    <div className="col-sm-12 col-md-10 col-lg-3 col-xl-3 my-auto">
                                         <div className='emailsection d-flex mt-2'>
                                             <label htmlFor='VATInclusive' className='lablesection my-auto color3 text-start mb-1'>
                                                 VAT Inclusive(Y/N)?
@@ -975,9 +978,7 @@ function Createpurchaserequest() {
                                             </select>
                                         </div>
                                     </div>
-                                        <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
-                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Purachase Requests</button>
-                                    </div>
+                                        
                                 </div>
 
                                 <hr className='color3 line' />
