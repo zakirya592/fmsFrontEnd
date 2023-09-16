@@ -703,7 +703,16 @@ function Creategoodreturn() {
 
     const addpurachrequestbtn = (e) => {
         localStorage.setItem('Addgoodreturn', value.PurchaseOrderNumber)
-        navigate('/Addgoodreturn')
+        if (value.PurchaseOrderNumber !== null) {
+            navigate('/Addgoodreturn')
+        }
+        else {
+            Swal.fire(
+                'Erro!',
+                ` Purchase order number is required to assign add to assetCode`,
+                'error'
+            )
+        }
     }
     const Createapi = () => {
         Postapi()

@@ -667,7 +667,16 @@ function Createreceipte() {
     
     const addpurachrequestbtn = (e) => {
         localStorage.setItem('Addgoodsreseciption', value.PurchaseOrderNumber)
-        navigate('/AddGoodsReceipts')
+        if (value.PurchaseOrderNumber !==null){
+            navigate('/AddGoodsReceipts')
+        }
+        else{
+            Swal.fire(
+                'Erro!',
+                ` Purchase order number is required to assign add to assetCode`,
+                'error'
+            )
+        }
     }
 
     const Postapi = async () => {
