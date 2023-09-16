@@ -22,6 +22,7 @@ import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from 'react-router-dom';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import moment from 'moment';
 
 function Updatagoodreceipt() {
@@ -108,57 +109,72 @@ function Updatagoodreceipt() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Goods Receipts",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/PurchaseGOODSAsset_DELETE_BYID/${ASQS}`)
+                    .then((res) => {
+                        apiget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Goods Receipts has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+    // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
         const handleMenuClose = () => {
             setAnchorEl(null);
         };
 
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
-
-
         );
     }
 
+
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/GET_BY_PurchaseOrderNumber_GoodsReceiptDetail/${userId}`)
             .then((res) => {
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
-
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
                     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
@@ -697,6 +713,11 @@ function Updatagoodreceipt() {
         }
     }
 
+    const addpurachrequestbtn = (e) => {
+        localStorage.setItem('Updatagoodsreseciption', userId)
+        navigate('/AddGoodsReceipts')
+    }
+
     const Postapi = async () => {
         axios.put(`/api/GoodsReceipt_Put/${userId}`, {
             InvoiceNumber: value.InvoiceNumber,
@@ -730,7 +751,17 @@ function Updatagoodreceipt() {
             });
 
     };
+    const Createapi = () => {
+        Postapi()
+        localStorage.removeItem('Updatagoodsreseciption');
+        localStorage.clear();
+    }
+    const backbtn = (() => {
+        localStorage.removeItem('Updatagoodsreseciption');
+        localStorage.clear();
+        navigate('/Goodsreceiptsview')
 
+    })
     return (
         <div>
             <div className='bg'>
@@ -740,7 +771,7 @@ function Updatagoodreceipt() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/Goodsreceiptsview')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -990,6 +1021,10 @@ function Updatagoodreceipt() {
                                         </div>
                                     </div>
 
+                                    <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Add Goods Receipts</button>
+                                    </div>
+
                                 </div>
 
                                 <hr className='color3 line' />
@@ -1207,9 +1242,9 @@ function Updatagoodreceipt() {
 
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Goodsreceiptsview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
-                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Postapi}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 
                                 </div>
                             </div>

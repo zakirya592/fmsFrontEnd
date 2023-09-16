@@ -97,6 +97,8 @@ import Maingoodreacpits from '../../Pages/Purchasing Management/Goods Receipts/M
 import Updatagoodreturn from '../../Pages/Purchasing Management/Goods Return/Goods Return Updata/Updatagoodreturn'
 import AddPurchaserequest from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/AddPurchaserequest'
 import Addpurchaseorder from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Addpurchaseorder'
+import AddGoodsreceiption from '../../Pages/Purchasing Management/Goods Receipts/Create Good Reacition/AddGoodsreceiption'
+import Addgoodreturn from '../../Pages/Purchasing Management/Goods Return/Good Return Create/Addgoodreturn'
 
 function Pagerounter() {
 
@@ -265,6 +267,7 @@ function Pagerounter() {
           <Route exact path="/Create/Goodsreceipts" element={<Createreceipte />} />
           <Route exact path="/View/Goodsreceipt/:userId" element={<Goodsreceiptsview />} />
           <Route exact path="/Update/Goodsreceipt/:userId" element={<Updatagoodreceipt />} />
+          <Route exact path="/AddGoodsReceipts" element={<AddGoodsreceiption />} />
 
 
           {/* GoodsreturnView */}
@@ -272,6 +275,7 @@ function Pagerounter() {
           <Route exact path="/GoodsreturnView" element={<Tablegoodreturn />} />
           <Route exact path="/Update/GoodReturn/:userId" element={<Updatagoodreturn />} />
           <Route exact path="/View/GoodReturn/:userId" element={<GoodsreturnView />} />
+          <Route exact path="/Addgoodreturn" element={<Addgoodreturn />} />
         </Routes>
       </BrowserRouter>
     </>

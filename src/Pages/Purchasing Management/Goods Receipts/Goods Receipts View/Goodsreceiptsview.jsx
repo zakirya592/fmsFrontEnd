@@ -3,18 +3,13 @@ import Siderbar from '../../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { SearchOutlined, CaretDownOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import SaveIcon from '@mui/icons-material/Save';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
@@ -23,6 +18,7 @@ import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Goodsreceiptsview() {
 
@@ -108,57 +104,72 @@ function Goodsreceiptsview() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Goods Receipts",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/PurchaseGOODSAsset_DELETE_BYID/${ASQS}`)
+                    .then((res) => {
+                        apiget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Goods Receipts has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+    // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
         const handleMenuClose = () => {
             setAnchorEl(null);
         };
 
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
-
-
         );
     }
 
+
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/GET_BY_PurchaseOrderNumber_GoodsReceiptDetail/${userId}`)
             .then((res) => {
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
-
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
                     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
@@ -951,6 +962,10 @@ function Goodsreceiptsview() {
                                                 required
                                             ></input>
                                         </div>
+                                    </div>
+
+                                    <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 " disabled> <AddCircleOutlineIcon className='me-1' />Add Goods Receipts</button>
                                     </div>
 
                                 </div>

@@ -23,6 +23,7 @@ import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Updatagoodreturn() {
 
@@ -34,7 +35,7 @@ function Updatagoodreturn() {
         Recievedby: '', EmployeeName: '',
         UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
-        FeedbackComments: '',
+        FeedbackComments: '', PurchaseOrderNumber: null,
     })
 
     const getapi = () => {
@@ -50,7 +51,7 @@ function Updatagoodreturn() {
                     PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
                     InvoiceNumber: res.data.recordset[0].InvoiceNumber,
                     VendorID: res.data.recordset[0].VendorID,
-                    PurchaseOrder: res.data.recordset[0].PurchaseOrderNumber,
+                    PurchaseOrderNumber: res.data.recordset[0].PurchaseOrderNumber,
                     Recievedby,
                     ReturnDate: InvoiceDatevalid,
                 }));
@@ -104,53 +105,69 @@ function Updatagoodreturn() {
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 200 },
-        // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
+    const Deletedapi = (ASQS) => {
+        console.log(ASQS);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success mx-2',
+                cancelButton: 'btn btn-danger mx-2',
+                // actions: 'mx-3'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this Goods Return",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/GOODSReturnAsset_DELETE_BYID/${ASQS}`)
+                    .then((res) => {
+                        apiget()
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Goods Return has been deleted.',
+                            'success'
+                        )
+                    })
+                    .catch((err) => {
+                        console.log('Error deleting', err);
+                    });
+
+            }
+        })
+
+    };
+    // Button section
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
         const handleMenuClose = () => {
             setAnchorEl(null);
         };
 
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate('/View/transaction')}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteButtonClick}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-                </Menu>
+                <MenuItem onClick={() => {
+                    Deletedapi(params.row.ASQS)
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
-
-
         );
     }
 
     const apiget = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/GET_BY_PurchaseOrderNumber_GoodsReturn/${userId}`)
             .then((res) => {
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
@@ -293,6 +310,28 @@ function Updatagoodreturn() {
             TOTAL_PRICE: totalPrice,
         };
     });
+
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    // Update overallTotalPrice when the VAT input changes
+    function handleVATChange(e) {
+        const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
+        const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
+        console.log(newVAT);
+        setOverallTotalPricess(newOverallTotalPrice);
+
+        setvalue(prevValue => ({
+            ...prevValue,
+            VAT: newVAT,
+        }));
+    }
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
@@ -530,7 +569,6 @@ function Updatagoodreturn() {
         }
     }
 
-
     const Postapi = async () => {
         axios.put(`/api/GoodsReturn_Put/${userId}`, {
             InvoiceNumber: value.InvoiceNumber,
@@ -563,6 +601,151 @@ function Updatagoodreturn() {
 
     };
 
+    const [unitCodeordernumber, setUnitCodeordernumber] = useState([]);
+    const [openordernumber, setOpenordernumber] = useState(false);
+    const [autocompleteLoadingordernumer, setAutocompleteLoadingordernumber] = useState(false);
+    const abortControllerRefordernumber = useRef(null);
+
+    const handleAutoCompleteInputordernumber = async (event, newInputValue, reason) => {
+        console.log('==========+++++++======', newInputValue)
+
+        if (reason === 'reset' || reason === 'clear') {
+            setUnitCodeordernumber([])
+            return; // Do not perform search if the input is cleared or an option is selected
+        }
+        if (reason === 'option') {
+            return reason// Do not perform search if the option is selected
+        }
+
+        if (!newInputValue || newInputValue.trim() === '') {
+            setUnitCodeordernumber([])
+            return;
+        }
+        if (newInputValue === null) {
+            setUnitCodeordernumber([])
+            setvalue(prevValue => ({
+                ...prevValue,
+                PurchaseOrderNumber: []
+            }))
+            return;
+        }
+
+        // postapi(newInputValue.EmployeeID);
+        setAutocompleteLoadingordernumber(true);
+        setOpenordernumber(true);
+        try {
+            // Cancel any pending requests
+            if (abortControllerRefordernumber.current) {
+                abortControllerRefordernumber.current.abort();
+            }
+            // Create a new AbortController
+            abortControllerRefordernumber.current = new AbortController();
+            // I dont know what is the response of your api but integrate your api into this block of code thanks 
+            axios.get('/api/Filter_PurchaseOrderNumber')
+                .then((response) => {
+                    console.log('Dropdown me', response.data.recordset)
+                    const data = response?.data?.recordset;
+                    //name state da setdropname
+                    setUnitCodeordernumber(data ?? [])
+                    setOpenordernumber(true);
+                    setAutocompleteLoadingordernumber(false);
+                    // 
+                })
+                .catch((error) => {
+                    console.log('-----', error);
+
+                }
+                );
+
+        }
+
+
+        catch (error) {
+            if (error?.name === 'CanceledError') {
+                // Ignore abort errors
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    PurchaseOrderNumber: []
+                }))
+                setAutocompleteLoadingordernumber(true);
+                console.log(error)
+                return;
+            }
+            console.error(error);
+            console.log(error)
+            setUnitCodeordernumber([])
+            setOpenordernumber(false);
+            setAutocompleteLoadingordernumber(false);
+        }
+
+    }
+
+    const handleGPCAutoordernumber = (event, value) => {
+
+        console.log('Received value:', value); // Debugging line
+        if (value === null || value === '-') {
+            setvalue(prevValue => ({
+                ...prevValue,
+                PurchaseOrderNumber: [],
+            }));
+        }
+
+        if (value && value.PurchaseOrderNumber) {
+
+            PurchaseOrderNumbergetapi(value.PurchaseOrderNumber);
+            setvalue(prevValue => ({
+                ...prevValue,
+                PurchaseOrderNumber: value.PurchaseOrderNumber,
+            }));
+            console.log('Received value----------:', value);
+        } else {
+            console.log('Value or value.EmployeeID is null:', value); // Debugging line
+        }
+    }
+
+    function PurchaseOrderNumbergetapi(PurchaseOrderNumber) {
+        axios.get(`/api/PurchaseOrder_GET_BYID/${PurchaseOrderNumber}`).then((res) => {
+            console.log(res.data)
+            setvalue((prevValue) => ({
+                ...prevValue,
+                VendorID: res.data.recordset[0].VendorID,
+            }));
+            const vendorcode = res.data.recordset[0].VendorID;
+            axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
+                .then((res) => {
+                    console.log('VendorName:', res.data.recordset[0].VendorName);
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        VendorName: res.data.recordset[0].VendorName
+                    }));
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                    // Handle any errors that occur during the API request.
+                });
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const addpurachrequestbtn = (e) => {
+        localStorage.setItem('updatagoodreturn', userId)
+        navigate('/Addgoodreturn')
+    }
+    const Createapi = () => {
+        Postapi()
+        localStorage.removeItem('updatagoodreturn');
+        localStorage.clear();
+    }
+    const backbtn = (() => {
+        localStorage.removeItem('updatagoodreturn');
+        localStorage.clear();
+        navigate('/GoodsreturnView')
+
+    })
     return (
         <div>
             <div className='bg'>
@@ -572,7 +755,7 @@ function Updatagoodreturn() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/GoodsreturnView')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -590,32 +773,74 @@ function Updatagoodreturn() {
                                 {/* Row section */}
                                 <div className="row mx-auto formsection">
 
+
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='PurchaseOrder' className='lablesection color3 text-start mb-1'>
                                                 Purchase Order # <span className='star'>*</span>
                                             </label>
 
-                                            <input
-                                                types='text'
-                                                id='PurchaseOrder'
-                                                value={value.PurchaseOrder}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        PurchaseOrder: e.target.value
-                                                    }))
-                                                }}
-                                                disabled
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter PR Number'
+                                            <Autocomplete
+                                                id="serachGpc"
+                                                className='rounded inputsection py-0 mt-0'
                                                 required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' />
-                                            </p>
+                                                options={unitCodeordernumber} // Use the formattedGpcList here
+                                                getOptionLabel={(option) =>
+                                                    option?.PurchaseOrderNumber
+                                                        ? option.PurchaseOrderNumber
+                                                        : ''
+                                                }
+                                                onChange={handleGPCAutoordernumber}
+                                                renderOption={(props, option) => (
+                                                    <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
+                                                        {option.PurchaseOrderNumber}
+                                                    </li>
+                                                )}
+                                                value={value}
+                                                onInputChange={(event, newInputValue, params) => handleAutoCompleteInputordernumber(event, newInputValue, params)}
+                                                loading={autocompleteLoadingordernumer}
+                                                open={openordernumber}
+                                                onOpen={() => {
+                                                    // setOpen(true);
+                                                }}
+                                                onClose={() => {
+                                                    setOpenordernumber(false);
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder='Purchase Order Number'
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                                <React.Fragment>
+                                                                    {autocompleteLoadingordernumer ? <CircularProgress style={{ color: 'black' }} size={20} /> : null}
+                                                                    {params.InputProps.endAdornment}
+                                                                </React.Fragment>
+                                                            ),
+                                                        }}
+                                                        sx={{
+                                                            '& label.Mui-focused': {
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiInput-underline:after': {
+                                                                borderBottomColor: '#00006a',
+                                                                color: '#000000',
+                                                            },
+                                                            '& .MuiOutlinedInput-root': {
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#00006a',
+                                                                    color: '#000000',
+                                                                },
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            />
                                         </div>
                                     </div>
 
@@ -761,6 +986,10 @@ function Updatagoodreturn() {
                                         </div>
                                     </div>
 
+                                    <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
+                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Add Goods Return</button>
+                                    </div>
+
                                 </div>
 
                                 <hr className='color3 line' />
@@ -782,21 +1011,17 @@ function Updatagoodreturn() {
 
                                 <div className="d-flex justify-content-end">
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start'>
+                                        <label htmlFor='UBTOTALAMOUNT' className='lablesection color3 text-start mb-1'>
                                             SUB TOTAL AMOUNT
                                         </label>
 
                                         <input
                                             types='text'
                                             id='UBTOTALAMOUNT'
-                                            value={value.UBTOTALAMOUNT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    UBTOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection '
+                                            // value={value.UBTOTALAMOUNT}
+                                            value={overallTotalPrice}
+                                            readOnly
+                                            className='rounded inputsection py-2'
                                             placeholder='SUB TOTAL AMOUNT'
                                             required
                                         ></input>
@@ -806,21 +1031,16 @@ function Updatagoodreturn() {
                                         <PlusOutlined className='mt-3' />
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='VAT' className='lablesection color3 text-start'>
+                                        <label htmlFor='VAT' className='lablesection color3 text-start mb-1'>
                                             VAT
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='VAT'
                                             value={value.VAT}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    VAT: e.target.value
-                                                }))
-                                            }}
-                                            className='rounded inputsection'
+                                            onChange={handleVATChange} // Use the updated VAT change handler
+                                            className='rounded inputsection py-2'
                                             placeholder='VAT'
                                             required
                                         ></input>
@@ -830,21 +1050,22 @@ function Updatagoodreturn() {
                                         =
                                     </span>
                                     <div className='emailsection position-relative d-grid my-2'>
-                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start'>
+                                        <label htmlFor='TOTALAMOUNT' className='lablesection color3 text-start mb-1'>
                                             TOTAL AMOUNT
                                         </label>
 
                                         <input
                                             types='text'
                                             id='TOTALAMOUNT'
-                                            value={value.TOTALAMOUNT}
+                                            value={overallTotalPricess}
                                             onChange={e => {
                                                 setvalue(prevValue => ({
                                                     ...prevValue,
                                                     TOTALAMOUNT: e.target.value
                                                 }))
                                             }}
-                                            className='rounded inputsection'
+                                            readOnly
+                                            className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
                                             required
                                         ></input>
@@ -966,12 +1187,10 @@ function Updatagoodreturn() {
                                     </div>
                                 </div>
 
-
-
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/GoodsreturnView')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
 
-                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Postapi}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 
                                 </div>
                             </div>

@@ -71,7 +71,7 @@ function Createreceipte() {
 
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "You want to delete this Purchase Order",
+            text: "You want to delete this Goods Receipts",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -79,13 +79,12 @@ function Createreceipte() {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/PurchaseOrderAsset_DELETE_BYID/${ASQS}`)
+                axios.delete(`/api/PurchaseGOODSAsset_DELETE_BYID/${ASQS}`)
                     .then((res) => {
-                        PurchaseOrderNumberpostapi()
-                        // Workrequestget()
+                        apiget()
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
-                            'Purchase Order has been deleted.',
+                            'Goods Receipts has been deleted.',
                             'success'
                         )
                     })
@@ -116,109 +115,6 @@ function Createreceipte() {
             </div>
         );
     }
-
-    const PurchaseOrderNumberpostapi = (PurchaseOrderNumber) => {
-        axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseOrderNumber/${PurchaseOrderNumber}`)
-            .then((res) => {
-                const AssetItemDescriptionsssss = res.data.recordset
-                // setgetdata(res.data.recordset);
-                const SAQ = res.data.recordset.map((item) => item.seq);
-                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
-
-                const promises = res.data.recordset.map((item) => {
-                    const itid = item.AssetItemDescription;
-                    return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
-                        .then((res) => {
-                            return {
-                                item,
-                                data: res.data.recordset,// Store API response data here
-                            };
-
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            return {
-                                item,
-                                data: null // Handle error case here
-                            };
-                        });
-
-                });
-
-                const assetItemTagIDs = [];
-
-                // Create an array of promises for fetching data and updating assetItemTagIDs
-                const promisesNumber = res.data.recordset.map((item) => {
-                    const itid = item.AssetItemDescription;
-
-                    return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
-                        .then((res) => {
-                            return {
-                                item,
-                                data: res.data.recordset,// Store API response data here
-                            };
-
-                        })
-
-
-                        .catch((err) => {
-                            console.log(err);
-                            return {
-                                item,
-                                data: null // Handle error case here
-                            };
-                        });
-                });
-
-                Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
-                    .then(([results1, results2]) => {
-
-
-                        // console.log('dfrfdf---------------------',results1);
-                        // console.log('-------------------------------', results2);
-                        results1.forEach((itemRecords, index) => {
-                            // setgetdata(results);
-                            const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
-                                description: description,
-                                records: results1[index],
-                                saq: SAQ[index],
-                            }));
-
-                            const recordsWithSAQ = SAQ.map((saq, index) => ({
-                                saq: SAQ[index],
-                                records: results1[index],
-                            }));
-
-
-                            setgetdata(recordsWithDescriptions, recordsWithSAQ);
-
-
-                        });
-                        results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
-                            const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
-                                assetItemTagID: assetItemTagID,
-                                records: results2[index],
-                                saq: SAQ[index],
-                            }));
-                            setdatanumber(assetItemTagID);
-
-                        });
-
-                    });
-
-
-
-
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
 
     const countDuplicates = (array, key) => {
         const counts = {};
@@ -452,7 +348,6 @@ function Createreceipte() {
         }
     }
 
-
     // Recievedby to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
     const [openID, setOpenID] = useState(false);
@@ -560,7 +455,6 @@ function Createreceipte() {
         }
     }
 
-
     const [unitCodeordernumber, setUnitCodeordernumber] = useState([]);
     const [openordernumber, setOpenordernumber] = useState(false);
     const [autocompleteLoadingordernumer, setAutocompleteLoadingordernumber] = useState(false);
@@ -651,7 +545,6 @@ function Createreceipte() {
         }
 
         if (value && value.PurchaseOrderNumber) {
-            PurchaseOrderNumberpostapi(value.PurchaseOrderNumber);
             PurchaseOrderNumbergetapi(value.PurchaseOrderNumber);
             setvalue(prevValue => ({
                 ...prevValue,
@@ -662,9 +555,119 @@ function Createreceipte() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+    const apiget = () => {
+        const empid = localStorage.getItem('Addgoodsreseciption',)
+        axios.get(`/api/GET_BY_PurchaseOrderNumber_GoodsReceiptDetail/${empid}`)
+            .then((res) => {
+                console.log('AssetsMaster_GET_LIST', res.data.recordset);
+                console.log('length', res.data.recordset.length);
+                const AssetItemDescriptionsssss = res.data.recordset
+                // setgetdata(res.data.recordset);
+                const SAQ = res.data.recordset.map((item) => item.seq);
+                const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
+
+                const promises = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
+
+                    return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                        .then((res) => {
+                            console.log('=====', res.data.recordset);
+                            return {
+                                item,
+                                data: res.data.recordset,// Store API response data here
+                            };
+
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
+
+                });
+
+                const assetItemTagIDs = [];
+
+                // Create an array of promises for fetching data and updating assetItemTagIDs
+                const promisesNumber = res.data.recordset.map((item) => {
+                    const itid = item.AssetItemDescription;
+                    console.log(itid);
+
+                    return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                        .then((res) => {
+                            return {
+                                item,
+                                data: res.data.recordset,// Store API response data here
+                            };
+
+                        })
+
+
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: null // Handle error case here
+                            };
+                        });
+                });
+
+                Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+                    .then(([results1, results2]) => {
+
+
+                        // console.log('dfrfdf---------------------',results1);
+                        // console.log('-------------------------------', results2);
+                        results1.forEach((itemRecords, index) => {
+                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                            // setgetdata(results);
+                            const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                description: description,
+                                records: results1[index],
+                                saq: SAQ[index],
+                            }));
+
+                            const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                saq: SAQ[index],
+                                records: results1[index],
+                            }));
+
+
+                            setgetdata(recordsWithDescriptions, recordsWithSAQ);
+
+
+                        });
+                        results2.forEach((itemRecords, index) => {
+                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                            // console.log("---------------------------------",assetItemTagID);
+                            const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                                assetItemTagID: assetItemTagID,
+                                records: results2[index],
+                                saq: SAQ[index],
+                            }));
+                            setdatanumber(assetItemTagID);
+
+                        });
+
+                    });
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        apiget()
+    }, [])
+    
     const addpurachrequestbtn = (e) => {
-        // localStorage.setItem('addpurachasorder', value.PurchaseOrder)
-        // navigate('/Addpurchaseorder')
+        localStorage.setItem('Addgoodsreseciption', value.PurchaseOrderNumber)
+        navigate('/AddGoodsReceipts')
     }
 
     const Postapi = async () => {
@@ -702,6 +705,18 @@ function Createreceipte() {
 
     };
 
+    const Createapi = () => {
+        Postapi()
+        localStorage.removeItem('Addgoodsreseciption');
+        localStorage.clear();
+    }
+    const backbtn = (() => {
+        localStorage.removeItem('Addgoodsreseciption');
+        localStorage.clear();
+        navigate('/Goodsreceiptsview')
+
+    })
+
     return (
         <div>
             <div className='bg'>
@@ -711,7 +726,7 @@ function Createreceipte() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/Goodsreceiptsview')} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto mx-auto">Purchasing Management </p>
                                 </Typography>
                             </Toolbar>
@@ -967,7 +982,7 @@ function Createreceipte() {
                                         </div>
                                     </div>
                                     <div className="col-sm-3 my-auto col-md-10 col-lg-3 col-xl-3 ">
-                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Goods Receipts</button>
+                                        <button type="button" className="btn btn-outline-primary color2 btnwork mt-3 btnworkactive" onClick={addpurachrequestbtn}> <AddCircleOutlineIcon className='me-1' />Add Goods Receipts</button>
                                     </div>
 
                                 </div>
@@ -1190,9 +1205,8 @@ function Createreceipte() {
 
 
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/Goodsreceiptsview')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-
-                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Postapi}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={backbtn}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
 
                                 </div>
                             </div>
