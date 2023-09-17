@@ -38,6 +38,8 @@ function GoodsreturnView() {
         FeedbackComments: '', PurchaseOrderNumber: null,
     })
 
+    const [vatget, setvatget] = useState([])
+
     const getapi = () => {
         axios.get(`/api/GoodsReturn_GET_BYID/${userId}`, {
         },)
@@ -57,7 +59,7 @@ function GoodsreturnView() {
                     VAT: res.data.recordset[0].VAT,
                 }));
 
-                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
+                setvatget(res.data.recordset[0].VAT)
 
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": Recievedby
@@ -342,6 +344,9 @@ function GoodsreturnView() {
             VAT: newVAT,
         }));
     }
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice + vatget);
+    }, [initialOverallTotalPrice])
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,

@@ -32,6 +32,7 @@ function Goodsreceiptsview() {
         VendorID: '', VendorName: '',
         FeedbackComments: '',
     })
+    const [vatget, setvatget] = useState([])
     const getapi = () => {
         axios.get(`/api/GoodsReceipt_GET_BYID/${userId}`, {
         },)
@@ -53,8 +54,7 @@ function Goodsreceiptsview() {
                     VAT: res.data.recordset[0].VAT,
                 }));
 
-                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
-
+                setvatget(res.data.recordset[0].VAT)
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": Recievedby
                 }).then((res) => {
@@ -338,6 +338,9 @@ function Goodsreceiptsview() {
             VAT: newVAT,
         }));
     }
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice + vatget);
+    }, [initialOverallTotalPrice])
     function handlediscountChange(e) {
         const newdount = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
         const newOverallTotalPricedis = toaldis - newdount;

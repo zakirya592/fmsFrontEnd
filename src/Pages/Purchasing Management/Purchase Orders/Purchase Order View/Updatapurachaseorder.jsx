@@ -47,6 +47,7 @@ function Updatapurachaseorder() {
         completeEmployee: null, CompleteEmployeeName: '', PurchaseRequestNumber:null
     })
 
+    const [vatget, setvatget] = useState([])
     const getapi = () => {
         axios.get(`/api/PurchaseOrder_GET_BYID/${userId}`, {
         },)
@@ -69,7 +70,8 @@ function Updatapurachaseorder() {
                     Comments: res.data.recordset[0].Comments,
                     VAT: res.data.recordset[0].VAT,
                 }));
-                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
+
+                setvatget(res.data.recordset[0].VAT)
                 const ConfirmationDateever = res.data.recordset[0].ConfirmationDate
                 const RequestedDateverered = moment(ConfirmationDateever).format('YYYY-MM-DD')
 
@@ -653,6 +655,9 @@ function Updatapurachaseorder() {
             VAT: newVAT,
         }));
     }
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice + vatget);
+    }, [initialOverallTotalPrice])
     //VendorCode
     const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
     const [openVendorCode, setOpenVendorCode] = useState(false);
