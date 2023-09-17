@@ -759,10 +759,7 @@ function Updatapurchaserequest() {
     const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     // Calculate the initial overallTotalPrice
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
-    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
-    useEffect(() => {
-        setOverallTotalPricess(initialOverallTotalPrice);
-    }, [initialOverallTotalPrice])
+    const [overallTotalPricess, setOverallTotalPricess] = useState('0');
     // Function to calculate the overallTotalPrice
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
