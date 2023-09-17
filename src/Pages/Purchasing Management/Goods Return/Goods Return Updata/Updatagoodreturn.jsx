@@ -74,13 +74,18 @@ function Updatagoodreturn() {
                         console.log(err);
                     });
 
-                const vendorcode = res.data.recordset[0].VendorID
-                axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`).then((res) => {
-                    setvalue((prevValue) => ({
-                        ...prevValue,
-                        VendorName: res.data.recordset[0].VendorName
-                    }));
-                })
+                const vendorcode = res.data.recordset[0].VendorID;
+                axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
+                    .then((res) => {
+                        if (res.data && res.data.recordset && res.data.recordset[0] && res.data.recordset[0].VendorName) {
+                            setvalue((prevValue) => ({
+                                ...prevValue,
+                                VendorName: res.data.recordset[0].VendorName
+                            }));
+                        } else {
+                            console.log('VendorName not found in the response data');
+                        }
+                    })
                     .catch((err) => {
                         console.log(err);
                     });
