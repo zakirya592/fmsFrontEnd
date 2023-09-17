@@ -1171,7 +1171,7 @@ function Updatagoodreceipt() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Vendor Code'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (

@@ -891,7 +891,7 @@ function Createpurchaserequest() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='complete employee Number'
+                                                        placeholder='Requested by Employee ID'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
@@ -1115,7 +1115,7 @@ function Createpurchaserequest() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Vendor Code'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
@@ -1214,7 +1214,7 @@ function Createpurchaserequest() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Verified by Employee ID'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
