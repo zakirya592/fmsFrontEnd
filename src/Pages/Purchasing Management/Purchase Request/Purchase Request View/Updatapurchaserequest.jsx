@@ -34,7 +34,7 @@ function Updatapurchaserequest() {
         PurchaseRequest: '', RequestDate: '', DateRequired: '',
         EmployeeID: null, Firstname: '',
         Purpose: '', VATInclusive: '',
-        UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '0', TOTALAMOUNT: '',
         VendorID: null, VendorName: '',
         Verifiedby: '', EmployeeName2: '',
         assignEmployee: null, EmployeeName: '',
@@ -47,7 +47,7 @@ function Updatapurchaserequest() {
         axios.get(`/api/PurchaseRequest_GET_BYID/${userId}`, {
         },)
             .then((res) => {
-                console.log('TO Assets Master By ID', res.data);
+                console.log('TO Purchase Request By ID', res.data);
 
                 const assignEmployee = res.data.recordset[0].VerifiedByEmpl
                 const completeEmployee = res.data.recordset[0].RequestByEmployeeID
@@ -60,7 +60,9 @@ function Updatapurchaserequest() {
                     VATInclusive: res.data.recordset[0].VATInclude,
                     PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
                     VendorID: res.data.recordset[0].VendorID,
+                    VAT: res.data.recordset[0].VAT,
                 }));
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
 
                 const RequestDatever = res.data.recordset[0].RequestDate
                 const WarrantyendDatese = moment(RequestDatever).format('YYYY-MM-DD')
@@ -69,16 +71,23 @@ function Updatapurchaserequest() {
                     ...prevValue,
                      RequestDate: WarrantyendDatese
                 }));
-                const vendorcode = res.data.recordset[0].VendorID
-                axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`).then((res) => {
-                    console.log('asdfaf=====================================', res.data.recordset[0].VendorName);
-                    setvalue((prevValue) => ({
-                        ...prevValue,
-                        VendorName: res.data.recordset[0].VendorName
-                    }));
-                })
+                const vendorcode = res.data.recordset[0].VendorID;
+                axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
+                    .then((res) => {
+                        if (res.data && res.data.recordset && res.data.recordset[0] && res.data.recordset[0].VendorName) {
+                            console.log('VendorName:', res.data.recordset[0].VendorName);
+                            setvalue((prevValue) => ({
+                                ...prevValue,
+                                VendorName: res.data.recordset[0].VendorName
+                            }));
+                        } else {
+                            console.log('VendorName not found in the response data');
+                            // Handle the case when 'VendorName' is not available in the response data.
+                        }
+                    })
                     .catch((err) => {
                         console.log(err);
+                        // Handle any errors that occur during the API request.
                     });
                 const RequestedDatever = res.data.recordset[0].RequiredDate
                 const RequestedDateverered = moment(RequestedDatever).format('YYYY-MM-DD')
@@ -90,7 +99,6 @@ function Updatapurchaserequest() {
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": completeEmployee
                 }).then((res) => {
-                    console.log('asdfaf=====================================', res);
                     const CompleteddEmployeeName = res.data.recordset[0].Firstname
                     const {
                         EmployeeID,
@@ -112,7 +120,6 @@ function Updatapurchaserequest() {
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": assignEmployee
                 }).then((res) => {
-                    console.log('asdfaf=====================================', res);
                     const Employee = res.data.recordsets[0][0].EmployeeID
                     const CompleteEmployee = res.data.recordsets[0][0].Firstname
                     console.log(Employee);
@@ -125,11 +132,8 @@ function Updatapurchaserequest() {
 
                 })
                     .catch((err) => {
-                        //// console.log(err);;
+                        console.log(err);
                     });
-                    
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -284,7 +288,6 @@ function Updatapurchaserequest() {
         }
     }
 
-
     const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
     const [opencompleteemployee, setOpencompleteemployee] = useState(false);
     const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
@@ -396,7 +399,6 @@ function Updatapurchaserequest() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
-
 
     // Assign to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
@@ -758,6 +760,9 @@ function Updatapurchaserequest() {
     // Calculate the initial overallTotalPrice
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice);
+    }, [initialOverallTotalPrice])
     // Function to calculate the overallTotalPrice
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
@@ -794,6 +799,9 @@ function Updatapurchaserequest() {
             VATInclude: value.VATInclusive,
             VendorID: value.VendorID,
             VerifiedByEmpl: value.assignEmployee,
+            VAT:value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
+
 
         })
             .then((res) => {
@@ -1163,15 +1171,9 @@ function Updatapurchaserequest() {
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='text'
                                             id='TOTALAMOUNT'
                                             value={overallTotalPricess}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    TOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
                                             readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'

@@ -56,8 +56,10 @@ function Viewpurchaserequest() {
                     PurchaseRequest: res.data.recordset[0].PurchaseRequestNumber,
                     VendorID: res.data.recordset[0].VendorID,
                     assignEmployee,
+                    VAT: res.data.recordset[0].VAT,
                 }));
 
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
                 const RequestDatever = res.data.recordset[0].RequestDate
                 const WarrantyendDatese = moment(RequestDatever).format('YYYY-MM-DD')
                 setDateRequiredvalid(RequestDatever)
@@ -689,6 +691,9 @@ function Viewpurchaserequest() {
     // Calculate the initial overallTotalPrice
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice);
+    }, [initialOverallTotalPrice])
     // Function to calculate the overallTotalPrice
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);

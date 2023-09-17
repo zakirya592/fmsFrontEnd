@@ -681,18 +681,24 @@ function Createpurchaserequest() {
     // Calculate the overall TOTAL_PRICE
     const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     // Calculate the initial overallTotalPrice
-
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    console.log(initialOverallTotalPrice);
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice);
+    }, [initialOverallTotalPrice])
+    
+    
     // Function to calculate the overallTotalPrice
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     }
+    
     // Update overallTotalPrice when the VAT input changes
     function handleVATChange(e) {
         const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
         const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
-        console.log(newVAT);
         setOverallTotalPricess(newOverallTotalPrice);
 
         setvalue(prevValue => ({
@@ -721,6 +727,8 @@ function Createpurchaserequest() {
             VATInclude: value.VATInclusive,
             VendorID: value.VendorID,
             VerifiedByEmpl: value.assignEmployee,
+            VAT:value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {
@@ -1061,15 +1069,9 @@ function Createpurchaserequest() {
                                         </label>
 
                                         <input
-                                            types='text'
+                                            type='number'
                                             id='TOTALAMOUNT'
                                             value={overallTotalPricess}
-                                            onChange={e => {
-                                                setvalue(prevValue => ({
-                                                    ...prevValue,
-                                                    TOTALAMOUNT: e.target.value
-                                                }))
-                                            }}
                                             readOnly
                                             className='rounded inputsection py-2'
                                             placeholder='TOTAL AMOUNT'
