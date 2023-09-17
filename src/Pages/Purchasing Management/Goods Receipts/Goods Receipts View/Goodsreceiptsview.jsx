@@ -755,6 +755,7 @@ function Goodsreceiptsview() {
                                                 id="serachGpc"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
+                                                readOnly
                                                 options={unitCodeordernumber} // Use the formattedGpcList here
                                                 getOptionLabel={(option) =>
                                                     option?.PurchaseOrderNumber
