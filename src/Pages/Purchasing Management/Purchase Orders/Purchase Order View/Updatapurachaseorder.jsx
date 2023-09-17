@@ -67,8 +67,9 @@ function Updatapurachaseorder() {
                     completeEmployee,
                     VendorConfirm: res.data.recordset[0].VendorConfirm,
                     Comments: res.data.recordset[0].Comments,
+                    VAT: res.data.recordset[0].VAT,
                 }));
-
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
                 const ConfirmationDateever = res.data.recordset[0].ConfirmationDate
                 const RequestedDateverered = moment(ConfirmationDateever).format('YYYY-MM-DD')
 
@@ -927,6 +928,8 @@ function Updatapurachaseorder() {
             VendorConfirm: value.VendorConfirm,
             ConfirmationDate: value.ConfirmationDate,
             Comments: value.Comments,
+            VAT: value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {

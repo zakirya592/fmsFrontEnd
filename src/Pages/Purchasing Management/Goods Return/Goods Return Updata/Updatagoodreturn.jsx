@@ -3,17 +3,13 @@ import Siderbar from '../../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { SearchOutlined, CaretDownOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
@@ -22,7 +18,6 @@ import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Updatagoodreturn() {
@@ -54,8 +49,10 @@ function Updatagoodreturn() {
                     PurchaseOrderNumber: res.data.recordset[0].PurchaseOrderNumber,
                     Recievedby,
                     ReturnDate: InvoiceDatevalid,
+                    VAT: res.data.recordset[0].VAT,
                 }));
 
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
 
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": Recievedby
@@ -581,6 +578,8 @@ function Updatagoodreturn() {
             RecievedByEmployeeID: value.Recievedby,
             VendorID: value.VendorID,
             ReasonOrComments: value.FeedbackComments,
+            VAT: value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {

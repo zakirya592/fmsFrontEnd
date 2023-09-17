@@ -159,6 +159,9 @@ function Createreceipte() {
     // Calculate the initial overallTotalPrice
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice);
+    }, [initialOverallTotalPrice])
     // Function to calculate the overallTotalPrice
 
     function calculateOverallTotalPrice(rows) {
@@ -696,6 +699,8 @@ useEffect(() => {
             VendorID: value.VendorID,
             FeedbackOrComments: value.FeedbackComments,
             DiscountAmount: value.Discounts,
+            VAT: value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {

@@ -38,7 +38,7 @@ function Createpurachaseorder() {
         PurchaseRequest: '', PODate: getRequestDate(), ProposedDeliveryDate: '', PurchaseOrder: '',
         ReviewProcessedby: '', EmployeeName: '',
         Approvedby: '', ApprovalDate: '', EmployeeName2: '', VATInclusive: '',
-        UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '0', TOTALAMOUNT: '',
         VendorCode: '', VendorName: '',
         VendorConfirm: '', Comments: '', ConfirmationDate: '',
          assignEmployee: null, EmployeeName: '',
@@ -332,6 +332,9 @@ function Createpurachaseorder() {
 
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice);
+    }, [initialOverallTotalPrice])
     // Function to calculate the overallTotalPrice
  function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
@@ -859,6 +862,8 @@ function Createpurachaseorder() {
             VendorConfirm: value.VendorConfirm,
             ConfirmationDate: value.ConfirmationDate,
             Comments: value.Comments,
+            VAT: value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {

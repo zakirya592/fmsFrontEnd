@@ -50,8 +50,10 @@ function Goodsreceiptsview() {
                     Recievedby,
                     InvoiceDate: InvoiceDatevalid,
                     ActualDeliveryDate: ActualDeliveryDatevalid,
+                    VAT: res.data.recordset[0].VAT,
                 }));
 
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
 
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": Recievedby

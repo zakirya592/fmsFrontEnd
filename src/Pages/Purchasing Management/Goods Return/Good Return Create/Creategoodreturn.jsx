@@ -3,22 +3,15 @@ import Siderbar from '../../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import { useNavigate } from "react-router-dom";
-import excel from "../../../../Image/excel.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import { SearchOutlined, CaretDownOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
@@ -265,6 +258,9 @@ function Creategoodreturn() {
     // Calculate the initial overallTotalPrice
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice);
+    }, [initialOverallTotalPrice])
     // Function to calculate the overallTotalPrice
 
     function calculateOverallTotalPrice(rows) {
@@ -676,6 +672,8 @@ function Creategoodreturn() {
             RecievedByEmployeeID: value.Recievedby,
             VendorID: value.VendorID,
             ReasonOrComments: value.FeedbackComments,
+            VAT: value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {

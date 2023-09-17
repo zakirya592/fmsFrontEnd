@@ -55,8 +55,9 @@ function Updatagoodreceipt() {
                     Recievedby,
                     InvoiceDate: InvoiceDatevalid,
                     ActualDeliveryDate: ActualDeliveryDatevalid,
+                    VAT: res.data.recordset[0].VAT,
                 }));
-
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
 
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": Recievedby
@@ -735,6 +736,8 @@ function Updatagoodreceipt() {
             VendorID: value.VendorID,
             FeedbackOrComments: value.FeedbackComments,
             DiscountAmount: value.Discounts,
+            VAT: value.VAT,
+            TOTAL_AMOUNT: overallTotalPricess,
 
         })
             .then((res) => {

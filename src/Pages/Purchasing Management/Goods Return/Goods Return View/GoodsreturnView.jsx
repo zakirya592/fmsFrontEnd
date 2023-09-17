@@ -54,8 +54,10 @@ function GoodsreturnView() {
                     PurchaseOrderNumber: res.data.recordset[0].PurchaseOrderNumber,
                     Recievedby,
                     ReturnDate: InvoiceDatevalid,
+                    VAT: res.data.recordset[0].VAT,
                 }));
 
+                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
 
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": Recievedby
