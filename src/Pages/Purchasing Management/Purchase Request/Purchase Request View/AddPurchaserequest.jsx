@@ -314,12 +314,7 @@ function AddPurchaserequest() {
                                     </div>
 
                                     <hr className="color3 line" />
-                                    {
-                                        getemplodata && getemplodata.map((item, index) => (
-                                            <p key={index}>{localStorage.setItem('addpurachaserequest', item.EmployeeID)}</p>
-
-                                        ))
-                                    }
+                                   
                                     {/* Search Fields */}
                                     <div className="row mx-auto my-auto formsection">
                                         <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">

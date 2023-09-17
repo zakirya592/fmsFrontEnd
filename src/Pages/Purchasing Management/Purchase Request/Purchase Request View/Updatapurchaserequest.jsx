@@ -43,6 +43,7 @@ function Updatapurchaserequest() {
 
     const [RequestDatevalid, setRequestDatevalid] = useState([])
     const [DateRequiredvalid, setDateRequiredvalid] = useState([])
+    const [vatget, setvatget] = useState([])
     const getapi = () => {
         axios.get(`/api/PurchaseRequest_GET_BYID/${userId}`, {
         },)
@@ -62,7 +63,8 @@ function Updatapurchaserequest() {
                     VendorID: res.data.recordset[0].VendorID,
                     VAT: res.data.recordset[0].VAT,
                 }));
-                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
+                // setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
+                setvatget(res.data.recordset[0].VAT)
 
                 const RequestDatever = res.data.recordset[0].RequestDate
                 const WarrantyendDatese = moment(RequestDatever).format('YYYY-MM-DD')
@@ -142,8 +144,6 @@ function Updatapurchaserequest() {
     useEffect(() => {
         getapi()
     }, [])
-
-
     // EmployeeID
     function postapi(EmployeeID) {
         axios.post(`/api/getworkRequest_by_EPID`, {
@@ -162,7 +162,6 @@ function Updatapurchaserequest() {
                 //// console.log(err);;
             });
     }
-
     //VendorCode
     const [unitCodeVendorCode, setUnitCodeVendorCode] = useState([]);
     const [openVendorCode, setOpenVendorCode] = useState(false);
@@ -764,6 +763,9 @@ function Updatapurchaserequest() {
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     }
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice + vatget);
+    }, [initialOverallTotalPrice])
     // Update overallTotalPrice when the VAT input changes
     function handleVATChange(e) {
         const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number

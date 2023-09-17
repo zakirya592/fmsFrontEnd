@@ -40,6 +40,7 @@ function Viewpurchaserequest() {
 
     const [RequestDatevalid, setRequestDatevalid] = useState([])
     const [DateRequiredvalid, setDateRequiredvalid] = useState([])
+    const [vatget, setvatget] = useState([])
     const getapi = () => {
         axios.get(`/api/PurchaseRequest_GET_BYID/${userId}`, {
         },)
@@ -58,8 +59,8 @@ function Viewpurchaserequest() {
                     assignEmployee,
                     VAT: res.data.recordset[0].VAT,
                 }));
-
-                setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
+                setvatget(res.data.recordset[0].VAT)
+                // setOverallTotalPricess(res.data.recordset[0].TOTAL_AMOUNT)
                 const RequestDatever = res.data.recordset[0].RequestDate
                 const WarrantyendDatese = moment(RequestDatever).format('YYYY-MM-DD')
                 setDateRequiredvalid(RequestDatever)
@@ -707,6 +708,9 @@ function Viewpurchaserequest() {
             VAT: newVAT,
         }));
     }
+    useEffect(() => {
+        setOverallTotalPricess(initialOverallTotalPrice + vatget);
+    }, [initialOverallTotalPrice])
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
