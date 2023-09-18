@@ -211,8 +211,10 @@ function Employeemaster() {
 
         );
     }
-
-    const filteredData = getdata && getdata.map((row, index) => {
+    const [EmployeeIDfilter, setEmployeeIDfilter] = useState('')
+    const filteredData = getdata && getdata.filter(row => (
+        (!EmployeeIDfilter || row.EmployeeID.toLowerCase().includes(EmployeeIDfilter.toLowerCase()))
+    )).map((row, index) => {
         const fullName = `${row.Firstname} ${row.Middlename} ${row.Lastname}`.trim();
         console.log(fullName);
         return {
@@ -309,7 +311,30 @@ function Employeemaster() {
                                     </div>
 
                                     <hr className="color3 line" />
+                                    <div className="row mx-auto my-auto formsection">
+                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-4 ">
+                                            <div className='emailsection position-relative d-grid my-2'>
+                                                <label className='lablesection color3 text-start mb-1 filter-label'>
+                                                    Employee ID</label>
 
+                                                <input
+                                                    types='text'
+                                                    id='Employeenumber'
+                                                    placeholder="Select Employee ID"
+                                                    value={EmployeeIDfilter}
+                                                    className='rounded inputsection py-2'
+                                                    onChange={(e) => setEmployeeIDfilter(e.target.value)}
+                                                ></input>
+                                                <p
+                                                    className='position-absolute text-end serachicon'
+                                                >
+                                                    <SearchOutlined className=' serachicon' />
+                                                </p>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
                                     <div style={{ height: 420, width: '100%' }}>
                                         <DataGrid
                                             rows={filteredData}

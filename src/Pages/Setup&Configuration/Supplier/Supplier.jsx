@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
+import { SearchOutlined } from '@ant-design/icons';
 
 function Employeemaster() {
     const navigate = useNavigate();
@@ -196,8 +197,10 @@ function Employeemaster() {
 
         );
     }
-
-    const filteredData = getdata && getdata.map((row, index) => ({
+    const [VendorIDfilter, setVendorIDfilter] = useState('')
+    const filteredData = getdata && getdata.filter(row => (
+        (!VendorIDfilter || row.VendorID.toLowerCase().includes(VendorIDfilter.toLowerCase()))
+    )).map((row, index) => ({
         id: index + 1,
         VendorID: row.VendorID,
         VendorName: row.VendorName,
@@ -247,7 +250,30 @@ function Employeemaster() {
                                     </div>
 
                                     <hr className="color3 line" />
+                                <div className="row mx-auto my-auto formsection">
+                                    <div className="col-sm-10 col-md-4 col-lg-4 col-xl-4 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label className='lablesection color3 text-start mb-1 filter-label'>
+                                                Vendor ID</label>
 
+                                            <input
+                                                types='text'
+                                                id='Employeenumber'
+                                                placeholder="Select Vendor ID"
+                                                value={VendorIDfilter}
+                                                className='rounded inputsection py-2'
+                                                onChange={(e) => setVendorIDfilter(e.target.value)}
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
+                                        </div>
+                                    </div>
+                                  
+
+                                </div>
                                     <div style={{ height: 420, width: '100%' }}>
                                         <DataGrid
                                             rows={filteredData}
