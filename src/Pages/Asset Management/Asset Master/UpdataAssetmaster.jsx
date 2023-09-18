@@ -606,7 +606,7 @@ const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState('')
                                                   AssetItemDescription: e.target.value
                                               }))
                                           }}
-                                          disabled
+                                          readOnly
                                           className='rounded inputsection py-2'
                                           placeholder='Enter Asset Item Discription'
                                           required

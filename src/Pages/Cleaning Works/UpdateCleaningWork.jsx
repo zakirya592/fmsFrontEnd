@@ -4,12 +4,9 @@ import AppBar from '@mui/material/AppBar'
 import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-import excel from "../../Image/excel.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import "react-phone-number-input/style.css";
-import Create from '../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Siderbar from '../../Component/Siderbar/Siderbar'
@@ -23,7 +20,6 @@ function UpdateCleaningWork() {
     const navigate = useNavigate();
     let { userId } = useParams();
     console.log(userId);
-    const [WorkRequest, setWorkRequest] = useState('')
     //dropdowns
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
@@ -135,6 +131,22 @@ function UpdateCleaningWork() {
                     Lastname,
                     Middlename,
                     // RequestNumber
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+            const RequestNumberss = res.data.recordsets[0][0].RequestNumber
+            axios.post(`/api/getworkRequestsecond`, {
+                'RequestNumber': RequestNumberss,
+            }).then((res) => {
+                console.log('======++++', res.data)
+                const {
+                    RequestStatus,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    RequestStatus,
                 }));
             })
                 .catch((err) => {
@@ -748,12 +760,7 @@ function UpdateCleaningWork() {
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Update Cleaning Works</p>
-                                    <div className="d-flex">
-                                        {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
-                                        <Create />
-                                        <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                        <button type="button" class="btn btn-outline-primary color2"><img src={excel} /> Export</button>
-                                    </div>
+                                    
                                 </div>
 
                                 <hr className='color3 line' />

@@ -827,7 +827,7 @@ function WorkOrder() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Work Request Number'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
@@ -1100,7 +1100,7 @@ function WorkOrder() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Assign to Employee ID'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
@@ -1306,7 +1306,7 @@ function WorkOrder() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Completed By Employee ID'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (

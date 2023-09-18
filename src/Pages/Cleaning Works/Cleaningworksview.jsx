@@ -145,6 +145,22 @@ function Cleaningworksview() {
                 .catch((err) => {
                     //// console.log(err);;
                 });
+            const RequestNumberss = res.data.recordsets[0][0].RequestNumber
+            axios.post(`/api/getworkRequestsecond`, {
+                'RequestNumber': RequestNumberss,
+            }).then((res) => {
+                console.log('======++++', res.data)
+                const {
+                    RequestStatus,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    RequestStatus,
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
             // requestdata
             const requestda = res.data.recordsets[0][0].RequestDateTime
             const reqdata = moment(requestda).format('YYYY-MM-DD h:mm A')
@@ -667,13 +683,8 @@ function Cleaningworksview() {
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
-                                    <p className='color1 workitoppro my-auto'>View/Modify Cleaning Works</p>
-                                    <div className="d-flex">
-                                        {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
-                                        <Create />
-                                        <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                        <button type="button" class="btn btn-outline-primary color2"><img src={excel} /> Export</button>
-                                    </div>
+                                    <p className='color1 workitoppro my-auto'>View Cleaning Works</p>
+                                    
                                 </div>
 
                                 <hr className='color3 line' />
@@ -763,17 +774,18 @@ function Cleaningworksview() {
                                                 id="completeemployee"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
+                                                readOnly
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber
-                                                        ? option.RequestNumber + ' - ' + option.workStatus
+                                                        ? option.RequestNumber + ' - ' + option.RequestStatus
                                                         : ''
                                                 }
                                                 getOptionSelected={(option, value) => option.RequestNumber === value.RequestNumber}
                                                 onChange={handleGPCAutoCompleteChangecompleteemployee}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
-                                                        {option.RequestNumber} - {option.workStatus}
+                                                        {option.RequestNumber} - {option.RequestStatus}
                                                     </li>
                                                 )}
                                                 value={value}

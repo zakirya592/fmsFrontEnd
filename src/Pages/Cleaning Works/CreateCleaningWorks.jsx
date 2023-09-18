@@ -728,7 +728,7 @@ function CreateCleaningWorks() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Work Request Number'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (

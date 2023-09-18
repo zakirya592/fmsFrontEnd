@@ -750,7 +750,7 @@ function CreatePreventiveMaintainance() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Work Request Number'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
@@ -790,7 +790,7 @@ function CreatePreventiveMaintainance() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Employdata' className='lablesection color3 text-start mb-1'>
-                                                Request Date/Time<span className='star'>*</span>
+                                                Request Date/Time
                                             </label>
                                             <input
                                                 type="datetime-local"

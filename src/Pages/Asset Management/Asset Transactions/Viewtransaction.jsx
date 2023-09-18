@@ -745,7 +745,7 @@ function Viewtransaction() {
                                                         AssetItemTagID: e.target.value
                                                     }))
                                                 }}
-                                                disabled
+                                                readOnly
                                                 // onKeyDown={handleKeyPress}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter/Generate Tag Number'

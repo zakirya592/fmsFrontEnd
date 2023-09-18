@@ -116,8 +116,6 @@ function UpdatePreventive() {
                 SchedulingPriority,
                 AssetItemTagID,
             }));
-            // setScheduleendtime(res.data.recordsets[0][0].ScheduleEndDateTime)
-            // setSchedulestarttime(res.data.recordsets[0][0].ScheduleStartDateTime)
 
             const Emplid = res.data.recordsets[0][0].EmployeeID
             axios.post(`/api/getworkRequest_by_EPID`, {
@@ -161,6 +159,23 @@ function UpdatePreventive() {
                 ...prevValue,
                 RequestDateTime: requestda
             }))
+
+            const RequestNumberss = res.data.recordsets[0][0].RequestNumber
+            axios.post(`/api/getworkRequestsecond`, {
+                'RequestNumber': RequestNumberss,
+            }).then((res) => {
+                console.log('======++++', res.data)
+                const {
+                    RequestStatus,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    RequestStatus,
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
 
             // Start data
             const startdat = res.data.recordsets[0][0].ScheduleStartDateTime
@@ -876,6 +891,7 @@ function UpdatePreventive() {
                                                 id="completeemployee"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
+                                                readOnly
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber

@@ -157,6 +157,23 @@ function PreventiveView() {
                     //// console.log(err);;
                 });
 
+            const RequestNumberss = res.data.recordsets[0][0].RequestNumber
+            axios.post(`/api/getworkRequestsecond`, {
+                'RequestNumber': RequestNumberss,
+            }).then((res) => {
+                console.log('======++++', res.data)
+                const {
+                    RequestStatus,
+                } = res.data.recordsets[0][0];
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    RequestStatus,
+                }));
+            })
+                .catch((err) => {
+                    //// console.log(err);;
+                });
+
             // requestdata
             const requestda = res.data.recordsets[0][0].RequestDateTime
             const reqdata = moment(requestda).format('YYYY-MM-DD h:mm A')
@@ -822,6 +839,7 @@ function PreventiveView() {
                                                 id="completeemployee"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
+                                                readOnly
                                                 options={unitCodecompleteemployee}
                                                 getOptionLabel={(option) =>
                                                     option?.RequestNumber

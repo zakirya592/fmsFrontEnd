@@ -444,7 +444,7 @@ function Mainworkordeer() {
                         <input
                           types='text'
                           id='Employeenumber'
-                          placeholder="Select Employee # "
+                          placeholder="Enter Order Number "
                           value={requestByEmployee}
                           className='rounded inputsection py-2'
                           onChange={(e) => setrequestByEmployee(e.target.value)}
