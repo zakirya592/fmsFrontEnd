@@ -193,6 +193,7 @@ function CreateSupplier() {
                                         <input
                                             type="text"
                                             id="VendorID"
+                                            readOnly
                                             value={value.VendorID}
                                             onChange={(e) => handleChange("VendorID", e.target.value)}
                                             className="rounded inputsection py-2"
