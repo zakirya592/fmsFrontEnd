@@ -800,7 +800,7 @@ useEffect(() => {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Purchase Order'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
