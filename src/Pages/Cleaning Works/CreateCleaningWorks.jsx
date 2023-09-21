@@ -605,12 +605,7 @@ function CreateCleaningWorks() {
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Create Cleaning Works</p>
-                                    <div className="d-flex">
-                                        {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
-                                        <Create />
-                                        <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button>
-                                        <button type="button" class="btn btn-outline-primary color2"><img src={excel} /> Export</button>
-                                    </div>
+                                   
                                 </div>
 
                                 <hr className='color3 line' />
