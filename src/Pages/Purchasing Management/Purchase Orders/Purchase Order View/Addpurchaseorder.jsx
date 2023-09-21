@@ -217,8 +217,66 @@ function Addpurchaseorder() {
         page: 0,
     });
 
-    const handlePrint = () => {
-        window.print(); // This triggers the browser's print dialog
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'SEQ': index + 1,
+            'Asset Item Description': row.AssetItemDescription,
+            'Asset Item Group': row.AssetItemGroup,
+            'Asset Category': row.AssetCategory,
+            'Asset SubCategory': row.AssetSubCategory,
+            'OnHandQty': row.OnHandQty,
+            'Last PurchaseDate': row.LastPurchaseDate,
+        }));
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table border="1">
+        <tr>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">Asset Item Description</th>
+          <th style="${headerStyle}">Asset Item Group</th>
+          <th style="${headerStyle}">Asset Category</th>
+          <th style="${headerStyle}">Asset SubCategory</th>
+          <th style="${headerStyle}">OnHandQty</th>
+          <th style="${headerStyle}">Last PurchaseDate</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['SEQ']}</td>
+            <td>${row['Asset Item Description']}</td>
+            <td>${row['Asset Item Group']}</td>
+            <td>${row['Asset Category']}</td>
+            <td>${row['Asset SubCategory']}</td>
+            <td>${row['OnHandQty']}</td>
+            <td>${row['Last PurchaseDate']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
     };
 
     const Navigatepage = () => {
@@ -254,7 +312,7 @@ function Addpurchaseorder() {
                                         <p className="color1 workitoppro my-auto">
                                             Purchase Order</p>
                                         <div className="d-flex">
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={handlePrint}>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
