@@ -274,18 +274,21 @@ function Addassetcode() {
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
         // (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
         (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
-    )).map((row, indes) => ({
-        ...row,
-        id: indes + 1,
-        AssetItemDescription: row.AssetItemDescription,
-        AssetItemGroup: row.AssetItemGroup,
-        AssetCategory: row.AssetCategory,
-        AssetSubCategory: row.AssetSubCategory,
-        OnHandQty: row.OnHandQty,
-        LastPurchaseDate: row.LastPurchaseDate,
-        Manufacturer: row.Manufacturer ,//this Both id  is to display a work types desc //ok
-        Model: row.Model
-    }))
+    )).map((row, index) => {
+        const isLastPurchaseDateValid = !isNaN(Date.parse(row.LastPurchaseDate));
+        return {
+            ...row,
+            id: index + 1,
+            AssetItemDescription: row.AssetItemDescription,
+            AssetItemGroup: row.AssetItemGroup,
+            AssetCategory: row.AssetCategory,
+            AssetSubCategory: row.AssetSubCategory,
+            OnHandQty: row.OnHandQty,
+            LastPurchaseDate: isLastPurchaseDateValid ? row.LastPurchaseDate : '', // Display empty string for invalid dates
+            Manufacturer: row.Manufacturer,
+            Model: row.Model
+        };
+    });
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,

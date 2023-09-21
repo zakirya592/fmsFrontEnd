@@ -184,6 +184,18 @@ function CreatePreventiveMaintainance() {
             .catch((err) => {
                 console.log(err);;
             });
+
+        axios.get(`/api/AssetType_GET_BYAssetType/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:++++++====', res.data);
+                setAssetCategory(res.data.recordset[0].AssetCategory)
+                setManufacturer(res.data.recordset[0].Manufacturer)
+                setModel(res.data.recordset[0].Model)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
     }
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
@@ -1011,6 +1023,7 @@ function CreatePreventiveMaintainance() {
                                                 onChange={e => {
                                                     setAssetCategory(e.target.value)
                                                 }}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Category '
                                                 required
@@ -1034,6 +1047,7 @@ function CreatePreventiveMaintainance() {
                                                 className='rounded inputsection py-2'
                                                 placeholder='Manufacturer'
                                                 required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>
@@ -1054,6 +1068,7 @@ function CreatePreventiveMaintainance() {
                                                 className='rounded inputsection py-2'
                                                 placeholder='Model'
                                                 required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>

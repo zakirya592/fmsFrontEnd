@@ -150,6 +150,7 @@ function UpdatePreventive() {
                 .catch((err) => {
                     console.log(err);
                 });
+                
             // requestdata
             const requestda = res.data.recordsets[0][0].RequestDateTime
             const reqdata = moment(requestda).format('YYYY-MM-DD h:mm A')
@@ -196,6 +197,17 @@ function UpdatePreventive() {
                 .then((res) => {
                     console.log('-----:', res.data);
                     setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
+            axios.get(`/api/AssetType_GET_BYAssetType/${AssetItemTagIDdesc}`)
+                .then((res) => {
+                    console.log('-----:++++++====', res.data);
+                    setAssetCategory(res.data.recordset[0].AssetCategory)
+                    setManufacturer(res.data.recordset[0].Manufacturer)
+                    setModel(res.data.recordset[0].Model)
 
                 })
                 .catch((err) => {
@@ -351,6 +363,17 @@ function UpdatePreventive() {
             .then((res) => {
                 console.log('-----:', res.data);
                 setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
+        axios.get(`/api/AssetType_GET_BYAssetType/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:++++++====', res.data);
+                setAssetCategory(res.data.recordset[0].AssetCategory)
+                setManufacturer(res.data.recordset[0].Manufacturer)
+                setModel(res.data.recordset[0].Model)
 
             })
             .catch((err) => {
@@ -1201,7 +1224,7 @@ function UpdatePreventive() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Category '
-                                                required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>
@@ -1221,7 +1244,7 @@ function UpdatePreventive() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Manufacturer'
-                                                required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>
@@ -1241,7 +1264,7 @@ function UpdatePreventive() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Model'
-                                                required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>

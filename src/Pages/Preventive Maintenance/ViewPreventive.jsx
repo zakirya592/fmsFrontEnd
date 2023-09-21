@@ -215,6 +215,17 @@ function PreventiveView() {
                 .catch((err) => {
                     console.log(err);;
                 });
+            axios.get(`/api/AssetType_GET_BYAssetType/${AssetItemTagIDdesc}`)
+                .then((res) => {
+                    console.log('-----:++++++====', res.data);
+                    setAssetCategory(res.data.recordset[0].AssetCategory)
+                    setManufacturer(res.data.recordset[0].Manufacturer)
+                    setModel(res.data.recordset[0].Model)
+
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
             const workaout = res.data.recordsets[0][0].WorkType
             axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                 .then((res) => {
@@ -377,6 +388,17 @@ function PreventiveView() {
             .catch((err) => {
                 console.log(err);;
             });
+        axios.get(`/api/AssetType_GET_BYAssetType/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:++++++====', res.data);
+                setAssetCategory(res.data.recordset[0].AssetCategory)
+                setManufacturer(res.data.recordset[0].Manufacturer)
+                setModel(res.data.recordset[0].Model)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            }); 
     }
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         console.log('==========+++++++======', newInputValue)
@@ -1149,7 +1171,7 @@ function PreventiveView() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Asset Category '
-                                                required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>
@@ -1169,7 +1191,7 @@ function PreventiveView() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Manufacturer'
-                                                required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>
@@ -1189,7 +1211,7 @@ function PreventiveView() {
                                                 }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Model'
-                                                required
+                                                readOnly
                                             ></input>
                                         </div>
                                     </div>

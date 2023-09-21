@@ -122,6 +122,17 @@ function Createtransaction() {
             .catch((err) => {
                 console.log(err);;
             });
+        axios.get(`/api/AssetType_GET_BYAssetType/${Deptnale}`)
+            .then((res) => {
+                console.log('-----:++++++====', res.data);
+                setmanufacturer(res.data.recordset[0].Manufacturer)
+                setModel(res.data.recordset[0].Model)
+                setBrand(res.data.recordset[0].Brand)
+
+            })
+            .catch((err) => {
+                console.log(err);;
+            });
     }
     // handleProvinceChangeasassetCategory
     const handleProvinceChangeasassetCategory = (e) => {
@@ -1145,6 +1156,7 @@ function Createtransaction() {
                                                 onChange={e => {
                                                     setmanufacturer(e.target.value)
                                                 }}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Manufacturer'
                                                 required
@@ -1166,6 +1178,7 @@ function Createtransaction() {
                                                 onChange={e => {
                                                     setModel(e.target.value)
                                                 }}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Model'
                                                 required

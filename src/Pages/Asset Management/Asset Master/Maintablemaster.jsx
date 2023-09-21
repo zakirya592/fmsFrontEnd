@@ -160,9 +160,6 @@ function Maintablemaster() {
         setSelectedRowIds(selectedRowData);
     };
 
-    // const handleRowClick = (selectedRows) => {
-    //     console.log(selectedRow)
-    // }
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
@@ -322,21 +319,24 @@ function Maintablemaster() {
 
     const filteredRows = getdata && getdata.filter(row => (
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-        // (!requestByEmployee || row.AssetItemDescription.includes(requestByEmployee))
             (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
-    )).map((row, index) => ({
-        ...row,
-        id: index + 1,
-        AssetItemDescription: row.AssetItemDescription,
-        AssetItemGroup: row.AssetItemGroup,
-        AssetCategory: row.AssetCategory,
-        AssetSubCategory: row.AssetSubCategory,
-        RequestDateTime: row.RequestDateTime,
-        WorkType: row.WorkType,
-        OnHandQty: row.OnHandQty, //this Both id  is to display a work types desc //ok
-        LastPurchaseDate: row.LastPurchaseDate ,
-        PurchaseAmount: row.PurchaseAmount,
-    }))
+    )).map((row, index) => {
+        const isLastPurchaseDateValid = !isNaN(Date.parse(row.LastPurchaseDate));
+        return {
+            ...row,
+            id: index + 1,
+            AssetItemDescription: row.AssetItemDescription,
+            AssetItemGroup: row.AssetItemGroup,
+            AssetCategory: row.AssetCategory,
+            AssetSubCategory: row.AssetSubCategory,
+            RequestDateTime: row.RequestDateTime,
+            WorkType: row.WorkType,
+            OnHandQty: row.OnHandQty, //this Both id  is to display a work types desc //ok
+            LastPurchaseDate: isLastPurchaseDateValid ? row.LastPurchaseDate : '',
+            PurchaseAmount: row.PurchaseAmount,
+        };
+       
+    })
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
