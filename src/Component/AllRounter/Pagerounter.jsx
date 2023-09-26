@@ -99,6 +99,9 @@ import Addpurchaseorder from '../../Pages/Purchasing Management/Purchase Orders/
 import AddGoodsreceiption from '../../Pages/Purchasing Management/Goods Receipts/Create Good Reacition/AddGoodsreceiption'
 import Addgoodreturn from '../../Pages/Purchasing Management/Goods Return/Good Return Create/Addgoodreturn'
 import Stockinventory from '../../Pages/Warehouse Management/Stock Master Inventory/Stockinventory'
+import Recorderminimul from '../../Pages/Warehouse Management/Reorder/Recorderminimul'
+import Expiredwarranty from '../../Pages/Warehouse Management/Expired Warranty Ends/Expiredwarranty'
+import Transferloaction from '../../Pages/Warehouse Management/Transfer Locations/Transferloaction'
 
 function Pagerounter() {
 
@@ -274,7 +277,14 @@ function Pagerounter() {
           <Route exact path="/Addgoodreturn" element={<Addgoodreturn />} />
 
           {/* Warehouse Management */}
+          {/* Stockinventory */}
           <Route exact path="/Stockinventory" element={<Stockinventory />} />
+          {/* Recorderminimul */}
+          <Route exact path="/ReorderMinimumLevels" element={<Recorderminimul />} />
+          {/* Expiredwarranty */}
+          <Route exact path="/Expiredwarranty" element={<Expiredwarranty />} />
+          {/* Transferloaction */}
+          <Route exact path="/TransferLocation" element={<Transferloaction />} />
 
         </Routes>
       </BrowserRouter>

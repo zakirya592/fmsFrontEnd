@@ -73,7 +73,7 @@ function Warehousesidebar() {
                     <List className='setupsidebar'>
                         {['.Transfer Locations '].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                // navigate('/Purachaseorderview')
+                                navigate('/TransferLocation')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -85,7 +85,7 @@ function Warehousesidebar() {
                     <List className='setupsidebar'>
                         {['.Reorder/Minimum Levels'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                // navigate('/Goodsreceiptsview')
+                                navigate('/ReorderMinimumLevels')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -97,7 +97,7 @@ function Warehousesidebar() {
                     <List className='setupsidebar'>
                         {['.Expired/Warrent Ends Items'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                // navigate('/GoodsreturnView')
+                                navigate('/Expiredwarranty')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />

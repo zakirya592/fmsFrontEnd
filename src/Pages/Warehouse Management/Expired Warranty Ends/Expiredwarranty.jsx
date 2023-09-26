@@ -22,7 +22,7 @@ import axios from 'axios';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
 
-function Stockinventory() {
+function Expiredwarranty() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
     const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -38,7 +38,7 @@ function Stockinventory() {
                 console.log(err);
             });
     }, [])
-    
+
 
     const handlePrintTable = (tableData) => {
         const printWindow = window.open('', '_blank');
@@ -169,8 +169,10 @@ function Stockinventory() {
         { field: 'AssetCategory', headerName: 'ASSET CATGORY', width: 180 },
         { field: 'AssetSubCategory', headerName: 'ASSET SUB_CATGORY', width: 180 },
         { field: 'OnHandQty', headerName: 'ON-HAND QTY', width: 150 },
+        { field: 'ReOrderLevel', headerName: 'RE-ORDER', width: 200 },
+        { field: 'MinimumOrderLevel', headerName: 'MINIMUM ORDER LEVEL', width: 200 },
         { field: 'LastPurchaseDate', headerName: 'LAST PURCHASE DATE', width: 200 },
-        // { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
+        { field: 'WarrantyEndDate', headerName: 'WARRANTY END DATE', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
 
     ];
@@ -243,7 +245,7 @@ function Stockinventory() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem > {/* onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)} */}
-                   <span style={{ paddingRight: '18px' }} >View</span>
+                        <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
                     {/* <MenuItem onClick={() => navigate(`/Updata/Assetmaster/${params.row.AssetItemDescription}`)}> */}
@@ -273,6 +275,7 @@ function Stockinventory() {
         (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
     )).map((row, index) => {
         const isLastPurchaseDateValid = !isNaN(Date.parse(row.LastPurchaseDate));
+        const isWarrantyEndDatevalid = !isNaN(Date.parse(row.WarrantyEndDate));
         return {
             ...row,
             id: index + 1,
@@ -283,7 +286,10 @@ function Stockinventory() {
             RequestDateTime: row.RequestDateTime,
             WorkType: row.WorkType,
             OnHandQty: row.OnHandQty, //this Both id  is to display a work types desc //ok
+            MinimumOrderLevel: row.MinimumOrderLevel,
+            ReOrderLevel: row.ReOrderLevel,
             LastPurchaseDate: isLastPurchaseDateValid ? row.LastPurchaseDate : '',
+            WarrantyEndDate: isWarrantyEndDatevalid ? row.WarrantyEndDate : '',
         };
 
     })
@@ -292,7 +298,6 @@ function Stockinventory() {
         pageSize: 25,
         page: 0,
     });
-
 
     return (
         <>
@@ -307,7 +312,7 @@ function Stockinventory() {
                                         <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
                                             navigate('/')
                                         })} />
-                                        <p className="text-center my-auto ms-5">STOCK MASTER INVENTORY</p>
+                                        <p className="text-center my-auto ms-5">EXPIRED/WARRANTY END ITEMS</p>
                                     </Typography>
                                 </Toolbar>
                             </AppBar>
@@ -316,7 +321,7 @@ function Stockinventory() {
                                 <div className="py-3">
                                     <div className="d-flex justify-content-between my-auto">
                                         <p className="color1 workitoppro my-auto">
-                                            Stocks Inventory</p>
+                                            Expired/Warrany Ends</p>
                                         <div className="d-flex">
                                             <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
@@ -332,7 +337,7 @@ function Stockinventory() {
                                     </div>
 
                                     <hr className="color3 line" />
-                                 
+
                                     {/* Search Fields */}
                                     <div className="row mx-auto formsection">
                                         <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
@@ -348,7 +353,7 @@ function Stockinventory() {
                                                     className='rounded inputsection py-2'
                                                     onChange={(e) => setrequestByEmployee(e.target.value)}
                                                 ></input>
-                                               
+
                                             </div>
                                         </div>
 
@@ -408,7 +413,7 @@ function Stockinventory() {
 
                                         </div>
                                     </div>
-                                        <div className="d-flex justify-content-between mt-3 mb-2">
+                                        <div className="d-flex justify-content-between mt-3">
                                             <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                                 navigate('/')
                                             })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
@@ -424,4 +429,4 @@ function Stockinventory() {
     );
 }
 
-export default Stockinventory;
+export default Expiredwarranty;
