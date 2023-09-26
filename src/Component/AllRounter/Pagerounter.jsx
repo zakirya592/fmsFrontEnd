@@ -64,7 +64,6 @@ import NewEmployeemaster from './setup configuration/Employee Master/NewEmployee
 import CreateSupplier from './setup configuration/Supplier/CreateSupplier'
 import ViewSupplier from '../../Pages/Setup&Configuration/Supplier/ViewSupplier'
 import UpdateSupplier from '../../Pages/Setup&Configuration/Supplier/UpdateSupplier'
-
 import Updataemployeemaster from '../../Pages/Setup&Configuration/Employee Maste/Updataemployeemaster'
 import PurchaserequestView from '../../Pages/Purchasing Management/Purchase Request/Purchase Request View/PurchaserequestView'
 import Purachaseview from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Purachaseview'
@@ -99,6 +98,7 @@ import AddPurchaserequest from '../../Pages/Purchasing Management/Purchase Reque
 import Addpurchaseorder from '../../Pages/Purchasing Management/Purchase Orders/Purchase Order View/Addpurchaseorder'
 import AddGoodsreceiption from '../../Pages/Purchasing Management/Goods Receipts/Create Good Reacition/AddGoodsreceiption'
 import Addgoodreturn from '../../Pages/Purchasing Management/Goods Return/Good Return Create/Addgoodreturn'
+import Stockinventory from '../../Pages/Warehouse Management/Stock Master Inventory/Stockinventory'
 
 function Pagerounter() {
 
@@ -202,8 +202,6 @@ function Pagerounter() {
           <Route exact path='/View/Supplier/:userId' element={<ViewSupplier />} />
           <Route exact path='/Update/Supplier/:userId' element={<UpdateSupplier />} />
 
-
-
           {/* ================ Preventive Maintenance* ==================*/}
           <Route exact path='/Preventive' element={<MainPreventiveMaintenance />} />
           <Route exact path='/CreatePreventive' element={<CreatePreventiveMaintenance />} />
@@ -215,12 +213,11 @@ function Pagerounter() {
           <Route exact path='/Cleaning/view/:userId' element={<Cleaningworksview />} />
           <Route exact path='/Cleaning/update/:userId' element={<UpdateCleaningWork />} />
 
-
           {/* Asset Management */}
           <Route exact path='/AssetMasters' element={<Maintablemaster />} />
           <Route exact path='/View/Assetmaster/:userId' element={<ViewAssmaster />} />
           <Route exact path='/Updata/Assetmaster/:userId' element={<UpdataAssetmaster />} />
-
+          {/* AssetTransaction */}
           <Route exact path='AssetTransaction' element={<Maintransactiontable />} />
           <Route exact path='/Create/Transaction' element={<Createtransaction />} />
           <Route exact path='/View/transaction/:userId' element={<Viewtransaction />} />
@@ -269,13 +266,16 @@ function Pagerounter() {
           <Route exact path="/Update/Goodsreceipt/:userId" element={<Updatagoodreceipt />} />
           <Route exact path="/AddGoodsReceipts" element={<AddGoodsreceiption />} />
 
-
           {/* GoodsreturnView */}
           <Route exact path="/Create/Goodsreturn" element={<Creategoodreturn />} />
           <Route exact path="/GoodsreturnView" element={<Tablegoodreturn />} />
           <Route exact path="/Update/GoodReturn/:userId" element={<Updatagoodreturn />} />
           <Route exact path="/View/GoodReturn/:userId" element={<GoodsreturnView />} />
           <Route exact path="/Addgoodreturn" element={<Addgoodreturn />} />
+
+          {/* Warehouse Management */}
+          <Route exact path="/Stockinventory" element={<Stockinventory />} />
+
         </Routes>
       </BrowserRouter>
     </>

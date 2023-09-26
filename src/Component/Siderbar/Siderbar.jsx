@@ -32,6 +32,7 @@ import UserManagementSidebar from '../../Pages/UserManagement/UserManagementSide
 import Assetmanagement from './Assetmanagement';
 import Purchasingsidbard from './Purchasing siderbar/Purchasingsidbard';
 import { MenuItem, Menu } from "@mui/material"
+import Warehousesidebar from './Warehouse Management/Warehousesidebar';
 const drawerWidth = 250;
 
 
@@ -40,6 +41,7 @@ function Siderbar(props) {
     const [showUserSidebar, setShowUserSidebar]=useState(false);
     const [AssetmanagementSidebar, setAssetmanagementSidebar] = useState(false);
     const [Purchasingmanagment, setPurchasingmanagment] = useState(false)
+    const [WarehouseManagementstate, setWarehouseManagementstate] = useState(false)
     const handleClick = () => {
         setShowSidebar(!showSidebar);
       };
@@ -53,6 +55,12 @@ function Siderbar(props) {
     const handerPurchasingmanagmentsidebar = () => {
         setPurchasingmanagment(!Purchasingmanagment)
     }
+
+    const WarehouseManagementheandle = () => {
+        setWarehouseManagementstate(!WarehouseManagementstate)
+    }
+
+
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClicked = (event) => {
@@ -253,9 +261,7 @@ function Siderbar(props) {
 
                     <List>
                         {['Warehouse Management'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                // navigate('/WorkRequest')
-                            })}>
+                            <ListItem key={text} disablePadding onClick={WarehouseManagementheandle}>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index % 2 === 0 ? <img src={WarehouseManagement} className="sidebaricon my-auto text-center" /> : <img src={WarehouseManagement} className="sidebaricon my-auto" />}
@@ -265,6 +271,7 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
+                    {WarehouseManagementstate && <Warehousesidebar />}
 
                     <List>
                         {['Dashboard'].map((text, index) => (
