@@ -193,6 +193,7 @@ function Pagerounter() {
           <Route exact path='/Create/Employeemaster' element={<NewEmployeemaster />} />
           <Route exact path='/View/Employeemaster/:userId' element={<Viewemployeemaster />} />
           <Route exact path='/Updata/Employeemaster/:userId' element={<Updataemployeemaster />} />
+          
           {/*WarrantyPeriod*/}
           <Route exact path='/WarrantyPeriod' element={<WarrantyPeriod />} />
           {/* Employee Status */}
@@ -210,6 +211,7 @@ function Pagerounter() {
           <Route exact path='/CreatePreventive' element={<CreatePreventiveMaintenance />} />
           <Route exact path='/Preventive/view/:userId' element={<ViewPreventive />} />
           <Route exact path='/Preventive/update/:userId' element={<UpdatePreventive />} />
+
           {/*=====================  View/Modify Cleaning Works* ===================== */}
           <Route exact path='/Cleaning' element={<MainCleaningWork />} />
           <Route exact path='/CreateCleaningWork' element={<CreateCleaningWork />} />
@@ -232,13 +234,11 @@ function Pagerounter() {
           {/* User Authourity Levels */}
           <Route exact path="/userauthority" element={<UserAuthority />} />
 
-
           {/* User Credentials  */}
           <Route exact path="/Create/userauthority" element={<Createusercredential />} />
           <Route exact path="/userCredentials" element={<UserCredentials />} />
           <Route exact path='/Updata/usercredential/:userId' element={<Updateusercredential />} />
           <Route exact path='/View/usercredential/:userId' element={<Viewusercredential />} />
-
 
           {/* userSystemAccess */}
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
