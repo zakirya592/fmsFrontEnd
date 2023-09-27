@@ -102,10 +102,10 @@ function Expiredwarranty() {
 
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/AssetsMaster_GET_LIST`, {
+        axios.get(`/api/Asset_WarrantyEndDate`, {
         },)
             .then((res) => {
-                console.log('TO get the list', res);
+                console.log('Asset Warranty EndDate get the list', res);
                 setgetdata(res.data.recordset)
             })
             .catch((err) => {
