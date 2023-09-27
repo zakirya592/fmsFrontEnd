@@ -31,6 +31,8 @@ function Mainworkordeer() {
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [getdata, setgetdata] = useState([])
+
+    const [RequestStatusLIST, setRequestStatusLIST] = useState([])
     // print button
     const handlePrintTable = (tableData) => {
         const printWindow = window.open('', '_blank');
@@ -223,7 +225,6 @@ function Mainworkordeer() {
     }
     const [filteredRows, setFilteredRows] = useState([]);
 
-
     useEffect(() => {
         const filteredRows = (getdata || []).filter(row => (
             (!RequestStatusFilterValue || row.WorkStatus === RequestStatusFilterValue) &&
@@ -312,7 +313,6 @@ function Mainworkordeer() {
             });
     }, [getdata, RequestStatusFilterValue, requestByEmployee]);
 
-
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
         page: 0,
@@ -323,9 +323,13 @@ function Mainworkordeer() {
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
     useEffect(() => {
-        console.log("Testing.....")
-        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
-        console.log(rowSelectionModel)  // ....clear....???
+        axios.get(`/api/RequestStatus_LIST`).then((res) => {
+            setRequestStatusLIST(res.data.recordsets[0])
+            console.log(res.data);
+        })
+            .catch((err) => {
+                console.log(err);
+            });
     }, [])
 
     const [statuscheck, setstatuscheck] = useState()
@@ -469,9 +473,13 @@ function Mainworkordeer() {
                           onChange={(e) => setRequestStatusFilterValue(e.target.value)}
                         >
                           <option value=''>Select Status</option>
-                          <option value='Open'>Open</option>
-                          <option value='Closed'>Closed</option>
-                          <option value='Cancelled'>Cancelled</option>
+                                                {
+                                                    RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.RequestStatusCode}>{itme.RequestStatusCode}</option>
+                                                        )
+                                                    })
+                                                }
                         </select>
 
                       </div>
