@@ -163,6 +163,7 @@ function LocationManagement() {
   const columns = [
     { field: 'id', headerName: 'SEQ.', width: 90 },
     { field: 'WorkOrderNumber', headerName: 'WORK ORDER#', width: 150 },
+    { field: 'WorkRequestNumber', headerName: 'Work RequestNumber', width: 150 },
     { field: 'WorkStatus', headerName: 'WORK STATUS', width: 150 },
     { field: 'WorkType', headerName: 'WORK TYPE', width: 150 },
     { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
@@ -184,6 +185,7 @@ function LocationManagement() {
       ...row,
       id: index + 1,
       WorkOrderNumber: row.WorkOrderNumber[0],
+      WorkRequestNumber: row.WorkRequestNumber,
       WorkStatus: row.WorkStatus,
       WorkType: row.WorkType,
       WorkPriority: row.WorkPriority[0],
