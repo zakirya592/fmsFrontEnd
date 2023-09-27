@@ -182,7 +182,7 @@ function Transferloaction() {
         { field: 'MinimumOrderLevel', headerName: 'MINIMUM ORDER LEVEL', width: 200 },
         { field: 'LastPurchaseDate', headerName: 'LAST PURCHASE DATE', width: 200 },
         { field: 'WarrantyEndDate', headerName: 'WARRANTY END DATE', width: 200 },
-        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
 
     ];
 
@@ -332,11 +332,11 @@ function Transferloaction() {
                                         <p className="color1 workitoppro my-auto">
                                             Transfer Location</p>
                                         <div className="d-flex">
-                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+                                            {/* <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 // navigate('/createAssetMaster')
-                                            })}><AddCircleOutlineIcon className='me-1' />Create</button>
+                                            })}><AddCircleOutlineIcon className='me-1' />Create</button> */}
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
 

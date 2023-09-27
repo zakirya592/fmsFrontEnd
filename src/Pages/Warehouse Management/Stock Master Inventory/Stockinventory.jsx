@@ -163,15 +163,15 @@ function Stockinventory() {
 
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
-        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 160 },
+        { field: 'id', headerName: 'SEQ.', width: 100 },
+        { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 250 },
+        { field: 'AssetItemGroup', headerName: 'ASSET ITEM GROUP', width: 180 },
         { field: 'AssetCategory', headerName: 'ASSET CATGORY', width: 180 },
         { field: 'AssetSubCategory', headerName: 'ASSET SUB_CATGORY', width: 180 },
         { field: 'OnHandQty', headerName: 'ON-HAND QTY', width: 150 },
         { field: 'LastPurchaseDate', headerName: 'LAST PURCHASE DATE', width: 200 },
         // { field: 'LOACTION', headerName: 'LOACTION', width: 200 },
-        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
 
     ];
 
@@ -318,11 +318,11 @@ function Stockinventory() {
                                         <p className="color1 workitoppro my-auto">
                                             Stocks Inventory</p>
                                         <div className="d-flex">
-                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+                                            {/* <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 // navigate('/createAssetMaster')
-                                            })}><AddCircleOutlineIcon className='me-1' />Create</button>
+                                            })}><AddCircleOutlineIcon className='me-1' />Create</button> */}
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
 
