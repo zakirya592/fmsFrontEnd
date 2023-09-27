@@ -61,12 +61,15 @@ function LocationManagement() {
     const printWindow = window.open('', '_blank');
     const selectedData = tableData.map((row, index) => ({
       'SEQ': index + 1,
-      'Asset Item Description': row.AssetItemDescription,
-      "AssetItem Group": row.AssetItemGroup,
-      'Asset Category': row.AssetCategory,
-      'Asset SubCategory': row.AssetSubCategory,
-      'OnHandQty': row.OnHandQty,
-      'LastPurchase Date': row.LastPurchaseDate,
+      'WorkOrderNumber': row.WorkOrderNumber,
+      "WorkStatus": row.WorkStatus,
+      'WorkType': row.WorkType,
+      'WorkPriority': row.WorkPriority,
+      'Failure Code': row.FailureCode,
+      'Scheduled DateTime': row.ScheduledDateTime,
+      'Building Code': row.BuildingCode,
+      'Location Code': row.LocationCode,
+      'Department Code': row.DepartmentCode,
     }));
     const headerStyle = 'font-weight: bold;';
 
@@ -74,22 +77,28 @@ function LocationManagement() {
       <table border="1">
         <tr>
           <th style="${headerStyle}">SEQ</th>
-          <th style="${headerStyle}">Asset Item Description</th>
-          <th style="${headerStyle}">AssetItem Group</th>
-          <th style="${headerStyle}">Asset Category</th>
-          <th style="${headerStyle}">'Asset SubCategory</th>
-          <th style="${headerStyle}">OnHandQty</th>
-          <th style="${headerStyle}">LastPurchase Date</th>
+          <th style="${headerStyle}">WorkOrderNumber</th>
+          <th style="${headerStyle}">WorkStatus</th>
+          <th style="${headerStyle}">WorkType</th>
+          <th style="${headerStyle}">'WorkPriority</th>
+          <th style="${headerStyle}">Failure Code</th>
+          <th style="${headerStyle}">Scheduled DateTime</th>
+           <th style="${headerStyle}">'Building Code</th>
+          <th style="${headerStyle}">Location Code</th>
+          <th style="${headerStyle}">Department Code</th>
         </tr>
         ${selectedData.map(row => `
           <tr>
             <td>${row['SEQ']}</td>
-            <td>${row['Asset Item Description']}</td>
-            <td>${row['AssetItem Group']}</td>
-            <td>${row['Asset Category']}</td>
-            <td>${row['Asset SubCategory']}</td>
-            <td>${row['OnHandQty']}</td>
-            <td>${row['LastPurchase Date']}</td>
+            <td>${row['WorkOrderNumber']}</td>
+            <td>${row['WorkStatus']}</td>
+            <td>${row['WorkType']}</td>
+            <td>${row['WorkPriority']}</td>
+            <td>${row['Failure Code']}</td>
+            <td>${row['Scheduled DateTime']}</td>
+               <td>${row['Building Code']}</td>
+            <td>${row['Location Code']}</td>
+            <td>${row['Department Code']}</td>
           </tr>`).join('')}
       </table>`;
 
@@ -119,7 +128,7 @@ function LocationManagement() {
 
   // List a data thougth api 
   const getapi = () => {
-    axios.get(`/api/AssetsMaster_GET_LIST`, {
+    axios.get(`/api/location_managment_All`, {
     },)
       .then((res) => {
         console.log('TO get the list', res);
@@ -152,40 +161,39 @@ function LocationManagement() {
   };
 
   const columns = [
-    { field: 'SEQ.', headerName: 'SEQ.', width: 90 },
-    { field: 'AssetItemDescription', headerName: 'WORK ORDER#', width: 150 },
-    { field: 'AssetItemGroup', headerName: 'WORK STATUS', width: 150 },
-    { field: 'AssetCategory', headerName: 'WORK TYPE', width: 150 },
-    { field: 'PRIORITY', headerName: 'PRIORITY', width: 150 },
-    { field: 'AssetSubCategory', headerName: 'SCHEDULED DATE', width: 150 },
-    { field: 'FINDING CODE', headerName: 'FINDING CODE', width: 150 },
-    { field: 'ASSIGNED TO EMP#', headerName: 'ASSIGNED TO EMP#', width: 150 },
-    { field: 'DEPARTMENT', headerName: 'DEPARTMENT', width: 150 },
-    { field: 'BUILDING', headerName: 'BUILDING', width: 150 },
-    { field: 'LOCATION', headerName: 'LOCATION', width: 150 },
+    { field: 'id', headerName: 'SEQ.', width: 90 },
+    { field: 'WorkOrderNumber', headerName: 'WORK ORDER#', width: 150 },
+    { field: 'WorkStatus', headerName: 'WORK STATUS', width: 150 },
+    { field: 'WorkType', headerName: 'WORK TYPE', width: 150 },
+    { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
+    { field: 'ScheduledDateTime', headerName: 'SCHEDULED DATE', width: 150 },
+    { field: 'FailureCode', headerName: 'FAILURE CODE', width: 150 },
+    { field: 'AssignedtoEmployeeID', headerName: 'ASSIGNED TO EMP#', width: 150 },
+    { field: 'DepartmentCode', headerName: 'DEPARTMENT', width: 150 },
+    { field: 'BuildingCode', headerName: 'BUILDING', width: 150 },
+    { field: 'LocationCode', headerName: 'LOCATION', width: 150 },
   ];
 
   const filteredRows = getdata && getdata.filter(row => (
-    (!BuildingCodefiltervalue || row.AssetItemGroup === BuildingCodefiltervalue) &&
-    (!DepartmentCodefilter || row.AssetItemGroup === DepartmentCodefilter) &&
-    (!LocationCodefiltervalue || row.AssetItemGroup === LocationCodefiltervalue)
+    (!BuildingCodefiltervalue || row.BuildingCode === BuildingCodefiltervalue) &&
+    (!DepartmentCodefilter || row.DepartmentCode === DepartmentCodefilter) &&
+    (!LocationCodefiltervalue || row.LocationCode === LocationCodefiltervalue)
   )).map((row, index) => {
-    const isLastPurchaseDateValid = !isNaN(Date.parse(row.LastPurchaseDate));
-    const isWarrantyEndDatevalid = !isNaN(Date.parse(row.WarrantyEndDate));
+    const isLastPurchaseDateValid = !isNaN(Date.parse(row.ScheduledDateTime));
     return {
       ...row,
       id: index + 1,
-      AssetItemDescription: row.AssetItemDescription,
-      AssetItemGroup: row.AssetItemGroup,
-      AssetCategory: row.AssetCategory,
-      AssetSubCategory: row.AssetSubCategory,
-      RequestDateTime: row.RequestDateTime,
+      WorkOrderNumber: row.WorkOrderNumber[0],
+      WorkStatus: row.WorkStatus,
       WorkType: row.WorkType,
-      OnHandQty: row.OnHandQty, //this Both id  is to display a work types desc //ok
-      MinimumOrderLevel: row.MinimumOrderLevel,
-      ReOrderLevel: row.ReOrderLevel,
-      LastPurchaseDate: isLastPurchaseDateValid ? row.LastPurchaseDate : '',
-      WarrantyEndDate: isWarrantyEndDatevalid ? row.WarrantyEndDate : '',
+      WorkPriority: row.WorkPriority[0],
+      WorkType: row.WorkType,
+      FailureCode: row.FailureCode,
+      AssignedtoEmployeeID: row.AssignedtoEmployeeID,
+      BuildingCode: row.BuildingCode,
+      DepartmentCode: row.DepartmentCode,
+      LocationCode: row.LocationCode,
+      ScheduledDateTime: isLastPurchaseDateValid ? row.ScheduledDateTime : '',
     };
 
   })
