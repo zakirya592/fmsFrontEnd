@@ -16,6 +16,8 @@ import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import Printer from "../../../Image/printer.jpeg"
 import Barcode from "../../../Image/barcode.png"
+import PrintIcon from '@mui/icons-material/Print';
+import logo from "../../../Image/log1.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
 
 function Viewtransaction() {
@@ -168,6 +170,248 @@ function Viewtransaction() {
     useEffect(() => {
         getapi()
     }, [])
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white';
+        const tableHtml = `
+        <p style='text-align: center;
+    background: #426d93;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;'> Asset Management</p>
+    <div style="display: flex;justify-content: space-between; margin:20px 10px">
+    <img src=${logo} alt='logo' width='150px' style='height: 150px'/>
+    
+  <p style='
+     font-size: 26px;
+    font-weight: bolder;
+    padding: 10px;
+    margin: auto;
+    border-radius: 12px;'> Asset Transaction</p>
+     <img src=${imageshow} alt='logo' width='150px' style='height: 150px'/>
+    </div>
+    <div style="display: flex;justify-content: space-between; margin:30px 10px">
+<div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                               Employee Name:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style=';border: antiquewhite; border-bottom: 1px solid black ;margin:auto'
+                                                value=${value.Firstname}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+        <div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                              Department Code:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style=';border: antiquewhite; border-bottom: 1px solid black ;margin:auto'
+                                                value=${value.DepartmentCode}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+        <div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                               Asset / Stock Number:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style=';border: antiquewhite; border-bottom: 1px solid black ;margin:auto'
+                                                value=${value.AssetItemTagID}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+    </div>
+    <hr style='background: black;
+    border: 1px solid black;
+    height: 2px'/>
+
+    
+    <p style='font-size: 16px;
+        font-weight: bolder;
+        font-family: math;
+    '>ASSET DETAIL</p>
+<div style="justify-content: center;display: flex; margin: auto 50px;">
+     <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Asset Item Discription:
+                                            </p>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto;width: 75%;'
+                                                value=${value.AssetItemDescription}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+      <div style="justify-content: center;display: flex;margin: auto 50px;">
+     <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Manufacturer:&nbsp &nbsp &nbsp &nbsp
+                                            </p>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto; width: 75%;'
+                                                value=${manufacturer}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+      <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Model:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                            </p>
+  
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${Model}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+         <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Brand:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${Brand}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+         <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Serial Number:
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${value.SerialNumber}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+         <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Building:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${value.BuildingCode}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+               <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Location:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto; width: 75%;'
+                                                value=${value.LocationCode}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+
+      <div style="display: flex;justify-content: space-between;">
+      <p>Signature: _____________________________</p>
+       <p>Date: _____________________________</p>
+      </div>
+    `;
+
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
     const [assetCategorylist, setassetCategorylist] = useState("");
     const [AssetItemGrouplist, setAssetItemGrouplist] = useState("");
     const [AssetitemGroupDescription, setAssetitemGroupDescription] = useState("");
@@ -1323,6 +1567,8 @@ function Viewtransaction() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/AssetTransaction')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable()}><PrintIcon className='me-1' />Print</button>
+
                                 </div>
                             </div>
                         </div>

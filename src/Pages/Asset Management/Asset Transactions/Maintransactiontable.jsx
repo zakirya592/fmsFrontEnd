@@ -21,12 +21,26 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
+import logo from "../../../Image/log1.png"
 
 function Maintransactiontable() {
     const navigate = useNavigate();
+    const [value, setvalue] = useState({
+        DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '',
+        Unites: '', UnitesDescription: "",
+        AssetType: '', SerialNumber: '',
+        EmployeeID: null, Firstname: '', AssetItemDescription: '', AssetItemTagID: '', AssetCondition: '', AssetCondition: ''
+    })
+
+    const [imageshow, setimageshow] = useState()
+    const [manufacturer, setmanufacturer] = useState("");
+    const [Model, setModel] = useState("");
+    const [Brand, setBrand] = useState("");
+
     // print button
-    const handlePrintTable = (tableData) => {
+    const handlePrintTable1 = (tableData) => {
         const printWindow = window.open('', '_blank');
+        
         const selectedData = tableData.map((row, index) => ({
             'SEQ': index + 1,
             'AssetItemTag ID': row.AssetItemTagID,
@@ -65,6 +79,248 @@ function Maintransactiontable() {
             <td>${row['LocationCode']}</td>
           </tr>`).join('')}
       </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+    const handlePrintTable2 = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white';
+        const tableHtml = `
+        <p style='text-align: center;
+    background: #426d93;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;'> Asset Management</p>
+    <div style="display: flex;justify-content: space-between; margin:20px 10px">
+    <img src=${logo} alt='logo' width='150px' style='height: 150px'/>
+    
+  <p style='
+     font-size: 26px;
+    font-weight: bolder;
+    padding: 10px;
+    margin: auto;
+    border-radius: 12px;'> Asset Transaction</p>
+     <img src=${imageshow} alt='logo' width='150px' style='height: 150px'/>
+    </div>
+    <div style="display: flex;justify-content: space-between; margin:30px 10px">
+<div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                               Employee Name:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style=';border: antiquewhite; border-bottom: 1px solid black ;margin:auto'
+                                                value=${value.Firstname}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+        <div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                              Department Code:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style=';border: antiquewhite; border-bottom: 1px solid black ;margin:auto'
+                                                value=${value.DepartmentCode}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+        <div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                               Asset / Stock Number:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style=';border: antiquewhite; border-bottom: 1px solid black ;margin:auto'
+                                                value=${value.AssetItemTagID}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+    </div>
+    <hr style='background: black;
+    border: 1px solid black;
+    height: 2px'/>
+
+    
+    <p style='font-size: 16px;
+        font-weight: bolder;
+        font-family: math;
+    '>ASSET DETAIL</p>
+<div style="justify-content: center;display: flex; margin: auto 50px;">
+     <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Asset Item Discription:
+                                            </p>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto;width: 75%;'
+                                                value=${value.AssetItemDescription}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+      <div style="justify-content: center;display: flex;margin: auto 50px;">
+     <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Manufacturer:&nbsp &nbsp &nbsp &nbsp
+                                            </p>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto; width: 75%;'
+                                                value=${manufacturer}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+      <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Model:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                            </p>
+  
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${Model}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+         <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Brand:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${Brand}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+         <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Serial Number:
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${value.SerialNumber}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+         <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Building:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto ; width: 75%;'
+                                                value=${value.BuildingCode}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+               <div style="justify-content: center;display: flex;margin: auto 50px;">
+       <p
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                             Location:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                            </p>
+
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border: antiquewhite; border-bottom: 1px solid black ;margin:auto; width: 75%;'
+                                                value=${value.LocationCode}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+                                            
+      </div>
+
+
+      <div style="display: flex;justify-content: space-between;">
+      <p>Signature: _____________________________</p>
+       <p>Date: _____________________________</p>
+      </div>
+    `;
+
 
         const printContent = `
       <html>
@@ -252,15 +508,103 @@ function Maintransactiontable() {
     const [selectedRow, setSelectedRow] = useState([]);
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
-    useEffect(() => {
-        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
-        console.log(rowSelectionModel)  // ....clear....???
-    }, [])
-
     const [statuscheck, setstatuscheck] = useState()
-    
+    const handleCellClick = (params, event) => {
+        const columnField = params.field;
+        if (columnField === '__check__') {
+            // This condition checks if the clicked cell is a checkbox cell
+            // Retrieve the entire data of the clicked row using its ID
+            const clickedRow = filteredRows.find((row) => row.id === params.id);
+
+            if (clickedRow) {
+                console.log("Selected row data:", clickedRow);
+                axios.get(`/api/AssetTransactions_GET_BYID/${clickedRow.AssetItemTagID}`, {
+                },)
+                    .then((res) => {
+                        console.log('TO Assets Master By ID', res.data);
+
+                        const Departmentcode = res.data.recordset[0].DepartmentCode
+                        setvalue((prevValue) => ({
+                            ...prevValue,
+                            AssetItemTagID: res.data.recordset[0].AssetItemTagID,
+                            AssetCondition: res.data.recordset[0].AssetCondition,
+                            AssetItemDescription: res.data.recordset[0].AssetItemDescription,
+                            SerialNumber: res.data.recordset[0].SerialNumber,
+                            EmployeeID: res.data.recordset[0].EmployeeID
+                        }));
+
+                        const EmployeeID = res.data.recordset[0].EmployeeID
+                        axios.post(`/api/getworkRequest_by_EPID`, {
+                            EmployeeID,
+                        }).then((res) => {
+
+                            const {
+                                Firstname,
+                                DepartmentCode,
+                                BuildingCode,
+                                LocationCode,
+                            } = res.data.recordsets[0][0];
+                            setvalue((prevValue) => ({
+                                ...prevValue,
+                                Firstname,
+                                DepartmentCode,
+                                BuildingCode,
+                                LocationCode,
+                            }));
+                          
+                        })
+                            .catch((err) => {
+                                //// console.log(err);;
+                            });
+                       
+
+                        const AssetItemDescriptionss = res.data.recordset[0].AssetItemDescription
+                        axios.get(`/api/AssetsMaster_GET_BYID/${AssetItemDescriptionss}`).then((res) => {
+                            console.log('-----', res.data);
+
+                            console.log(res.data.recordset[0].AssetImage);
+                            const AssetType = res.data.recordset[0].AssetType
+                            const AssetItemGroup = res.data.recordset[0].AssetItemGroup
+                            const AssetCategory = res.data.recordset[0].AssetCategory
+                            const AssetSubCategory = res.data.recordset[0].AssetSubCategory
+                            setvalue((prevValue) => ({
+                                ...prevValue,
+                                AssetType: AssetType,
+                                AssetItemGroup: AssetItemGroup,
+                                assetCategory: AssetCategory,
+                                assetSubCategory: AssetSubCategory,
+                            }));
+                            setmanufacturer(res.data.recordset[0].Manufacturer)
+                            setModel(res.data.recordset[0].Model)
+                            setBrand(res.data.recordset[0].Brand)
+                            setimageshow(res.data.recordset[0].AssetImage)
+
+                        })
+                            .catch((err) => {
+                                //// console.log(err);;
+                            });
+
+
+
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                console.log(clickedRow.OrderStatus);
+                setstatuscheck(clickedRow.WorkStatus)
+                // setSelectedRowIds([params.id])
+                setSelectedRowIds(clickedRow)
+            }
+            //    =======
+            if (clickedRow) {
+                setSelectedRowIds((prevSelected) => ({
+                    ...prevSelected,
+                    [params.id]: !prevSelected[params.id] // Toggle the selection
+                }));
+            }
+        }
+    };
     const handleAddToWorkRequest = () => {
-        console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
         if (!selectedRow || selectedRow.length === 0) {
             Swal.fire({
                 title: "Error",
@@ -317,7 +661,17 @@ function Maintransactiontable() {
                                                  navigate('/Create/Transaction')
                                             })}
                                             ><AddCircleOutlineIcon className='me-1' />Create</button>
-                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
+                                            //  onClick={() => handlePrintTable(filteredRows)}
+                                                onClick={() => {
+                                                    if (selectedRow.length === 1) {
+                                                        handlePrintTable2();
+                                                    } else {
+                                                        handlePrintTable1(filteredRows);
+                                                    }
+                                                }}
+                                              
+                                             >
                                                 <PrintIcon className="me-1" />
                                                 Print
                                             </button>
@@ -380,6 +734,7 @@ function Maintransactiontable() {
                                             rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
                                             paginationModel={paginationModel}
                                             onPaginationModelChange={setPaginationModel}
+                                            onCellClick={handleCellClick}
                                             checkboxSelection
                                             disableRowSelectionOnClick
                                             disableMultipleSelection

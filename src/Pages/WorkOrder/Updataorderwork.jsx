@@ -362,8 +362,6 @@ function Updataorderwork() {
     color: white;
     border-radius: 12px;'>WORK ORDER</p>
     <div style="display: flex;justify-content: space-between; margin:10px 10px">
-      <img src=${logo} alt='img' style='width:150px'/>
-
 <div style='margin:auto 1px'>
       <label
                                                 htmlFor="WorkOrderNumber"

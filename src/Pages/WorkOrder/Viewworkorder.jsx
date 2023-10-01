@@ -13,7 +13,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import moment from 'moment';
-import logo from "../../Image/log1.png";
 import PrintIcon from '@mui/icons-material/Print';
 
 
@@ -312,7 +311,6 @@ function Viewworkorder() {
     color: white;
     border-radius: 12px;'>WORK ORDER</p>
     <div style="display: flex;justify-content: space-between; margin:10px 10px">
-      <img src=${logo} alt='img' style='width:150px'/>
 
 <div style='margin:auto 1px'>
       <label
