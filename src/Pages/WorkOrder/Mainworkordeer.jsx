@@ -34,70 +34,89 @@ function Mainworkordeer() {
 
     const [RequestStatusLIST, setRequestStatusLIST] = useState([])
     // print button
-    const handlePrintTable = (tableData) => {
+    const handlePrintTable = (tableData, selectedRowIds) => {
         const printWindow = window.open('', '_blank');
-        const selectedData = tableData.map((row, index) => ({
-            'SEQ': index + 1,
-            'Order Number': row.WorkOrderNumber,
-            'ORDER Status': row.WorkStatus,
-            'Work Request Number': row.WorkRequestNumber,
-            'Work Priority': row.WorkPriority,
-            'Request Date': row.ScheduledDateTime,
-            'Work Category': row.WorkCategory,
-            'Soluction Code': row.SolutionCode,
-        }));
+        let selectedData;
+        if (selectedRowIds.length == 1) {
+            // If any rows are selected, print only the selected rows
+         selectedData = tableData.filter((row) => selectedRowIds.includes(row.id)).map((row, index) => ({
+                'SEQ': index + 1,
+                'Order Number': row.WorkOrderNumber,
+                'ORDER Status': row.WorkStatus,
+                'Work Request Number': row.WorkRequestNumber,
+                'Work Priority': row.WorkPriority,
+                'Request Date': row.ScheduledDateTime,
+                'Work Category': row.WorkCategory,
+                'Solution Code': row.SolutionCode,
+            }));
+        } 
+        else {
+            // If no rows are selected, print the entire table
+         selectedData = tableData.map((row, index) => ({
+                'SEQ': index + 1,
+                'Order Number': row.WorkOrderNumber,
+                'ORDER Status': row.WorkStatus,
+                'Work Request Number': row.WorkRequestNumber,
+                'Work Priority': row.WorkPriority,
+                'Request Date': row.ScheduledDateTime,
+                'Work Category': row.WorkCategory,
+                'Solution Code': row.SolutionCode,
+            }));
+        }
         // Create a bold style for header cells
         const headerStyle = 'font-weight: bold;';
 
         const tableHtml = `
-      <table border="1">
+    <table border="1">
+      <tr>
+        <th style="${headerStyle}">SEQ</th>
+        <th style="${headerStyle}">Order Number</th>
+        <th style="${headerStyle}">ORDER Status</th>
+        <th style="${headerStyle}">Work Request Number</th>
+        <th style="${headerStyle}">Work Priority</th>
+        <th style="${headerStyle}">Request Date</th>
+        <th style="${headerStyle}">Work Category</th>
+        <th style="${headerStyle}">Solution Code</th>
+      </tr>
+      ${selectedData.map(row => `
         <tr>
-          <th style="${headerStyle}">SEQ</th>
-          <th style="${headerStyle}">Order Number</th>
-          <th style="${headerStyle}">ORDER Status</th>
-          <th style="${headerStyle}">Work Request Number</th>
-          <th style="${headerStyle}">Work Priority</th>
-          <th style="${headerStyle}">Request Date</th>
-          <th style="${headerStyle}">Work Category </th>
-          <th style="${headerStyle}">Soluction Code</th>
-        </tr>
-        ${selectedData.map(row => `
-          <tr>
-            <td>${row['SEQ']}</td>
-            <td>${row['Order Number']}</td>
-            <td>${row['ORDER Status']}</td>
-            <td>${row['Work Request Number']}</td>
-            <td>${row['Work Priority']}</td>
-            <td>${row['Request Date']}</td>
-            <td>${row['Work Category']}</td>
-            <td>${row['Soluction Code']}</td>
-          </tr>`).join('')}
-      </table>`;
+          <td>${row['SEQ']}</td>
+          <td>${row['Order Number']}</td>
+          <td>${row['ORDER Status']}</td>
+          <td>${row['Work Request Number']}</td>
+          <td>${row['Work Priority']}</td>
+          <td>${row['Request Date']}</td>
+          <td>${row['Work Category']}</td>
+          <td>${row['Solution Code']}</td>
+        </tr>`).join('')}
+    </table>`;
 
         const printContent = `
-      <html>
-        <head>
-          <title>DataGrid Table</title>
-          <style>
-            @media print {
-              body {
-                padding: 0;
-                margin: 0;
-              }
-              th {
-                ${headerStyle}
-              }
+    <html>
+      <head>
+        <title>DataGrid Table</title>
+        <style>
+          @media print {
+            body {
+              padding: 0;
+              margin: 0;
             }
-          </style>
-        </head>
-        <body>${tableHtml}</body>
-      </html>
-    `;
+            th {
+              ${headerStyle}
+            }
+          }
+        </style>
+      </head>
+      <body>${tableHtml}</body>
+    </html>
+  `;
 
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.print();
     };
+
+
     // List a data thougth api 
     const getapi = () => {
         axios.get(`/api/WorkOrders_GET_LIST`, {
@@ -430,7 +449,19 @@ function Mainworkordeer() {
                                           navigate('/createworkorder')
                                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
                                       {/* print  */}
-                                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
+                                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => {
+                                        // Check if selectedRowIds is defined and not null before calling handlePrintTable
+if (selectedRowIds == undefined && selectedRowIds == null && selectedRowIds == []) {
+    handlePrintTable(filteredRows); // Pass an empty array if no selection
+
+} else {
+  // Handle the case where selectedRowIds is undefined or null
+  // You may choose to print the entire table or handle it differently
+    handlePrintTable(selectedRow, selectedRowIds);
+
+}
+
+                                      }}><PrintIcon className='me-1' />Print</button>
                                       {/* excel  */}
                                       <CSVLink data={filteredRows} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                       </CSVLink>

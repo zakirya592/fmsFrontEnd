@@ -13,6 +13,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import moment from 'moment';
+import logo from "../../Image/log1.png";
+import PrintIcon from '@mui/icons-material/Print';
+
 
 function Viewworkorder() {
     const navigate = useNavigate();
@@ -103,6 +106,112 @@ function Viewworkorder() {
                 ScheduledDateTime,
                 AppointmentDateTime
             }));
+
+            axios.get(`/api/assetworkrequest_GET_BYID/${RequestNumber}`)
+                .then((res) => {
+                    console.log('assetworkrequest  GET  BYID', res.data.recordset);
+                    const AssetItemDescriptionsssss = res.data.recordset
+                    // setgetdata(res.data.recordset);
+                    const SAQ = res.data.recordset.map((item) => item.seq);
+                    const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                    console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
+                    const promises = res.data.recordset.map((item) => {
+                        const itid = item.AssetItemDescription;
+                        console.log(itid);
+
+                        return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                            .then((res) => {
+                                console.log('=====', res.data.recordset);
+                                return {
+                                    item,
+                                    data: res.data.recordset,// Store API response data here
+                                };
+
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                return {
+                                    item,
+                                    data: null // Handle error case here
+                                };
+                            });
+
+                    });
+
+                    const assetItemTagIDs = [];
+
+                    // Create an array of promises for fetching data and updating assetItemTagIDs
+                    const promisesNumber = res.data.recordset.map((item) => {
+                        const itid = item.AssetItemDescription;
+                        console.log(itid);
+
+                        return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                            .then((res) => {
+                                console.log('=====------', res.data.recordset[0].AssetItemTagID);
+                                return {
+                                    item,
+                                    data: res.data.recordset,// Store API response data here
+                                };
+
+                            })
+
+
+                            .catch((err) => {
+                                console.log(err);
+                                return {
+                                    item,
+                                    data: [] // Handle error case here
+                                };
+                            });
+                    });
+
+                    Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+                        .then(([results1, results2]) => {
+
+
+                            // console.log('dfrfdf---------------------',results1);
+                            // console.log('-------------------------------', results2);
+                            results1.forEach((itemRecords, index) => {
+                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                                // setgetdata(results);
+                                const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                    description: description,
+                                    records: results1[index],
+                                    saq: SAQ[index],
+                                }));
+
+                                const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                    saq: SAQ[index],
+                                    records: results1[index],
+                                }));
+
+
+                                setgetdata(recordsWithDescriptions, recordsWithSAQ);
+
+
+                            });
+                            results2.forEach((itemRecords, index) => {
+                                // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                                // console.log("---------------------------------",assetItemTagID);
+                                const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                                    assetItemTagID: assetItemTagID,
+                                    records: results2[index],
+                                    saq: SAQ[index],
+                                }));
+                                setdatanumber(assetItemTagID);
+
+                            });
+
+                        });
+
+
+
+
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
           
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": assignEmployee
@@ -183,6 +292,214 @@ function Viewworkorder() {
       useEffect(() => {
         GetgetworkRequest()
     }, [])
+
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+
+        const selectedData = tableData.map((row, index) => ({
+            'SEQs': index + 1,
+            'QTY': row.AssetQty,
+            'AssetItemDescription': row.AssetItemDescription,
+            'AssetItemTag ID': row.AssetItemTagID,
+        }));
+        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white';
+        const tableHtml = `
+        <p style='text-align: center;
+    background: #426d93;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;'>WORK ORDER</p>
+    <div style="display: flex;justify-content: space-between; margin:10px 10px">
+      <img src=${logo} alt='img' style='width:150px'/>
+
+<div style='margin:auto 1px'>
+      <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                                Work Order Number:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.orderNumber}
+                                                placeholder='Enter Work Order Number'
+                                                readonly
+                                            ></input>
+        </div>
+    </div>
+      <div style="text-align: end; margin:10px 10px">
+                                                 <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                              Work Request Number:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${value.RequestNumber}
+                                                placeholder='Enter  RequestNumber'
+                                                readonly
+                                            ></input>
+    </div>
+
+      <div style="text-align: end; margin:10px 10px">
+                                                 <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                              Assign to Employee:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${value.assignEmployee}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+    </div>
+
+     <div style="text-align: end; margin:10px 10px">
+                                                 <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                            work Status:
+                                            </label>
+                                             <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${value.workStatus}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+    </div>
+         <div style=' width: 100%;display: flex;'> 
+                                                    
+        <table border="1" style='width:100% ;text-align: left;margin: 30px 0px;'>
+        <tr style='background:#3d41cf; color:white'>
+          <th style="${headerStyle} ">Work Description</th>
+          <th style="${headerStyle}">Start Date/Time</th>
+          <th style="${headerStyle}">End Date/Time</th>
+        </tr>
+       
+          <tr>
+            <td>  
+                <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                                value=${value.WorkCategoryDiscriptionmain}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+                                            </td>
+                                              <td>
+                <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                                value=${bdata}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+                                            </td>
+                                                                <td>
+                <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                                value=${edata}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+                                            </td>
+          </tr>
+      </table>
+
+                                
+    </div>
+    <table border="1" style='width:100% ;text-align: left;margin: 30px 0px;'>
+        <tr style='background:#3d41cf; color:white'>
+          <th style="${headerStyle} ">QTY</th>
+          <th style="${headerStyle}">AssetItemDescription</th>
+          <th style="${headerStyle}">AssetItemTag ID</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td>${row['QTY']}</td>
+            <td>${row['AssetItemDescription']}</td>
+            <td>${row['AssetItemTag ID']}</td>
+          </tr>`).join('')}
+      </table>
+
+      <div style="display: flex;justify-content: space-between;">
+      <p>Signature: _____________________________</p>
+       <p>Date: _____________________________</p>
+      </div>
+    `;
+
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+
+
+    const [datanumber, setdatanumber] = useState([])
+    const [getdata, setgetdata] = useState([])
+    const countDuplicates = (array, key) => {
+        const counts = {};
+        array.forEach(item => {
+            const value = item[key];
+            counts[value] = (counts[value] || 0) + 1;
+        });
+        return counts;
+    };
+
+    // Get the data first
+    const duplicatesCount = countDuplicates(getdata, 'description');
+    // Extract unique descriptions
+    const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
+    // Create filteredRows with unique descriptions and counts
+    const filteredRows = uniqueDescriptions.map((description, index) => ({
+        id: index + 1,
+        AssetItemDescription: description,
+        AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
+        AssetQty: duplicatesCount[description] || 0,
+    }));
+
+    filteredRows.forEach(row => {
+        const description = row.AssetItemDescription;
+        const count = row.AssetQty;
+    });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -1437,6 +1754,8 @@ function Viewworkorder() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workorder')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
+
                                 </div>
                             </div>
                         </div>

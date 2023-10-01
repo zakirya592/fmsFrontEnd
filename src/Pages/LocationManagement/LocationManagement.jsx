@@ -133,6 +133,7 @@ function LocationManagement() {
       .then((res) => {
         console.log('TO get the list', res);
         setgetdata(res.data.recordset)
+        setModel(res.data.recordset.length)
       })
       .catch((err) => {
         console.log(err);
@@ -434,11 +435,9 @@ function LocationManagement() {
                         type='text'
                         id='Model'
                         value={Model}
-                        onChange={e => {
-                          setModel(e.target.value)
-                        }}
-                        className=' rounded inputsectiondropdpwn color2 py-2 w-75 text-center'
+                       className=' rounded inputsectiondropdpwn color2 py-2 w-75 text-center'
                         placeholder='9999'
+                        readOnly
                       ></input>
                     </div>
                   </div>
