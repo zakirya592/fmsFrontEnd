@@ -35,15 +35,9 @@ function Mainworkordeer() {
         VAT: ''
 
     })
-
-
     const [datanumber, setdatanumber] = useState([])
-
-    const [WorkPrioritlist, setWorkPrioritlist] = useState([])
-    const [workCategorylist, setworkCategorylist] = useState([])
+    const [getdataprinter, setgetdataprinter] = useState([])
     const [WorkCategoryDiscription, setWorkCategoryDiscription] = useState([])
-    const [failureStatusCodelist, setfailureStatusCodelist] = useState([])
-    const [solutionCodelist, setsolutionCodelist] = useState([])
 
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
     const [requestByEmployee, setrequestByEmployee] = useState('');
@@ -59,7 +53,7 @@ function Mainworkordeer() {
         let selectedData;
         if (selectedRowIds.length == 1) {
             // If any rows are selected, print only the selected rows
-         selectedData = tableData.filter((row) => selectedRowIds.includes(row.id)).map((row, index) => ({
+            selectedData = tableData.filter((row) => selectedRowIds.includes(row.id)).map((row, index) => ({
                 'SEQ': index + 1,
                 'Order Number': row.WorkOrderNumber,
                 'ORDER Status': row.WorkStatus,
@@ -69,10 +63,10 @@ function Mainworkordeer() {
                 'Work Category': row.WorkCategory,
                 'Solution Code': row.SolutionCode,
             }));
-        } 
+        }
         else {
             // If no rows are selected, print the entire table
-         selectedData = tableData.map((row, index) => ({
+            selectedData = tableData.map((row, index) => ({
                 'SEQ': index + 1,
                 'Order Number': row.WorkOrderNumber,
                 'ORDER Status': row.WorkStatus,
@@ -87,8 +81,9 @@ function Mainworkordeer() {
         const headerStyle = 'font-weight: bold;';
 
         const tableHtml = `
-    <table border="1">
-      <tr>
+    <table  style='width:100% ;text-align: left;margin: 30px 0px; border: 1px solid black;
+  border-collapse: collapse;'>
+      <tr style='background:#3d41cf; color:white; '>
         <th style="${headerStyle}">SEQ</th>
         <th style="${headerStyle}">Order Number</th>
         <th style="${headerStyle}">ORDER Status</th>
@@ -100,14 +95,22 @@ function Mainworkordeer() {
       </tr>
       ${selectedData.map(row => `
         <tr>
-          <td>${row['SEQ']}</td>
-          <td>${row['Order Number']}</td>
-          <td>${row['ORDER Status']}</td>
-          <td>${row['Work Request Number']}</td>
-          <td>${row['Work Priority']}</td>
-          <td>${row['Request Date']}</td>
-          <td>${row['Work Category']}</td>
-          <td>${row['Solution Code']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['SEQ']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Order Number']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['ORDER Status']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Work Request Number']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Work Priority']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Request Date']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Work Category']}</td>
+          <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Solution Code']}</td>
         </tr>`).join('')}
     </table>`;
 
@@ -135,11 +138,10 @@ function Mainworkordeer() {
         printWindow.document.close();
         printWindow.print();
     };
-
-    const handlePrintTable2 = (tableData)=>{
+    const handlePrintTable2 = (tableData) => {
         const printWindow = window.open('', '_blank');
 
-        const selectedDatass = tableData.map((row, index) => ({
+        const selectedData = tableData.map((row, index) => ({
             'id': index + 1,
             'AssetItemDescription': row.AssetItemDescription,
             'AssetItemTag ID': row.AssetItemTagID,
@@ -493,7 +495,7 @@ function Mainworkordeer() {
                                                 id='ordernumber'
                                                 style='border:none; padding: 10px;'
                                             >
-                                           </p>
+                                            ${bdata}</p>
                                             </td>
                                                                 <td>
                 <p
@@ -502,7 +504,7 @@ function Mainworkordeer() {
                                                 style='border:none; padding: 10px;'
                                                 readonly
                                             >
-                                           
+                                            ${edata}
                                             </p>
                                             </td>
 
@@ -513,7 +515,7 @@ function Mainworkordeer() {
                                                 style='border:none; padding: 10px;'
                                                 readonly
                                             >
-                                           
+                                            ${value.AppointmentDateTime}
                                             </p>
                                             </td>
 
@@ -524,7 +526,7 @@ function Mainworkordeer() {
                                                 style='border:none; padding: 10px;'
                                                 readonly
                                             >
-                                          
+                                            ${value.ScheduledDateTime}
                                             </p>
                                             </td>
           </tr>
@@ -545,7 +547,7 @@ function Mainworkordeer() {
          <th style="${headerStyle}">TOTAL PRICE</th>
 
         </tr>
-        ${selectedDatass.map(row => `
+        ${selectedData.map(row => `
           <tr>
             <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
   border-collapse: collapse;">${row['id']}</td>
@@ -583,7 +585,7 @@ function Mainworkordeer() {
          <p
                                                 types='text'
                                                 id='ordernumber'
-                                            ></p>
+                                            >${daysBetween}</p>
       </td>
       </tr>
 
@@ -603,7 +605,7 @@ function Mainworkordeer() {
                                                 style='border-radius: 5px;border:none;'
                                                 
                                             >
-                                           
+                                            ${minutesdifferent}
                                             </p>
       </td>
       </tr>
@@ -624,7 +626,7 @@ function Mainworkordeer() {
                                                 style='border-radius: 5px;border:none;'
 
                                             >
-                                            
+                                            ${timeDifference}
                                             </p>
       </td>
       </tr>
@@ -646,7 +648,7 @@ function Mainworkordeer() {
                                                 style='border-radius: 5px;border:none;'
 
                                             >
-                                         
+                                            ${value.costWork}
                                             </p>
       </td>
       </tr>
@@ -670,7 +672,7 @@ function Mainworkordeer() {
                                                 types='text'
                                                 id='ordernumber'
                                                 style='border-radius: 5px;border:1px solid #524d4dab;'
-                                               
+                                                value=${overallTotalPrice}
                                                 readonly
                                             ></input>
       </td>
@@ -713,7 +715,7 @@ function Mainworkordeer() {
                                                 style='border-radius: 5px;border:none;'
 
                                             >
-                                           
+                                            ${overallTotalPrice}
                                             </p>
       </td>
       </tr>
@@ -753,67 +755,7 @@ function Mainworkordeer() {
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.print();
-    }
-    const countDuplicates = (array, key) => {
-        const counts = {};
-        array.forEach(item => {
-            const value = item[key];
-            counts[value] = (counts[value] || 0) + 1;
-        });
-        return counts;
     };
-    // Get the data first
-    const duplicatesCount = countDuplicates(getdata, 'description');
-    // Extract unique descriptions
-    const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
-
-    const filteredRowsprinter = uniqueDescriptions.map((description, index) => {
-        const assetQty = duplicatesCount[description] || 0;
-        const purchaseAmount = getdata[index].records ? parseFloat(getdata[index].records.data[0].PurchaseAmount) : '';
-        let totalPrice;
-
-        if (!isNaN(purchaseAmount)) {
-            if (assetQty === 1) {
-                totalPrice = purchaseAmount;
-            } else if (assetQty > 1) {
-                totalPrice = purchaseAmount * assetQty;
-            } else {
-                totalPrice = 0; // Handle cases where AssetQty is negative or invalid
-            }
-        } else {
-            totalPrice = 0; // Handle cases where PurchaseAmount is not a valid number
-        }
-
-        return {
-            id: index + 1,
-            AssetItemDescription: description,
-            AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
-            ASQS: getdata.find(row => row.description === description)?.saq || 0,
-            AssetQty: assetQty,
-            Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
-            Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
-            PurchaseAmount: purchaseAmount,
-            TOTAL_PRICE: totalPrice,
-        };
-    });
-    // Calculate the overall TOTAL_PRICE
-    const overallTotalPrice = filteredRowsprinter.reduce((total, row) => total + row.TOTAL_PRICE, 0);
-    // Calculate the initial overallTotalPrice
-
-    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRowsprinter);
-    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
-    // Function to calculate the overallTotalPrice
-    function calculateOverallTotalPrice(rows) {
-        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
-    }
-    filteredRowsprinter.forEach(row => {
-        const description = row.AssetItemDescription;
-        const count = row.AssetQty;
-        const AssetItemTagID = "sdf";
-
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
-    });
 
 
     // List a data thougth api 
@@ -832,7 +774,6 @@ function Mainworkordeer() {
         getapi()
     }, [])
 
-    // Deleted api section
     // Deleted api section
     const Deletedapi = (WorkOrderNumber) => {
         console.log(WorkOrderNumber);
@@ -941,10 +882,10 @@ function Mainworkordeer() {
 
         );
     }
-    const [filteredRows, setFilteredRows] = useState([]);
+    const [filteredRowsss, setFilteredRowsss] = useState([]);
 
     useEffect(() => {
-        const filteredRows = (getdata || []).filter(row => (
+        const filteredRowsss = (getdata || []).filter(row => (
             (!RequestStatusFilterValue || row.WorkStatus === RequestStatusFilterValue) &&
             (!requestByEmployee || (row.WorkOrderNumber && row.WorkOrderNumber.includes(requestByEmployee)))
         )).sort((a, b) => a.WorkOrderNumber - b.WorkOrderNumber).map((row, index) => {
@@ -982,8 +923,8 @@ function Mainworkordeer() {
             }
         });
 
-        const uniqueWorkTypes = [...new Set(filteredRows.map(row => row.WorkType))];
-        const uniqueWorkTrade = [...new Set(filteredRows.map(row => row.WorkTrade))];
+        const uniqueWorkTypes = [...new Set(filteredRowsss.map(row => row.WorkType))];
+        const uniqueWorkTrade = [...new Set(filteredRowsss.map(row => row.WorkTrade))];
 
         const workTypePromises = uniqueWorkTypes.map(workType =>
             axios.get(`/api/WorkType_descri_LIST/${workType}`)
@@ -1012,7 +953,7 @@ function Mainworkordeer() {
 
         Promise.all([...workTypePromises, ...workTradePromises])
             .then(results => {
-                const updatedRows = filteredRows.map(row => {
+                const updatedRows = filteredRowsss.map(row => {
                     let newRow = { ...row };
                     results.forEach(result => {
                         if (result && result.workType === row.WorkType) {
@@ -1024,7 +965,7 @@ function Mainworkordeer() {
                     });
                     return newRow;
                 });
-                setFilteredRows(updatedRows);
+                setFilteredRowsss(updatedRows);
             })
             .catch(err => {
                 console.log(err);
@@ -1039,7 +980,19 @@ function Mainworkordeer() {
     const [selectedRowIds, setSelectedRowIds] = useState([]);
     const [selectedRow, setSelectedRow] = useState([]);
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [timeDifference, setTimeDifference] = useState('');
+    const [minutesdifferent, setminutesdifferent] = useState('')
+    const [daysBetween, setDaysBetween] = useState(0);
 
+    // Work Employes ID  Api
+    const [bdata, setbata] = useState([])
+    const [edata, seteata] = useState([])
+
+    const [appiontmentddata, setappiontmentddata] = useState([])
+
+    const [scheduleddata, setscheduleddata] = useState([])
     useEffect(() => {
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
             setRequestStatusLIST(res.data.recordsets[0])
@@ -1050,28 +1003,338 @@ function Mainworkordeer() {
             });
     }, [])
 
+
+    const countDuplicates = (array, key) => {
+        const counts = {};
+        array.forEach(item => {
+            const value = item[key];
+            counts[value] = (counts[value] || 0) + 1;
+        });
+        return counts;
+    };
+
+    // Get the data first
+    const duplicatesCount = countDuplicates(getdataprinter, 'description');
+    // Extract unique descriptions
+    const uniqueDescriptions = Array.from(new Set(getdataprinter.map(row => row.description)));
+    const filteredRows = uniqueDescriptions.map((description, index) => {
+        const assetQty = duplicatesCount[description] || 0;
+        const purchaseAmount = getdataprinter[index].records ? parseFloat(getdataprinter[index].records.data[0].PurchaseAmount) : '';
+        let totalPrice;
+
+        if (!isNaN(purchaseAmount)) {
+            if (assetQty === 1) {
+                totalPrice = purchaseAmount;
+            } else if (assetQty > 1) {
+                totalPrice = purchaseAmount * assetQty;
+            } else {
+                totalPrice = 0; // Handle cases where AssetQty is negative or invalid
+            }
+        } else {
+            totalPrice = 0; // Handle cases where purchaseAmount is not a valid number
+        }
+
+        return {
+            id: index + 1,
+            AssetItemDescription: description,
+            AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
+            ASQS: getdataprinter.find(row => row.description === description)?.saq || 0,
+            AssetQty: assetQty,
+            Manufacturer: getdataprinter[index].records ? getdataprinter[index].records.data[0].Manufacturer : '',
+            Model: getdataprinter[index].records ? getdataprinter[index].records.data[0].Model : '',
+            PurchaseAmount: purchaseAmount,
+            TOTAL_PRICE: totalPrice,
+        };
+    });
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    filteredRows.forEach(row => {
+        const description = row.AssetItemDescription;
+        const count = row.AssetQty;
+        const AssetItemTagID = "sdf";
+
+        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
+
+    });
+
     const [statuscheck, setstatuscheck] = useState()
     const handleCellClick = (params, event) => {
         const columnField = params.field;
         if (columnField === '__check__') {
-            // This condition checks if the clicked cell is a checkbox cell
-            // Retrieve the entire data of the clicked row using its ID
-            const clickedRow = filteredRows.find((row) => row.id === params.id);
+            const clickedRow = filteredRowsss.find((row) => row.id === params.id);
 
             if (clickedRow) {
-                console.log('WorkRequestNumber', clickedRow.WorkRequestNumber);
-               console.log("Selected row data:", clickedRow);
-                console.log(clickedRow.OrderStatus);
-                setstatuscheck(clickedRow.WorkStatus)
+                const Res = clickedRow.WorkRequestNumber;
+                const ordernumber = clickedRow.OrderNumber
+                console.log(Res);
+                axios.get(`/api/WorkOrders_GET_BYID/${ordernumber}`).then((res) => {
+                    console.log('asdfaf=============++++====----=============', res);
+                    // setdataget(res.data.recordset[0])
+                    const orderNumber = res.data.recordset[0].WorkOrderNumber
+                    const RequestNumber = res.data.recordset[0].WorkRequestNumber
+                    const RequestStatus = res.data.recordset[0].workStatus
+                    const costWork = res.data.recordset[0].TotalCostofWork;
+                    const assignEmployee = res.data.recordset[0].AssignedtoEmployeeID
+                    const completeEmployee = res.data.recordset[0].CompletedByEmployeeID
+                    const WorkCategoryDiscriptionmain = res.data.recordset[0].WorkDescription
+                    const workStatus = res.data.recordset[0].WorkStatus
+                    const workPriority = res.data.recordset[0].WorkPriority
+                    const WorkCategory = res.data.recordset[0].WorkCategoryCode
+                    const failureCode = res.data.recordset[0].FailureCode
+                    const solutionCode = res.data.recordset[0].SolutionCode
+                    const ScheduledDateTime = res.data.recordset[0].ScheduledDateTime
+                    const AppointmentDateTime = res.data.recordset[0].AppointmentDateTime
+                    const startdat = res.data.recordset[0].StartWorkOrderDateTime
+                    const enddata = res.data.recordset[0].EndWorkOrderDateTime
+
+                    const sdata = moment(startdat).format('YYYY-MM-DD h:mm A')
+                    const edata = moment(enddata).format('YYYY-MM-DD h:mm A')
+                    const scheduledd = moment(ScheduledDateTime).format('YYYY-MM-DD h:mm A')
+                    const appiontment = moment(AppointmentDateTime).format('YYYY-MM-DD h:mm A')
+                    setbata(sdata)
+                    seteata(edata)
+                    setscheduleddata(scheduledd)
+                    setappiontmentddata(appiontment)
+                    setStartDate(startdat)
+                    setEndDate(enddata)
+
+
+
+                    // setUnitCodeID([{ EmployeeID: assignEmployee, Firstname: '' }]);
+                    const defaultEmployeeOption = { EmployeeID: assignEmployee, Firstname: '' };
+                    // setUnitCodecompleteemployee([{ EmployeeID: completeEmployee, Firstname: '' }])
+                    const defaultcomplempeOption = { EmployeeID: completeEmployee, Firstname: '' };
+
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        orderNumber,
+                        RequestNumber,
+                        costWork,
+                        WorkCategoryDiscriptionmain,
+                        workStatus,
+                        workPriority,
+                        WorkCategory,
+                        failureCode,
+                        solutionCode,
+                        assignEmployee,
+                        completeEmployee,
+                        ScheduledDateTime,
+                        AppointmentDateTime,
+                    }));
+
+                    axios.post(`/api/getworkRequest`, {
+                        "EmployeeID": completeEmployee
+                    }).then((res) => {
+                        console.log('asdfaf=====================================', res);
+                        const CompleteddEmployeeName = res.data.recordset[0].Firstname
+                        const {
+                            EmployeeID,
+                            Firstname
+                        } = res.data.recordsets[0][0];
+
+                        setvalue((prevValue) => ({
+                            ...prevValue,
+                            EmployeeID,
+                            Firstname,
+                            CompleteEmployeeName: CompleteddEmployeeName,
+                        }));
+
+                    })
+                        .catch((err) => {
+                            //// console.log(err);;
+                        });
+
+                    axios.post(`/api/getworkRequest`, {
+                        "EmployeeID": assignEmployee
+                    }).then((res) => {
+                        console.log('asdfaf=====================================', res);
+                        const Employee = res.data.recordsets[0][0].EmployeeID
+                        const CompleteEmployee = res.data.recordsets[0][0].Firstname
+                        console.log(CompleteEmployee);
+
+                        setvalue((prevValue) => ({
+                            ...prevValue,
+                            assignEmployee: Employee,
+                            EmployeeName: CompleteEmployee,
+                            Middlename: res.data.recordsets[0][0].Middlename,
+                            Lastname: res.data.recordsets[0][0].Lastname,
+                            MobileNumber: res.data.recordsets[0][0].MobileNumber,
+                            LocationCode: res.data.recordsets[0][0].LocationCode,
+                        }));
+
+                    })
+                        .catch((err) => {
+                            //// console.log(err);;
+                        });
+
+                    axios.post(`/api/getworkRequest`, {
+                        "EmployeeID": assignEmployee
+                    }).then((res) => {
+                        console.log('asdfaf=====================================', res);
+                        const {
+                            EmployeeName,
+                        } = res.data.recordsets[0];
+                        const firstname = res.data.recordset[0].Firstname
+                        setvalue((prevValue) => ({
+                            ...prevValue,
+                            EmployeeName: firstname
+                        }));
+
+                    })
+                        .catch((err) => {
+                            //// console.log(err);;
+                        });
+
+
+                    setminutesdifferent(res.data.recordset[0].TotalMinutes)
+                    setTimeDifference(res.data.recordset[0].TotalHours)
+                    setDaysBetween(res.data.recordset[0].TotalDays)
+                    // FailureCodedec
+                    const FailureCodedec = res.data.recordset[0].FailureCode
+                    axios.get(`/api/Failure_GET_BYID/${FailureCodedec}`)
+                        .then((res) => {
+                            // console.log('-----:', res.data);
+                            setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
+
+                        })
+                        .catch((err) => {
+                            // console.log(err);;
+                        });
+                    // SolutionCode
+                    const soluctionCodedec = res.data.recordset[0].SolutionCode
+                    axios.get(`/api/Solution_GET_BYID/${soluctionCodedec}`)
+                        .then((res) => {
+                            setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
+                        })
+                        .catch((err) => {
+                            // console.log(err);;
+                        });
+
+                    // Work Catager
+                    const workcategoryCodedec = res.data.recordset[0].WorkCategoryCode
+                    axios.get(`/api/WorkCatagres_GET_BYID/${workcategoryCodedec}`)
+                        .then((res) => {
+                            // console.log('-----', res.data);
+                            setWorkCategoryDiscription(res.data.recordset[0].WorkCategoryDesc)
+
+                        })
+                        .catch((err) => {
+                            // console.log(err);;
+                        });
+
+
+                })
+                    .catch((err) => {
+                        //// console.log(err);;
+                    });
+                axios.get(`/api/assetworkrequest_GET_BYID/${Res}`)
+                    .then((res) => {
+                        console.log('assetworkrequest  GET  BYID', res.data.recordset);
+                        console.log('length', res.data.recordset.length);
+                        const AssetItemDescriptionsssss = res.data.recordset
+                        // setgetdata(res.data.recordset);
+                        const SAQ = res.data.recordset.map((item) => item.seq);
+                        const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+                        console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
+
+                        const promises = res.data.recordset.map((item) => {
+                            const itid = item.AssetItemDescription;
+                            console.log(itid);
+
+                            return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                                .then((res) => {
+                                    console.log('=====', res.data.recordset);
+                                    return {
+                                        item,
+                                        data: res.data.recordset,// Store API response data here
+                                    };
+
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                    return {
+                                        item,
+                                        data: null // Handle error case here
+                                    };
+                                });
+
+                        });
+
+                        const assetItemTagIDs = [];
+
+                        // Create an array of promises for fetching data and updating assetItemTagIDs
+                        const promisesNumber = res.data.recordset.map((item) => {
+                            const itid = item.AssetItemDescription;
+                            console.log(itid);
+
+                            return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                                .then((res) => {
+                                    console.log('=====------', res.data.recordset[0].AssetItemTagID);
+                                    return {
+                                        item,
+                                        data: res.data.recordset,// Store API response data here
+                                    };
+
+                                })
+
+
+                                .catch((err) => {
+                                    console.log(err);
+                                    return {
+                                        item,
+                                        data: [] // Handle error case here
+                                    };
+                                });
+                        });
+
+                        Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+                            .then(([results1, results2]) => {
+
+                                results1.forEach((itemRecords, index) => {
+                                    console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                                    // setgetdata(results);
+                                    const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                                        description: description,
+                                        records: results1[index],
+                                        saq: SAQ[index],
+                                    }));
+
+                                    const recordsWithSAQ = SAQ.map((saq, index) => ({
+                                        saq: SAQ[index],
+                                        records: results1[index],
+                                    }));
+                                    setgetdataprinter(recordsWithDescriptions, recordsWithSAQ);
+
+                                });
+                                results2.forEach((itemRecords, index) => {
+                                    // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                                    // console.log("---------------------------------",assetItemTagID);
+                                    const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                                        assetItemTagID: assetItemTagID,
+                                        records: results2[index],
+                                        saq: SAQ[index],
+                                    }));
+                                    setdatanumber(assetItemTagID);
+
+                                });
+
+                            });
+
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                setstatuscheck(clickedRow.RequestStatus)
                 // setSelectedRowIds([params.id])
                 setSelectedRowIds(clickedRow)
-            }
-            //    =======
-            if (clickedRow) {
-                setSelectedRowIds((prevSelected) => ({
-                    ...prevSelected,
-                    [params.id]: !prevSelected[params.id] // Toggle the selection
-                }));
             }
         }
     };
@@ -1118,86 +1381,86 @@ function Mainworkordeer() {
         // Example: sendToWorkRequest(selectedRowData);
     };
 
-  return (
-      <div>
-          <div className='bg'>
-              <div className=''>
-                  <Box sx={{ display: 'flex' }}>
-                      <Siderbar />
-                      <AppBar className="fortrans locationfortrans" position="fixed">
-                          <Toolbar>
-                              <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                  <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/')} />
-                                  <p className="text-center my-auto mx-auto">Work Order</p>
-                              </Typography>
-                          </Toolbar>
-                      </AppBar>
-                      <div className="topermaringpage mb-4 container">
-                          <div className="py-3">
+    return (
+        <div>
+            <div className='bg'>
+                <div className=''>
+                    <Box sx={{ display: 'flex' }}>
+                        <Siderbar />
+                        <AppBar className="fortrans locationfortrans" position="fixed">
+                            <Toolbar>
+                                <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto ms-2" onClick={() => navigate('/')} />
+                                    <p className="text-center my-auto mx-auto">Work Order</p>
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+                        <div className="topermaringpage mb-4 container">
+                            <div className="py-3">
 
 
-                              {/* Top section */}
-                              <div className="d-flex justify-content-between my-auto">
-                                  <p className='color1 workitoppro my-auto'>Work Order<span className='star'>*</span></p>
-                                  <div className="d-flex">
-                                      {/* create */}
-                                      <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+                                {/* Top section */}
+                                <div className="d-flex justify-content-between my-auto">
+                                    <p className='color1 workitoppro my-auto'>Work Order<span className='star'>*</span></p>
+                                    <div className="d-flex">
+                                        {/* create */}
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Order is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
 
-                                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                          navigate('/createworkorder')
-                                      })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                                      {/* print  */}
-                                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" 
-                                          onClick={() => {
-                                              if (selectedRow.length === 1) {
-                                                  handlePrintTable2();
-                                              } else {
-                                                  handlePrintTable1(filteredRows);
-                                              }
-                                          }}
-                                          ><PrintIcon className='me-1' />Print</button>
-                                      {/* excel  */}
-                                      <CSVLink data={filteredRows} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
-                                      </CSVLink>
-                                  </div>
-                              </div>
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
+                                            navigate('/createworkorder')
+                                        })}><AddCircleOutlineIcon className='me-1' />Create</button>
+                                        {/* print  */}
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
+                                            onClick={() => {
+                                                if (selectedRow.length === 1) {
+                                                    handlePrintTable2(filteredRows);
+                                                } else {
+                                                    handlePrintTable1(filteredRowsss);
+                                                }
+                                            }}
+                                        ><PrintIcon className='me-1' />Print</button>
+                                        {/* excel  */}
+                                        <CSVLink data={filteredRowsss} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
+                                        </CSVLink>
+                                    </div>
+                                </div>
 
-                              <hr className='color3 line' />
-                               {/* Search Fields */}
-                  <div className="row mx-auto formsection">
-                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
-                      <div className='emailsection position-relative d-grid my-2'>
-                        <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Order Number</label>
+                                <hr className='color3 line' />
+                                {/* Search Fields */}
+                                <div className="row mx-auto formsection">
+                                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label className='lablesection color3 text-start mb-1 filter-label'>
+                                                Order Number</label>
 
-                        <input
-                          types='text'
-                          id='Employeenumber'
-                          placeholder="Enter Order Number "
-                          value={requestByEmployee}
-                          className='rounded inputsection py-2'
-                          onChange={(e) => setrequestByEmployee(e.target.value)}
-                        ></input>
-                        <p
-                          className='position-absolute text-end serachicon'
-                        >
-                          <SearchOutlined className=' serachicon' />
-                        </p>
-                      </div>
-                    </div>
-                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5">
-                      <div className='emailsection position-relative d-grid my-2'>
-                        <label className='lablesection color3 text-start mb-1 filter-label'>
-                          Order Status
-                        </label>
+                                            <input
+                                                types='text'
+                                                id='Employeenumber'
+                                                placeholder="Enter Order Number "
+                                                value={requestByEmployee}
+                                                className='rounded inputsection py-2'
+                                                onChange={(e) => setrequestByEmployee(e.target.value)}
+                                            ></input>
+                                            <p
+                                                className='position-absolute text-end serachicon'
+                                            >
+                                                <SearchOutlined className=' serachicon' />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-10 col-md-5 col-lg-5 col-xl-5">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label className='lablesection color3 text-start mb-1 filter-label'>
+                                                Order Status
+                                            </label>
 
-                        <select
-                          id='RequestStatus'
-                          value={RequestStatusFilterValue}
-                          className='rounded inputsection py-2'
-                          onChange={(e) => setRequestStatusFilterValue(e.target.value)}
-                        >
-                          <option value=''>Select Status</option>
+                                            <select
+                                                id='RequestStatus'
+                                                value={RequestStatusFilterValue}
+                                                className='rounded inputsection py-2'
+                                                onChange={(e) => setRequestStatusFilterValue(e.target.value)}
+                                            >
+                                                <option value=''>Select Status</option>
                                                 {
                                                     RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
                                                         return (
@@ -1205,50 +1468,50 @@ function Mainworkordeer() {
                                                         )
                                                     })
                                                 }
-                        </select>
+                                            </select>
 
-                      </div>
-                    </div>
+                                        </div>
+                                    </div>
 
-                  </div>
-                              {/* table section */}
-                              <div style={{ height: 400, width: '100%' }}>
-                                  <DataGrid
-                                      rows={filteredRows}
-                                      columns={columns}
-                                      pagination
-                                      rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
-                                      paginationModel={paginationModel}
-                                      onPaginationModelChange={setPaginationModel}
-                                      onCellClick={handleCellClick}
-                                      checkboxSelection
-                                      disableRowSelectionOnClick
-                                      disableMultipleSelection
-                                      selectionModel={selectedRowIds}
-                                      onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
-                                      rowSelectionModel={rowSelectionModel}
-                                      onRowSelectionModelChange={(newRowSelectionModel) => {
-                                          setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
-                                          // console.log(newRowSelectionModel); // Logs the ids of selected rows
-                                          const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
-                                          console.log(selectedRows)
-                                          setSelectedRow(selectedRows); // Set the state with selected row data objects
-                                          // handleRowClick(selectedRows);
+                                </div>
+                                {/* table section */}
+                                <div style={{ height: 400, width: '100%' }}>
+                                    <DataGrid
+                                        rows={filteredRowsss}
+                                        columns={columns}
+                                        pagination
+                                        rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
+                                        paginationModel={paginationModel}
+                                        onPaginationModelChange={setPaginationModel}
+                                        onCellClick={handleCellClick}
+                                        checkboxSelection
+                                        disableRowSelectionOnClick
+                                        disableMultipleSelection
+                                        selectionModel={selectedRowIds}
+                                        onSelectionModelChange={(selection) => setSelectedRowIds(selection)}
+                                        rowSelectionModel={rowSelectionModel}
+                                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                                            setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
+                                            // console.log(newRowSelectionModel); // Logs the ids of selected rows
+                                            const selectedRows = filteredRowsss.filter((row) => newRowSelectionModel.includes(row.id));
+                                            console.log(selectedRows)
+                                            setSelectedRow(selectedRows); // Set the state with selected row data objects
+                                            // handleRowClick(selectedRows);
 
-                                      }}
-                                  />
-                              </div>
+                                        }}
+                                    />
+                                </div>
 
-                              <div className="d-flex justify-content-between mt-3">
-                                  <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                              </div>
-                          </div>
-                      </div>
-                  </Box>
-              </div>
-          </div>
-      </div>
-  )
+                                <div className="d-flex justify-content-between mt-3">
+                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={() => navigate('/')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </Box>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default Mainworkordeer

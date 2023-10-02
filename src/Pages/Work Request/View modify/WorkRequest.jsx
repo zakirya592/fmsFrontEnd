@@ -22,13 +22,26 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import moment from 'moment';
 import { CSVLink } from "react-csv";
-import { Row } from 'jspdf-autotable';
 
 function WorkRequest() {
   const navigate = useNavigate();
   const [getdata, setgetdata] = useState([])
+  const [getdataprinter, setgetdataprinter] = useState([])
+
+  const [value, setvalue] = useState({
+    EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', MobileNumber: '', LandlineNumber: '',//AddworkRequestPOST api input
+    DepartmentCode: 'Select Dept Code', Departmentname: '',//Department api input 
+    BuildingCode: 'Select Building', //AddBuildingInworkRequestPOST api input
+    Location: 'Select Location',// //AddLocationInworkRequestPOST api input
+    WorkType: "", WorkTypeDesc: '',//AddWorkTypeInworkRequestPOST api input
+    WorkPriority: '',//AddWorkPriorityInworkRequestPOST api input
+    AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
+    AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
+    RequestNumber: '', WorkTrade: '',// RequestNumber
+    RequestStatus: '',
+  })
   // print button
-  const handlePrintTable = (tableData) => {
+  const handlePrintTable1 = (tableData) => {
     const printWindow = window.open('', '_blank');
     const selectedData = tableData.map((row, index) => ({
       'SEQ': index + 1,
@@ -38,15 +51,15 @@ function WorkRequest() {
       'Work Priority': row.WorkPriority,
       'Request Date': row.RequestDateTime,
       'Work Type Desc': row.workTypeDesc,
-      'Work Trade Desc': row.worktradeDesc,
     }));
 
     // Create a bold style for header cells
     const headerStyle = 'font-weight: bold;';
 
     const tableHtml = `
-      <table border="1">
-        <tr>
+      <table  style='width:100% ;text-align: left;margin: 30px 0px; border: 1px solid black;
+  border-collapse: collapse;'>
+        <tr style='background:#3d41cf; color:white; '>
           <th style="${headerStyle}">SEQ</th>
           <th style="${headerStyle}">Request Number</th>
           <th style="${headerStyle}">Request Status</th>
@@ -54,18 +67,23 @@ function WorkRequest() {
           <th style="${headerStyle}">Work Priority</th>
           <th style="${headerStyle}">Request Date</th>
           <th style="${headerStyle}">Work Type Desc</th>
-          <th style="${headerStyle}">Work Trade Desc</th>
         </tr>
         ${selectedData.map(row => `
           <tr>
-            <td>${row['SEQ']}</td>
-            <td>${row['Request Number']}</td>
-            <td>${row['Request Status']}</td>
-            <td>${row['Employee ID']}</td>
-            <td>${row['Work Priority']}</td>
-            <td>${row['Request Date']}</td>
-            <td>${row['Work Type Desc']}</td>
-            <td>${row['Work Trade Desc']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['SEQ']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Request Number']}</td>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Request Status']}</td>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Employee ID']}</td>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Work Priority']}</td>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Request Date']}</td>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Work Type Desc']}</td>
           </tr>`).join('')}
       </table>`;
 
@@ -93,6 +111,446 @@ function WorkRequest() {
     printWindow.document.close();
     printWindow.print();
   };
+
+  const handlePrintTable2 = (tableData) => {
+    const printWindow = window.open('', '_blank');
+
+    const selectedData = tableData.map((row, index) => ({
+      'id': index + 1,
+      'AssetItemDescription': row.AssetItemDescription,
+      'AssetItemTag ID': row.AssetItemTagID,
+      'Manufacturer': row.Manufacturer,
+      'Model': row.Model,
+      'AssetQty': row.AssetQty,
+      'purchaseAmount': row.purchaseAmount,
+      'TOTAL_PRICE': row.TOTAL_PRICE,
+    }));
+    const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
+    const tableHtml = `
+        <p style='text-align: center;
+    background: #426d93;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;'>WORK REQUEST</p>
+    
+
+       <div style='display: flex;
+    justify-content: space-between'>
+      <table style='display: flex; justify-content: end;'>
+    <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                         Name:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            > ${value.EmployeeName ? value.EmployeeName : ''} ${value.Middlename ? value.Middlename : ''}${value.Lastname ? value.Lastname : ''} </p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          MobileNumber:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.MobileNumber}
+                                            </p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Landline Number:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.LandlineNumber}
+                                            </p>
+      </td>
+      </tr>
+
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Location Code:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.LocationCode}
+                                            </p>
+      </td>
+      </tr>
+
+
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                        Department Code:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            >${value.DepartmentCode}</p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Work Type:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.WorkType}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Work Trade:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.WorkTrade ? value.WorkTrade : ''}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+
+
+      <table style='display: flex; justify-content: end;'>
+
+  <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                       Work Request Number:
+                                            </label>
+      </td>
+      <td>
+        <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.RequestNumber}
+                                                placeholder=${'Enter Work Order Number'}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                        Employee ID:
+                                            </label>
+      </td>
+      <td>
+        <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.EmployeeID}
+                                                placeholder=${'Enter Work Order Number'}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Request Status:
+                                            </label>
+      </td>
+      <td>
+       
+      <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${value.RequestStatus}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+
+
+
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                        Work Priority:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            >${value.WorkPriority}</p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Department Name:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${DeptDesc}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                        Work Type Description:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${WorkTypedesc}
+                                            </p>
+      </td>
+      </tr>
+
+       <tr>
+
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                         Work Trade Description
+:
+                                            </label>
+      </td>
+      <td>
+
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${WorkTradedescp}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+      
+
+      </div>
+
+    <table style='width:100% ;text-align: left;margin: 30px 0px; border: 1px solid black;
+  border-collapse: collapse;'>
+        <tr style='background:#3d41cf; color:white; '>
+          <th style="${headerStyle} padding: 5px ;">SEQ</th>
+          <th style="${headerStyle}">AssetItemDescription</th>
+          <th style="${headerStyle}">AssetItemTag ID</th>
+           <th style="${headerStyle}">Manufacturer</th>
+             <th style="${headerStyle}">Model</th>
+          <th style="${headerStyle} ">QTY</th>
+        <th style="${headerStyle}">UNITY PRICE</th>
+         <th style="${headerStyle}">TOTAL PRICE</th>
+
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['id']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetItemDescription']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetItemTag ID']}</td>
+  <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Manufacturer']}</td>
+    <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Model']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetQty']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['purchaseAmount']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['TOTAL_PRICE']}</td>
+          </tr>`).join('')}
+      </table>
+
+       <table style='display: flex;justify-content: end'>
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                           SUB TOTAL AMOUNT:
+                                            </label>
+      </td>
+      <td>
+         <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${overallTotalPrice}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          TOTAL AMOUNT:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${overallTotalPrice}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+      <div style="display: flex;justify-content: space-between;">
+      <p>Signature: _____________________________</p>
+       <p>Date: _____________________________</p>
+      </div>
+    `;
+
+
+    const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
   // List a data thougth api 
   const getapi = () => {
     axios.get(`/api/workRequest_GET_LIST`, {
@@ -100,10 +558,6 @@ function WorkRequest() {
       .then((res) => {
         console.log('TO get the list', res);
         setgetdata(res.data.recordset)
-        // setWorkTypes(res.data.recordset.map((item,ind)=>{
-        //   console.log("work desc sing",item.WorkType);
-        //   setwordecss(item.WorkType)
-        // }));
       })
       .catch((err) => {
         console.log(err);
@@ -113,7 +567,6 @@ function WorkRequest() {
     getapi()
   }, [])
 
-  // Deleted api section
   // Deleted api section
   const Deletedapi = (RequestNumber) => {
     console.log(RequestNumber);
@@ -139,13 +592,13 @@ function WorkRequest() {
         axios.delete(`/api/all_work_request_DELETE_BYID/${RequestNumber}`)
           .then((res) => {
             getapi()
-              // Handle successful delete response
-              console.log('Deleted successfully', res);
-              swalWithBootstrapButtons.fire(
-                'Deleted!',
-                `workrequest ${RequestNumber} has been deleted.`,
-                'success'
-              )
+            // Handle successful delete response
+            console.log('Deleted successfully', res);
+            swalWithBootstrapButtons.fire(
+              'Deleted!',
+              `workrequest ${RequestNumber} has been deleted.`,
+              'success'
+            )
             getapi()
           })
           .catch((err) => {
@@ -157,7 +610,7 @@ function WorkRequest() {
               text: 'Something went wrong!',
             })
           });
-       
+
       }
     })
 
@@ -224,34 +677,16 @@ function WorkRequest() {
 
     );
   }
+
   const [requestByEmployee, setrequestByEmployee] = useState('');
   const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
-  const [filteredRows, setFilteredRows] = useState([]);
+  const [filteredRowsss, setFilteredRows] = useState([]);
 
-  // const filteredRows = getdata && getdata.filter(row => (
-  //   (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-  //   (!requestByEmployee || row.EmployeeID === requestByEmployee) 
-  // )).map((row, indes) => ({
-  //   ...row,
-  //   id: indes + 1,
-  //   RequestNumber: row.RequestNumber,
-  //   RequestStatus: row.RequestStatus ,
-  //   EmployeeID: row.EmployeeID,
-  //   WorkPriority: row.WorkPriority,
-  //   RequestDateTime: moment(row.RequestDateTime).format('DD/MM/YYYY'),
-  //   WorkType: row.WorkType,
-  //   workTypeDesc: row.workTypeDesc //this Both id  is to display a work types desc //ok
-  // }))
-
-  // workTypeDesc api 
-  
   useEffect(() => {
-    const filteredRows = (getdata || []).filter(row => (
+    const filteredRowsss = (getdata || []).filter(row => (
       (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
       (!requestByEmployee || (row.EmployeeID && row.EmployeeID.includes(requestByEmployee)))
     )).sort((a, b) => a.RequestNumber - b.RequestNumber).map((row, index) => {
-      // Your mapping logic remains the same
-    
 
       const isClosed = row.RequestStatus === "Closed";
 
@@ -289,57 +724,11 @@ function WorkRequest() {
     });
 
     // Fetch work type descriptions for all unique work types
-    const uniqueWorkTypes = [...new Set(filteredRows.map(row => row.WorkType))];
-    // uniqueWorkTypes.forEach(workType => {
-    //   // console.log(workType);
-    //   axios.get(`/api/WorkType_descri_LIST/${workType}`)
-    //     .then((res) => {
-    //       const descriptions = res.data.recordset[0].WorkTypeDesc// Assuming the response contains the descriptions as an array
-    //       const updatedRows = filteredRows.map(row => {
-    //         if (row.WorkType === workType) {
-    //           return {
-    //             ...row,
-    //             workTypeDesc: descriptions,
-    //           };
-    //         }
-    //         return row;
-    //       });
-    //       // Update the filteredRows state with the updated rows
-    //       // You might want to set the state using setFilteredRows(updatedRows)
-    //       console.log(updatedRows);
-    //       setFilteredRows(updatedRows);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // });
+    const uniqueWorkTypesss = [...new Set(filteredRowsss.map(row => row.WorkType))];
 
-    const uniqueWorkTrade = [...new Set(filteredRows.map(row => row.WorkTrade))];
-    // uniqueWorkTrade.forEach(workTrade => {
-    //   // console.log(workTrade);
-    //   axios.get(`/api/WorkTrade_descri_LIST/${workTrade}`)
-    //     .then((res) => {
-    //       const descriptionsTrade = res.data.recordset[0].WorkTradeDesc// Assuming the response contains the descriptions as an array
-    //       const updatedRows = filteredRows.map(row => {
-    //         if (row.WorkTrade === workTrade) {
-    //           return {
-    //             ...row,
-    //             worktradeDesc: descriptionsTrade,
-    //           };
-    //         }
-    //         return row;
-    //       });
-    //       // Update the filteredRows state with the updated rows
-    //       // You might want to set the state using setFilteredRows(updatedRows)
-    //       console.log('work trade desc',updatedRows);
-    //       setFilteredRows(updatedRows);
-    //     })
-    //     .catch((err) => {
-    //       // console.log(err);
-    //     });
-    // });
+    const uniqueWorkTradess = [...new Set(filteredRowsss.map(row => row.WorkTrade))];
 
-    const workTypePromises = uniqueWorkTypes.map(workType =>
+    const workTypePromisesss = uniqueWorkTypesss.map(workType =>
       axios.get(`/api/WorkType_descri_LIST/${workType}`)
         .then(res => ({
           workType,
@@ -352,7 +741,7 @@ function WorkRequest() {
     );
 
     // Fetch work trade descriptions for all unique work trades
-    const workTradePromises = uniqueWorkTrade.map(workTrade =>
+    const workTradePromisesss = uniqueWorkTradess.map(workTrade =>
       axios.get(`/api/WorkTrade_descri_LIST/${workTrade}`)
         .then(res => ({
           workTrade,
@@ -364,9 +753,9 @@ function WorkRequest() {
         })
     );
 
-    Promise.all([...workTypePromises, ...workTradePromises])
+    Promise.all([...workTypePromisesss, ...workTradePromisesss])
       .then(results => {
-        const updatedRows = filteredRows.map(row => {
+        const updatedRows = filteredRowsss.map(row => {
           let newRow = { ...row };
           results.forEach(result => {
             if (result && result.workType === row.WorkType) {
@@ -394,28 +783,242 @@ function WorkRequest() {
   const [selectedRow, setSelectedRow] = useState([]);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
-  useEffect(() => {
-    console.log("Testing.....")
-    console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
-    console.log(rowSelectionModel)  // ....clear....???
-  }, [])
-
   const [statuscheck, setstatuscheck] = useState()
+  const [DeptDesc, setDeptDesc] = useState([])
+  const [WorkTypedesc, setWorkTypedesc] = useState([])
+  const [datanumber, setdatanumber] = useState([])
+  const [WorkTradedescp, setWorkTradedescp] = useState([])
   const handleCellClick = (params, event) => {
     const columnField = params.field;
     if (columnField === '__check__') {
       // This condition checks if the clicked cell is a checkbox cell
       // Retrieve the entire data of the clicked row using its ID
-      const clickedRow = filteredRows.find((row) => row.id === params.id);
-     
+      const clickedRow = filteredRowsss.find((row) => row.id === params.id);
+
       console.log(params.id);
       if (clickedRow) {
         console.log("Selected row data:", clickedRow);
-        
+        const Res = clickedRow.RequestNumber;
+        axios.post(`/api/getworkRequestsecond`, {
+          "RequestNumber": Res
+        }).then((res) => {
+          console.log('res', res);
+          const {
+            RequestNumber,
+            WorkType,
+            WorkPriority,
+            ProblemDescription,
+            RequestStatus,
+            ProblemCategory,
+            RequestDateTime,
+            AssetItemTagID,
+            EmployeeID,
+          } = res.data.recordsets[0][0];
+          setvalue((prevValue) => ({
+            ...prevValue,
+            WorkType,
+            EmployeeID,
+            WorkPriority,
+            ProblemDescription,
+            RequestStatus,
+            ProblemCategory,
+            RequestDateTime,
+            AssetItemTagID,
+            RequestNumber,
+            // DepartmentCode,
+            // LocationCode,
+            // BuildingCode
+          }));
+          const Depauto = res.data.recordsets[0][0].DepartmentCode
+          axios.get(`/api/Department_desc_LIST/${Depauto}`)
+            .then((res) => {
+              setDeptDesc(res.data.recordset[0].DepartmentDesc)
+            })
+            .catch((err) => {
+              //// console.log(err);;
+            });
+
+          const workaout = res.data.recordsets[0][0].WorkType
+          axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
+            console.log("WorkTrade_LIST", res.data.recordset);
+            if (res.data.recordsets[0][0] && res.data.recordsets[0][0].WorkTradeCode) {
+              setvalue((prevValue) => ({
+                ...prevValue,
+                WorkTrade: res.data.recordsets[0][0].WorkTradeCode,
+              }));
+              const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
+              axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
+                .then((res) => {
+                  console.log('WorkTrade_descri_LIST', res.data);
+                  setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
+                })
+                .catch((err) => {
+                  // console.log(err);;
+                });
+            }
+            else {
+              console.log("not");
+            }
+          })
+            .catch((err) => {
+              // console.log(err);;
+            });
+          axios.get(`/api/WorkType_descri_LIST/${workaout}`)
+            .then((res) => {
+              setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
+            })
+            .catch((err) => {
+              // console.log(err);;
+            });
+        }).catch((error) => {
+          console.log("error");
+        })
+
+
+
+        axios.post(`/api/getworkRequest`, {
+          "EmployeeID": clickedRow.EmployeeID
+        }).then((res) => {
+          console.log('asdfaf=====================================', res);
+          const {
+            EmployeeID,
+            Firstname,
+            Lastname,
+            Middlename,
+            MobileNumber,
+            LandlineNumber,
+            RequestDateTime,
+            DepartmentCode,
+            BuildingCode,
+            LocationCode,
+          } = res.data.recordsets[0][0];
+
+          setvalue((prevValue) => ({
+            ...prevValue,
+            EmployeeID,
+            Firstname,
+            Lastname,
+            Middlename,
+            MobileNumber,
+            LandlineNumber,
+            RequestDateTime,
+            DepartmentCode,
+            BuildingCode,
+            LocationCode,
+          }));
+        })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        axios.get(`/api/assetworkrequest_GET_BYID/${clickedRow.RequestNumber}`)
+          .then((res) => {
+            console.log('assetworkrequest  GET  BYID', res.data.recordset);
+            console.log('length', res.data.recordset.length);
+            const AssetItemDescriptionsssss = res.data.recordset
+            // setgetdata(res.data.recordset);
+            const SAQ = res.data.recordset.map((item) => item.seq);
+            const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
+            console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
+
+            const promises = res.data.recordset.map((item) => {
+              const itid = item.AssetItemDescription;
+              console.log(itid);
+
+              return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
+                .then((res) => {
+                  console.log('=====', res.data.recordset);
+                  return {
+                    item,
+                    data: res.data.recordset,// Store API response data here
+                  };
+
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return {
+                    item,
+                    data: null // Handle error case here
+                  };
+                });
+
+            });
+
+            const assetItemTagIDs = [];
+
+            // Create an array of promises for fetching data and updating assetItemTagIDs
+            const promisesNumber = res.data.recordset.map((item) => {
+              const itid = item.AssetItemDescription;
+              console.log(itid);
+
+              return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
+                .then((res) => {
+                  console.log('=====------', res.data.recordset[0].AssetItemTagID);
+                  return {
+                    item,
+                    data: res.data.recordset,// Store API response data here
+                  };
+
+                })
+
+
+                .catch((err) => {
+                  console.log(err);
+                  return {
+                    item,
+                    data: [] // Handle error case here
+                  };
+                });
+            });
+
+            Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
+              .then(([results1, results2]) => {
+
+
+                // console.log('dfrfdf---------------------',results1);
+                // console.log('-------------------------------', results2);
+                results1.forEach((itemRecords, index) => {
+                  console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
+                  // setgetdata(results);
+                  const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
+                    description: description,
+                    records: results1[index],
+                    saq: SAQ[index],
+                  }));
+
+                  const recordsWithSAQ = SAQ.map((saq, index) => ({
+                    saq: SAQ[index],
+                    records: results1[index],
+                  }));
+                  setgetdataprinter(recordsWithDescriptions, recordsWithSAQ);
+
+                });
+                results2.forEach((itemRecords, index) => {
+                  // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
+                  // console.log("---------------------------------",assetItemTagID);
+                  const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
+                    assetItemTagID: assetItemTagID,
+                    records: results2[index],
+                    saq: SAQ[index],
+                  }));
+                  setdatanumber(assetItemTagID);
+
+                });
+
+              });
+
+
+
+
+
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         console.log(clickedRow.RequestStatus);
         setstatuscheck(clickedRow.RequestStatus)
         // setSelectedRowIds([params.id])
-        setSelectedRowIds(clickedRow) 
+        setSelectedRowIds(clickedRow)
       }
       //    =======
       if (clickedRow) {
@@ -426,19 +1029,82 @@ function WorkRequest() {
       }
     }
   };
+
+  const countDuplicates = (array, key) => {
+    const counts = {};
+    array.forEach(item => {
+      const value = item[key];
+      counts[value] = (counts[value] || 0) + 1;
+    });
+    return counts;
+  };
+
+  // Get the data first
+  const duplicatesCount = countDuplicates(getdataprinter, 'description');
+  // Extract unique descriptions
+  const uniqueDescriptions = Array.from(new Set(getdataprinter.map(row => row.description)));
+  const filteredRows = uniqueDescriptions.map((description, index) => {
+    const assetQty = duplicatesCount[description] || 0;
+    const purchaseAmount = getdataprinter[index].records ? parseFloat(getdataprinter[index].records.data[0].PurchaseAmount) : '';
+    let totalPrice;
+
+    if (!isNaN(purchaseAmount)) {
+      if (assetQty === 1) {
+        totalPrice = purchaseAmount;
+      } else if (assetQty > 1) {
+        totalPrice = purchaseAmount * assetQty;
+      } else {
+        totalPrice = 0; // Handle cases where AssetQty is negative or invalid
+      }
+    } else {
+      totalPrice = 0; // Handle cases where purchaseAmount is not a valid number
+    }
+
+    return {
+      id: index + 1,
+      AssetItemDescription: description,
+      AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
+      AssetQty: duplicatesCount[description] || 0,
+      Model: getdataprinter[index].records ? getdataprinter[index].records.data[0].Model : '',
+      Manufacturer: getdataprinter[index].records ? getdataprinter[index].records.data[0].Manufacturer : '',
+      purchaseAmount: purchaseAmount,
+      TOTAL_PRICE: totalPrice,
+    };
+  });
+  // Calculate the overall TOTAL_PRICE
+  const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+  // Calculate the initial overallTotalPrice
+
+  const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+  const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+  // Function to calculate the overallTotalPrice
+  function calculateOverallTotalPrice(rows) {
+    return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+  }
+  filteredRows.forEach(row => {
+    const description = row.AssetItemDescription;
+    const count = row.AssetQty;
+    const AssetItemTagID = "sdf";
+
+    console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
+
+  });
+
+
+
   const handleAddToWorkRequest = () => {
     console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
-  if (!selectedRow || selectedRow.length === 0) {
-    console.log('Select a Work Request by checking the check box');
-    Swal.fire({
-      title: "Error",
-      text: `Select a Work Request by checking the check box`,
-      icon: "error",
-      confirmButtonText: "OK",
-    })
-   
-    return;
-  }
+    if (!selectedRow || selectedRow.length === 0) {
+      console.log('Select a Work Request by checking the check box');
+      Swal.fire({
+        title: "Error",
+        text: `Select a Work Request by checking the check box`,
+        icon: "error",
+        confirmButtonText: "OK",
+      })
+
+      return;
+    }
     if (statuscheck === 'This Work Request is already closed..') {
       console.log('This Work Request is already closed..');
       Swal.fire({
@@ -459,20 +1125,13 @@ function WorkRequest() {
     }
 
 
-  const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
-  console.log('Selected Row Data:', selectedRowData);
+    const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
+    console.log('Selected Row Data:', selectedRowData);
 
-  setSelectedRowIds(selectedRowData);
+    setSelectedRowIds(selectedRowData);
 
+  };
 
-  // Perform your logic to add to work request using selectedRowData
-  // Example: sendToWorkRequest(selectedRowData);
-};
-
-
-    // const handleRowClick = (selectedRows) => {
-    //     console.log(selectedRow)
-    // }
   return (
     <>
       <div className="bg">
@@ -502,7 +1161,17 @@ function WorkRequest() {
                       <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                         navigate('/createworkrequest')
                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
+                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"
+                        //  onClick={() => handlePrintTable(filteredRows)}
+                        onClick={() => {
+                          if (selectedRow.length === 1) {
+                            handlePrintTable2(filteredRows);
+                          } else {
+                            handlePrintTable1(filteredRowsss);
+                          }
+                        }}
+
+                      >
                         <PrintIcon className="me-1" />
                         Print
                       </button>
@@ -558,7 +1227,7 @@ function WorkRequest() {
                   </div>
                   <div style={{ height: 420, width: '100%' }}>
                     <DataGrid
-                      rows={filteredRows}
+                      rows={filteredRowsss}
                       columns={columns}
                       pagination
                       rowsPerPageOptions={[10, 25, 50]}
@@ -574,10 +1243,9 @@ function WorkRequest() {
                       onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
                         // console.log(newRowSelectionModel); // Logs the ids of selected rows
-                        const selectedRows = filteredRows.filter((row) => newRowSelectionModel.includes(row.id));
+                        const selectedRows = filteredRowsss.filter((row) => newRowSelectionModel.includes(row.id));
                         console.log(selectedRows)
                         setSelectedRow(selectedRows); // Set the state with selected row data objects
-                        // handleRowClick(selectedRows);
 
                       }}
                     />
