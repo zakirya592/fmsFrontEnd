@@ -27,14 +27,34 @@ import moment from 'moment';
 
 function Mainworkordeer() {
     const navigate = useNavigate();
+    const [value, setvalue] = useState({
+        orderNumber: '', RequestNumber: null, RequestStatus: '', workStatus: '', workPriority: '', WorkCategory: "", failureCode: '',
+        solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName: '',
+        costWork: '', AppointmentDateTime: "", ScheduledDateTime: '', WorkCategoryDiscriptionmain: '',
+        EmployeeID: '', Firstname: '', MobileNumber: '', Lastname: '', Middlename: '', LocationCode: '',
+        VAT: ''
+
+    })
+
+
+    const [datanumber, setdatanumber] = useState([])
+
+    const [WorkPrioritlist, setWorkPrioritlist] = useState([])
+    const [workCategorylist, setworkCategorylist] = useState([])
+    const [WorkCategoryDiscription, setWorkCategoryDiscription] = useState([])
+    const [failureStatusCodelist, setfailureStatusCodelist] = useState([])
+    const [solutionCodelist, setsolutionCodelist] = useState([])
 
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('');
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [getdata, setgetdata] = useState([])
 
     const [RequestStatusLIST, setRequestStatusLIST] = useState([])
+
+    const [failureDiscriptionCode, setFailureDiscriptionCode] = useState([]);
+    const [solutionCodeDiscription, setsolutionCodeDiscription] = useState("");
     // print button
-    const handlePrintTable = (tableData, selectedRowIds) => {
+    const handlePrintTable1 = (tableData) => {
         const printWindow = window.open('', '_blank');
         let selectedData;
         if (selectedRowIds.length == 1) {
@@ -115,6 +135,685 @@ function Mainworkordeer() {
         printWindow.document.close();
         printWindow.print();
     };
+
+    const handlePrintTable2 = (tableData)=>{
+        const printWindow = window.open('', '_blank');
+
+        const selectedDatass = tableData.map((row, index) => ({
+            'id': index + 1,
+            'AssetItemDescription': row.AssetItemDescription,
+            'AssetItemTag ID': row.AssetItemTagID,
+            'Manufacturer': row.Manufacturer,
+            'Model': row.Model,
+            'AssetQty': row.AssetQty,
+            'PurchaseAmount': row.PurchaseAmount,
+            'TOTAL_PRICE': row.TOTAL_PRICE,
+        }));
+        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
+        const tableHtml = `
+        <p style='text-align: center;
+    background: #426d93;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;'>WORK ORDER</p>
+    
+
+       <div style='display: flex;
+    justify-content: space-between'>
+      <table style='display: flex; justify-content: end;'>
+    <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                         Name:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            > ${value.EmployeeName}  ${value.Middlename}  ${value.Lastname} </p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          MobileNumber:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.MobileNumber}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Location Code:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.LocationCode}
+                                            </p>
+      </td>
+      </tr>
+
+
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                         Work Category:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            >${value.WorkCategory}</p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Solution Code:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.solutionCode}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Failure Code:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.failureCode}
+                                            </p>
+      </td>
+      </tr>
+
+       <tr>
+
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                         Assign to Employee:
+                                            </label>
+      </td>
+      <td>
+
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.assignEmployee}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+
+
+      <table style='display: flex; justify-content: end;'>
+
+  <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                       Work Request Number:
+                                            </label>
+      </td>
+      <td>
+        <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.RequestNumber}
+                                                placeholder=${'Enter Work Order Number'}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                         Completed By Employee:
+                                            </label>
+      </td>
+      <td>
+        <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.EmployeeID}
+                                                placeholder=${'Enter Work Order Number'}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                           work Status:
+                                            </label>
+      </td>
+      <td>
+       
+      <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${value.workStatus}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+
+
+
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                        Work Category Discription:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            >${WorkCategoryDiscription}</p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Solution Code Description:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${solutionCodeDiscription}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Failure Code Description:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${failureDiscriptionCode}
+                                            </p>
+      </td>
+      </tr>
+
+       <tr>
+
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                         Employee Name
+:
+                                            </label>
+      </td>
+      <td>
+
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.EmployeeName}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+      
+
+      </div>
+
+
+
+
+         <div style=' width: 100%;display: flex;'> 
+                                                    
+        <table style='width:100% ;text-align: left;margin: 30px 0px;'>
+        <tr style='background:#3d41cf; color:white'>
+          <th style="${headerStyle} padding: 5px">Work Description</th>
+          <th style="${headerStyle}">Start Date/Time</th>
+          <th style="${headerStyle}">End Date/Time</th>
+           <th style="${headerStyle}">Appointment Date/Time</th>
+          <th style="${headerStyle}">Scheduled Date/Time</th>
+        </tr>
+       
+          <tr>
+            <td>  
+                <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                            >
+                                            ${value.WorkCategoryDiscriptionmain}</p>
+                                            </td>
+                                              <td>
+                <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                            >
+                                           </p>
+                                            </td>
+                                                                <td>
+                <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                                readonly
+                                            >
+                                           
+                                            </p>
+                                            </td>
+
+                                                                                          <td>
+                <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                                readonly
+                                            >
+                                           
+                                            </p>
+                                            </td>
+
+                                                                                          <td>
+                <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border:none; padding: 10px;'
+                                                readonly
+                                            >
+                                          
+                                            </p>
+                                            </td>
+          </tr>
+      </table>
+
+                                
+    </div>
+    <table style='width:100% ;text-align: left;margin: 30px 0px; border: 1px solid black;
+  border-collapse: collapse;'>
+        <tr style='background:#3d41cf; color:white; '>
+          <th style="${headerStyle} padding: 5px ;">SEQ</th>
+          <th style="${headerStyle}">AssetItemDescription</th>
+          <th style="${headerStyle}">AssetItemTag ID</th>
+           <th style="${headerStyle}">Manufacturer</th>
+             <th style="${headerStyle}">Model</th>
+          <th style="${headerStyle} ">QTY</th>
+        <th style="${headerStyle}">UNITY PRICE</th>
+         <th style="${headerStyle}">TOTAL PRICE</th>
+
+        </tr>
+        ${selectedDatass.map(row => `
+          <tr>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['id']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetItemDescription']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetItemTag ID']}</td>
+  <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Manufacturer']}</td>
+    <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Model']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetQty']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['PurchaseAmount']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['TOTAL_PRICE']}</td>
+          </tr>`).join('')}
+      </table>
+
+      <div style='display: flex;
+    justify-content: space-between'>
+
+      <table style='display: flex; justify-content: end;'>
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                         Total days:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            ></p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Total Minutes:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                           
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Total hours:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            
+                                            </p>
+      </td>
+      </tr>
+
+       <tr>
+
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Cost of Work:
+                                            </label>
+      </td>
+      <td>
+
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                         
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+
+
+       <table style='display: flex;'>
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                           SUB TOTAL AMOUNT:
+                                            </label>
+      </td>
+      <td>
+         <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                               
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          VAT:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.VAT}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          TOTAL AMOUNT:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                           
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+
+      </div>
+
+      <div style="display: flex;justify-content: space-between;">
+      <p>Signature: _____________________________</p>
+       <p>Date: _____________________________</p>
+      </div>
+    `;
+
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    }
+    const countDuplicates = (array, key) => {
+        const counts = {};
+        array.forEach(item => {
+            const value = item[key];
+            counts[value] = (counts[value] || 0) + 1;
+        });
+        return counts;
+    };
+    // Get the data first
+    const duplicatesCount = countDuplicates(getdata, 'description');
+    // Extract unique descriptions
+    const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
+
+    const filteredRowsprinter = uniqueDescriptions.map((description, index) => {
+        const assetQty = duplicatesCount[description] || 0;
+        const purchaseAmount = getdata[index].records ? parseFloat(getdata[index].records.data[0].PurchaseAmount) : '';
+        let totalPrice;
+
+        if (!isNaN(purchaseAmount)) {
+            if (assetQty === 1) {
+                totalPrice = purchaseAmount;
+            } else if (assetQty > 1) {
+                totalPrice = purchaseAmount * assetQty;
+            } else {
+                totalPrice = 0; // Handle cases where AssetQty is negative or invalid
+            }
+        } else {
+            totalPrice = 0; // Handle cases where PurchaseAmount is not a valid number
+        }
+
+        return {
+            id: index + 1,
+            AssetItemDescription: description,
+            AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
+            ASQS: getdata.find(row => row.description === description)?.saq || 0,
+            AssetQty: assetQty,
+            Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
+            Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
+            PurchaseAmount: purchaseAmount,
+            TOTAL_PRICE: totalPrice,
+        };
+    });
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRowsprinter.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRowsprinter);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
+    filteredRowsprinter.forEach(row => {
+        const description = row.AssetItemDescription;
+        const count = row.AssetQty;
+        const AssetItemTagID = "sdf";
+
+        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
+
+    });
 
 
     // List a data thougth api 
@@ -359,10 +1058,9 @@ function Mainworkordeer() {
             // Retrieve the entire data of the clicked row using its ID
             const clickedRow = filteredRows.find((row) => row.id === params.id);
 
-            console.log(params.id);
             if (clickedRow) {
-                console.log("Selected row data:", clickedRow);
-
+                console.log('WorkRequestNumber', clickedRow.WorkRequestNumber);
+               console.log("Selected row data:", clickedRow);
                 console.log(clickedRow.OrderStatus);
                 setstatuscheck(clickedRow.WorkStatus)
                 // setSelectedRowIds([params.id])
@@ -449,19 +1147,15 @@ function Mainworkordeer() {
                                           navigate('/createworkorder')
                                       })}><AddCircleOutlineIcon className='me-1' />Create</button>
                                       {/* print  */}
-                                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => {
-                                        // Check if selectedRowIds is defined and not null before calling handlePrintTable
-if (selectedRowIds == undefined && selectedRowIds == null && selectedRowIds == []) {
-    handlePrintTable(filteredRows); // Pass an empty array if no selection
-
-} else {
-  // Handle the case where selectedRowIds is undefined or null
-  // You may choose to print the entire table or handle it differently
-    handlePrintTable(selectedRow, selectedRowIds);
-
-}
-
-                                      }}><PrintIcon className='me-1' />Print</button>
+                                      <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" 
+                                          onClick={() => {
+                                              if (selectedRow.length === 1) {
+                                                  handlePrintTable2();
+                                              } else {
+                                                  handlePrintTable1(filteredRows);
+                                              }
+                                          }}
+                                          ><PrintIcon className='me-1' />Print</button>
                                       {/* excel  */}
                                       <CSVLink data={filteredRows} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export
                                       </CSVLink>
@@ -523,7 +1217,7 @@ if (selectedRowIds == undefined && selectedRowIds == null && selectedRowIds == [
                                       rows={filteredRows}
                                       columns={columns}
                                       pagination
-                                      rowsPerPageOptions={[10, 25, 50]}
+                                      rowsPerPageOptions={[10, 25, 50]} // Optional: Set available page size options
                                       paginationModel={paginationModel}
                                       onPaginationModelChange={setPaginationModel}
                                       onCellClick={handleCellClick}

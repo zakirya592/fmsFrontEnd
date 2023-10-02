@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import { CircularProgress } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
+import PrintIcon from '@mui/icons-material/Print';
 
 function Updataworkrequest() {
     let { userId } = useParams();
@@ -887,7 +888,445 @@ function Updataworkrequest() {
             </div>
         );
     }
+    
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
 
+        const selectedData = tableData.map((row, index) => ({
+            'id': index + 1,
+            'AssetItemDescription': row.AssetItemDescription,
+            'AssetItemTag ID': row.AssetItemTagID,
+            'Manufacturer': row.Manufacturer,
+            'Model': row.Model,
+            'AssetQty': row.AssetQty,
+            'PurchaseAmount': row.PurchaseAmount,
+            'TOTAL_PRICE': row.TOTAL_PRICE,
+        }));
+        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
+        const tableHtml = `
+        <p style='text-align: center;
+    background: #426d93;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;'>WORK REQUEST</p>
+    
+
+       <div style='display: flex;
+    justify-content: space-between'>
+      <table style='display: flex; justify-content: end;'>
+    <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                         Name:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            > ${value.EmployeeName ? value.EmployeeName : ''} ${value.Middlename ? value.Middlename : ''}${value.Lastname ? value.Lastname : ''} </p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          MobileNumber:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.MobileNumber}
+                                            </p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Landline Number:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.LandlineNumber}
+                                            </p>
+      </td>
+      </tr>
+
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Location Code:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.LocationCode}
+                                            </p>
+      </td>
+      </tr>
+
+
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                        Department Code:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            >${value.DepartmentCode}</p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Work Type:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${value.WorkType}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Work Trade:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${value.WorkTrade ? value.WorkTrade : ''}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+
+
+      <table style='display: flex; justify-content: end;'>
+
+  <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                       Work Request Number:
+                                            </label>
+      </td>
+      <td>
+        <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.RequestNumber}
+                                                placeholder=${'Enter Work Order Number'}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                        Employee ID:
+                                            </label>
+      </td>
+      <td>
+        <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;margin:auto'
+                                                value=${value.EmployeeID}
+                                                placeholder=${'Enter Work Order Number'}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          Request Status:
+                                            </label>
+      </td>
+      <td>
+       
+      <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${value.RequestStatus}
+                                                placeholder='Enter  assignEmployee'
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+
+
+
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                        Work Priority:
+                                            </label>
+      </td>
+      <td>
+         <p
+                                                types='text'
+                                                id='ordernumber'
+                                            >${value.WorkPriority}</p>
+      </td>
+      </tr>
+
+        <tr >
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px'
+                                                className="lablesection color3 text-start mb-1 " >
+                                          Department Name:
+                                            </label>
+      </td>
+      <td>
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+                                                
+                                            >
+                                            ${DeptDesc}
+                                            </p>
+      </td>
+      </tr>
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                        Work Type Description:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${WorkTypedesc}
+                                            </p>
+      </td>
+      </tr>
+
+       <tr>
+
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                         Work Trade Description
+:
+                                            </label>
+      </td>
+      <td>
+
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${WorkTradedescp}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+      
+
+      </div>
+
+    <table style='width:100% ;text-align: left;margin: 30px 0px; border: 1px solid black;
+  border-collapse: collapse;'>
+        <tr style='background:#3d41cf; color:white; '>
+          <th style="${headerStyle} padding: 5px ;">SEQ</th>
+          <th style="${headerStyle}">AssetItemDescription</th>
+          <th style="${headerStyle}">AssetItemTag ID</th>
+           <th style="${headerStyle}">Manufacturer</th>
+             <th style="${headerStyle}">Model</th>
+          <th style="${headerStyle} ">QTY</th>
+        <th style="${headerStyle}">UNITY PRICE</th>
+         <th style="${headerStyle}">TOTAL PRICE</th>
+
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['id']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetItemDescription']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetItemTag ID']}</td>
+  <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Manufacturer']}</td>
+    <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Model']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['AssetQty']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['PurchaseAmount']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['TOTAL_PRICE']}</td>
+          </tr>`).join('')}
+      </table>
+
+       <table style='display: flex;justify-content: end'>
+      <tr>
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;'
+                                                className="lablesection color3 text-start mb-1" >
+                                           SUB TOTAL AMOUNT:
+                                            </label>
+      </td>
+      <td>
+         <input
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:1px solid #524d4dab;'
+                                                value=${overallTotalPrice}
+                                                readonly
+                                            ></input>
+      </td>
+      </tr>
+
+                <tr>
+                
+      <td>
+             <label
+                                                htmlFor="WorkOrderNumber"
+                                                style='font-weight: bold;margin-top:5px border: 1px solid black' >
+                                          TOTAL AMOUNT:
+                                            </label>
+      </td>
+      <td>
+       
+        <p
+                                                types='text'
+                                                id='ordernumber'
+                                                style='border-radius: 5px;border:none;'
+
+                                            >
+                                            ${overallTotalPrice}
+                                            </p>
+      </td>
+      </tr>
+
+      </table>
+
+      <div style="display: flex;justify-content: space-between;">
+      <p>Signature: _____________________________</p>
+       <p>Date: _____________________________</p>
+      </div>
+    `;
+
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
     const countDuplicates = (array, key) => {
         const counts = {};
         array.forEach(item => {
@@ -899,25 +1338,51 @@ function Updataworkrequest() {
 
     // Get the data first
     const duplicatesCount = countDuplicates(getdata, 'description');
-
-
     // Extract unique descriptions
     const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
-    // Create filteredRows with unique descriptions and counts
-    const filteredRows = uniqueDescriptions.map((description, index) => ({
-        id: index + 1,
-        AssetItemDescription: description,
-        AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
-        ASQS: getdata.find(row => row.description === description)?.saq || 0,
-        AssetQty: duplicatesCount[description] || 0,
-        AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
-        AssetCategory: getdata[index].records ? getdata[index].records.data[0].AssetCategory : '',
-        AssetSubCategory: getdata[index].records ? getdata[index].records.data[0].AssetSubCategory : '',
-        RequestDateTime: getdata[index].records ? getdata[index].records.data[0].RequestDateTime : '',
-        Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
-        Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
-    }));
+    const filteredRows = uniqueDescriptions.map((description, index) => {
+        const assetQty = duplicatesCount[description] || 0;
+        const purchaseAmount = getdata[index].records ? parseFloat(getdata[index].records.data[0].PurchaseAmount) : '';
+        let totalPrice;
 
+        if (!isNaN(purchaseAmount)) {
+            if (assetQty === 1) {
+                totalPrice = purchaseAmount;
+            } else if (assetQty > 1) {
+                totalPrice = purchaseAmount * assetQty;
+            } else {
+                totalPrice = 0; // Handle cases where AssetQty is negative or invalid
+            }
+        } else {
+            totalPrice = 0; // Handle cases where PurchaseAmount is not a valid number
+        }
+
+        return {
+            id: index + 1,
+            AssetItemDescription: description,
+            AssetItemTagID: datanumber[index]?.records?.data[0]?.AssetItemTagID || "",
+            ASQS: getdata.find(row => row.description === description)?.saq || 0,
+            AssetQty: duplicatesCount[description] || 0,
+            AssetItemGroup: getdata[index].records ? getdata[index].records.data[0].AssetItemGroup : '',
+            AssetCategory: getdata[index].records ? getdata[index].records.data[0].AssetCategory : '',
+            AssetSubCategory: getdata[index].records ? getdata[index].records.data[0].AssetSubCategory : '',
+            RequestDateTime: getdata[index].records ? getdata[index].records.data[0].RequestDateTime : '',
+            Model: getdata[index].records ? getdata[index].records.data[0].Model : '',
+            Manufacturer: getdata[index].records ? getdata[index].records.data[0].Manufacturer : '',
+            PurchaseAmount: purchaseAmount,
+            TOTAL_PRICE: totalPrice,
+        };
+    });
+    // Calculate the overall TOTAL_PRICE
+    const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    // Calculate the initial overallTotalPrice
+
+    const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
+    const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
+    // Function to calculate the overallTotalPrice
+    function calculateOverallTotalPrice(rows) {
+        return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
+    }
     filteredRows.forEach(row => {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
@@ -1430,13 +1895,6 @@ function Updataworkrequest() {
                                                 types='text'
                                                 id='Departmentname'
                                                 value={DeptDesc}
-
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         Departmentname: e.target.value
-                                                //     }))
-                                                // }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Department Name'
                                                 required
@@ -1527,12 +1985,6 @@ function Updataworkrequest() {
                                                 types='text'
                                                 id='WorkTypeDescription'
                                                 value={WorkTypedesc}
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         WorkTypeDesc: e.target.value
-                                                //     }))
-                                                // }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Work Type Description '
                                                 required
@@ -1637,8 +2089,11 @@ function Updataworkrequest() {
                                         localStorage.clear();
                                         navigate('/workRequest')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+<div className="d-flex">
+                                        <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
+                                        <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
 
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={Updatealldata}><SaveIcon className='me-2' />SAVE</button>
+</div>
                                 </div>
                             </div>
                         </div>
