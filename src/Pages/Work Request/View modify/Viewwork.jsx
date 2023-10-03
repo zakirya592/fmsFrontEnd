@@ -870,7 +870,9 @@ function Viewwork() {
             'PurchaseAmount': row.PurchaseAmount,
             'TOTAL_PRICE': row.TOTAL_PRICE,
         }));
-        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
+
+       
+       const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
         const tableHtml = `
         <p style='text-align: center;
     background: #426d93;

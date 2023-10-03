@@ -114,6 +114,7 @@ function WorkRequest() {
 
   const handlePrintTable2 = (tableData) => {
     const printWindow = window.open('', '_blank');
+    const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
 
     const selectedData = tableData.map((row, index) => ({
       'id': index + 1,
@@ -125,7 +126,7 @@ function WorkRequest() {
       'purchaseAmount': row.purchaseAmount,
       'TOTAL_PRICE': row.TOTAL_PRICE,
     }));
-    const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
+    
     const tableHtml = `
         <p style='text-align: center;
     background: #426d93;
