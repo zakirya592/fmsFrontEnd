@@ -107,6 +107,34 @@ function Maintransactiontable() {
     const handlePrintTable2 = (tableData) => {
         const printWindow = window.open('', '_blank');
         const headerStyle = 'font-weight: bold; background:#3d41cf, color:white';
+        const logsss = 'https://i.ibb.co/s1mkC8Q/log1.png'
+        const imageshowss = imageshow; // Replace with your second image URL
+
+        // Create promises to load both images
+        const loadImage1 = new Promise((resolve) => {
+            const img1 = new Image();
+            img1.src = logsss;
+            img1.onload = () => {
+                resolve(img1);
+            };
+        });
+
+        const loadImage2 = new Promise((resolve) => {
+            if (imageshowss) {
+                const img2 = new Image();
+                img2.src = imageshowss;
+                img2.onload = () => {
+                    resolve(img2);
+                };
+            } else {
+                const img2 = new Image();
+                img2.src = null;
+
+                resolve(img2); // Resolve with null if imageshowss is empty
+            }
+        });
+        Promise.all([loadImage1, loadImage2])
+            .then(([img1, img2]) => {
         const tableHtml = `
         <p style='text-align: center;
     background: #426d93;
@@ -116,7 +144,7 @@ function Maintransactiontable() {
     color: white;
     border-radius: 12px;'> Asset Management</p>
     <div style="display: flex;justify-content: space-between; margin:20px 10px">
-    <img src=${logo} alt='logo' width='150px' style='height: 150px'/>
+    <img src=${img1.src} alt='logo' width='150px' style='height: 150px'/>
     
   <p style='
      font-size: 26px;
@@ -124,7 +152,7 @@ function Maintransactiontable() {
     padding: 10px;
     margin: auto;
     border-radius: 12px;'> Asset Transaction</p>
-     <img src=${imageshow} alt='logo' width='150px' style='height: 150px'/>
+     <img src=${img2.src} alt='logo' width='150px' style='height: 150px'/>
     </div>
     <div style="display: flex;justify-content: space-between; margin:30px 10px">
 <div style='margin:auto 1px'>
@@ -345,6 +373,7 @@ function Maintransactiontable() {
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.print();
+            })
     };
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
