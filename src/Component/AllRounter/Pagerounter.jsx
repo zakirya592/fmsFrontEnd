@@ -102,6 +102,10 @@ import Stockinventory from '../../Pages/Warehouse Management/Stock Master Invent
 import Recorderminimul from '../../Pages/Warehouse Management/Reorder/Recorderminimul'
 import Expiredwarranty from '../../Pages/Warehouse Management/Expired Warranty Ends/Expiredwarranty'
 import Transferloaction from '../../Pages/Warehouse Management/Transfer Locations/Transferloaction'
+import Mainbuildings from '../../Pages/Space Management/Buildings/Mainbuildings'
+import Createbuilding from '../../Pages/Space Management/Buildings/Createbuilding'
+import Roommaintenance from '../../Pages/Space Management/Room Maintenance/Roommaintenance'
+import Createroommaintence from '../../Pages/Space Management/Room Maintenance/Createroommaintence'
 
 function Pagerounter() {
 
@@ -286,6 +290,14 @@ function Pagerounter() {
           {/* Transferloaction */}
           <Route exact path="/TransferLocation" element={<Transferloaction />} />
 
+          {/* Space Management */}
+          <Route exact path="/Create/Buildings" element={<Createbuilding />} />
+          <Route exact path="/Buildings" element={<Mainbuildings />} />
+
+          {/* Room Management */}
+          <Route exact path="/Roomaintenance" element={<Roommaintenance />} />
+
+          <Route exact path="/Create/Roomaintenance" element={<Createroommaintence />} />
         </Routes>
       </BrowserRouter>
     </>

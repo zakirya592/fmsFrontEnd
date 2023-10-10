@@ -60,7 +60,7 @@ function Spacemanagementsidebar() {
                     <List className='setupsidebar'>
                         {['.Building'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/Building')
+                                navigate('/Buildings')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
@@ -80,11 +80,11 @@ function Spacemanagementsidebar() {
                             </ListItem>
                         ))}
                     </List>
-                    {/*Rooms  */}
+                    {/*Roomaintenance  */}
                     <List className='setupsidebar'>
                         {['.Rooms '].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/Rooms')
+                                navigate('/Roomaintenance')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
