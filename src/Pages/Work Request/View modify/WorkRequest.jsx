@@ -126,7 +126,7 @@ function WorkRequest() {
       'purchaseAmount': row.purchaseAmount,
       'TOTAL_PRICE': row.TOTAL_PRICE,
     }));
-    
+
     const tableHtml = `
         <p style='text-align: center;
     background: #426d93;

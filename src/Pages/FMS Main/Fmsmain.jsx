@@ -25,6 +25,8 @@ import Assetmanagement from '../../Component/Siderbar/Assetmanagement';
 import SetupSidebar from '../Setup&Configuration/SetupSidebar';
 import UserManagementSidebar from '../UserManagement/UserManagementSidebar';
 import Purchasingsidbard from '../../Component/Siderbar/Purchasing siderbar/Purchasingsidbard';
+import Spacemanagementsidebar from '../../Component/Siderbar/Space Management/Spacemanagementsidebar';
+import Warehousesidebar from '../../Component/Siderbar/Warehouse Management/Warehousesidebar';
 
 function Fmsmain() {
     const navigate = useNavigate();
@@ -32,6 +34,8 @@ function Fmsmain() {
     const [showUserSidebar, setShowUserSidebar] = useState(false);
     const [AssetmanagementSidebar, setAssetmanagementSidebar] = useState(false);
     const [Purchasingmanagment, setPurchasingmanagment] = useState(false)
+    const [spaceManagementstate, setspaceManagementstate] = useState(false)
+    const [WarehouseManagementstate, setWarehouseManagementstate] = useState(false)
 
     const handleClick = () => {
         setShowSidebar(!showSidebar);
@@ -42,11 +46,16 @@ function Fmsmain() {
     const handleAssetmanagementSidebar = () => {
         setAssetmanagementSidebar(!AssetmanagementSidebar)
     }
-
     const handerPurchasingmanagmentsidebar = () => {
         setPurchasingmanagment(!Purchasingmanagment)
     }
-  
+    const spaceManagementheandle = () => {
+        setspaceManagementstate(!spaceManagementstate)
+    }
+    const WarehouseManagementheandle = () => {
+        setWarehouseManagementstate(!WarehouseManagementstate)
+    }
+
     return (
         <div>
             <div className='bg'>
@@ -87,22 +96,21 @@ function Fmsmain() {
                                                 </div>
                                                 <p className='textstyle'>Location Management</p>
                                             </div>
-
+                                            {/* mainlog */}
                                             <div className="w-secCircle">
                                                 <img src={mainlog} alt="Amazon" width='100%' />
                                             </div>
-
+                                            {/* Asset Management  */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={handleAssetmanagementSidebar}>
                                                     <img src={Assetmanagemtn} alt="upwork" width='100%' />
                                                 </div>
                                                 <div className="d-flex">
 
-                                                <p className='textstyle'>Asset Management </p>
-                                                {AssetmanagementSidebar && <Assetmanagement />}
+                                                    <p className='textstyle'>Asset Management </p>
+                                                    {AssetmanagementSidebar && <Assetmanagement />}
                                                 </div>
                                             </div>
-                                           
                                             {/* setupconfiguration */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={handleClick}>
@@ -112,68 +120,67 @@ function Fmsmain() {
                                                     <p className='textstyle'>Setup & Configuration</p>
                                                     {showSidebar && <SetupSidebar />}
                                                 </div>
-                                                
-                                            </div>
 
+                                            </div>
                                             {/* UserManagementSidebar */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={handerPurchasingmanagmentsidebar}>
                                                     <img src={usermanagment} alt="upwork" width='100%' />
                                                 </div>
                                                 <div className="d-flex">
-                                                <p className='textstyle'>User Management</p>
+                                                    <p className='textstyle'>User Management</p>
                                                     {Purchasingmanagment && <UserManagementSidebar />}
                                                 </div>
                                             </div>
-
                                             {/* PurchasingManagement */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={handleUserSidebar}>
                                                     <img src={PurchasingManagement} alt="upwork" width='100%' />
                                                 </div>
                                                 <div className="d-flex">
-                                                <p className='textstyle'>Purchasing<br></br> Management</p>
-                                                
+                                                    <p className='textstyle'>Purchasing<br></br> Management</p>
+
                                                     {showUserSidebar && <Purchasingsidbard />}
                                                 </div>
                                             </div>
-
+                                            {/* Warehouse Management */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={WarehouseManagementheandle}>
                                                     <img src={WarehouseManagement} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Warehouse <br></br>Management</p>
+                                                {WarehouseManagementstate && <Warehousesidebar />}
                                             </div>
-
+                                            {/* Dashboard */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside">
                                                     <img src={Dashboard} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Dashboard</p>
                                             </div>
-
+                                            {/* Reports */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside">
                                                     <img src={Reports} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Reports</p>
                                             </div>
-
+                                            {/* space Management */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={spaceManagementheandle}>
                                                     <img src={SpaceManagement} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Space Management</p>
+                                                {spaceManagementstate && <Spacemanagementsidebar />}
                                             </div>
-
+                                            {/* Log-out */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside">
                                                     <img src={Logout} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Log-out </p>
                                             </div>
-
-                                            {/* workRequest        */}
+                                            {/* workRequest */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={(() => {
                                                     navigate('/workRequest')
@@ -182,7 +189,6 @@ function Fmsmain() {
                                                 </div>
                                                 <p className='textstyle' >Work Request </p>
                                             </div>
-
                                             {/* workorder */}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={(() => {
@@ -192,7 +198,6 @@ function Fmsmain() {
                                                 </div>
                                                 <p className='textstyle'>Work Orders </p>
                                             </div>
-
                                             {/* Preventive Maintenance*/}
                                             <div className="w-secCircle">
                                                 <div className="w-secCircleindside" onClick={(() => {

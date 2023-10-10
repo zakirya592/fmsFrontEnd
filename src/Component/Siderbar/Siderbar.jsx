@@ -33,21 +33,23 @@ import Assetmanagement from './Assetmanagement';
 import Purchasingsidbard from './Purchasing siderbar/Purchasingsidbard';
 import { MenuItem, Menu } from "@mui/material"
 import Warehousesidebar from './Warehouse Management/Warehousesidebar';
+import Spacemanagementsidebar from './Space Management/Spacemanagementsidebar';
 const drawerWidth = 250;
 
 
 function Siderbar(props) {
     const [showSidebar, setShowSidebar] = useState(false);
-    const [showUserSidebar, setShowUserSidebar]=useState(false);
+    const [showUserSidebar, setShowUserSidebar] = useState(false);
     const [AssetmanagementSidebar, setAssetmanagementSidebar] = useState(false);
     const [Purchasingmanagment, setPurchasingmanagment] = useState(false)
     const [WarehouseManagementstate, setWarehouseManagementstate] = useState(false)
+    const [spaceManagementstate, setspaceManagementstate] = useState(false)
     const handleClick = () => {
         setShowSidebar(!showSidebar);
-      };
-     const  handleUserSidebar = ( ) => {
+    };
+    const handleUserSidebar = () => {
         setShowUserSidebar(!showUserSidebar)
-     }
+    }
     const handleAssetmanagementSidebar = () => {
         setAssetmanagementSidebar(!AssetmanagementSidebar)
     }
@@ -60,6 +62,9 @@ function Siderbar(props) {
         setWarehouseManagementstate(!WarehouseManagementstate)
     }
 
+    const spaceManagementheandle = () => {
+        setspaceManagementstate(!spaceManagementstate)
+    }
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -88,6 +93,7 @@ function Siderbar(props) {
                 >
 
                 </AppBar>
+
                 <Drawer
                     sx={{
                         width: drawerWidth,
@@ -101,7 +107,7 @@ function Siderbar(props) {
                     anchor="left"
                 >
                     <Toolbar />
-                    {/* <Divider /> */}
+                    {/* LOG */}
                     <span className="">
                         <center onClick={(() => {
                             navigate('/')
@@ -113,7 +119,7 @@ function Siderbar(props) {
                     {/* Work Request */}
                     <List>
                         {['Work Request'].map((text, index) => (
-                            <ListItem key={text} disablePadding 
+                            <ListItem key={text} disablePadding
                                 onClick={handleClicked}
                             >
                                 <ListItemButton>
@@ -133,6 +139,7 @@ function Siderbar(props) {
                         <MenuItem onClick={handleClose}>Close</MenuItem>
                         <MenuItem onClick={handleNewTabClick}>New Tab</MenuItem>
                     </Menu>
+
                     {/* Work Order */}
                     <List>
                         {['Work Order'].map((text, index) => (
@@ -197,12 +204,13 @@ function Siderbar(props) {
                         ))}
                     </List>
 
+                    {/* 'Asset Management */}
                     <List>
                         {['Asset Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={handleAssetmanagementSidebar}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={Assetmanagemtn} className="sidebaricon my-auto" alt=''/> : <img src={Assetmanagemtn} className="sidebaricon my-auto"  alt/>}
+                                        {index % 2 === 0 ? <img src={Assetmanagemtn} className="sidebaricon my-auto" alt='' /> : <img src={Assetmanagemtn} className="sidebaricon my-auto" alt />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -210,24 +218,25 @@ function Siderbar(props) {
                         ))}
                     </List>
                     {AssetmanagementSidebar && <Assetmanagement />}
+
                     {/* Setup & Configuration */}
                     <List>
-        {['Setup & Configuration'].map((text, index) => (
-          <ListItem key={text} disablePadding onClick={handleClick}>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? (
-                  <img src={setupcon} className="sidebaricon my-auto" alt="" />
-                ) : (
-                  <img src={setupcon} className="sidebaricon my-auto" alt="" />
-                )}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      {showSidebar && <SetupSidebar />}
+                        {['Setup & Configuration'].map((text, index) => (
+                            <ListItem key={text} disablePadding onClick={handleClick}>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        {index % 2 === 0 ? (
+                                            <img src={setupcon} className="sidebaricon my-auto" alt="" />
+                                        ) : (
+                                            <img src={setupcon} className="sidebaricon my-auto" alt="" />
+                                        )}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                    {showSidebar && <SetupSidebar />}
 
                     {/* Usergmanagment */}
                     <List>
@@ -235,15 +244,15 @@ function Siderbar(props) {
                             <ListItem key={text} disablePadding onClick={handerPurchasingmanagmentsidebar}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={usermanagment} className="sidebaricon my-auto" alt=''/> : <img src={usermanagment} className="sidebaricon my-auto" alt=''/>}
+                                        {index % 2 === 0 ? <img src={usermanagment} className="sidebaricon my-auto" alt='' /> : <img src={usermanagment} className="sidebaricon my-auto" alt='' />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
-                    {Purchasingmanagment && <UserManagementSidebar/>}
-                    
+                    {Purchasingmanagment && <UserManagementSidebar />}
+
                     {/* PurchasingManagement */}
                     <List>
                         {['Purchasing  Management'].map((text, index) => (
@@ -259,6 +268,7 @@ function Siderbar(props) {
                     </List>
                     {showUserSidebar && <Purchasingsidbard />}
 
+                    {/* Warehouse Management */}
                     <List>
                         {['Warehouse Management'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={WarehouseManagementheandle}>
@@ -273,6 +283,7 @@ function Siderbar(props) {
                     </List>
                     {WarehouseManagementstate && <Warehousesidebar />}
 
+                    {/* Dashboard */}
                     <List>
                         {['Dashboard'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
@@ -288,6 +299,7 @@ function Siderbar(props) {
                         ))}
                     </List>
 
+                    {/* Reports */}
                     <List>
                         {['Reports'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
@@ -303,11 +315,10 @@ function Siderbar(props) {
                         ))}
                     </List>
 
+                    {/* Space Management */}
                     <List>
                         {['Space Management'].map((text, index) => (
-                            <ListItem key={text} disablePadding onClick={(() => {
-                                // navigate('/WorkRequest')
-                            })}>
+                            <ListItem key={text} disablePadding onClick={spaceManagementheandle}>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index % 2 === 0 ? <img src={SpaceManagement} className="sidebaricon my-auto" /> : <img src={SpaceManagement} className="sidebaricon my-auto" />}
@@ -317,7 +328,9 @@ function Siderbar(props) {
                             </ListItem>
                         ))}
                     </List>
+                    {spaceManagementstate && <Spacemanagementsidebar />}
 
+                    {/* Log-out */}
                     <List>
                         {['Log-out'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
