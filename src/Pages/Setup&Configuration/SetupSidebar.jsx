@@ -214,6 +214,18 @@ function SetupSidebar() {
                         </ListItem>
                     ))}
                 </List>
+                {/* Floor */}
+                <List className='setupsidebar'>
+                    {['. Floor'].map((text, index) => (
+                        <ListItem key={text} disablePadding onClick={(() => {
+                            navigate('/Floor')
+                        })}>
+                            <ListItemButton>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
                 {/* Frequency */}
                 <List className='setupsidebar'>
                     {['. Frequency'].map((text, index) => (
@@ -370,7 +382,6 @@ function SetupSidebar() {
                         </ListItem>
                     ))}
                 </List>
-                
                 {/* Vendor/Supplier   */}
                 <List className='setupsidebar setupsidebarlast'>
                     {['. Vendor/Supplier '].map((text, index) => (

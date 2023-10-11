@@ -106,6 +106,7 @@ import Mainbuildings from '../../Pages/Space Management/Buildings/Mainbuildings'
 import Createbuilding from '../../Pages/Space Management/Buildings/Createbuilding'
 import Roommaintenance from '../../Pages/Space Management/Room Maintenance/Roommaintenance'
 import Createroommaintence from '../../Pages/Space Management/Room Maintenance/Createroommaintence'
+import Floor from '../../Pages/Setup&Configuration/Floor/Floor'
 
 function Pagerounter() {
 
@@ -173,6 +174,8 @@ function Pagerounter() {
           <Route exact path='/TradeMaintenance' element={<TradeMaintenance />} />
           {/*Day*/}
           <Route exact path='/Day' element={<Day />} />
+          {/*Floor*/}
+          <Route exact path='/Floor' element={<Floor />} />
           {/*Frequency*/}
           <Route exact path='/Frequency' element={<Frequency />} />
           {/*Gender*/}
