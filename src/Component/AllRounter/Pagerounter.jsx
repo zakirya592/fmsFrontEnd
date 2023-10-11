@@ -107,6 +107,8 @@ import Createbuilding from '../../Pages/Space Management/Buildings/Createbuildin
 import Roommaintenance from '../../Pages/Space Management/Room Maintenance/Roommaintenance'
 import Createroommaintence from '../../Pages/Space Management/Room Maintenance/Createroommaintence'
 import Floor from '../../Pages/Setup&Configuration/Floor/Floor'
+import Viewbuilding from '../../Pages/Space Management/Buildings/Viewbuilding'
+import Updatabuilding from '../../Pages/Space Management/Buildings/Updatabuilding'
 
 function Pagerounter() {
 
@@ -296,10 +298,11 @@ function Pagerounter() {
           {/* Space Management */}
           <Route exact path="/Create/Buildings" element={<Createbuilding />} />
           <Route exact path="/Buildings" element={<Mainbuildings />} />
+          <Route exact path="/View/Building/:userId" element={<Viewbuilding />} />
+          <Route exact path="/Update/Building/:userId" element={<Updatabuilding />} />
 
           {/* Room Management */}
           <Route exact path="/Roomaintenance" element={<Roommaintenance />} />
-
           <Route exact path="/Create/Roomaintenance" element={<Createroommaintence />} />
         </Routes>
       </BrowserRouter>

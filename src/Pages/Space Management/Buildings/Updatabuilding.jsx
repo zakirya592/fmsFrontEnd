@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import SaveIcon from '@mui/icons-material/Save';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'
 import Swal from "sweetalert2";
 import Printer from "../../../Image/building.png"
@@ -14,8 +14,9 @@ import BrowserFolder from "../../../Image/browsefolder 3.png"
 import { GoogleMap, StandaloneSearchBox, Marker } from '@react-google-maps/api';
 import { Modal, Button, Form } from "react-bootstrap";
 
-function Createbuilding() {
+function Updatabuilding() {
     const navigate = useNavigate();
+    let { userId } = useParams();
 
     const [value, setvalue] = useState({
         BuildingCode: '', Buildiingname: '',
@@ -23,6 +24,44 @@ function Createbuilding() {
         Latitude: '', Longtitude: '',
         BuildingCapacity: '0'
     })
+
+    const [locationsapi, setlocationsapi] = useState([]);
+
+    const getapi = () => {
+        axios.get(`/api/Building_newpage_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Assets Master By ID', res.data);
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    BuildingCode: res.data.data[0].BuildingCode,
+                    Buildiingname: res.data.data[0].BuildingDesc,
+                    BuildingCapacity: res.data.data[0].Capacity,
+                    Latitude: res.data.data[0].Latitude,
+                    Longtitude: res.data.data[0].Longtitude,
+                    LocationCode: res.data.data[0].LocationCode,
+                }));
+
+                setlocationsapi(res.data.data[0].Longtitude);
+                setimageshow(res.data.data[0].BuildingImage)
+
+                const loactiondesc = res.data.data[0].LocationCode
+                axios.get(`/api/Location_GET_BYID/${loactiondesc}`)
+                    .then((res) => {
+                        // console.log(res.data);
+                        setlocationdesc(res.data.recordset[0].LocationDesc)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
     const [dropdownLocation, setdropdownLocation] = useState([])
 
@@ -47,7 +86,6 @@ function Createbuilding() {
         }));
         axios.get(`/api/Location_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
                 setlocationdesc(res.data.recordset[0].LocationDesc)
             })
             .catch((err) => {
@@ -63,9 +101,6 @@ function Createbuilding() {
     }
 
     // Map Loactiuon
-
-
-    // Design section 
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
     const handleShowModal = () => {
@@ -141,21 +176,20 @@ function Createbuilding() {
     };
 
     const formData = new FormData();
-    formData.append('BuildingCode', value.BuildingCode);
     formData.append('BuildingDesc', value.Buildiingname);
     formData.append('Capacity', value.BuildingCapacity);
-    formData.append('Latitude', selectedLocation?.latitude || '');
-    formData.append('Longtitude', selectedLocation?.longitude || '');
+    formData.append('Latitude', selectedLocation?.latitude || value.Latitude);
+    formData.append('Longtitude', selectedLocation?.longitude || value.Longtitude);
     formData.append('LocationCode', value.LocationCode);
     formData.append('BuildingImage', selectedFile);
 
     const addtransaction = async () => {
-        axios.post(`/api/Building_newpage_post`, formData)
+        axios.put(`/api/Building_newpage_Put/${userId}`, formData)
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
-                    'Created!',
-                    `Building Maintenance  ${value.BuildingCode} has been created successfully`,
+                    'Update!',
+                    `Building Maintenance  ${userId} has been updated`,
                     'success'
                 )
                 navigate('/Buildings')
@@ -171,8 +205,6 @@ function Createbuilding() {
             });
 
     };
-
-
 
     return (
         <>
@@ -197,7 +229,7 @@ function Createbuilding() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        Building Maintenance - Create
+                                        Building Maintenance - Modify
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -246,6 +278,7 @@ function Createbuilding() {
                                                         BuildingCode: e.target.value
                                                     }))
                                                 }}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Building Code'
                                             ></input>
@@ -331,7 +364,7 @@ function Createbuilding() {
                                             <input
                                                 type='text'
                                                 id='Latitude'
-                                                value={selectedLocation ? selectedLocation.latitude : ""}
+                                                value={selectedLocation ? selectedLocation.latitude : value.Latitude}
 
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -355,7 +388,7 @@ function Createbuilding() {
                                             <input
                                                 type='text'
                                                 id='Longtitude'
-                                                value={selectedLocation ? selectedLocation.longitude : ""}
+                                                value={selectedLocation ? selectedLocation.longitude : value.Longtitude}
 
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
@@ -371,13 +404,13 @@ function Createbuilding() {
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className="mb-3">
+                                        <div className="my-2">
                                             <label
                                                 htmlFor="Locationmap"
                                                 className="lablesection color3 text-start mb-1">
                                                 My Location
                                             </label>
-                                            <button id='Locationmap' className='fs-6 py-2 w-100 loactiontak px-2 fw-bold bg-light border border-secondary loactioncolor ' onClick={handleShowModal}>
+                                            <button id='Locationmap' className='fs-6 rounded py-2 w-100 loactiontak px-2 fw-bold bg-light border border-secondary loactioncolor ' onClick={handleShowModal}>
                                                 Pick your Location
                                             </button>
                                         </div>
@@ -465,7 +498,8 @@ function Createbuilding() {
 
                                 </Marker>
                             )}
-                        </GoogleMap>
+
+                       </GoogleMap>
 
                         <Form onSubmit={handleFormSubmit}>
                             <Form.Group controlId="formLatitude">
@@ -491,12 +525,9 @@ function Createbuilding() {
                         </Form>
                     </Modal.Body>
                 </Modal>
-
-                {selectedLocation ? <p>{localStorage.setItem('latitude', selectedLocation.latitude)}</p> : ""}
-                {selectedLocation ? <p>{localStorage.setItem('longitude', selectedLocation.longitude)}</p> : ""}
             </div>
         </>
     );
 }
 
-export default Createbuilding;
+export default Updatabuilding;

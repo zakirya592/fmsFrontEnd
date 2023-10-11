@@ -29,10 +29,10 @@ function Mainbuildings() {
 
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/EmployeeMaster_GET_LIST`, {
-        },)
+        axios.get(`/api/Building_newpage_GET_List`)
             .then((res) => {
-                setgetdata(res.data.recordset)
+                console.log(res.data.data);
+                setgetdata(res.data.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -45,18 +45,18 @@ function Mainbuildings() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'EmployeeID', headerName: 'Building Code', width: 160 },
-        { field: 'FullName', headerName: 'DESCRIPTION ', width: 300 },
-        { field: 'NationalityCode', headerName: 'Capacity', width: 190 },
-        { field: 'BuildingCode', headerName: 'GPS Latitude', width: 190 },
-        { field: 'DepartmentCode', headerName: 'GPS Longtitude', width: 190 },
+        { field: 'BuildingCode', headerName: 'Building Code', width: 160 },
+        { field: 'BuildingDesc', headerName: 'DESCRIPTION ', width: 300 },
+        { field: 'Capacity', headerName: 'Capacity', width: 190 },
+        { field: 'Latitude', headerName: 'GPS Latitude', width: 190 },
+        { field: 'Longtitude', headerName: 'GPS Longtitude', width: 190 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
 
-        const Deletedapi = (EmployeeID) => {
+        const Deletedapi = (BuildingCode) => {
             handleMenuClose();
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -69,7 +69,7 @@ function Mainbuildings() {
 
             swalWithBootstrapButtons.fire({
                 title: 'Are you sure?',
-                text: `Do you want to deleting ${EmployeeID} BUILDING MAINTENANCE !`,
+                text: `Do you want to deleting ${BuildingCode} BUILDING MAINTENANCE !`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -77,10 +77,8 @@ function Mainbuildings() {
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/EmployeeMaster_DELETE_BYID/${EmployeeID}`)
+                    axios.delete(`/api/Building_newpage_DELETE_BYID/${BuildingCode}`)
                         .then((res) => {
-                            // Handle successful delete response
-                            console.log('Deleted successfully', res);
                             getapi()
                         })
                         .catch((err) => {
@@ -89,7 +87,7 @@ function Mainbuildings() {
                         });
                     swalWithBootstrapButtons.fire(
                         'Deleted!',
-                        `BUILDING MAINTENANCE ${EmployeeID}  has been deleted.`,
+                        `BUILDING MAINTENANCE ${BuildingCode}  has been deleted.`,
                         'success'
                     )
                 }
@@ -104,16 +102,6 @@ function Mainbuildings() {
             setAnchorEl(null);
         };
 
-        const handleUpdate = () => {
-            // Handle update action
-            handleMenuClose();
-        };
-
-        const handleDeleteButtonClick = () => {
-            // Handle delete action
-            handleMenuClose();
-        };
-
         return (
             <div>
                 <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
@@ -126,18 +114,18 @@ function Mainbuildings() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem onClick={(() => {
-                        navigate(`/View/Employeemaster/${params.row.EmployeeID}`)
+                        navigate(`/View/Building/${params.row.BuildingCode}`)
                     })}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
                     <MenuItem onClick={(() => {
-                        navigate(`/Updata/Employeemaster/${params.row.EmployeeID}`)
+                        navigate(`/Update/Building/${params.row.BuildingCode}`)
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => Deletedapi(params.row.EmployeeID)}>
+                    <MenuItem onClick={() => Deletedapi(params.row.BuildingCode)}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -151,16 +139,15 @@ function Mainbuildings() {
     const filteredData = getdata && getdata.filter(row => (
         (!EmployeeIDfilter || row.EmployeeID.toLowerCase().includes(EmployeeIDfilter.toLowerCase()))
     )).map((row, index) => {
-        const fullName = `${row.Firstname} ${row.Middlename} ${row.Lastname}`.trim();
         return {
             ...row,
             id: index + 1,
-            RequestNumber: row.RequestNumber,
-            EmployeeID: row.EmployeeID,
-            FullName: fullName, // Combine first name, middle name, and last name
-            NationalityCode: row.NationalityCode,
             BuildingCode: row.BuildingCode,
-            DepartmentCode: row.DepartmentCode,
+            BuildingDesc: row.BuildingDesc,
+            Capacity: row.Capacity, // Combine first name, middle name, and last name
+            NationalityCode: row.NationalityCode,
+            Latitude: row.Latitude,
+            Longtitude: row.Longtitude,
             Gender: row.Gender,
         };
     });
@@ -170,74 +157,28 @@ function Mainbuildings() {
     const [selectedRow, setSelectedRow] = useState([]);
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
-    // Updata btn
+    // Updata Button
     const handleAddToWorkRequest = () => {
         if (!selectedRow || selectedRow.length === 0) {
             Swal.fire({
                 title: "Error",
-                text: `Select a BUILDING MAINTENANCE by checking the check box`,
+                text: `Select a Building MAINTENANCE by checking the check box`,
                 icon: "error",
                 confirmButtonText: "OK",
             })
-
             return;
         }
-
         // Assuming you want to navigate to the update page of the first selected row
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
-            console.log('Post the Data:', firstSelectedRow.EmployeeID);
-            navigate(`/Updata/Employeemaster/${firstSelectedRow.EmployeeID}`)
+            console.log('Post the Data:', firstSelectedRow.BuildingCode);
+            navigate(`/Update/Building/${firstSelectedRow.BuildingCode}`)
         }
-
         const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
         setSelectedRowIds(selectedRowData);
         // Example: sendToWorkRequest(selectedRowData);
     };
 
-    // Import 
-    const handleFileUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0]; // Assuming you have data in the first sheet
-                const sheet = workbook.Sheets[sheetName];
-                const json = XLSX.utils.sheet_to_json(sheet);
-                json.forEach((item) => {
-                    axios.post(`/api/WorkTrade_post`, {
-                        WorkTypeCode: item.WorkTypeCode, // Adjust property names as needed
-                        WorkTradeCode: item.WorkTradeCode,
-                        WorkTradeDesc: item.WorkTradeDesc,
-                        // Add more properties as needed
-                    })
-                        .then((res) => {
-                            console.log('Add', res.data);
-                            // Handle success
-                            Swal.fire(
-                                'Add!',
-                                `Building maintenance has been created`,
-                                'success'
-                            )
-                            getapi()
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            Swal.fire(
-                                'Error!',
-                                `Some Building maintenance already exist`,
-                                'error'
-                            )
-                            // Handle errors
-                        });
-                });
-            };
-            reader.readAsArrayBuffer(file);
-
-        }
-    };
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 25,
@@ -273,11 +214,6 @@ function Mainbuildings() {
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/Buildings')
                                             })}><AddCircleOutlineIcon className='me-1' />Create</button>
-                                            <label type="button" className="btn btn-outline-primary mx-1 color2 btnwork" htmlFor="Importdata">
-                                                <img src={excel} alt="export" className='me-1' />
-                                                Import <GetAppIcon />
-                                            </label>
-                                            <input type="file" accept=".xlsx" onChange={handleFileUpload} className='d-none' id='Importdata' />
                                             <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
                                             </CSVLink>
                                         </div>

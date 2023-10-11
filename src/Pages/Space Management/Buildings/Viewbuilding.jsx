@@ -5,17 +5,18 @@ import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import SaveIcon from '@mui/icons-material/Save';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'
-import Swal from "sweetalert2";
 import Printer from "../../../Image/building.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
-import { GoogleMap, StandaloneSearchBox, Marker } from '@react-google-maps/api';
-import { Modal, Button, Form } from "react-bootstrap";
 
-function Createbuilding() {
+function Viewbuilding() {
     const navigate = useNavigate();
+    let { userId } = useParams();
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imageshow, setimageshow] = useState()
+    const [dropdownLocation, setdropdownLocation] = useState([])
 
     const [value, setvalue] = useState({
         BuildingCode: '', Buildiingname: '',
@@ -24,7 +25,40 @@ function Createbuilding() {
         BuildingCapacity: '0'
     })
 
-    const [dropdownLocation, setdropdownLocation] = useState([])
+    const getapi = () => {
+        axios.get(`/api/Building_newpage_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Assets Master By ID', res.data);
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    BuildingCode: res.data.data[0].BuildingCode,
+                    Buildiingname: res.data.data[0].BuildingDesc,
+                    BuildingCapacity: res.data.data[0].Capacity,
+                    Latitude: res.data.data[0].Latitude,
+                    Longtitude: res.data.data[0].Longtitude,
+                    LocationCode: res.data.data[0].LocationCode,
+                }));
+                setimageshow(res.data.data[0].BuildingImage)
+
+                const loactiondesc = res.data.data[0].LocationCode
+                axios.get(`/api/Location_GET_BYID/${loactiondesc}`)
+                    .then((res) => {
+                        // console.log(res.data);
+                        setlocationdesc(res.data.recordset[0].LocationDesc)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
+
 
     useEffect(() => {
         // Location_LIST
@@ -47,7 +81,7 @@ function Createbuilding() {
         }));
         axios.get(`/api/Location_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setlocationdesc(res.data.recordset[0].LocationDesc)
             })
             .catch((err) => {
@@ -55,124 +89,10 @@ function Createbuilding() {
             });
     }
 
-    const [imageshow, setimageshow] = useState()
 
-    const [selectedFile, setSelectedFile] = useState(null);
     function handleChangeback(e) {
         setSelectedFile(e.target.files[0]);
     }
-
-    // Map Loactiuon
-
-
-    // Design section 
-    const [showModal, setShowModal] = useState(false);
-    const [error, setError] = useState(null);
-    const handleShowModal = () => {
-        setShowModal(true);
-
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        // Handle form submission with selectedLocation data
-        console.log(selectedLocation);
-        setShowModal(false);
-    };
-    // Loaction section 
-    const [selectedLocation, setSelectedLocation] = useState(null);
-    const [searchBox, setSearchBox] = useState(null);
-    const handleSearchBoxLoad = (ref) => {
-        setSearchBox(ref);
-    };
-    const handlePlacesChanged = () => {
-        if (searchBox) {
-            const places = searchBox.getPlaces();
-            if (places && places.length > 0) {
-                const place = places[0];
-                const newLocation = {
-                    latitude: place.geometry.location.lat(),
-                    longitude: place.geometry.location.lng(),
-                    address: place.formatted_address,
-                };
-                setSelectedLocation(newLocation);
-            }
-        }
-    };
-    // Current Loaction
-    const [currentLocation, setCurrentLocation] = useState(null);
-    useEffect(() => {
-        // Get the user's current location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setCurrentLocation({ lat: latitude, lng: longitude });
-                },
-                (error) => {
-                    console.log('Error getting current location:', error);
-                }
-            );
-        } else {
-            console.log('Geolocation is not supported by this browser.');
-        }
-    }, []);
-
-    const handleMapClicked = (event) => {
-        const { latLng } = event;
-        const latitude = latLng.lat();
-        const longitude = latLng.lng();
-        // Use the Geocoder service to get the address based on latitude and longitude
-
-        const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
-            if (status === "OK" && results[0]) {
-                const address = results[0].formatted_address;
-
-                setSelectedLocation({ latitude, longitude, address });
-                console.log(address, latitude, longitude);
-                setCurrentLocation(null);
-            }
-
-        });
-    };
-
-    const formData = new FormData();
-    formData.append('BuildingCode', value.BuildingCode);
-    formData.append('BuildingDesc', value.Buildiingname);
-    formData.append('Capacity', value.BuildingCapacity);
-    formData.append('Latitude', selectedLocation?.latitude || '');
-    formData.append('Longtitude', selectedLocation?.longitude || '');
-    formData.append('LocationCode', value.LocationCode);
-    formData.append('BuildingImage', selectedFile);
-
-    const addtransaction = async () => {
-        axios.post(`/api/Building_newpage_post`, formData)
-            .then((res) => {
-                console.log(res.data);
-                Swal.fire(
-                    'Created!',
-                    `Building Maintenance  ${value.BuildingCode} has been created successfully`,
-                    'success'
-                )
-                navigate('/Buildings')
-            })
-            .catch((err) => {
-                console.log(err);
-                const statuss = err.response.data.error
-                Swal.fire(
-                    'Error!',
-                    ` ${statuss} `,
-                    'error'
-                )
-            });
-
-    };
-
-
 
     return (
         <>
@@ -197,7 +117,7 @@ function Createbuilding() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        Building Maintenance - Create
+                                        Building Maintenance - View
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -331,18 +251,17 @@ function Createbuilding() {
                                             <input
                                                 type='text'
                                                 id='Latitude'
-                                                value={selectedLocation ? selectedLocation.latitude : ""}
-
+                                                value={value.Latitude}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
-                                                        Longtitude: e.target.value
+                                                        Latitude: e.target.value
                                                     }))
                                                 }}
-                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='99999999999'
                                             ></input>
+
                                         </div>
                                     </div>
                                     <div className="col-sm-6 col-md-4 col-lg-4 col-xl-3 ">
@@ -355,31 +274,17 @@ function Createbuilding() {
                                             <input
                                                 type='text'
                                                 id='Longtitude'
-                                                value={selectedLocation ? selectedLocation.longitude : ""}
-
+                                                value={value.Longtitude}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
                                                         Longtitude: e.target.value
                                                     }))
                                                 }}
-                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='99999999999'
                                             ></input>
 
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
-                                        <div className="mb-3">
-                                            <label
-                                                htmlFor="Locationmap"
-                                                className="lablesection color3 text-start mb-1">
-                                                My Location
-                                            </label>
-                                            <button id='Locationmap' className='fs-6 py-2 w-100 loactiontak px-2 fw-bold bg-light border border-secondary loactioncolor ' onClick={handleShowModal}>
-                                                Pick your Location
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -412,91 +317,14 @@ function Createbuilding() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={() => navigate('/Buildings')}> <ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" className="border-0 px-3 mx-2  savebtn py-2" onClick={addtransaction}><SaveIcon className='me-2' />SAVE</button>
-                                </div>
+                                  </div>
                             </div>
                         </div>
                     </Box>
                 </div>
-
-                <Modal show={showModal} onHide={handleCloseModal} size="lg">
-                    <Modal.Header closeButton>
-                        <Modal.Title>Select Location</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-
-                        <GoogleMap
-                            mapContainerStyle={{ height: '400px', width: '100%' }}
-                            center={selectedLocation ? { lat: selectedLocation.latitude, lng: selectedLocation.longitude } : currentLocation}
-                            zoom={10}
-                            onClick={handleMapClicked}
-                        >
-                            <StandaloneSearchBox onLoad={handleSearchBoxLoad} onPlacesChanged={handlePlacesChanged}>
-                                <input
-                                    type="text"
-                                    placeholder="Search for a location"
-                                    style={{
-                                        boxSizing: 'border-box',
-                                        border: '1px solid transparent',
-                                        width: '240px',
-                                        height: '32px',
-                                        padding: '0 12px',
-                                        borderRadius: '3px',
-                                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)',
-                                        fontSize: '14px',
-                                        outline: 'none',
-                                        textOverflow: 'ellipses',
-                                        position: 'absolute',
-                                        left: '50%',
-                                        marginLeft: '-120px',
-                                    }}
-                                />
-                            </StandaloneSearchBox>
-
-                            {currentLocation && <Marker position={currentLocation} />}
-
-                            {selectedLocation && (
-                                <Marker
-                                    position={{
-                                        lat: selectedLocation.latitude,
-                                        lng: selectedLocation.longitude,
-                                    }}
-                                >
-
-                                </Marker>
-                            )}
-                        </GoogleMap>
-
-                        <Form onSubmit={handleFormSubmit}>
-                            <Form.Group controlId="formLatitude">
-                                <Form.Label>Latitude</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={selectedLocation ? selectedLocation.latitude : ""}
-                                // readOnly
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formLongitude">
-                                <Form.Label>Longitude</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={selectedLocation ? selectedLocation.longitude : ""}
-                                // readOnly
-                                />
-                            </Form.Group>
-
-                            <Button variant="primary" type="submit">
-                                Save
-                            </Button>
-                        </Form>
-                    </Modal.Body>
-                </Modal>
-
-                {selectedLocation ? <p>{localStorage.setItem('latitude', selectedLocation.latitude)}</p> : ""}
-                {selectedLocation ? <p>{localStorage.setItem('longitude', selectedLocation.longitude)}</p> : ""}
             </div>
         </>
     );
 }
 
-export default Createbuilding;
+export default Viewbuilding;
