@@ -6,24 +6,82 @@ import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import SaveIcon from '@mui/icons-material/Save';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'
 import Swal from "sweetalert2";
 import Printer from "../../../Image/RoomMaintence.png"
 import BrowserFolder from "../../../Image/browsefolder 3.png"
 
-function Createroommaintence() {
+function Updataroom() {
     const navigate = useNavigate();
+    let { userId } = useParams();
 
     const [value, setvalue] = useState({
-        RoomCode: '', RoomName: '', Area: '', Floor:'',
+        RoomCode: '', RoomName: '', Area: '', Floor: '',
         BuildingCode: '', Buildiingname: '',
         LocationCode: '', Locationname: [],
-        RoomCapacity: '', noofCapacity: '', Vacancy:'',
+        RoomCapacity: '', noofCapacity: '', Vacancy: '',
     })
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownFloor, setdropdownFloor] = useState([])
+
+    const getapi = () => {
+        axios.get(`/api/Rooms_newpage_GET_BYID/${userId}`, {
+        },)
+            .then((res) => {
+                console.log('TO Room Managment Master By ID', res.data);
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    RoomCode: res.data.data[0].RoomCode,
+                    RoomName: res.data.data[0].RoomDesc,
+                    Area: res.data.data[0].Area,
+                    Floor: res.data.data[0].FloorCode,
+                    BuildingCode: res.data.data[0].BuildingCode,
+                    RoomCapacity: res.data.data[0].Capacity,
+                    noofCapacity: res.data.data[0].Occupants,
+                    Vacancy: res.data.data[0].VacancyFlag,
+                    LocationCode: res.data.data[0].LocationCode,
+                }));
+
+                if (res.data.data && res.data.data[0]) {
+                    const loactioncode = res.data.data[0].LocationCode
+                    axios.get(`/api/Location_GET_BYID/${loactioncode}`)
+                        .then((res) => {
+                            setvalue((prevValue) => {
+                                if (res.data.recordset && res.data.recordset[0]) {
+                                    return {
+                                        ...prevValue,
+                                        Locationname: res.data.recordset[0].LocationDesc,
+                                    };
+                                } else {
+                                    // Handle the case where res.data.recordset[0] is undefined
+                                    return prevValue; // or return a default value
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+               
+                const buildingcodeget = res.data.data[0].BuildingCode
+                axios.get(`/api/Building_GET_BYID/${buildingcodeget}`)
+                    .then((res) => {
+                        setBuildingDesc(res.data.recordset[0].BuildingDesc)
+                        setimageshow(res.data.recordset[0].BuildingImage)
+                    })
+                    .catch((err) => {
+                        // console.log(err);;
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    useEffect(() => {
+        getapi()
+    }, [])
 
     useEffect(() => {
         // Building_LIST
@@ -40,9 +98,8 @@ function Createroommaintence() {
             .catch((err) => {
                 console.log(err);
             });
-            // Floor
+        // Floor
         axios.get(`/api/Floor_GET_List`).then((res) => {
-            console.log('+++++++++++++',res.data);
             setdropdownFloor(res.data.data)
         })
             .catch((err) => {
@@ -94,7 +151,7 @@ function Createroommaintence() {
                     .catch((err) => {
                         // console.log(err);;
                     });
-                
+
             })
             .catch((err) => {
                 // console.log(err);;
@@ -133,10 +190,9 @@ function Createroommaintence() {
         setSelectedFile(e.target.files[0]);
     }
 
-    
+
     const addtransaction = async () => {
-        axios.post(`/api/Rooms_newpage_post`, {
-            RoomCode: value.RoomCode,
+        axios.put(`/api/Rooms_newpage_Put/${userId}`, {
             RoomDesc: value.RoomName,
             Area: value.Area,
             FloorCode: value.Floor,
@@ -149,8 +205,8 @@ function Createroommaintence() {
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
-                    'Created!',
-                    `Room Maintenance  ${value.RoomCode} has been created successfully`,
+                    'Update!',
+                    `Room Maintenance  ${userId} has been updated`,
                     'success'
                 )
                 navigate('/Roomaintenance')
@@ -192,7 +248,7 @@ function Createroommaintence() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        ROOM MAINTENANCE - CREATE
+                                        ROOM MAINTENANCE - UPDATE
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -241,6 +297,7 @@ function Createroommaintence() {
                                                         RoomCode: e.target.value
                                                     }))
                                                 }}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Room Name'
                                             ></input>
@@ -320,6 +377,7 @@ function Createroommaintence() {
                                     </div>
 
                                 </div>
+
                                 <div className="row mx-auto formsection">
 
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
@@ -371,7 +429,7 @@ function Createroommaintence() {
                                                 value={value.LocationCode}
                                                 onChange={handleProvinceChange}
                                             >
-                                                <option className='inputsectiondropdpwn'>Select Location code</option>
+                                                <option className='inputsectiondropdpwn' value=''>Select Location code</option>
                                                 {
                                                     dropdownLocation && dropdownLocation.map((itme, index) => {
                                                         return (
@@ -466,8 +524,8 @@ function Createroommaintence() {
                                                     }))
                                                 }}>
                                                 <option className='inputsectiondropdpwn' value=''>X</option>
-                                                <option  value='Yes'>Yes</option>
-                                                <option  value='No'>No</option>
+                                                <option value='Yes'>Yes</option>
+                                                <option value='No'>No</option>
                                             </select>
                                         </div>
                                     </div>
@@ -486,4 +544,4 @@ function Createroommaintence() {
     );
 }
 
-export default Createroommaintence;
+export default Updataroom;

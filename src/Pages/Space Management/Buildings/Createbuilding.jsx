@@ -63,8 +63,6 @@ function Createbuilding() {
     }
 
     // Map Loactiuon
-
-
     // Design section 
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);

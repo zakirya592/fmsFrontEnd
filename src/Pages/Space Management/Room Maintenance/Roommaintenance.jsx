@@ -29,10 +29,11 @@ function Roommaintenance() {
 
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/EmployeeMaster_GET_LIST`, {
+        axios.get(`/api/Rooms_newpage_GET_List`, {
         },)
             .then((res) => {
-                setgetdata(res.data.recordset)
+                console.log('---------------',res.data);
+                setgetdata(res.data.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -42,22 +43,22 @@ function Roommaintenance() {
         getapi()
     }, [])
 
-
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'EmployeeID', headerName: 'Room Code', width: 160 },
-        { field: 'FullName', headerName: 'DESCRIPTION ', width: 300 },
-        { field: 'NationalityCode', headerName: 'Area ', width: 190 },
+        { field: 'RoomCode', headerName: 'Room Code', width: 160 },
+        { field: 'RoomDesc', headerName: 'DESCRIPTION ', width: 300 },
+        { field: 'Area', headerName: 'Area ', width: 190 },
+        { field: 'FloorCode', headerName: 'Floor Code', width: 190 },
         { field: 'BuildingCode', headerName: 'Building Code', width: 190 },
-        { field: 'DepartmentCode', headerName: 'Location Code', width: 190 },
-        { field: 'DepartmentCode', headerName: 'Capacity', width: 190 },
+        { field: 'LocationCode', headerName: 'Location Code', width: 190 },
+        { field: 'Capacity', headerName: 'Capacity', width: 190 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
     function ActionButtons(params) {
         const [anchorEl, setAnchorEl] = useState(null);
 
-        const Deletedapi = (EmployeeID) => {
+        const Deletedapi = (RoomCode) => {
             handleMenuClose();
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -70,7 +71,7 @@ function Roommaintenance() {
 
             swalWithBootstrapButtons.fire({
                 title: 'Are you sure?',
-                text: `Do you really want to Delete ${EmployeeID} Room record! `,
+                text: `Do you really want to Delete ${RoomCode} Room record! `,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -78,7 +79,7 @@ function Roommaintenance() {
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/EmployeeMaster_DELETE_BYID/${EmployeeID}`)
+                    axios.delete(`/api/Rooms_newpage_DELETE_BYID/${RoomCode}`)
                         .then((res) => {
                             // Handle successful delete response
                             console.log('Deleted successfully', res);
@@ -90,7 +91,7 @@ function Roommaintenance() {
                         });
                     swalWithBootstrapButtons.fire(
                         'Deleted!',
-                        `Room  ${EmployeeID} has been deleted.`,
+                        `Room  ${RoomCode} has been deleted.`,
                         'success'
                     )
                 }
@@ -105,7 +106,6 @@ function Roommaintenance() {
             setAnchorEl(null);
         };
 
-
         return (
             <div>
                 <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
@@ -118,18 +118,18 @@ function Roommaintenance() {
                     onClose={handleMenuClose}
                 >
                     <MenuItem onClick={(() => {
-                        navigate(`/View/Employeemaster/${params.row.EmployeeID}`)
+                        navigate(`/View/Room/${params.row.RoomCode}`)
                     })}>
                         <span style={{ paddingRight: '18px' }} >View</span>
                         <VisibilityIcon />
                     </MenuItem>
                     <MenuItem onClick={(() => {
-                        navigate(`/Updata/Employeemaster/${params.row.EmployeeID}`)
+                        navigate(`/Update/Room/${params.row.RoomCode}`)
                     })}>
                         <span style={{ paddingRight: '3px' }}>Update</span>
                         <EditIcon />
                     </MenuItem>
-                    <MenuItem onClick={() => Deletedapi(params.row.EmployeeID)}>
+                    <MenuItem onClick={() => Deletedapi(params.row.RoomCode)}>
                         <span style={{ paddingRight: '10px' }}>Delete</span>
                         <DeleteIcon />
                     </MenuItem>
@@ -139,21 +139,18 @@ function Roommaintenance() {
 
         );
     }
-    const [EmployeeIDfilter, setEmployeeIDfilter] = useState('')
-    const filteredData = getdata && getdata.filter(row => (
-        (!EmployeeIDfilter || row.EmployeeID.toLowerCase().includes(EmployeeIDfilter.toLowerCase()))
-    )).map((row, index) => {
-        const fullName = `${row.Firstname} ${row.Middlename} ${row.Lastname}`.trim();
+
+    const filteredData = getdata && getdata.map((row, index) => {
         return {
             ...row,
             id: index + 1,
-            RequestNumber: row.RequestNumber,
-            EmployeeID: row.EmployeeID,
-            FullName: fullName, // Combine first name, middle name, and last name
-            NationalityCode: row.NationalityCode,
+            RoomCode: row.RoomCode,
+            RoomDesc: row.RoomDesc,
+            FloorCode: row.FloorCode,
             BuildingCode: row.BuildingCode,
             DepartmentCode: row.DepartmentCode,
-            Gender: row.Gender,
+            Capacity: row.Capacity,
+            LocationCode: row.LocationCode,
         };
     });
 
@@ -178,8 +175,8 @@ function Roommaintenance() {
         // Assuming you want to navigate to the update page of the first selected row
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
-            console.log('Post the Data:', firstSelectedRow.EmployeeID);
-            navigate(`/Updata/Employeemaster/${firstSelectedRow.EmployeeID}`)
+            console.log('Post the Data:', firstSelectedRow.RoomCode);
+            navigate(`/Update/Room/${firstSelectedRow.RoomCode}`)
         }
 
         const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
@@ -191,6 +188,7 @@ function Roommaintenance() {
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            console.log(file.type);
             const reader = new FileReader();
             reader.onload = (e) => {
                 const data = new Uint8Array(e.target.result);
@@ -199,18 +197,24 @@ function Roommaintenance() {
                 const sheet = workbook.Sheets[sheetName];
                 const json = XLSX.utils.sheet_to_json(sheet);
                 json.forEach((item) => {
-                    axios.post(`/api/WorkTrade_post`, {
-                        WorkTypeCode: item.WorkTypeCode, // Adjust property names as needed
-                        WorkTradeCode: item.WorkTradeCode,
-                        WorkTradeDesc: item.WorkTradeDesc,
-                        // Add more properties as needed
+                    console.log(item.RoomCode);
+                    axios.post(`/api/Rooms_newpage_post`, {
+                        RoomCode: item.RoomCode.toString(),
+                        RoomDesc: item.RoomDesc,
+                        Area: item.Area,
+                        FloorCode: item.FloorCode.toString(),
+                        BuildingCode: item.BuildingCode,
+                        LocationCode: item.LocationCode,
+                        Capacity: item.Capacity,
+                        Occupants: item.Occupants.toString(),
+                        VacancyFlag: item.VacancyFlag
                     })
                         .then((res) => {
                             console.log('Add', res.data);
                             // Handle success
                             Swal.fire(
                                 'Add!',
-                                `Room maintenance has been created`,
+                                `Room Code has been created`,
                                 'success'
                             )
                             getapi()
@@ -219,7 +223,7 @@ function Roommaintenance() {
                             console.log(err);
                             Swal.fire(
                                 'Error!',
-                                `Some Room maintenance already exist`,
+                                `${err.response.data.error}`,
                                 'error'
                             )
                             // Handle errors
@@ -249,7 +253,7 @@ function Roommaintenance() {
                                         <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
                                             navigate('/')
                                         })} />
-                                        <p className="text-center my-auto ms-5">ROOM MAINTENANCE</p>
+                                        <p className="text-center my-auto ms-5">Space Management</p>
                                     </Typography>
                                 </Toolbar>
                             </AppBar>
