@@ -193,7 +193,6 @@ function Mainbuildings() {
 
                 json.forEach((item) => {
                     const formData = new FormData(); // Create a new FormData object for each item
-
                     // Append building data to the FormData object for the specific item
                     formData.append('BuildingCode', item.BuildingCode);
                     formData.append('BuildingDesc', item.BuildingDesc);
