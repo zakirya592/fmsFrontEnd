@@ -109,6 +109,7 @@ import Createroommaintence from '../../Pages/Space Management/Room Maintenance/C
 import Floor from '../../Pages/Setup&Configuration/Floor/Floor'
 import Viewbuilding from '../../Pages/Space Management/Buildings/Viewbuilding'
 import Updatabuilding from '../../Pages/Space Management/Buildings/Updatabuilding'
+import Configurroom from '../../Pages/Setup&Configuration/Room/Configurroom'
 
 function Pagerounter() {
 
@@ -178,6 +179,8 @@ function Pagerounter() {
           <Route exact path='/Day' element={<Day />} />
           {/*Floor*/}
           <Route exact path='/Floor' element={<Floor />} />
+          {/*Room*/}
+          <Route exact path='/Room' element={<Configurroom />} />
           {/*Frequency*/}
           <Route exact path='/Frequency' element={<Frequency />} />
           {/*Gender*/}
