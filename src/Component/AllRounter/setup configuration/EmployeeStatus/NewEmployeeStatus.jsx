@@ -98,7 +98,7 @@ function NewEmployeeStatus() {
                                         }))
                                     }}
                                     className='rounded inputsection py-2 px-2'
-                                    placeholder='WorkStatus Code'
+                                    placeholder='EmployeeStatus Code'
                                     required
                                 ></input>
                             </div>
@@ -121,7 +121,7 @@ function NewEmployeeStatus() {
                                         }))
                                     }}
                                     className='rounded inputsection py-2 px-2' 
-                                    placeholder='WorkStatus Desc'
+                                    placeholder='EmployeeStatus Desc'
                                     required
                                 ></input>
                             </div>

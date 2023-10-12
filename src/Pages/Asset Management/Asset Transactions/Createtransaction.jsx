@@ -824,7 +824,7 @@ function Createtransaction() {
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
-                                                        placeholder='Employee Number'
+                                                        placeholder='Asset Item Discription'
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (

@@ -143,22 +143,19 @@ function Createroommaintence() {
                                             <label htmlFor='RoomCode' className='lablesection color3 text-start mb-1'>
                                                 Room Code
                                             </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="RoomCode" aria-label="Floating label select example" value={value.RoomCode}
+                                            <input
+                                                type='text'
+                                                id='RoomCode'
+                                                value={value.RoomCode}
                                                 onChange={e => {
                                                     setvalue(prevValue => ({
                                                         ...prevValue,
                                                         RoomCode: e.target.value
                                                     }))
-                                                }}>
-                                                <option className='inputsectiondropdpwn'>Select Room Code</option>
-                                                {
-                                                    dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
+                                                }}
+                                                className='rounded inputsection py-2'
+                                                placeholder='Room Name'
+                                            ></input>
                                         </div>
                                     </div>
 
@@ -187,7 +184,7 @@ function Createroommaintence() {
                                     <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='Area' className='lablesection color3 text-start mb-1'>
-                                                Area
+                                                Area/Table/Seat Number
                                             </label>
 
                                             <input
