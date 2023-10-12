@@ -182,19 +182,20 @@ function Mainbuildings() {
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            console.log(file.type);
             const reader = new FileReader();
+
             reader.onload = (e) => {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheetName = workbook.SheetNames[0]; // Assuming you have data in the first sheet
                 const sheet = workbook.Sheets[sheetName];
                 const json = XLSX.utils.sheet_to_json(sheet);
-                const formData = new FormData();
 
                 json.forEach((item) => {
-                    console.log(item.BuildingCode);
-                    formData.append('BuildingCode', item.BuildingCode.toString());
+                    const formData = new FormData(); // Create a new FormData object for each item
+
+                    // Append building data to the FormData object for the specific item
+                    formData.append('BuildingCode', item.BuildingCode);
                     formData.append('BuildingDesc', item.BuildingDesc);
                     formData.append('Capacity', item.Capacity);
                     formData.append('Latitude', item.Latitude);
@@ -225,8 +226,8 @@ function Mainbuildings() {
                 });
             };
             reader.readAsArrayBuffer(file);
-
         }
+
     };
 
     const [paginationModel, setPaginationModel] = React.useState({
