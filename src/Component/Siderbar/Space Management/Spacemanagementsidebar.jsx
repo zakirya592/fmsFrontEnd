@@ -96,7 +96,7 @@ function Spacemanagementsidebar() {
                     <List className='setupsidebar'>
                         {['.Employee Room Assignment'].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/Employee Room Assignment')
+                                navigate('/Employee/RoomAssigment')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />

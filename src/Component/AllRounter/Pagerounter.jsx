@@ -112,6 +112,10 @@ import Updatabuilding from '../../Pages/Space Management/Buildings/Updatabuildin
 import Configurroom from '../../Pages/Setup&Configuration/Room/Configurroom'
 import Viewroom from '../../Pages/Space Management/Room Maintenance/Viewroom'
 import Updataroom from '../../Pages/Space Management/Room Maintenance/Updataroom'
+import Employeeroomassigment from '../../Pages/Space Management/Employee Room Assignment/Employeeroomassigment'
+import Createemployeeroomassigment from '../../Pages/Space Management/Employee Room Assignment/Createemployeeroomassigment'
+import Viewemployeeassigment from '../../Pages/Space Management/Employee Room Assignment/Viewemployeeassigment'
+import Updataemployeeroomassigment from '../../Pages/Space Management/Employee Room Assignment/Updataemployeeroomassigment'
 
 function Pagerounter() {
 
@@ -311,6 +315,12 @@ function Pagerounter() {
           <Route exact path="/Create/Roomaintenance" element={<Createroommaintence />} />
           <Route exact path="/View/Room/:userId" element={<Viewroom />} />
           <Route exact path="/Update/Room/:userId" element={<Updataroom />} />
+
+          {/* Employee room assigment */}
+          <Route exact path="/Employee/RoomAssigment" element={<Employeeroomassigment />} />
+          <Route exact path="/Create/Employee/RoomAssigment" element={<Createemployeeroomassigment />} />
+          <Route exact path="/View/Employee/RoomAssigment/:userId" element={<Viewemployeeassigment />} />
+          <Route exact path="/Update/Employee/RoomAssigment/:userId" element={<Updataemployeeroomassigment />} />
         </Routes>
       </BrowserRouter>
     </>
