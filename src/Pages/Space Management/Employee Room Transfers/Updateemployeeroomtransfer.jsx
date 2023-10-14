@@ -6,80 +6,120 @@ import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import SaveIcon from '@mui/icons-material/Save';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import Swal from "sweetalert2";
 import Printer from "../../../Image/Roomassesct.png"
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { useNavigate, useParams } from 'react-router-dom';
+import moment from 'moment';
 
-function Createemployeeroomtransfer() {
+function Updateemployeeroomtransfer() {
     const navigate = useNavigate();
+    let { userId } = useParams();
 
-    const getCurrentDateTimeString = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-    };
     const [value, setvalue] = useState({
-        TransferRequestNumber: '', RequestDateTime: getCurrentDateTimeString(),
-        EmployeeID: '', Firstname: '',
-        RoomCode1: '', RoomName: '', Area: '', Floor: '',
+        TransferRequestNumber: '', RequestDateTime: '',
+        EmployeeID: null, Firstname: '',
+        RoomCode1: null, RoomName: '', Area: '', Floor: '',
         BuildingCode: '', Buildiingname: '',
-        RoomCode: '', RoomDesc: '', AreaTable: '', Floorcode: '', Buildiing: '',
-        EmpCode1stLevel: '', Fullname: '', ApprovalDate: '', Flag: '',
-        EmpCode2ndLevel: '', Fullname2: '', ApprovalDate2: '', Flag2: '',
-        EmpCode3rdLevel: '', Fullname3: '', ApprovalDate3: '', Flag3: '',
+        RoomCode: null, RoomDesc: '', AreaTable: '', Floorcode: '', Buildiing: '',
+        EmpCode1stLevel: null, Fullname: '', ApprovalDate: '', Flag: '',
+        EmpCode2ndLevel: null, Fullname2: '', ApprovalDate2: '', Flag2: '',
+        EmpCode3rdLevel: null, Fullname3: '', ApprovalDate3: '', Flag3: '',
     })
 
-    const [Buildiingname2, setBuildiingname2] = useState([])
-    // Work Employes ID  Api
-    const Requestnumberapi = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
+    const [Purchaselasdatass, setPurchaselasdatass] = useState([])
+    const getapi = () => {
+        axios.get(`/api/EmployeeRoomTransfers_GET_BYID/${userId}`)
             .then((res) => {
-                const reqput = res.data.recordset[0].TransferRequestNumber;
-                // const reqput=1000
-                let formattedRequestNumber;
-                if (reqput >= 1 && reqput <= 9) {
-                    formattedRequestNumber = `000-000-00${reqput}`;
-                } else if (reqput >= 10 && reqput <= 99) {
-                    formattedRequestNumber = `000-000-0${reqput}`;
-                } else if (reqput >= 100 && reqput <= 999) {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                } else if (reqput >= 1000 && reqput <= 9999) {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                } else {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                }
-                setvalue(prevState => ({ ...prevState, TransferRequestNumber: formattedRequestNumber }));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+                console.log('TO EmployeeRoom Transfers GET_BYID By ID', res.data);
+                setvalue((prevValue) => ({
+                    ...prevValue,
+                    TransferRequestNumber: res.data.data[0].TransferRequestNumber,
+                    EmployeeID: res.data.data[0].EmployeeID,
+                    RoomCode1: res.data.data[0].FROM_RoomCode,
+                    RoomCode: res.data.data[0].TO_RoomCode,
+                    EmpCode1stLevel: res.data.data[0].EmployeeID_Approval_1,
+                    EmpCode2ndLevel: res.data.data[0].EmployeeID_Approval_2,
+                    EmpCode3rdLevel: res.data.data[0].EmployeeID_Approval_3,
+                    ApprovalDate: res.data.data[0].DateApproved_Approval_1,
+                    ApprovalDate2: res.data.data[0].DateApproved_Approval_2,
+                    ApprovalDate3: res.data.data[0].DateApproved_Approval_3,
+                    Flag: res.data.data[0].ApprovedFlag_Approval_1,
+                    Flag2: res.data.data[0].ApprovedFlag_Approval_2,
+                    Flag3: res.data.data[0].ApprovedFlag_Approval_3,
+                }));
 
-    useEffect(() => {
-        Requestnumberapi()
-    }, [])
-
-    const requestincreas = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
-            .then((res) => {
-                const reqput = res.data.recordset[0].TransferRequestNumber + 1;
-                // localStorage.setItem('Requestnumbers', reqput)
-                axios.put(`/api/TransferRequestNumber_Put/1`, {
-                    TransferRequestNumber: reqput
+                const RequestDateTimeget = res.data.data[0].TransferRequestDate
+                const Purchasedatas = moment(RequestDateTimeget).format('YYYY-MM-DD h:mm A')
+                setPurchaselasdatass(Purchasedatas)
+                setvalue(prevValue => ({
+                    ...prevValue,
+                    RequestDateTime: RequestDateTimeget
+                }))
+                // EmployeeID
+                const EmployeeID = res.data.data[0].EmployeeID
+                axios.post(`/api/getworkRequest_by_EPID`, {
+                    EmployeeID,
+                }).then((res) => {
+                    const {
+                        Firstname,
+                    } = res.data.recordsets[0][0];
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        Firstname,
+                    }));
                 })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+                // FROM_RoomCode,
+                const FROM_RoomCode = res.data.data[0].FROM_RoomCode
+                axios.get(`/api/Rooms_newpage_GET_BYID/${FROM_RoomCode}`)
                     .then((res) => {
-                        console.log('Work Request Number put Api', res.data);
-                        const reqput = res.data.recordset[0].TransferRequestNumber + 1;
-                        setvalue(prevState => ({ ...prevState, TransferRequestNumber: '000-000-' + '0' + `${reqput}` }));
+                        setvalue((prevValue) => ({
+                            ...prevValue,
+                            RoomName: res.data.data[0].RoomDesc,
+                            Area: res.data.data[0].Area,
+                            Floor: res.data.data[0].FloorCode,
+                            BuildingCode: res.data.data[0].BuildingCode,
+                        }));
+                        const RoomCodes = res.data.data[0].RoomCode
+                        axios.get(`/api/Building_GET_BYID/${RoomCodes}`)
+                            .then((res) => {
+                                setBuildingDesc(res.data.recordset[0].BuildingDesc)
+                                setimageshow(res.data.recordset[0].BuildingImage)
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                    .catch((err) => {
+                        // console.log(err);;
+                    });
+
+                // TO_RoomCode,
+                const TO_RoomCode = res.data.data[0].TO_RoomCode
+                axios.get(`/api/Rooms_newpage_GET_BYID/${TO_RoomCode}`)
+                    .then((res) => {
+                        setvalue((prevValue) => ({
+                            ...prevValue,
+                            RoomDesc: res.data.data[0].RoomDesc,
+                            AreaTable: res.data.data[0].Area,
+                            Floorcode: res.data.data[0].FloorCode,
+                            Buildiing: res.data.data[0].BuildingCode,
+                        }));
+                        const RoomCodes = res.data.data[0].RoomCode
+                        axios.get(`/api/Building_GET_BYID/${RoomCodes}`)
+                            .then((res) => {
+                                setBuildiingname2(res.data.recordset[0].BuildingDesc)
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
                     })
                     .catch((err) => {
                         console.log(err);
@@ -89,7 +129,11 @@ function Createemployeeroomtransfer() {
                 console.log(err);
             });
     }
+    useEffect(() => {
+        getapi()
+    }, [])
 
+    const [Buildiingname2, setBuildiingname2] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownFloor, setdropdownFloor] = useState([])
@@ -716,21 +760,17 @@ function Createemployeeroomtransfer() {
     }
 
     const addapi = async () => {
-        axios.post(`/api/EmployeeRoomTransfers_post`, {
-            TransferRequestNumber: value.TransferRequestNumber,
+        axios.put(`/api/EmployeeRoomTransfers_Put/${userId}`, {
             TransferRequestDate: value.RequestDateTime,
             EmployeeID: value.EmployeeID,
             FROM_RoomCode: value.RoomCode1,
             TO_RoomCode: value.RoomCode,
-
             EmployeeID_Approval_1: value.EmpCode1stLevel,
             DateApproved_Approval_1: value.ApprovalDate,
             ApprovedFlag_Approval_1: value.Flag,
-
             EmployeeID_Approval_2: value.EmpCode2ndLevel,
             DateApproved_Approval_2: value.ApprovalDate2,
             ApprovedFlag_Approval_2: value.Flag2,
-
             EmployeeID_Approval_3: value.EmpCode3rdLevel,
             DateApproved_Approval_3: value.ApprovalDate3,
             ApprovedFlag_Approval_3: value.Flag3,
@@ -739,8 +779,8 @@ function Createemployeeroomtransfer() {
             .then((res) => {
                 console.log(res.data);
                 Swal.fire(
-                    'Created!',
-                    `Employee Room Transfers ${value.TransferRequestNumber} has been created successfully`,
+                    'Update!',
+                    `Employee Room Transfers ${userId} has been Update`,
                     'success'
                 )
                 navigate('/Employee/RoomTransfers')
@@ -761,7 +801,6 @@ function Createemployeeroomtransfer() {
 
     const addtransaction = async () => {
         addapi()
-        requestincreas()
     };
 
     return (
@@ -787,7 +826,7 @@ function Createemployeeroomtransfer() {
                                 {/* Top Section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className="color1 workitoppro my-auto">
-                                        Employee Room Transfers - Create
+                                        Modify Employee Room Transfers
                                     </p>
                                 </div>
                                 <hr className="color3 line" />
@@ -819,7 +858,6 @@ function Createemployeeroomtransfer() {
                                                 readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder=' Transfer Request Number'
-                                                required
                                             ></input>
                                         </div>
 
@@ -900,14 +938,27 @@ function Createemployeeroomtransfer() {
                                             <label htmlFor='RequestDateTime' className='lablesection color3 text-start mb-1'>
                                                 Request Date / Time
                                             </label>
-                                            <input type="datetime-local" id="RequestDateTime" name="birthdaytime" className='rounded inputsection py-2'
-                                                value={value.RequestDateTime}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        RequestDateTime: e.target.value
-                                                    }))
-                                                }} />
+
+                                            {Purchaselasdatass !== 'Invalid date' ? (
+                                                <input type="datetime-local" id="RequestDateTime" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={value.RequestDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            RequestDateTime: e.target.value
+                                                        }))
+                                                    }} />
+                                            ) : (
+
+                                                <input type="datetime-local" id="RequestDateTime" name="birthdaytime" className='rounded inputsection py-2'
+                                                    value={value.RequestDateTime}
+                                                    onChange={e => {
+                                                        setvalue(prevValue => ({
+                                                            ...prevValue,
+                                                            RequestDateTime: e.target.value
+                                                        }))
+                                                    }} />
+                                            )}
                                         </div>
 
                                         <div className="emailsection position-relative d-grid my-2">
@@ -1694,4 +1745,4 @@ function Createemployeeroomtransfer() {
     );
 }
 
-export default Createemployeeroomtransfer;
+export default Updateemployeeroomtransfer;
