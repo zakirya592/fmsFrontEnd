@@ -21,16 +21,119 @@ import axios from 'axios';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import PrintIcon from '@mui/icons-material/Print';
 
 function Employeeroomassigment() {
     const navigate = useNavigate();
     const [getdata, setgetdata] = useState([])
 
+    const handlePrintTable = (tableData) => {
+        const printWindow = window.open('', '_blank');
+        const selectedData = tableData.map((row, index) => ({
+            'SEQ': index + 1,
+            'RoomCode': row.RoomCode,
+            'RoomDesc': row.RoomDesc,
+            'EmployeeID': row.EmployeeID,
+            'FloorCode': row.FloorCode,
+            'Buildingcode': row.Buildingcode,
+            'LocationCode': row.LocationCode,
+
+        }));
+
+        // Create a bold style for header cells
+        const headerStyle = 'font-weight: bold;';
+
+        const tableHtml = `
+      <table  style='width:100% ;text-align: left;margin: 30px 0px; border: 1px solid black;
+  border-collapse: collapse;'>
+        <tr style='background:#3d41cf; color:white; '>
+          <th style="${headerStyle}">SEQ</th>
+          <th style="${headerStyle}">Room Code</th>
+          <th style="${headerStyle}">DESCRIPTION </th>
+           <th style="${headerStyle}">Employee Number</th>
+          <th style="${headerStyle}">Floor Code</th>
+          <th style="${headerStyle}">Building Code</th>
+          <th style="${headerStyle}">Location Code</th>
+        </tr>
+        ${selectedData.map(row => `
+          <tr>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['SEQ']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['RoomCode']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['RoomDesc']}</td>
+             <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['EmployeeID']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['FloorCode']}</td>
+             <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['Buildingcode']}</td>
+            <td  style=" border-right: 2px solid; border-bottom: 1px solid;padding:5px;
+  border-collapse: collapse;">${row['LocationCode']}</td>
+          </tr>`).join('')}
+      </table>`;
+
+        const printContent = `
+      <html>
+        <head>
+          <title>DataGrid Table</title>
+          <style>
+            @media print {
+              body {
+                padding: 0;
+                margin: 0;
+              }
+              th {
+                ${headerStyle}
+              }
+            }
+          </style>
+        </head>
+        <body>${tableHtml}</body>
+      </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
     // List a data thougth api 
     const getapi = () => {
         axios.get(`/api/EmployeeRooms_GET_List`)
             .then((res) => {
-                setgetdata(res.data.data)
+                const employeeRoomsData = res.data.data;
+                const promises = employeeRoomsData.map((item) => {
+                    const itid = item.RoomCode;
+
+                    return axios.get(`/api/Rooms_newpage_GET_BYID/${itid}`)
+                        .then((res) => {
+                            return {
+                                item,
+                                data: res.data, // Use res.data directly, assuming it contains the data you need
+                            };
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return {
+                                item,
+                                data: [],
+                            };
+                        });
+                });
+
+                Promise.all(promises)
+                    .then((results) => {
+                        const recordsWithEmployeeID = employeeRoomsData.map((item, index) => ({
+                            EmployeeID: item.EmployeeID,
+                            records: results[index].data,
+                        }));
+                        setgetdata(recordsWithEmployeeID);
+                        console.log(recordsWithEmployeeID);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             })
             .catch((err) => {
                 console.log(err);
@@ -71,7 +174,7 @@ function Employeeroomassigment() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'RoomCode', headerName: 'Room Code', width: 160 },
-        { field: 'BuildingDesc', headerName: 'DESCRIPTION ', width: 300 },
+        { field: 'RoomDesc', headerName: 'DESCRIPTION ', width: 300 },
         { field: 'EmployeeID', headerName: 'Employee Number', width: 190 },
         { field: 'FloorCode', headerName: 'Floor Code', width: 190 },
         { field: 'Buildingcode', headerName: 'Building Code', width: 190 },
@@ -167,21 +270,19 @@ function Employeeroomassigment() {
     const [Floorfilter, setFloorfilter] = useState()
 
     const filteredData = getdata && getdata.filter(row => (
-        (!BuildingCodefiltervalue || row.BuildingCode === BuildingCodefiltervalue) &&
-        (!Floorfilter || row.FloorCode === Floorfilter) &&
-        (!LocationCodefiltervalue || row.LocationCode === LocationCodefiltervalue)
+        (!BuildingCodefiltervalue || row.records.data?.[0]?.BuildingCode === BuildingCodefiltervalue) &&
+        (!Floorfilter || row.records.data?.[0]?.FloorCode === Floorfilter) &&
+        (!LocationCodefiltervalue || row.records.data?.[0]?.LocationCode === LocationCodefiltervalue)
     )).map((row, index) => {
         return {
             ...row,
             id: index + 1,
-            RoomCode: row.RoomCode,
-            EmployeeID: row.EmployeeID,
-            Capacity: row.Capacity,
-            NationalityCode: row.NationalityCode,
-            Latitude: row.Latitude,
-            FloorCode: row.FloorCode,
-            Buildingcode: row.Buildingcode,
-            Gender: row.Gender,
+            RoomCode: row.records.data?.[0]?.RoomCode || row.RoomCode,
+            EmployeeID: row.EmployeeID || row.Employeeid,
+            RoomDesc: row.records.data?.[0]?.RoomDesc || row.RoomDesc,
+            FloorCode: row.records.data?.[0]?.FloorCode || row.FloorCode,
+            Buildingcode: row.records.data?.[0]?.BuildingCode || row.BuildingCode,
+            LocationCode: row.records.data?.[0]?.LocationCode || row.LocationCode,
         };
     });
 
@@ -244,7 +345,10 @@ function Employeeroomassigment() {
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/Employee/RoomAssigment')
                                             })}><AddCircleOutlineIcon className='me-1' />Create</button>
-
+                                            <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredData)}>
+                                                <PrintIcon className="me-1" />
+                                                Print
+                                            </button>
                                             <CSVLink data={getdata} type="button" className="btn btn-outline-primary color2" > <img src={excel} alt="export" className='me-1' htmlFor='epoet' /> Export  <FileUploadIcon />
                                             </CSVLink>
                                         </div>
