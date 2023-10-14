@@ -74,7 +74,7 @@ function Employeeroomassigment() {
         { field: 'BuildingDesc', headerName: 'DESCRIPTION ', width: 300 },
         { field: 'EmployeeID', headerName: 'Employee Number', width: 190 },
         { field: 'FloorCode', headerName: 'Floor Code', width: 190 },
-        { field: 'Longtitude', headerName: 'Building Code', width: 190 },
+        { field: 'Buildingcode', headerName: 'Building Code', width: 190 },
         { field: 'LocationCode', headerName: 'Location Code', width: 190 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
@@ -176,16 +176,15 @@ function Employeeroomassigment() {
             id: index + 1,
             RoomCode: row.RoomCode,
             EmployeeID: row.EmployeeID,
-            Capacity: row.Capacity, // Combine first name, middle name, and last name
+            Capacity: row.Capacity,
             NationalityCode: row.NationalityCode,
             Latitude: row.Latitude,
             FloorCode: row.FloorCode,
-            Longtitude: row.Longtitude,
+            Buildingcode: row.Buildingcode,
             Gender: row.Gender,
         };
     });
 
-    const [statuscheck, setstatuscheck] = useState()
     const [selectedRowIds, setSelectedRowIds] = useState([]);
     const [selectedRow, setSelectedRow] = useState([]);
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
@@ -204,7 +203,6 @@ function Employeeroomassigment() {
         // Assuming you want to navigate to the update page of the first selected row
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
-            console.log('Post the Data:', firstSelectedRow.EmployeeID);
             navigate(`/Update/Employee/RoomAssigment/${firstSelectedRow.EmployeeID}`)
         }
         const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
@@ -241,7 +239,7 @@ function Employeeroomassigment() {
                                         <p className="color1 workitoppro my-auto">
                                             Employee Room Assignments </p>
                                         <div className="d-flex">
-                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}> {selectedRowIds.length === 0 ? 'UPDATE' : statuscheck === 'This Work Request is already closed..' ? 'UPDATE' : 'UPDATE'}</button>
+                                            <button type="button" className="border-0 px-3  savebtn py-2" onClick={handleAddToWorkRequest}>UPDATE</button>
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
                                                 navigate('/Create/Employee/RoomAssigment')
@@ -259,7 +257,7 @@ function Employeeroomassigment() {
                                         <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
-                                                    Building
+                                                    Building Code
                                                 </label>
                                                 <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example"
                                                     value={BuildingCodefiltervalue}
@@ -278,10 +276,10 @@ function Employeeroomassigment() {
                                             </div>
                                         </div>
 
-                                        <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                        <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
-                                                    Location
+                                                    Location Code
                                                 </label>
 
                                                 <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
@@ -315,7 +313,7 @@ function Employeeroomassigment() {
                                                     }
                                                 >
 
-                                                    <option className='inputsectiondropdpwn' value=''>Select Dept Code</option>
+                                                    <option className='inputsectiondropdpwn' value=''>Select Floor Code</option>
                                                     {
                                                         dropdownFloor && dropdownFloor.map((itme, index) => {
                                                             return (
