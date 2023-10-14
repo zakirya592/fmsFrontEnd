@@ -39,14 +39,6 @@ function CreateWorkRequest() {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-    // const initialEmployeeID = () => {
-    //     const storedEmployeeID = localStorage.getItem('EmployeeIDset');
-    //     if (storedEmployeeID ) {
-    //         return "";
-    //     }
-    //     return storedEmployeeID;
-    // };
-    // const initialEmployeeID = localStorage.getItem('EmployeeIDset') || ""; // Use empty string if null
     const initialEmployeeID = ''; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null

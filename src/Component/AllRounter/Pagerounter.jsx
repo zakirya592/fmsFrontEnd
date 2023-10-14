@@ -116,6 +116,7 @@ import Employeeroomassigment from '../../Pages/Space Management/Employee Room As
 import Createemployeeroomassigment from '../../Pages/Space Management/Employee Room Assignment/Createemployeeroomassigment'
 import Viewemployeeassigment from '../../Pages/Space Management/Employee Room Assignment/Viewemployeeassigment'
 import Updataemployeeroomassigment from '../../Pages/Space Management/Employee Room Assignment/Updataemployeeroomassigment'
+import Createemployeeroomtransfer from '../../Pages/Space Management/Employee Room Transfers/Createemployeeroomtransfer'
 
 function Pagerounter() {
 
@@ -321,6 +322,10 @@ function Pagerounter() {
           <Route exact path="/Create/Employee/RoomAssigment" element={<Createemployeeroomassigment />} />
           <Route exact path="/View/Employee/RoomAssigment/:userId" element={<Viewemployeeassigment />} />
           <Route exact path="/Update/Employee/RoomAssigment/:userId" element={<Updataemployeeroomassigment />} />
+
+          {/* Employee Room Transfers */}
+          <Route exact path="/Create/Employee/RoomTransfers" element={<Createemployeeroomtransfer />} />
+
         </Routes>
       </BrowserRouter>
     </>
