@@ -173,9 +173,9 @@ function Employeeroomassigment() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'EmployeeID', headerName: 'Employee Number', width: 190 },
         { field: 'RoomCode', headerName: 'Room Code', width: 160 },
         { field: 'RoomDesc', headerName: 'DESCRIPTION ', width: 300 },
-        { field: 'EmployeeID', headerName: 'Employee Number', width: 190 },
         { field: 'FloorCode', headerName: 'Floor Code', width: 190 },
         { field: 'Buildingcode', headerName: 'Building Code', width: 190 },
         { field: 'LocationCode', headerName: 'Location Code', width: 190 },

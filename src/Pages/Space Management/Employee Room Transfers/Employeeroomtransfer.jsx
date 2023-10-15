@@ -125,9 +125,9 @@ function Employeeroomtransfer() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
+        { field: 'EmployeeID', headerName: 'Employee Number ', width: 190 },
         { field: 'TransferRequestNumber', headerName: 'Transfer Number', width: 160 },
         { field: 'TransferRequestDate', headerName: 'Request Date ', width: 190 },
-        { field: 'EmployeeID', headerName: 'Employee Number ', width: 190 },
         { field: 'FROM_RoomCode', headerName: 'FROM-Room Code', width: 190 },
         { field: 'TO_RoomCode', headerName: 'TO-Room Code', width: 190 },
         { field: 'EmployeeID_Approval_1', headerName: '1st Level - Emp. Code', width: 190 },
@@ -317,7 +317,7 @@ function Employeeroomtransfer() {
                                     <hr className="color3 line" />
                                     {/* Search Fields */}
                                     <div className="row mx-auto formsection">
-                                        <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
+                                        <div className="col-sm-10 col-md-6 col-lg-4 col-xl-3">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                     Transfer Number
@@ -337,14 +337,14 @@ function Employeeroomtransfer() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
+                                        <div className="col-sm-10 col-md-6 col-lg-4 col-xl-3 ">
                                             <div className='emailsection position-relative d-grid my-2'>
                                                 <label className='lablesection color3 text-start mb-1 filter-label'>
                                                    Employee ID </label>
                                                 <input
                                                     types='text'
                                                     id='Asset'
-                                                    placeholder="Select filter Asset Item Description"
+                                                    placeholder="Enter Employee ID "
                                                     value={EmployeeIDfilter}
                                                     className='rounded inputsection py-2'
                                                     onChange={(e) => setEmployeeIDfilter(e.target.value)}

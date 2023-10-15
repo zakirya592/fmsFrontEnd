@@ -76,6 +76,55 @@ function Viewemployeeroomtransfer() {
                         console.log(err);
                     });
 
+                // EmployeeID
+                const EmpCode1stLevel = res.data.data[0].EmployeeID_Approval_1
+                console.log('EmpCode1stLevel', EmpCode1stLevel);
+                axios.get(`/api/EmployeeMaster_GET_BYID/${EmpCode1stLevel}`).then((res) => {
+                    console.log(res.data);
+                    const first = res.data.recordset[0].Firstname 
+                    const middle = res.data.recordset[0].Middlename 
+                    const last = res.data.recordset[0].Lastname 
+                    setvalue(prevValue => ({
+                        ...prevValue,
+                        Fullname: `${first} ${middle} ${last}`
+                    }))
+                })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+                const EmpCode2ndLevel = res.data.data[0].EmployeeID_Approval_2
+                console.log('EmpCode2ndLevel', EmpCode2ndLevel);
+                axios.get(`/api/EmployeeMaster_GET_BYID/${EmpCode2ndLevel}`).then((res) => {
+                    console.log(res.data);
+                    const first2 = res.data.recordset[0].Firstname
+                    const middle2 = res.data.recordset[0].Middlename
+                    const last2 = res.data.recordset[0].Lastname
+                    setvalue(prevValue => ({
+                        ...prevValue,
+                        Fullname2: `${first2} ${middle2} ${last2}`
+                    }))
+                })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+                const EmpCode3rdLevel = res.data.data[0].EmployeeID_Approval_3
+                console.log('EmpCode2ndLevel', EmpCode2ndLevel);
+                axios.get(`/api/EmployeeMaster_GET_BYID/${EmpCode3rdLevel}`).then((res) => {
+                    console.log(res.data);
+                    const first3 = res.data.recordset[0].Firstname
+                    const middle3 = res.data.recordset[0].Middlename
+                    const last3 = res.data.recordset[0].Lastname
+                    setvalue(prevValue => ({
+                        ...prevValue,
+                        Fullname3: `${first3} ${middle3} ${last3}`
+                    }))
+                })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
                 // FROM_RoomCode,
                 const FROM_RoomCode = res.data.data[0].FROM_RoomCode
                 axios.get(`/api/Rooms_newpage_GET_BYID/${FROM_RoomCode}`)
