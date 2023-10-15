@@ -72,7 +72,7 @@ function Spacemanagementsidebar() {
                     <List className='setupsidebar'>
                         {['.Floors '].map((text, index) => (
                             <ListItem key={text} disablePadding onClick={(() => {
-                                navigate('/Floors')
+                                navigate('/Floor')
                             })}>
                                 <ListItemButton>
                                     <ListItemText primary={text} />
