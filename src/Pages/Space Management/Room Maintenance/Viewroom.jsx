@@ -263,7 +263,7 @@ function Viewroom() {
                                                 }}
                                                 readOnly
                                                 className='rounded inputsection py-2'
-                                                placeholder='Room Name'
+                                                placeholder='Room Code'
                                             ></input>
                                         </div>
                                     </div>
