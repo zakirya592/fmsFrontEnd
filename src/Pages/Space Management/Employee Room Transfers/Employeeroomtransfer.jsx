@@ -125,8 +125,8 @@ function Employeeroomtransfer() {
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
-        { field: 'EmployeeID', headerName: 'Employee Number ', width: 190 },
         { field: 'TransferRequestNumber', headerName: 'Transfer Number', width: 160 },
+        { field: 'EmployeeID', headerName: 'Employee Number ', width: 190 },
         { field: 'TransferRequestDate', headerName: 'Request Date ', width: 190 },
         { field: 'FROM_RoomCode', headerName: 'FROM-Room Code', width: 190 },
         { field: 'TO_RoomCode', headerName: 'TO-Room Code', width: 190 },

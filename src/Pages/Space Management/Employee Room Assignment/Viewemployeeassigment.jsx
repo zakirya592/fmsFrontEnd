@@ -31,6 +31,7 @@ function Viewemployeeassigment() {
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownFloor, setdropdownFloor] = useState([])
     const [dropdownRoomLIST, setdropdownRoomLIST] = useState([])
+    const [dropdownDesignation, setdropdownDesignation] = useState([])
     const getapi = () => {
         axios.get(`/api/EmployeeRooms_GET_BYID/${userId}`)
             .then((res) => {
@@ -121,6 +122,14 @@ function Viewemployeeassigment() {
         getapi()
     }, [])
     useEffect(() => {
+        // DesignationCode
+        axios.get(`/api/Designation_GET_LIST`).then((res) => {
+            console.log('+++++++++++++', res.data);
+            setdropdownDesignation(res.data.recordset)
+        })
+            .catch((err) => {
+                console.log(err);
+            });
         // Building_LIST
         axios.get(`/api/Building_GET_LIST`).then((res) => {
             setdropdownBuildingLIST(res.data.recordsets[0])
@@ -217,6 +226,33 @@ function Viewemployeeassigment() {
             .catch((err) => {
                 // console.log(err);;
             });
+    }
+
+    const dropdownDesignationhandleProvinceChange = (e) => {
+        const Deptnale = e.target.value;
+        setvalue((prevValue) => ({
+            ...prevValue,
+            DesignationCode: e.target.value,
+        }));
+
+        axios.get(`/api/Designation_GET_BYID/${Deptnale}`).then((res) => {
+            console.log('+++++++++++++', res.data);
+            setvalue((prevValue) => {
+                if (res.data.recordset && res.data.recordset[0]) {
+                    return {
+                        ...prevValue,
+                        DesignationName: res.data.recordset[0].DesignationDesc,
+                    };
+                } else {
+                    // Handle the case where res.data.recordset[0] is undefined
+                    return prevValue; // or return a default value
+                }
+            });
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
     }
     // Employe ID
     const [unitCode, setUnitCode] = useState([]);
@@ -444,20 +480,17 @@ function Viewemployeeassigment() {
                                             <label htmlFor=' DesignationCode' className='lablesection color3 text-start mb-1'>
                                                 Designation Code<span className='star'>*</span>
                                             </label>
-                                            <input
-                                                types='text'
-                                                id='DesignationCode'
-                                                value={value.DesignationCode}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        DesignationCode: e.target.value
-                                                    }))
-                                                }}
-                                                className='rounded inputsection py-2'
-                                                placeholder=' Designation Code'
-                                                required
-                                            ></input>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="DesignationCode" aria-label="Floating label select example" value={value.DesignationCode}
+                                                onChange={dropdownDesignationhandleProvinceChange}>
+                                                <option className='inputsectiondropdpwn' value=''>Select Designation Code</option>
+                                                {
+                                                    dropdownDesignation && dropdownDesignation.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.DesignationCode}>{itme.DesignationCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
                                         </div>
 
                                     </div>
