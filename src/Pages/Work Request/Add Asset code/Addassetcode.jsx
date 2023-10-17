@@ -29,11 +29,6 @@ function Addassetcode() {
     const [selectedRow, setSelectedRow] = useState([]);
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
-    useEffect(() => {
-        console.log("Testing.....")
-        console.log(selectedRow) // when ever you select row or disselect it this selectedRow contains all the data..
-        console.log(rowSelectionModel)  // ....clear....???
-    }, [])
     const handlePrintTable = (tableData) => {
         const printWindow = window.open('', '_blank');
         const selectedData = tableData.map((row, index) => ({
@@ -100,12 +95,7 @@ function Addassetcode() {
         axios.get(`/api/AssetsMaster_GET_LIST`, {
         },)
             .then((res) => {
-                console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
-                // setWorkTypes(res.data.recordset.map((item,ind)=>{
-                //   console.log("work desc sing",item.WorkType);
-                //   setwordecss(item.WorkType)
-                // }));
             })
             .catch((err) => {
                 console.log(err);
@@ -121,7 +111,6 @@ function Addassetcode() {
             // This condition checks if the clicked cell is a checkbox cell
             // Retrieve the entire data of the clicked row using its ID
             const clickedRow = filteredRows.find((row) => row.id === params.id);
-            console.log('ID', params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
             }
@@ -135,27 +124,10 @@ function Addassetcode() {
         }
     };
     const handleAddToWorkRequest = () => {
-        // const selectedRowData = getdata.map((selectedIndex) => filteredRows[selectedIndex]);
-
         const selectedRowData = selectedRow?.map((row) => row?.AssetItemDescription);
-       
-        console.log("selectedRowData")
-        console.log(selectedRowData) // THIS CONTAIN THE LSIT OF DESCRITION......OKKKKKK
-        // const selectedRowData = getdata.map((row, index) => ({
-        //     ...row,
-        //     id: index,
-        //     AssetItemDescription: row.AssetItemDescription,
-        // }))
-        console.log('Selected Row Data for Work Request:', selectedRowIds);
-       
         setSelectedRowIds(selectedRowData)
-        // TO GET ONLY ONE DESCRIPTION
-        // let oneDesc = selectedRowData[selectedRowData.length - 1];
         let oneDesc = selectedRowData;
         putapi(oneDesc)
-        // selectedRowData.forEach(oneDesc => {
-        //     putapi(oneDesc); // Perform API request for each selected row description
-        // });
     };
 
     const columns = [
@@ -168,12 +140,10 @@ function Addassetcode() {
         { field: 'LastPurchaseDate', headerName: 'LAST PURCHASE DATE', width: 200 },
         { field: 'Manufacturer', headerName: 'MANUFACTURE', width: 200 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
-        // { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
     // Deleted api section
     const Deletedapi = (AssetItemDescription) => {
-        console.log(AssetItemDescription);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -195,11 +165,7 @@ function Addassetcode() {
             if (result.isConfirmed) {
                 axios.delete(`/api/AssetsMaster_DELETE_BYID/${AssetItemDescription}`)
                     .then((res) => {
-                        // Handle successful delete response
-                        console.log('Deleted successfully', res);
                         getapi()
-                        // Refresh the table data if needed
-                        // You can call the API again or remove the deleted row from the state
                     })
                     .catch((err) => {
                         // Handle delete error
@@ -218,9 +184,6 @@ function Addassetcode() {
     const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
         const assetcodeid = localStorage.getItem('EmployeeIDsetss') || localStorage.getItem('requestnumber');
-        
-        console.log(AssetItemDescription);
-        console.log(assetcodeid);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -229,7 +192,6 @@ function Addassetcode() {
             },
             buttonsStyling: false
         })
-
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
             text: "You want to Add ",
@@ -245,9 +207,7 @@ function Addassetcode() {
                     AssetItemDescriptions: AssetItemDescription
                 })
                     .then((res) => {
-                        console.log('Asset desc Add  successfully', res);
                         setgetemplodata(res.data.recordset)
-                        console.log();
                         getapi()
                         setSelectedRowIds([]); // Clear selected row IDs
                         setRowSelectionModel([]); // Clear row selection model
@@ -272,63 +232,11 @@ function Addassetcode() {
 
     };
 
-
-    function ActionButtons(params) {
-        const [anchorEl, setAnchorEl] = useState(null);
-
-        const handleMenuOpen = (event) => {
-            setAnchorEl(event.currentTarget);
-        };
-
-        const handleMenuClose = () => {
-            setAnchorEl(null);
-        };
-
-        return (
-            <div>
-                <Button className='actionBtn' onClick={handleMenuOpen} style={{ color: "black" }}>
-                    <span style={{ paddingRight: '10px' }}>Action</span>
-                    <ArrowDropDownIcon />
-                </Button>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                >
-                    <MenuItem onClick={() => navigate(`/View/Assetmaster/${params.row.AssetItemDescription}`)}>
-                        <span style={{ paddingRight: '18px' }} >View</span>
-                        <VisibilityIcon />
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate(`/Updata/Assetmaster/${params.row.AssetItemDescription}`)}>
-                        <span style={{ paddingRight: '3px' }}>Update</span>
-                        <EditIcon />
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        Deletedapi(params.row.AssetItemDescription)
-                        handleMenuClose();
-                    }}  >
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
-
-                    <MenuItem onClick={(e) => {
-                        putapi(params.row.AssetItemDescription);
-                        handleMenuClose();
-                    }}>
-                        <span style={{ paddingRight: '10px' }}>ADD TO WORK REQUEST</span>
-                    </MenuItem>
-                </Menu>
-            </div>
-
-
-        );
-    }
     const [requestByEmployee, setrequestByEmployee] = useState('');
     const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
     const filteredRows = getdata && getdata.filter(row => (
         (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
-        // (!requestByEmployee || row.AssetItemDescription === requestByEmployee)
         (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
     )).map((row, index) => {
         const isLastPurchaseDateValid = !isNaN(Date.parse(row.LastPurchaseDate));
@@ -350,7 +258,6 @@ function Addassetcode() {
         pageSize: 25,
         page: 0,
     });
-
 
     const Navigatepage = () => {
         const employeeIDss = localStorage.getItem('EmployeeIDsetss');

@@ -557,7 +557,6 @@ function WorkRequest() {
     axios.get(`/api/workRequest_GET_LIST`, {
     },)
       .then((res) => {
-        console.log('TO get the list', res);
         setgetdata(res.data.recordset)
       })
       .catch((err) => {
@@ -570,7 +569,6 @@ function WorkRequest() {
 
   // Deleted api section
   const Deletedapi = (RequestNumber) => {
-    console.log(RequestNumber);
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success mx-2',
@@ -594,7 +592,6 @@ function WorkRequest() {
           .then((res) => {
             getapi()
             // Handle successful delete response
-            console.log('Deleted successfully', res);
             swalWithBootstrapButtons.fire(
               'Deleted!',
               `workrequest ${RequestNumber} has been deleted.`,
@@ -604,7 +601,6 @@ function WorkRequest() {
           })
           .catch((err) => {
             // Handle delete error
-            console.log('Error deleting', err);
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -796,14 +792,11 @@ function WorkRequest() {
       // Retrieve the entire data of the clicked row using its ID
       const clickedRow = filteredRowsss.find((row) => row.id === params.id);
 
-      console.log(params.id);
       if (clickedRow) {
-        console.log("Selected row data:", clickedRow);
         const Res = clickedRow.RequestNumber;
         axios.post(`/api/getworkRequestsecond`, {
           "RequestNumber": Res
         }).then((res) => {
-          console.log('res', res);
           const {
             RequestNumber,
             WorkType,
@@ -841,7 +834,6 @@ function WorkRequest() {
 
           const workaout = res.data.recordsets[0][0].WorkType
           axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
-            console.log("WorkTrade_LIST", res.data.recordset);
             if (res.data.recordsets[0][0] && res.data.recordsets[0][0].WorkTradeCode) {
               setvalue((prevValue) => ({
                 ...prevValue,
@@ -850,7 +842,6 @@ function WorkRequest() {
               const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
               axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
                 .then((res) => {
-                  console.log('WorkTrade_descri_LIST', res.data);
                   setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
                 })
                 .catch((err) => {
@@ -880,7 +871,6 @@ function WorkRequest() {
         axios.post(`/api/getworkRequest`, {
           "EmployeeID": clickedRow.EmployeeID
         }).then((res) => {
-          console.log('asdfaf=====================================', res);
           const {
             EmployeeID,
             Firstname,
@@ -914,21 +904,14 @@ function WorkRequest() {
 
         axios.get(`/api/assetworkrequest_GET_BYID/${clickedRow.RequestNumber}`)
           .then((res) => {
-            console.log('assetworkrequest  GET  BYID', res.data.recordset);
-            console.log('length', res.data.recordset.length);
             const AssetItemDescriptionsssss = res.data.recordset
             // setgetdata(res.data.recordset);
             const SAQ = res.data.recordset.map((item) => item.seq);
             const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-            console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
-
             const promises = res.data.recordset.map((item) => {
               const itid = item.AssetItemDescription;
-              console.log(itid);
-
               return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                 .then((res) => {
-                  console.log('=====', res.data.recordset);
                   return {
                     item,
                     data: res.data.recordset,// Store API response data here
@@ -950,19 +933,14 @@ function WorkRequest() {
             // Create an array of promises for fetching data and updating assetItemTagIDs
             const promisesNumber = res.data.recordset.map((item) => {
               const itid = item.AssetItemDescription;
-              console.log(itid);
-
               return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                 .then((res) => {
-                  console.log('=====------', res.data.recordset[0].AssetItemTagID);
                   return {
                     item,
                     data: res.data.recordset,// Store API response data here
                   };
 
                 })
-
-
                 .catch((err) => {
                   console.log(err);
                   return {
@@ -974,12 +952,7 @@ function WorkRequest() {
 
             Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
               .then(([results1, results2]) => {
-
-
-                // console.log('dfrfdf---------------------',results1);
-                // console.log('-------------------------------', results2);
                 results1.forEach((itemRecords, index) => {
-                  console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                   // setgetdata(results);
                   const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                     description: description,
@@ -995,8 +968,6 @@ function WorkRequest() {
 
                 });
                 results2.forEach((itemRecords, index) => {
-                  // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                  // console.log("---------------------------------",assetItemTagID);
                   const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                     assetItemTagID: assetItemTagID,
                     records: results2[index],
@@ -1008,15 +979,10 @@ function WorkRequest() {
 
               });
 
-
-
-
-
           })
           .catch((err) => {
             console.log(err);
           });
-        console.log(clickedRow.RequestStatus);
         setstatuscheck(clickedRow.RequestStatus)
         // setSelectedRowIds([params.id])
         setSelectedRowIds(clickedRow)
@@ -1086,17 +1052,12 @@ function WorkRequest() {
     const description = row.AssetItemDescription;
     const count = row.AssetQty;
     const AssetItemTagID = "sdf";
-
-    console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
   });
 
 
 
   const handleAddToWorkRequest = () => {
-    console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
     if (!selectedRow || selectedRow.length === 0) {
-      console.log('Select a Work Request by checking the check box');
       Swal.fire({
         title: "Error",
         text: `Select a Work Request by checking the check box`,
@@ -1107,7 +1068,6 @@ function WorkRequest() {
       return;
     }
     if (statuscheck === 'This Work Request is already closed..') {
-      console.log('This Work Request is already closed..');
       Swal.fire({
         title: "Error",
         text: `This Work Request No. ${selectedRow[0].RequestNumber}  is already closed..`,
@@ -1121,14 +1081,9 @@ function WorkRequest() {
     // Assuming you want to navigate to the update page of the first selected row
     if (selectedRow.length > 0) {
       const firstSelectedRow = selectedRow[0];
-      console.log('Post the Data:', firstSelectedRow.RequestNumber);
       navigate(`/WorkRequest/Updata/${firstSelectedRow.RequestNumber}`);
     }
-
-
     const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
-    console.log('Selected Row Data:', selectedRowData);
-
     setSelectedRowIds(selectedRowData);
 
   };
@@ -1243,9 +1198,7 @@ function WorkRequest() {
                       rowSelectionModel={rowSelectionModel}
                       onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel); // Set the state with selected row ids
-                        // console.log(newRowSelectionModel); // Logs the ids of selected rows
                         const selectedRows = filteredRowsss.filter((row) => newRowSelectionModel.includes(row.id));
-                        console.log(selectedRows)
                         setSelectedRow(selectedRows); // Set the state with selected row data objects
 
                       }}
