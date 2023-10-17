@@ -763,7 +763,6 @@ function Mainworkordeer() {
         axios.get(`/api/WorkOrders_GET_LIST`, {
         },)
             .then((res) => {
-                console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
             })
             .catch((err) => {
@@ -776,7 +775,6 @@ function Mainworkordeer() {
 
     // Deleted api section
     const Deletedapi = (WorkOrderNumber) => {
-        console.log(WorkOrderNumber);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -800,7 +798,6 @@ function Mainworkordeer() {
                     .then((res) => {
                         getapi()
                         // Handle successful delete response
-                        console.log('Deleted successfully', res);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             `workorder ${WorkOrderNumber} has been deleted.`,
@@ -996,7 +993,6 @@ function Mainworkordeer() {
     useEffect(() => {
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
             setRequestStatusLIST(res.data.recordsets[0])
-            console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
@@ -1060,9 +1056,6 @@ function Mainworkordeer() {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
         const AssetItemTagID = "sdf";
-
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
     });
 
     const [statuscheck, setstatuscheck] = useState()
@@ -1074,9 +1067,7 @@ function Mainworkordeer() {
             if (clickedRow) {
                 const Res = clickedRow.WorkRequestNumber;
                 const ordernumber = clickedRow.OrderNumber
-                console.log(Res);
                 axios.get(`/api/WorkOrders_GET_BYID/${ordernumber}`).then((res) => {
-                    console.log('asdfaf=============++++====----=============', res);
                     // setdataget(res.data.recordset[0])
                     const orderNumber = res.data.recordset[0].WorkOrderNumber
                     const RequestNumber = res.data.recordset[0].WorkRequestNumber
@@ -1133,7 +1124,6 @@ function Mainworkordeer() {
                     axios.post(`/api/getworkRequest`, {
                         "EmployeeID": completeEmployee
                     }).then((res) => {
-                        console.log('asdfaf=====================================', res);
                         const CompleteddEmployeeName = res.data.recordset[0].Firstname
                         const {
                             EmployeeID,
@@ -1149,16 +1139,14 @@ function Mainworkordeer() {
 
                     })
                         .catch((err) => {
-                            //// console.log(err);;
+                            console.log(err);
                         });
 
                     axios.post(`/api/getworkRequest`, {
                         "EmployeeID": assignEmployee
                     }).then((res) => {
-                        console.log('asdfaf=====================================', res);
                         const Employee = res.data.recordsets[0][0].EmployeeID
                         const CompleteEmployee = res.data.recordsets[0][0].Firstname
-                        console.log(CompleteEmployee);
 
                         setvalue((prevValue) => ({
                             ...prevValue,
@@ -1172,13 +1160,12 @@ function Mainworkordeer() {
 
                     })
                         .catch((err) => {
-                            //// console.log(err);;
+                            console.log(err);
                         });
 
                     axios.post(`/api/getworkRequest`, {
                         "EmployeeID": assignEmployee
                     }).then((res) => {
-                        console.log('asdfaf=====================================', res);
                         const {
                             EmployeeName,
                         } = res.data.recordsets[0];
@@ -1190,7 +1177,7 @@ function Mainworkordeer() {
 
                     })
                         .catch((err) => {
-                            //// console.log(err);;
+                            console.log(err);
                         });
 
 
@@ -1201,12 +1188,11 @@ function Mainworkordeer() {
                     const FailureCodedec = res.data.recordset[0].FailureCode
                     axios.get(`/api/Failure_GET_BYID/${FailureCodedec}`)
                         .then((res) => {
-                            // console.log('-----:', res.data);
                             setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
 
                         })
                         .catch((err) => {
-                            // console.log(err);;
+                            console.log(err);
                         });
                     // SolutionCode
                     const soluctionCodedec = res.data.recordset[0].SolutionCode
@@ -1215,7 +1201,7 @@ function Mainworkordeer() {
                             setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
                         })
                         .catch((err) => {
-                            // console.log(err);;
+                            console.log(err);
                         });
 
                     // Work Catager
@@ -1237,21 +1223,15 @@ function Mainworkordeer() {
                     });
                 axios.get(`/api/assetworkrequest_GET_BYID/${Res}`)
                     .then((res) => {
-                        console.log('assetworkrequest  GET  BYID', res.data.recordset);
-                        console.log('length', res.data.recordset.length);
                         const AssetItemDescriptionsssss = res.data.recordset
                         // setgetdata(res.data.recordset);
                         const SAQ = res.data.recordset.map((item) => item.seq);
                         const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                        console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
 
                         const promises = res.data.recordset.map((item) => {
                             const itid = item.AssetItemDescription;
-                            console.log(itid);
-
                             return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                                 .then((res) => {
-                                    console.log('=====', res.data.recordset);
                                     return {
                                         item,
                                         data: res.data.recordset,// Store API response data here
@@ -1259,7 +1239,6 @@ function Mainworkordeer() {
 
                                 })
                                 .catch((err) => {
-                                    console.log(err);
                                     return {
                                         item,
                                         data: null // Handle error case here
@@ -1273,11 +1252,8 @@ function Mainworkordeer() {
                         // Create an array of promises for fetching data and updating assetItemTagIDs
                         const promisesNumber = res.data.recordset.map((item) => {
                             const itid = item.AssetItemDescription;
-                            console.log(itid);
-
                             return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                                 .then((res) => {
-                                    console.log('=====------', res.data.recordset[0].AssetItemTagID);
                                     return {
                                         item,
                                         data: res.data.recordset,// Store API response data here
@@ -1299,7 +1275,6 @@ function Mainworkordeer() {
                             .then(([results1, results2]) => {
 
                                 results1.forEach((itemRecords, index) => {
-                                    console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                                     // setgetdata(results);
                                     const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                         description: description,
@@ -1315,8 +1290,6 @@ function Mainworkordeer() {
 
                                 });
                                 results2.forEach((itemRecords, index) => {
-                                    // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                                    // console.log("---------------------------------",assetItemTagID);
                                     const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                         assetItemTagID: assetItemTagID,
                                         records: results2[index],
@@ -1339,9 +1312,7 @@ function Mainworkordeer() {
         }
     };
     const handleAddToWorkRequest = () => {
-        console.log("rozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", selectedRow);
         if (!selectedRow || selectedRow.length === 0) {
-            console.log('Select a Work Order by checking the check box');
             Swal.fire({
                 title: "Error",
                 text: `Select a Work Order by checking the check box`,
@@ -1352,7 +1323,6 @@ function Mainworkordeer() {
             return;
         }
         if (statuscheck === 'Closed') {
-            console.log('This Work Order is already closed..');
             Swal.fire({
                 title: "Error",
                 text: `This Work Order No. ${selectedRow[0].WorkOrderNumber}  is already closed..`,
@@ -1366,14 +1336,11 @@ function Mainworkordeer() {
         // Assuming you want to navigate to the update page of the first selected row
         if (selectedRow.length > 0) {
             const firstSelectedRow = selectedRow[0];
-            console.log('Post the Data:', firstSelectedRow.WorkStatus);
             navigate(`/Workorder/Updata/${firstSelectedRow.WorkOrderNumber}`);
         }
 
 
         const selectedRowData = selectedRow.map((row) => row.AssetItemDescription);
-        console.log('Selected Row Data:', selectedRowData);
-
         setSelectedRowIds(selectedRowData);
 
 

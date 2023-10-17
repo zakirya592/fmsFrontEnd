@@ -67,7 +67,6 @@ function Updataorderwork() {
     const [getdata, setgetdata] = useState([])
     function GetgetworkRequest() {
         axios.get(`/api/WorkOrders_GET_BYID/${userId}`).then((res) => {
-            console.log('asdfaf=============++++====----=============', res);
             setdataget(res.data.recordset[0])
             const orderNumber = res.data.recordset[0].WorkOrderNumber
             const RequestNumber = res.data.recordset[0].WorkRequestNumber
@@ -124,19 +123,14 @@ function Updataorderwork() {
 
             axios.get(`/api/assetworkrequest_GET_BYID/${RequestNumber}`)
                 .then((res) => {
-                    console.log('assetworkrequest  GET  BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
                     // setgetdata(res.data.recordset);
                     const SAQ = res.data.recordset.map((item) => item.seq);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                    console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
                     const promises = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
-                        console.log(itid);
-
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
-                                console.log('=====', res.data.recordset);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -158,11 +152,9 @@ function Updataorderwork() {
                     // Create an array of promises for fetching data and updating assetItemTagIDs
                     const promisesNumber = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
-                        console.log(itid);
 
                         return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                             .then((res) => {
-                                console.log('resres', res);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -182,12 +174,7 @@ function Updataorderwork() {
 
                     Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
                         .then(([results1, results2]) => {
-
-
-                            // console.log('dfrfdf---------------------',results1);
-                            // console.log('-------------------------------', results2);
                             results1.forEach((itemRecords, index) => {
-                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                                 // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
@@ -206,8 +193,6 @@ function Updataorderwork() {
 
                             });
                             results2.forEach((itemRecords, index) => {
-                                // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                                // console.log("---------------------------------",assetItemTagID);
                                 const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                     assetItemTagID: assetItemTagID,
                                     records: results2[index],
@@ -232,7 +217,6 @@ function Updataorderwork() {
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": completeEmployee
             }).then((res) => {
-                console.log('asdfaf=====================================', res);
                 const CompleteddEmployeeName = res.data.recordset[0].Firstname
                 const {
                     EmployeeID,
@@ -254,11 +238,8 @@ function Updataorderwork() {
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": assignEmployee
             }).then((res) => {
-                console.log('asdfaf=====================================', res);
                 const Employee = res.data.recordsets[0][0].EmployeeID
                 const CompleteEmployee = res.data.recordsets[0][0].Firstname
-                console.log(CompleteEmployee);
-
                 setvalue((prevValue) => ({
                     ...prevValue,
                     assignEmployee: Employee,
@@ -277,7 +258,6 @@ function Updataorderwork() {
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": assignEmployee
             }).then((res) => {
-                console.log('asdfaf=====================================', res);
                 const {
                     EmployeeName,
                 } = res.data.recordsets[0];
@@ -1026,9 +1006,6 @@ function Updataorderwork() {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
         const AssetItemTagID = "sdf";
-
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
     });
 
     const handleInputChange = (e) => {
@@ -1050,7 +1027,6 @@ function Updataorderwork() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                // console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 // console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
@@ -1069,7 +1045,6 @@ function Updataorderwork() {
     }, [])
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
 
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
@@ -1111,7 +1086,6 @@ function Updataorderwork() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_WR')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -1137,7 +1111,6 @@ function Updataorderwork() {
                     RequestNumber: []
                 }))
                 setAutocompleteLoading(true);
-                console.log(error)
                 return;
             }
             console.error(error);
@@ -1150,8 +1123,6 @@ function Updataorderwork() {
     }
 
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -1167,7 +1138,6 @@ function Updataorderwork() {
                 RequestNumber: value.RequestNumber,
                 workStatus: value.workStatus
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -1275,7 +1245,6 @@ function Updataorderwork() {
     useEffect(() => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
                 const NAmese = data.map((namedata) => namedata?.Firstname);
@@ -1293,7 +1262,6 @@ function Updataorderwork() {
     }, [])
 
     const handleAutoCompleteInputChangeAE = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setGpcListAE([]); // Clear the data list if there is no input
             setUnitCodeAE([])
@@ -1334,7 +1302,6 @@ function Updataorderwork() {
             // I don't know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     // const data = response?.data?.recordset;
                     const data = response?.data?.recordset.map(item => ({
                         ...item,
@@ -1365,7 +1332,6 @@ function Updataorderwork() {
                     assignEmployee: [] // Change to assignEmployee
                 }))
                 setAutocompleteLoadingAE(true);
-                console.log(error)
                 return;
             }
             console.error(error);
@@ -1377,8 +1343,6 @@ function Updataorderwork() {
     }
 
     const handleGPCAutoCompleteChangeAE = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -1392,7 +1356,6 @@ function Updataorderwork() {
                 assignEmployee: value.assignEmployee,// Change to assignEmployee
                 EmployeeName: value.EmployeeName
             }));
-            console.log('Received value----------:', value.assignEmployee);
         } else {
             console.log('Value or value.assignEmployee is null:', value); // Debugging line
         }
@@ -1447,7 +1410,6 @@ function Updataorderwork() {
             // const hours = Math.floor(timeDiff / (1000 * 60 * 60));
             // const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const hours = Math.floor(timeDiff / 3600000); // 1 hour = 3600000 milliseconds
-            console.log(hours * 60);
             // const minutes = Math.floor((timeDiff * 60 % 3600000) / 60000); // 1 minute = 60000 milliseconds
             const minutes = hours * 60
 
@@ -1469,7 +1431,6 @@ function Updataorderwork() {
 
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
                 const NAmese = data.map((namedata) => namedata?.Firstname);
@@ -1487,7 +1448,6 @@ function Updataorderwork() {
     }, [])
 
     const handleAutoCompleteInputChangeEI = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setGpcListEI([]); // Clear the data list if there is no input
             setUnitCodeEI([])
@@ -1528,7 +1488,6 @@ function Updataorderwork() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -1554,7 +1513,6 @@ function Updataorderwork() {
                     EmployeeID: []
                 }))
                 setAutocompleteLoadingEI(true);
-                console.log(error)
                 return;
             }
             console.error(error);

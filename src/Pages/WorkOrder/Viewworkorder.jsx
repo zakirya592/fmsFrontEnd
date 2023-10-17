@@ -55,8 +55,6 @@ function Viewworkorder() {
     // Emp ID
     function GetgetworkRequest() {
         axios.get(`/api/WorkOrders_GET_BYID/${userId}`).then((res) => {
-            console.log('asdfaf=====================================', res);
-
             const orderNumber = res.data.recordset[0].WorkOrderNumber
             const RequestNumber = res.data.recordset[0].WorkRequestNumber
             const costWork = res.data.recordset[0].TotalCostofWork;
@@ -109,19 +107,14 @@ function Viewworkorder() {
 
             axios.get(`/api/assetworkrequest_GET_BYID/${RequestNumber}`)
                 .then((res) => {
-                    console.log('assetworkrequest  GET  BYID', res.data.recordset);
                     const AssetItemDescriptionsssss = res.data.recordset
                     // setgetdata(res.data.recordset);
                     const SAQ = res.data.recordset.map((item) => item.seq);
                     const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                    console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
                     const promises = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
-                        console.log(itid);
-
                         return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                             .then((res) => {
-                                console.log('=====', res.data.recordset);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -143,11 +136,8 @@ function Viewworkorder() {
                     // Create an array of promises for fetching data and updating assetItemTagIDs
                     const promisesNumber = res.data.recordset.map((item) => {
                         const itid = item.AssetItemDescription;
-                        console.log(itid);
-
                         return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                             .then((res) => {
-                                console.log('=====------', res.data.recordset[0].AssetItemTagID);
                                 return {
                                     item,
                                     data: res.data.recordset,// Store API response data here
@@ -168,11 +158,7 @@ function Viewworkorder() {
                     Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
                         .then(([results1, results2]) => {
 
-
-                            // console.log('dfrfdf---------------------',results1);
-                            // console.log('-------------------------------', results2);
                             results1.forEach((itemRecords, index) => {
-                                console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                                 // setgetdata(results);
                                 const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                     description: description,
@@ -191,8 +177,6 @@ function Viewworkorder() {
 
                             });
                             results2.forEach((itemRecords, index) => {
-                                // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                                // console.log("---------------------------------",assetItemTagID);
                                 const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                     assetItemTagID: assetItemTagID,
                                     records: results2[index],
@@ -216,7 +200,6 @@ function Viewworkorder() {
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": assignEmployee
             }).then((res) => {
-                console.log('asdfaf=====================================', res);
                 const firstname = res.data.recordset[0].Firstname
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -235,7 +218,6 @@ function Viewworkorder() {
             axios.post(`/api/getworkRequest`, {
                 "EmployeeID": completeEmployee
             }).then((res) => {
-                console.log('asdfaf=====================================', res);
                 const {
                     CompleteEmployeeName,
                 } = res.data.recordsets[0];
@@ -247,7 +229,7 @@ function Viewworkorder() {
 
             })
                 .catch((err) => {
-                    //// console.log(err);;
+                    console.log(err);
                 });
 
             setminutesdifferent(res.data.recordset[0].TotalMinutes)
@@ -257,7 +239,7 @@ function Viewworkorder() {
             const FailureCodedec = res.data.recordset[0].FailureCode
             axios.get(`/api/Failure_GET_BYID/${FailureCodedec}`)
                 .then((res) => {
-                    // console.log('-----:', res.data);
+                   
                     setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
 
                 })
@@ -976,9 +958,6 @@ function Viewworkorder() {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
         const AssetItemTagID = "sdf";
-
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
     });
 
     const handleInputChange = (e) => {
@@ -1000,9 +979,7 @@ function Viewworkorder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                // console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                // console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -1019,8 +996,6 @@ function Viewworkorder() {
     }, [])
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
-
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
@@ -1061,7 +1036,6 @@ function Viewworkorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_WR')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -1100,8 +1074,6 @@ function Viewworkorder() {
     }
 
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -1117,7 +1089,6 @@ function Viewworkorder() {
                 RequestNumber: value.RequestNumber,
                 workStatus: value.workStatus
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -1126,21 +1097,21 @@ function Viewworkorder() {
     useEffect(() => {
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
             setRequestStatusLIST(res.data.recordsets[0])
-            // console.log(res.data);
+            
         })
             .catch((err) => {
                 console.log(err);
             });
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
             setWorkPrioritlist(res.data.recordsets[0])
-            // console.log(res.data);
+            
         })
             .catch((err) => {
                 console.log(err);
             });
         axios.get(`/api/WorkCatagres_GET_CODE_LIST`).then((res) => {
             setworkCategorylist(res.data.recordsets[0])
-            // console.log('WorkCatagres_GET_LIST', res.data);
+            
         })
             .catch((err) => {
                 console.log(err);
@@ -1148,7 +1119,6 @@ function Viewworkorder() {
 
         axios.get(`/api/Failure_GET_CODELIST`).then((res) => {
             setfailureStatusCodelist(res.data.recordsets[0])
-            // console.log('Failure_GET_CODELIST', res.data.recordsets[0].FailureStatusCode);
         })
             .catch((err) => {
                 console.log(err);
@@ -1188,7 +1158,7 @@ function Viewworkorder() {
         }));
         axios.get(`/api/Failure_GET_BYID/${Deptnale}`)
             .then((res) => {
-                // console.log('-----:', res.data);
+               
                 setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
 
             })
@@ -1204,8 +1174,7 @@ function Viewworkorder() {
             solutionCode: e.target.value,
         }));
         axios.get(`/api/Solution_GET_BYID/${Deptnale}`)
-            .then((res) => {
-                // console.log('-----:', res.data);
+            .then((res) => {    
                 setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
 
             })
@@ -1225,9 +1194,7 @@ function Viewworkorder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     workStatus: requestdata?.RequestStatus,
@@ -1244,8 +1211,6 @@ function Viewworkorder() {
     }, [])
 
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
-        console.log('==========+++++++======', newInputValueID)
-
         if (reason === 'reset' || reason === 'clear') {
             setGpcListID([]); // Clear the data list if there is no input
             setUnitCodeID([])
@@ -1287,7 +1252,6 @@ function Viewworkorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -1328,8 +1292,6 @@ function Viewworkorder() {
     }
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -1345,7 +1307,6 @@ function Viewworkorder() {
                 assignEmployee: value,
                 EmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -1399,7 +1360,6 @@ function Viewworkorder() {
             // const hours = Math.floor(timeDiff / (1000 * 60 * 60));
             // const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const hours = Math.floor(timeDiff / 3600000); // 1 hour = 3600000 milliseconds
-            console.log(hours * 60);
             // const minutes = Math.floor((timeDiff * 60 % 3600000) / 60000); // 1 minute = 60000 milliseconds
             const minutes = hours * 60
 
@@ -1417,9 +1377,7 @@ function Viewworkorder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     workStatus: requestdata?.RequestStatus,
@@ -1436,8 +1394,6 @@ function Viewworkorder() {
     }, [])
 
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
         if (reason === 'reset' || reason === 'clear') {
             setGpcListcompleteemployee([]); // Clear the data list if there is no input
             setUnitCodecompleteemployee([])
@@ -1479,7 +1435,6 @@ function Viewworkorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -1520,8 +1475,6 @@ function Viewworkorder() {
     }
 
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -1537,7 +1490,6 @@ function Viewworkorder() {
                 completeEmployee: value,
                 CompleteEmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }

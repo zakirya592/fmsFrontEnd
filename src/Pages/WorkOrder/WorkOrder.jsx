@@ -47,7 +47,6 @@ function WorkOrder() {
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                console.log('Work Request Number Api', res.data.recordset[0]);
                 const reqput = res.data.recordset[0].WorkOrderNumber;
                 // const reqput=1000
                 let formattedRequestNumber;
@@ -77,7 +76,6 @@ function WorkOrder() {
     const requestincreas = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                console.log('Work Request Number Api', res.data.recordset[0].EmployeeID);
                 const reqput = res.data.recordset[0].WorkOrderNumber + 1;
                 // localStorage.setItem('Requestnumbers', reqput)
                 axios.put(`/api/WorkOrderNumberCount_Put/1`, {
@@ -116,9 +114,7 @@ function WorkOrder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -135,7 +131,6 @@ function WorkOrder() {
     }, [])
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
 
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
@@ -177,7 +172,6 @@ function WorkOrder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_WR')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -217,7 +211,6 @@ function WorkOrder() {
 
     const handleGPCAutoCompleteChange = (event, value) => {
 
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -233,7 +226,6 @@ function WorkOrder() {
                 RequestNumber: value.RequestNumber,
                 RequestStatus: value.RequestStatus
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -242,21 +234,18 @@ function WorkOrder() {
     useEffect(() => {
         axios.get(`/api/RequestStatus_LIST`).then((res) => {
             setRequestStatusLIST(res.data.recordsets[0])
-            console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
             });
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
             setWorkPrioritlist(res.data.recordsets[0])
-            console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
             });
         axios.get(`/api/WorkCatagres_GET_CODE_LIST`).then((res) => {
             setworkCategorylist(res.data.recordsets[0])
-            console.log('WorkCatagres_GET_LIST', res.data);
         })
             .catch((err) => {
                 console.log(err);
@@ -264,7 +253,6 @@ function WorkOrder() {
 
         axios.get(`/api/Failure_GET_CODELIST`).then((res) => {
             setfailureStatusCodelist(res.data.recordsets[0])
-            console.log('Failure_GET_CODELIST', res.data.recordsets[0].FailureStatusCode);
         })
             .catch((err) => {
                 console.log(err);
@@ -272,7 +260,6 @@ function WorkOrder() {
 
         axios.get(`/api/Solution_GET_CODE_LIST`).then((res) => {
             setsolutionCodelist(res.data.recordsets[0])
-            console.log('SolutiontatusCode', res.data.recordsets[0]);
         })
             .catch((err) => {
                 console.log(err);
@@ -287,7 +274,6 @@ function WorkOrder() {
         }));
         axios.get(`/api/WorkCatagres_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----', res.data);
                 setWorkCategoryDiscription(res.data.recordset[0].WorkCategoryDesc)
 
             })
@@ -304,7 +290,6 @@ function WorkOrder() {
         }));
         axios.get(`/api/Failure_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----:', res.data);
                 setFailureDiscriptionCode(res.data.recordset[0].FailureStatusDesc)
 
             })
@@ -321,7 +306,6 @@ function WorkOrder() {
         }));
         axios.get(`/api/Solution_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----:', res.data);
                 setsolutionCodeDiscription(res.data.recordset[0].SolutionStatusDesc)
 
             })
@@ -341,9 +325,7 @@ function WorkOrder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -360,7 +342,6 @@ function WorkOrder() {
     }, [])
 
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
-        console.log('==========+++++++======', newInputValueID)
 
         if (reason === 'reset' || reason === 'clear') {
             setGpcListID([]); // Clear the data list if there is no input
@@ -403,7 +384,6 @@ function WorkOrder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -444,8 +424,6 @@ function WorkOrder() {
     }
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -461,7 +439,6 @@ function WorkOrder() {
                 assignEmployee: value.EmployeeID,
                 EmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -538,9 +515,7 @@ function WorkOrder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -557,7 +532,6 @@ function WorkOrder() {
     }, [])
 
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
 
         if (reason === 'reset' || reason === 'clear') {
             setGpcListcompleteemployee([]); // Clear the data list if there is no input
@@ -600,7 +574,6 @@ function WorkOrder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -641,8 +614,6 @@ function WorkOrder() {
     }
 
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -658,7 +629,6 @@ function WorkOrder() {
                 completeEmployee: value.EmployeeID,
                 CompleteEmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -747,20 +717,6 @@ function WorkOrder() {
                                         Create Work Orders
 
                                     </p>
-                                    {/* <div className="d-flex">
-                                        <img src={pagepin} className="me-2" alt="pagepin" />
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-primary mx-1 color2 btnwork">
-                                            <PrintIcon className="me-1" />
-                                            Print
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-primary color2">
-                                            <img src={excel} alt="excel" /> Export
-                                        </button>
-                                    </div> */}
                                 </div>
                                 <hr className="color3 line" />
 
@@ -1370,7 +1326,7 @@ function WorkOrder() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/workorder')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                    <button type="button" class="border-0 px-3  savebtn py-2" onClick={created}><SaveIcon className='me-2' />SAVE</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={created}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>
                         </div>
