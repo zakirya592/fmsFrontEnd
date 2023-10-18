@@ -385,7 +385,6 @@ function Updatapurchaserequest() {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,

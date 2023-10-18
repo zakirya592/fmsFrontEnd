@@ -599,15 +599,9 @@ function Createpurchaserequest() {
                                 saq: SAQ[index],
                                 records: results1[index],
                             }));
-
-
                             setgetdata(recordsWithDescriptions, recordsWithSAQ);
-
-
                         });
                         results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
                             const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                 assetItemTagID: assetItemTagID,
                                 records: results2[index],
@@ -618,11 +612,6 @@ function Createpurchaserequest() {
                         });
 
                     });
-
-
-
-
-
             })
             .catch((err) => {
                 console.log(err);

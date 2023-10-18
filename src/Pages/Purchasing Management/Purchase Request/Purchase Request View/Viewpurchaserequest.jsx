@@ -9,12 +9,8 @@ import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
@@ -45,7 +41,6 @@ function Viewpurchaserequest() {
         axios.get(`/api/PurchaseRequest_GET_BYID/${userId}`, {
         },)
             .then((res) => {
-                console.log('TO Assets Master By ID', res.data);
                 console.log(res.data.recordset[0].RequestByEmployeeID);
                 const assignEmployee = res.data.recordset[0].VerifiedByEmpl
                 const completeEmployee = res.data.recordset[0].RequestByEmployeeID
@@ -81,7 +76,7 @@ function Viewpurchaserequest() {
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": completeEmployee
                 }).then((res) => {
-                    console.log('asdfaf=====================================', res);
+                    
                     const CompleteddEmployeeName = res.data.recordset[0].Firstname
                     const {
                         EmployeeID,
@@ -104,7 +99,7 @@ function Viewpurchaserequest() {
                 axios.post(`/api/getworkRequest`, {
                     "EmployeeID": assignEmployee
                 }).then((res) => {
-                    console.log('asdfaf=====================================', res);
+                    
                     const Employee = res.data.recordsets[0][0].EmployeeID
                     const CompleteEmployee = res.data.recordsets[0][0].Firstname
                     console.log(Employee);
@@ -122,7 +117,7 @@ function Viewpurchaserequest() {
 
                 const vendorcode = res.data.recordset[0].VendorID
                 axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`).then((res) => {
-                    console.log('asdfaf=====================================', res.data.recordset[0].VendorName);
+                    
                     setvalue((prevValue) => ({
                         ...prevValue,
                         VendorName: res.data.recordset[0].VendorName
@@ -223,8 +218,6 @@ function Viewpurchaserequest() {
     }
 
     const handleGPCAutoVendorCode = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -240,7 +233,6 @@ function Viewpurchaserequest() {
                 VendorID: value.VendorID,
                 VendorName: value.VendorName
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -252,8 +244,6 @@ function Viewpurchaserequest() {
     const abortControllerRefcompleteemployee = useRef(null);
 
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -334,9 +324,7 @@ function Viewpurchaserequest() {
 
     }
 
-    const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
+    const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {       
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -352,7 +340,6 @@ function Viewpurchaserequest() {
                 completeEmployee: value.completeEmployee,
                 CompleteEmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -473,7 +460,7 @@ function Viewpurchaserequest() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 230 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
@@ -542,21 +529,16 @@ function Viewpurchaserequest() {
     const apiget = () => {
         axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseRequestNumber/${userId}`)
             .then((res) => {
-                console.log('AssetsMaster_GET_LIST', res.data.recordset);
-                console.log('length', res.data.recordset.length);
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                // console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
-
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
 
                     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                         .then((res) => {
-                            console.log('=====', res.data.recordset);
+                            
                             return {
                                 item,
                                 data: res.data.recordset,// Store API response data here
@@ -578,8 +560,7 @@ function Viewpurchaserequest() {
                 // Create an array of promises for fetching data and updating assetItemTagIDs
                 const promisesNumber = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
+                    
                     return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                         .then((res) => {
                             return {
@@ -588,8 +569,6 @@ function Viewpurchaserequest() {
                             };
 
                         })
-
-
                         .catch((err) => {
                             console.log(err);
                             return {
@@ -613,15 +592,9 @@ function Viewpurchaserequest() {
                                 saq: SAQ[index],
                                 records: results1[index],
                             }));
-
-
                             setgetdata(recordsWithDescriptions, recordsWithSAQ);
-
-
                         });
                         results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
                             const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                 assetItemTagID: assetItemTagID,
                                 records: results2[index],
@@ -632,10 +605,6 @@ function Viewpurchaserequest() {
                         });
 
                     });
-
-
-
-
 
             })
             .catch((err) => {
