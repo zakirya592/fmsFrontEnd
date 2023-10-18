@@ -9,13 +9,8 @@ import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
 import MenuItem from '@mui/material/MenuItem';
 import Swal from "sweetalert2";
@@ -47,21 +42,20 @@ function Createpurchaserequest() {
     // Usestatus
     const [value, setvalue] = useState({
         PurchaseRequest: '', RequestDate: getRequestDate(), DateRequired: getDateRequired(),
-         Firstname: '',
+        Firstname: '',
         Purpose: '', VATInclusive: '',
         UBTOTALAMOUNT: '', VAT: '0', TOTALAMOUNT: '',
         VendorID: null, VendorName: '',
         Verifiedby: null,
         assignEmployee: null, EmployeeName: '',
-        completeEmployee: null, CompleteEmployeeName:''
+        completeEmployee: null, CompleteEmployeeName: ''
     })
 
-    // purchase numebr auto increament no
     // purchase numebr auto increament no
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                console.log('+++++++++++++++',res.data);
+                console.log('+++++++++++++++', res.data);
                 const reqput = res.data.recordset[0].PurchaseRequestNumber;
                 // const reqput=1000
                 let formattedRequestNumber;
@@ -336,7 +330,7 @@ function Createpurchaserequest() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
-        
+
     // Assign to Employee Logic.
     const [unitCodeID, setUnitCodeID] = useState([]);
     const [openID, setOpenID] = useState(false);
@@ -470,7 +464,7 @@ function Createpurchaserequest() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 250 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
@@ -536,7 +530,7 @@ function Createpurchaserequest() {
         );
     }
 
-    const apiget=()=>{
+    const apiget = () => {
 
         const empid = localStorage.getItem('purachaserequest',)
         axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseRequestNumber/${empid}`)
@@ -637,7 +631,7 @@ function Createpurchaserequest() {
     useEffect(() => {
         apiget()
     }, [])
-    
+
     const countDuplicates = (array, key) => {
         const counts = {};
         array.forEach(item => {
@@ -650,7 +644,7 @@ function Createpurchaserequest() {
     const duplicatesCount = countDuplicates(getdata, 'description');
     // Extract unique descriptions
     const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
-   // Create filteredRows with unique descriptions and counts
+    // Create filteredRows with unique descriptions and counts
     const filteredRows = uniqueDescriptions.map((description, index) => {
         const assetQty = duplicatesCount[description] || 0;
         const purchaseAmount = getdata[index].records ? parseFloat(getdata[index].records.data[0].PurchaseAmount) : '';
@@ -682,19 +676,19 @@ function Createpurchaserequest() {
     const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     // Calculate the initial overallTotalPrice
     const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
-    
+
     const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
     console.log(initialOverallTotalPrice);
     useEffect(() => {
         setOverallTotalPricess(initialOverallTotalPrice);
     }, [initialOverallTotalPrice])
-    
-    
+
+
     // Function to calculate the overallTotalPrice
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     }
-    
+
     // Update overallTotalPrice when the VAT input changes
     function handleVATChange(e) {
         const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
@@ -727,7 +721,7 @@ function Createpurchaserequest() {
             VATInclude: value.VATInclusive,
             VendorID: value.VendorID,
             VerifiedByEmpl: value.assignEmployee,
-            VAT:value.VAT,
+            VAT: value.VAT,
             TOTAL_AMOUNT: overallTotalPricess,
 
         })
@@ -767,6 +761,13 @@ function Createpurchaserequest() {
         localStorage.clear();
         navigate('/PurchaserequestView')
 
+        axios.delete(`/api/PurchaseRequest_count_DELETE_BYID/${value.PurchaseRequest}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Error deleting', err);
+            });
     })
 
     return (
@@ -806,7 +807,7 @@ function Createpurchaserequest() {
                                                 types='text'
                                                 id='PurchaseRequest'
                                                 value={value.PurchaseRequest}
-                                                 className='rounded inputsection py-2'
+                                                className='rounded inputsection py-2'
                                                 placeholder='Enter PR Number'
                                                 required
                                             ></input>
@@ -1003,7 +1004,7 @@ function Createpurchaserequest() {
                                             </select>
                                         </div>
                                     </div>
-                                        
+
                                 </div>
 
                                 <hr className='color3 line' />

@@ -9,13 +9,8 @@ import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import 'react-phone-input-2/lib/style.css'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import SaveIcon from '@mui/icons-material/Save';
 import MenuItem from '@mui/material/MenuItem';
 import Swal from "sweetalert2";
@@ -48,8 +43,6 @@ function Updatapurchaserequest() {
         axios.get(`/api/PurchaseRequest_GET_BYID/${userId}`, {
         },)
             .then((res) => {
-                console.log('TO Purchase Request By ID', res.data);
-
                 const assignEmployee = res.data.recordset[0].VerifiedByEmpl
                 const completeEmployee = res.data.recordset[0].RequestByEmployeeID
                 setvalue((prevValue) => ({
@@ -77,7 +70,6 @@ function Updatapurchaserequest() {
                 axios.get(`/api/VendorMaster_GET_BYID/${vendorcode}`)
                     .then((res) => {
                         if (res.data && res.data.recordset && res.data.recordset[0] && res.data.recordset[0].VendorName) {
-                            console.log('VendorName:', res.data.recordset[0].VendorName);
                             setvalue((prevValue) => ({
                                 ...prevValue,
                                 VendorName: res.data.recordset[0].VendorName
@@ -124,8 +116,6 @@ function Updatapurchaserequest() {
                 }).then((res) => {
                     const Employee = res.data.recordsets[0][0].EmployeeID
                     const CompleteEmployee = res.data.recordsets[0][0].Firstname
-                    console.log(Employee);
-
                     setvalue((prevValue) => ({
                         ...prevValue,
                         assignEmployee: Employee,
@@ -171,9 +161,7 @@ function Updatapurchaserequest() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
                 const unitNameList = data.map((requestdata) => ({
                     VendorID: requestdata?.VendorID,
                     VendorName: requestdata?.VendorName,
@@ -190,8 +178,6 @@ function Updatapurchaserequest() {
     }, [])
 
     const handleAutoCompleteInputVendorCode = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
-
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodeVendorCode([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -226,7 +212,6 @@ function Updatapurchaserequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_VendorMaster')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCodeVendorCode(data ?? [])
@@ -251,7 +236,6 @@ function Updatapurchaserequest() {
                     VendorID: []
                 }))
                 setAutocompleteLoadingVendorCode(true);
-                console.log(error)
                 return;
             }
             console.error(error);
@@ -264,8 +248,6 @@ function Updatapurchaserequest() {
     }
 
     const handleGPCAutoVendorCode = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -281,7 +263,6 @@ function Updatapurchaserequest() {
                 VendorID: value.VendorID,
                 VendorName: value.VendorName
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -293,8 +274,6 @@ function Updatapurchaserequest() {
     const abortControllerRefcompleteemployee = useRef(null);
 
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -330,7 +309,6 @@ function Updatapurchaserequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     // const data = response?.data?.recordset;
                     const data = response?.data?.recordset.map(item => ({
                         ...item,
@@ -363,7 +341,6 @@ function Updatapurchaserequest() {
                     CompleteEmployeeName: []
                 }))
                 setAutocompleteLoadingID(true);
-                console.log(error)
                 return;
             }
             console.error(error);
@@ -376,8 +353,6 @@ function Updatapurchaserequest() {
     }
 
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -393,7 +368,7 @@ function Updatapurchaserequest() {
                 completeEmployee: value.completeEmployee,
                 CompleteEmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
+           
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -409,7 +384,6 @@ function Updatapurchaserequest() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 console.log("----------------------------", data);
                 const dataget = data.map((requestdata) => ({
@@ -428,8 +402,6 @@ function Updatapurchaserequest() {
     }, [])
 
     const handleAutoCompleteInputChangeID = async (eventID, newInputValueID, reason) => {
-        console.log('==========+++++++======', newInputValueID)
-
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodeID([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -465,7 +437,7 @@ function Updatapurchaserequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                   
                     // const data = response?.data?.recordset;
                     const data = response?.data?.recordset.map(item => ({
                         ...item,
@@ -509,8 +481,6 @@ function Updatapurchaserequest() {
     }
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -526,7 +496,7 @@ function Updatapurchaserequest() {
                 assignEmployee: value.assignEmployee,
                 EmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
+           
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -537,7 +507,7 @@ function Updatapurchaserequest() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 250 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
@@ -545,7 +515,6 @@ function Updatapurchaserequest() {
     ];
 
     const Deletedapi = (ASQS) => {
-        console.log(ASQS);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -568,7 +537,6 @@ function Updatapurchaserequest() {
                 axios.delete(`/api/PurchaseRequestAsset_DELETE_BYID/${ASQS}`)
                     .then((res) => {
                         apiget()
-                        // Workrequestget()
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'Purchase Request has been deleted.',
@@ -606,19 +574,13 @@ function Updatapurchaserequest() {
     const apiget = () => {
         axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseRequestNumber/${userId}`)
             .then((res) => {
-                console.log('AssetsMaster_GET_LIST', res.data.recordset);
-                console.log('length', res.data.recordset.length);
-                const AssetItemDescriptionsssss = res.data.recordset
                 const SAQ = res.data.recordset.map((item) => item.seq);
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
 
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
                     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                         .then((res) => {
-                            console.log('=====', res.data.recordset);
                             return {
                                 item,
                                 data: res.data.recordset,// Store API response data here
@@ -640,8 +602,6 @@ function Updatapurchaserequest() {
                 // Create an array of promises for fetching data and updating assetItemTagIDs
                 const promisesNumber = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
                     return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                         .then((res) => {
                             return {
@@ -650,8 +610,6 @@ function Updatapurchaserequest() {
                             };
 
                         })
-
-
                         .catch((err) => {
                             console.log(err);
                             return {
@@ -663,12 +621,7 @@ function Updatapurchaserequest() {
 
                 Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
                     .then(([results1, results2]) => {
-
-
-                        // console.log('dfrfdf---------------------',results1);
-                        // console.log('-------------------------------', results2);
                         results1.forEach((itemRecords, index) => {
-                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                             // setgetdata(results);
                             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                 description: description,
@@ -687,8 +640,6 @@ function Updatapurchaserequest() {
 
                         });
                         results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
                             const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                 assetItemTagID: assetItemTagID,
                                 records: results2[index],
@@ -699,11 +650,6 @@ function Updatapurchaserequest() {
                         });
 
                     });
-
-
-
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -770,9 +716,7 @@ function Updatapurchaserequest() {
     function handleVATChange(e) {
         const newVAT = parseFloat(e.target.value) || 0; // Parse the VAT input as a number
         const newOverallTotalPrice = initialOverallTotalPrice + newVAT;
-        console.log(newVAT);
         setOverallTotalPricess(newOverallTotalPrice);
-
         setvalue(prevValue => ({
             ...prevValue,
             VAT: newVAT,
@@ -804,7 +748,6 @@ function Updatapurchaserequest() {
 
         })
             .then((res) => {
-                console.log(res.data);
                 Swal.fire(
                     'Success!',
                     `Purchase Requests ${userId} has been updated`,
