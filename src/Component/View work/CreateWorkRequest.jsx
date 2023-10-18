@@ -39,7 +39,6 @@ function CreateWorkRequest() {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-    const initialEmployeeID = ''; // Use empty string if null
     const initialRequestStatus = localStorage.getItem('RequestStatus') || "Open"; // Use empty string if null
     const initialFirstName = localStorage.getItem('Firstname') || ""; // Use empty string if null
     const initialMiddlename = localStorage.getItem('Middlename') || ""; // Use empty string if null
@@ -50,7 +49,7 @@ function CreateWorkRequest() {
     const initialBuildingCode = localStorage.getItem('BuildingCode') || "Select Dept Code";
     const initialLocationCode = localStorage.getItem('LocationCode') || "Select Location Code";
     const initialWorkType = localStorage.getItem('WorkType') || "Select WorkType Code";
-    const initialWorkPriority = localStorage.getItem('WorkPriority') || "Select Work Priority Code";
+    const initialWorkPriority = localStorage.getItem('WorkPriority') || "";
     const initialWorkTradeCode = localStorage.getItem('WorkTradeCode') || "Select Work Trade Code Code";
     const initialWorkTypeDesc = localStorage.getItem('WorkTypeDesc') || "Select Work Trade Desc";
     const initialDepartmentname = localStorage.getItem('Departmentname') || "Select Departmentname";
@@ -68,9 +67,7 @@ function CreateWorkRequest() {
         AssetItemTagID: '',// AddAssetItemTagIDInworkRequestPOST api input
         AssetItemDescription: '', AssetCategory: '', Manufacturer: '', Model: '',//AddassetItemInworkRequestPOST api input
         ProblemCategory: '', ProblemDescription: '',
-        // RequestDateTime: '',
         RequestNumber: '',
-        // RequestNumber: generateCustomId(),
         RequestStatus: initialRequestStatus,
         workTrade: initialWorkTradeCode,
         WorkOrder: '',
@@ -83,17 +80,12 @@ function CreateWorkRequest() {
     })
 
     const [renum, setrenum] = useState('')
-
     // Work Request Number Api
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
                 const reqput = res.data.recordset[0].RequestNumber + 1;
-                // const reqput = res.data.recordset[0].RequestNumber;
-                // const reqput=19
                 setrenum(reqput)
-                
                 let formattedRequestNumber;
                 if (reqput >= 1 && reqput <= 9) {
                     formattedRequestNumber = `000-000-00${reqput}`;
@@ -119,7 +111,6 @@ function CreateWorkRequest() {
     const requestincreas = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
-                console.log('Work Request Number Api', res.data.recordset[0].RequestNumber);
                 const reqput = res.data.recordset[0].RequestNumber + 1;
                 // localStorage.setItem('Requestnumbers', reqput)
                 setvalue(prevState => ({ ...prevState, RequestNumber: '000-000-' + '0' + `${reqput}` }));
@@ -128,7 +119,6 @@ function CreateWorkRequest() {
                     RequestNumber: reqput
                 })
                     .then((res) => {
-                        console.log('Work Request Number put Api', res.data);
                         axios.get(`/api/workRequestCount_GET_BYID/${reqput}`).then((res) => {
                             console.log('Work request country second api', res);
                         })
@@ -222,7 +212,6 @@ function CreateWorkRequest() {
         axios.post(`/api/getworkRequest_by_EPID`, {
             EmployeeID,
         }).then((res) => {
-            // console.log(res.data)
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Employee ID not found!', 'error')
                 // setModelError(true);
@@ -253,9 +242,7 @@ function CreateWorkRequest() {
                     WorkTrade,
                     // RequestNumber
                 }));
-                console.log('-------------------', res.data.recordsets[0][0]);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
-                console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -440,7 +427,6 @@ function CreateWorkRequest() {
                 setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                 axios.get(`/api/AssetType_model_all_LIST/${res.data.recordset[0].AssetItemDescription}`)
                     .then((res) => {
-                        // console.log(res.data);
                         setManufacturerdesc(res.data.recordset[0].Manufacturer)
                         setAssetCategory(res.data.recordset[0].AssetCategory)
                         setModel(res.data.recordset[0].Model)
@@ -455,16 +441,13 @@ function CreateWorkRequest() {
     }
 
     // Work Request Number
-    // post api for the data 
     function Workrequestpost(RequestNumber) {
         axios.post(`/api/getworkRequestsecond`, {
             RequestNumber,
         }).then((res) => {
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
-                // setModelError(true);
             } else {
-                console.log(res.data);
                 const {
                     WorkType,
                     WorkTrade,
@@ -490,14 +473,12 @@ function CreateWorkRequest() {
                 const workaout = res.data.recordsets[0][0].WorkType
                 axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                     .then((res) => {
-                        // console.log(res.data);
                         setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
                     })
                     .catch((err) => {
                         console.log(err);
                     });
                 axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
-                    // console.log("WorkTrade_LIST", res.data.recordset);
                     setdropdownWorkTradeLIST(res.data.recordsets[0])
                     const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
                     axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
@@ -524,17 +505,14 @@ function CreateWorkRequest() {
             Workrequestpost(value.RequestNumber);
             axios.get(`/api/WorkRequestItems_GET_BYID/${value.RequestNumber}`)
                 .then((res) => {
-                    console.log('WorkRequestItems_GET_BYID', res.data);
                     setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
                     const assetdascauto = res.data.recordset[0].AssetItemTagID
-                    console.log(assetdascauto);
                     axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
                         .then((res) => {
                             setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
                             const modellistmode = res.data.recordset[0].AssetItemDescription
                             axios.get(`/api/AssetType_model_all_LIST/${modellistmode}`)
                                 .then((res) => {
-                                    // console.log(res.data);
                                     setManufacturerdesc(res.data.recordset[0].Manufacturer)
                                     setAssetCategory(res.data.recordset[0].AssetCategory)
                                     setModel(res.data.recordset[0].Model)
@@ -618,14 +596,7 @@ function CreateWorkRequest() {
     const [empreq, setempreq] = useState(false)
     // All Createapi function
     const allCreateapi = () => {
-        // if (lenght==0) {
-        //     console.log("You selected the asset code");
-        //     // Swal.fire('Oops...!', 'please choose the asset code.', 'error')
-        //     alert('Asset details is required.')
-        // }
-        // else{
         requestincreas()
-        // Createapi();
         workrequsrpostapi()
         AssetItemTagIDpost()
         Swal.fire({
@@ -633,11 +604,8 @@ function CreateWorkRequest() {
             text: `Work request ${value.RequestNumber} has been created successfully`,
             icon: "success",
             confirmButtonText: "OK",
-           
-            
         })
         navigate('/workrequest'); // Navigate after alert is closed
-
         localStorage.removeItem('postemployid');
         localStorage.removeItem('EmployeeIDset');
         localStorage.removeItem('MobileNumber');
@@ -662,15 +630,6 @@ function CreateWorkRequest() {
 
     }
     const Assetcodebtn = (e) => {
-        // Createapi();
-        // workrequsrpostapi()
-        // AssetItemTagIDpost()
-        // if (value.EmployeeID.trim() === '') {
-        //     console.error('EmployeeID is required.');
-        //     return;
-        // }
-        // else{
-        // }
         setvalue(prevValue => ({
             ...prevValue,
             EmployeeID: e.target.value
@@ -687,26 +646,18 @@ function CreateWorkRequest() {
     const [getdata, setgetdata] = useState([])
     const [datanumber, setdatanumber] = useState([])
 
-   const getapi = () => {
+    const getapi = () => {
         // const empid = localStorage.getItem('postemployid',)
         const empid = localStorage.getItem('requestnumber',)
         axios.get(`/api/assetworkrequest_GET_BYID/${empid}`)
             .then((res) => {
-                console.log('assetworkrequest  GET  BYID', res.data.recordset);
-                console.log('length', res.data.recordset.length);
                 const AssetItemDescriptionsssss = res.data.recordset
-                // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
                 const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
-                console.log('AssetItemDescriptionsssss', AssetItemDescriptionsssss);
-
                 const promises = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
                     return axios.get(`/api/tblAssetsMaster_GET_BYID/${itid}`)
                         .then((res) => {
-                            console.log('=====', res.data.recordset);
                             return {
                                 item,
                                 data: res.data.recordset,// Store API response data here
@@ -728,19 +679,14 @@ function CreateWorkRequest() {
                 // Create an array of promises for fetching data and updating assetItemTagIDs
                 const promisesNumber = res.data.recordset.map((item) => {
                     const itid = item.AssetItemDescription;
-                    console.log(itid);
-
                     return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
                         .then((res) => {
-                            console.log('=====------', res.data.recordset[0].AssetItemTagID);
                             return {
                                 item,
                                 data: res.data.recordset,// Store API response data here
                             };
 
-                        })
-
-                        .catch((err) => {
+                        }).catch((err) => {
                             console.log(err);
                             return {
                                 item,
@@ -753,8 +699,6 @@ function CreateWorkRequest() {
                     .then(([results1, results2]) => {
 
                         results1.forEach((itemRecords, index) => {
-                            console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
-                            // setgetdata(results);
                             const recordsWithDescriptions = AssetItemDescriptionsss.map((description, index) => ({
                                 description: description,
                                 records: results1[index],
@@ -765,15 +709,9 @@ function CreateWorkRequest() {
                                 saq: SAQ[index],
                                 records: results1[index],
                             }));
-
-
                             setgetdata(recordsWithDescriptions, recordsWithSAQ);
-
-
                         });
                         results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
                             const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                 assetItemTagID: assetItemTagID,
                                 records: results2[index],
@@ -784,11 +722,6 @@ function CreateWorkRequest() {
                         });
 
                     });
-
-
-
-
-
             })
             .catch((err) => {
                 console.log(err);
@@ -809,9 +742,7 @@ function CreateWorkRequest() {
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
     //  Deleting the assetworkrequest DELETE_BYID
-    // Deleted api section
     const Deletedapi = (ASQS) => {
-        console.log(ASQS);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -834,7 +765,6 @@ function CreateWorkRequest() {
                 axios.delete(`/api/assetworkrequest_DELETE_BYID/${ASQS}`)
                     .then((res) => {
                         getapi()
-                        console.log('Deleted successfully', res);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'AssetCode has been deleted.',
@@ -869,7 +799,6 @@ function CreateWorkRequest() {
             </div>
         );
     }
-
     const countDuplicates = (array, key) => {
         const counts = {};
         array.forEach(item => {
@@ -878,11 +807,8 @@ function CreateWorkRequest() {
         });
         return counts;
     };
-
     // Get the data first
     const duplicatesCount = countDuplicates(getdata, 'description');
-
-
     // Extract unique descriptions
     const uniqueDescriptions = Array.from(new Set(getdata.map(row => row.description)));
     // Create filteredRows with unique descriptions and counts
@@ -906,9 +832,6 @@ function CreateWorkRequest() {
         const description = row.AssetItemDescription;
         const count = row.AssetQty;
         const AssetItemTagID = "sdf";
-
-        console.log(`Description: ${description}, Count: ${count} ,AssetItemTagID ${AssetItemTagID}`);
-
     });
 
     const [paginationModel, setPaginationModel] = React.useState({
@@ -984,23 +907,18 @@ function CreateWorkRequest() {
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.print();
-    }; 
+    };
 
     const [unitCode, setUnitCode] = useState([]);
     const [dropname, setdropname] = useState([])
     const [open, setOpen] = useState(false);
     const [autocompleteLoading, setAutocompleteLoading] = useState(false);
-    const [hsLoaderOpen, setHsLoaderOpen] = useState(false);
     const [gpcList, setGpcList] = useState([]); // gpc list
     const abortControllerRef = useRef(null);
 
     useEffect(() => {
-
-        // const handleOnBlurCall = () => {
-
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
                 const unitNameList = data.map((unitData) => unitData?.EmployeeID);
                 const NAmese = data.map((namedata) => namedata?.Firstname);
@@ -1018,7 +936,6 @@ function CreateWorkRequest() {
     }, [])
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
@@ -1059,7 +976,6 @@ function CreateWorkRequest() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -1098,8 +1014,6 @@ function CreateWorkRequest() {
     }
 
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -1112,7 +1026,6 @@ function CreateWorkRequest() {
                 ...prevValue,
                 EmployeeID: value.EmployeeID
             }));
-            console.log('Received value----------:', value.EmployeeID);
             localStorage.setItem('EmployeeIDset', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
@@ -1141,6 +1054,15 @@ function CreateWorkRequest() {
         localStorage.removeItem('WorkTradedesc');
         localStorage.clear();
         navigate('/workRequest')
+
+        axios.delete(`/api/WorkRequest_count_DELETE_BYID/${value.RequestNumber}`)
+            .then((res) => {
+                getapi()
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Error deleting', err);
+            });
 
     })
 
