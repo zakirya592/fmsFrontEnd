@@ -113,7 +113,7 @@ function Updatagoodreceipt() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 230 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },

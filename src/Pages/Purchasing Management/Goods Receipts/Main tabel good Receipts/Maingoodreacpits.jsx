@@ -109,7 +109,7 @@ function Maingoodreacpits() {
         { field: 'DiscountAmount', headerName: 'Discount Amount', width: 200 },
         { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
         { field: 'InvoiceDate', headerName: 'Invoice Date', width: 200 },
-        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 150, renderCell: ActionButtons },
     ];
 
     // Deleted api section

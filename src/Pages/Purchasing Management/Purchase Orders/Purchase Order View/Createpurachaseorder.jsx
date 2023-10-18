@@ -63,9 +63,7 @@ function Createpurachaseorder() {
                 } else {
                     formattedRequestNumber = `000-000-${reqput}`;
                 }
-                console.log('----++++',res.data);
                 setvalue(prevState => ({ ...prevState, PurchaseOrder: formattedRequestNumber }));
-
                 localStorage.setItem('addpurachasorderss', formattedRequestNumber)
             })
             .catch((err) => {
@@ -103,7 +101,7 @@ function Createpurachaseorder() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 230 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
@@ -173,8 +171,6 @@ function Createpurachaseorder() {
         const empid = localStorage.getItem('addpurachasorderss',)
         axios.get(`/api/PurchaseRequestDetail_GET_BY_PurchaseOrderNumber/${empid}`)
             .then((res) => {
-                console.log('AssetsMaster_GET_LIST', res.data.recordset);
-                console.log('length', res.data.recordset.length);
                 const AssetItemDescriptionsssss = res.data.recordset
                 // setgetdata(res.data.recordset);
                 const SAQ = res.data.recordset.map((item) => item.seq);
@@ -232,10 +228,6 @@ function Createpurachaseorder() {
 
                 Promise.all([Promise.all(promises), Promise.all(promisesNumber)])
                     .then(([results1, results2]) => {
-
-
-                        // console.log('dfrfdf---------------------',results1);
-                        // console.log('-------------------------------', results2);
                         results1.forEach((itemRecords, index) => {
                             console.log(`Records for ${AssetItemDescriptionsss[index]}:`, itemRecords.data);
                             // setgetdata(results);
@@ -250,14 +242,9 @@ function Createpurachaseorder() {
                                 records: results1[index],
                             }));
 
-
                             setgetdata(recordsWithDescriptions, recordsWithSAQ);
-
-
                         });
                         results2.forEach((itemRecords, index) => {
-                            // const assetItemTagID = itemRecords.data[0].AssetItemTagID;
-                            // console.log("---------------------------------",assetItemTagID);
                             const assetItemTagID = AssetItemDescriptionsss.map((assetItemTagID, index) => ({
                                 assetItemTagID: assetItemTagID,
                                 records: results2[index],
@@ -268,10 +255,6 @@ function Createpurachaseorder() {
                         });
 
                     });
-
-
-
-
 
             })
             .catch((err) => {
@@ -362,10 +345,8 @@ function Createpurachaseorder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/Filter_WR')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
-                const unitNameList = data.map((requestdata) => ({
+               const unitNameList = data.map((requestdata) => ({
                     VendorID: requestdata?.VendorID,
                     VendorName: requestdata?.VendorName,
                 }));
@@ -381,8 +362,6 @@ function Createpurachaseorder() {
     }, [])
 
     const handleAutoCompleteInputVendorCode = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
-
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodeVendorCode([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -417,7 +396,7 @@ function Createpurachaseorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_VendorMaster')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                    
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCodeVendorCode(data ?? [])
@@ -455,9 +434,7 @@ function Createpurachaseorder() {
     }
 
     const handleGPCAutoVendorCode = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
-        if (value === null || value === '-') {
+          if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
                 VendorID: [],
@@ -472,7 +449,7 @@ function Createpurachaseorder() {
                 VendorID: value.VendorID,
                 VendorName: value.VendorName
             }));
-            console.log('Received value----------:', value);
+            
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -488,9 +465,9 @@ function Createpurachaseorder() {
         // const handleOnBlurCall = () => {
         axios.get('/api/EmployeeID_GET_LIST')
             .then((response) => {
-                console.log('Dropdown me', response.data.recordset)
+                
                 const data = response?.data?.recordset;
-                console.log("----------------------------", data);
+               
                 const dataget = data.map((requestdata) => ({
                     RequestNumber: requestdata?.RequestNumber,
                     RequestStatus: requestdata?.RequestStatus,
@@ -544,7 +521,7 @@ function Createpurachaseorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                    
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -586,7 +563,7 @@ function Createpurachaseorder() {
 
     const handleGPCAutoCompleteChangeID = (event, value) => {
 
-        console.log('Received value:', value); // Debugging line
+        
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -602,7 +579,7 @@ function Createpurachaseorder() {
                 assignEmployee: value.EmployeeID,
                 EmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
+            
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -619,7 +596,7 @@ function Createpurachaseorder() {
     const abortControllerRefcompleteemployee = useRef(null);
 
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
+        
 
         if (reason === 'reset' || reason === 'clear') {
             setUnitCodecompleteemployee([])
@@ -656,7 +633,7 @@ function Createpurachaseorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                    
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -698,7 +675,7 @@ function Createpurachaseorder() {
 
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
 
-        console.log('Received value:', value); // Debugging line
+        
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -714,7 +691,7 @@ function Createpurachaseorder() {
                 completeEmployee: value.EmployeeID,
                 CompleteEmployeeName: value.Firstname
             }));
-            console.log('Received value----------:', value);
+            
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -789,7 +766,7 @@ function Createpurachaseorder() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/Filter_PurchaseRequestNumber')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                    
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCoderequestnumber(data ?? [])
@@ -828,7 +805,7 @@ function Createpurachaseorder() {
 
     const handleGPCAutorequestnumber = (event, value) => {
 
-        console.log('Received value:', value); // Debugging line
+        
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -842,7 +819,7 @@ function Createpurachaseorder() {
                 ...prevValue,
                 PurchaseRequestNumber: value.PurchaseRequestNumber,
             }));
-            console.log('Received value----------:', value);
+            
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -899,6 +876,14 @@ function Createpurachaseorder() {
         localStorage.removeItem('addpurachasorder');
         localStorage.clear();
         navigate('/Purachaseorderview')
+
+        axios.delete(`/api/PurchaseOrder_count_DELETE_BYID/${value.PurchaseOrder}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Error deleting', err);
+            });
 
     })
 

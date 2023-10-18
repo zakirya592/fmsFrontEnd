@@ -40,7 +40,7 @@ function Createreceipte() {
     const [value, setvalue] = useState({
         PurchaseOrder: '', InvoiceDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
-        UBTOTALAMOUNT: '', VAT: '', Discounts: '0', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '0', Discounts: '0', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '', PurchaseOrderNumber: null,
     })
@@ -51,7 +51,7 @@ function Createreceipte() {
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 90 },
         { field: 'PurchaseRequest', headerName: 'MATERIAL /STOCK CODE', width: 200 },
-        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 200 },
+        { field: 'AssetItemDescription', headerName: 'DESCRIPTION', width: 230 },
         { field: 'AssetQty', headerName: 'QAT', width: 180 },
         { field: 'PurchaseAmount', headerName: 'UNITY PRICE', width: 200 },
         { field: 'TOTAL_PRICE', headerName: 'TOTAL PRICE', width: 180 },
@@ -736,6 +736,13 @@ useEffect(() => {
         localStorage.clear();
         navigate('/Goodsreceiptsview')
 
+        axios.delete(`/api/GoodsReceipt_count_DELETE_BYID/${value.PurchaseOrderNumber}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Error deleting', err);
+            });
     })
 
     return (

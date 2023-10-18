@@ -33,7 +33,7 @@ function Creategoodreturn() {
     const [value, setvalue] = useState({
         PurchaseOrder: '', ReturnDate: getRequestDate(), ActualDeliveryDate: '', InvoiceNumber: '',
         Recievedby: '', EmployeeName: '',
-        UBTOTALAMOUNT: '', VAT: '', TOTALAMOUNT: '',
+        UBTOTALAMOUNT: '', VAT: '0', TOTALAMOUNT: '',
         VendorID: '', VendorName: '',
         FeedbackComments: '', PurchaseOrderNumber: null,
     })
@@ -729,6 +729,13 @@ function Creategoodreturn() {
         localStorage.clear();
         navigate('/GoodsreturnView')
 
+        axios.delete(`/api/GoodsReturn_count_DELETE_BYID/${value.PurchaseOrderNumber}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Error deleting', err);
+            });
     })
 
 

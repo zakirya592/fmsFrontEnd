@@ -97,12 +97,12 @@ function Tablegoodreturn() {
     }, [])
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 120 },
-        { field: 'PurchaseOrderNumber', headerName: 'Purchase Order Number', width: 220 },
-        { field: 'InvoiceNumber', headerName: 'Invoice Number', width: 210 },
-        { field: 'VendorID', headerName: 'Vendor ID', width: 210 },
-        { field: 'ReturnDate', headerName: 'Return Date', width: 220 },
-        { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
+        { field: 'id', headerName: 'SEQ.', width: 130 },
+        { field: 'PurchaseOrderNumber', headerName: 'Purchase Order Number', width: 250 },
+        { field: 'InvoiceNumber', headerName: 'Invoice Number', width: 230 },
+        { field: 'VendorID', headerName: 'Vendor ID', width: 230 },
+        { field: 'ReturnDate', headerName: 'Return Date', width: 230 },
+        { field: 'ACTIONS', headerName: 'ACTIONS', width: 170, renderCell: ActionButtons },
     ];
 
     // Deleted api section
