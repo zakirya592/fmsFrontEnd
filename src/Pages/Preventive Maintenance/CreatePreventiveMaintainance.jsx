@@ -60,8 +60,6 @@ function CreatePreventiveMaintainance() {
     const [dropdownWorkTradeLIST, setdropdownWorkTradeLIST] = useState([])
     const [schedulingprioritylist, setschedulingprioritylist] = useState([])
 
-
-
     // apis
     useEffect(() => {
         // building
@@ -177,9 +175,7 @@ function CreatePreventiveMaintainance() {
         }));
         axios.get(`/api/AssetType_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log('-----:', res.data);
                 setassetTypeDiscription(res.data.recordset[0].AssetTypeDesc)
-
             })
             .catch((err) => {
                 console.log(err);;
@@ -187,7 +183,6 @@ function CreatePreventiveMaintainance() {
 
         axios.get(`/api/AssetType_GET_BYAssetType/${Deptnale}`)
             .then((res) => {
-                console.log('-----:++++++====', res.data);
                 setAssetCategory(res.data.recordset[0].AssetCategory)
                 setManufacturer(res.data.recordset[0].Manufacturer)
                 setModel(res.data.recordset[0].Model)
@@ -239,7 +234,7 @@ function CreatePreventiveMaintainance() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
+                    
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -334,7 +329,7 @@ function CreatePreventiveMaintainance() {
     }
     const handleGPCAutoCompleteChange = (event, value) => {
 
-        console.log('Received value:', value); // Debugging line
+        
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -428,9 +423,7 @@ function CreatePreventiveMaintainance() {
             });
     }
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
-        if (reason === 'reset' || reason === 'clear') {
+                if (reason === 'reset' || reason === 'clear') {
             setGpcListcompleteemployee([]); // Clear the data list if there is no input
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -446,7 +439,6 @@ function CreatePreventiveMaintainance() {
             return;
         }
         if (newInputValuecompleteemployee === null) {
-
             // perform operation when input is cleared
             setGpcListcompleteemployee([]);
             setUnitCodecompleteemployee([])
@@ -470,10 +462,7 @@ function CreatePreventiveMaintainance() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/workRequest_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
-                    //name state da setdropname
-                    //or Id state da setGpcList da 
                     setUnitCodecompleteemployee(data ?? [])
                     setOpencompleteemployee(true);
                     setUnitCodecompleteemployee(data)
@@ -485,10 +474,7 @@ function CreatePreventiveMaintainance() {
 
                 }
                 );
-
         }
-
-
         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
@@ -510,16 +496,13 @@ function CreatePreventiveMaintainance() {
     }
 
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
-        if (value === null || value === '-') {
+                if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
                 RequestStatus: []
             }));
         }
-
         if (value && value.RequestNumber) {
             Workrequestpost(value.RequestNumber);
             setvalue(prevValue => ({
@@ -527,7 +510,6 @@ function CreatePreventiveMaintainance() {
                 RequestNumber: value.RequestNumber,
                 RequestStatus: value.RequestStatus
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -552,7 +534,6 @@ function CreatePreventiveMaintainance() {
             SchedulingPriority: value.schedulingpriority,
         },)
             .then((res) => {
-                console.log('Add work api first api-------------', res.data);
                 if (res.status == 201) {
                     Swal.fire({
                         title: "Success",
@@ -561,7 +542,6 @@ function CreatePreventiveMaintainance() {
                         confirmButtonText: "OK",
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Navigate to the next page when "OK" is clicked
                             navigate('/Preventive')
                         }
                     });
@@ -589,10 +569,8 @@ function CreatePreventiveMaintainance() {
         const selectedStartDate = new Date(event.target.value);
         const nextDay = new Date(selectedStartDate);
         nextDay.setDate(selectedStartDate.getDate() + 1);
-
         setSchedulestarttime(event.target.value);
         setScheduleendtime(nextDay);
-
         // Ensure end date is never before the selected start date
         if (nextDay < new Date(Scheduleendtime)) {
             setScheduleendtime(nextDay);
@@ -603,12 +581,9 @@ function CreatePreventiveMaintainance() {
     };
     const handleEndDateChange = (event) => {
         const selectedEndDate = new Date(event.target.value);
-
-        // Ensure end date is never before the selected start date
         if (selectedEndDate < new Date(Schedulestarttime)) {
             setScheduleendtime(new Date(Schedulestarttime));
         } else {
-            // setScheduleendtime(selectedEndDate);
             setScheduleendtime(event.target.value);
 
         }
@@ -636,12 +611,6 @@ function CreatePreventiveMaintainance() {
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Create Preventive Maintenance<span className='star'>*</span></p>
-                                    <div className="d-flex">
-                                        {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><AddCircleOutlineRoundedIcon className='me-1' />Create</button> */}
-                                        {/* <Create /> */}
-                                        {/* <button type="button" class="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button> */}
-                                        {/* <button type="button" class="btn btn-outline-primary color2"><img src={excel} /> Export</button> */}
-                                    </div>
                                 </div>
 
                                 <hr className='color3 line' />
@@ -1361,8 +1330,6 @@ function CreatePreventiveMaintainance() {
 
                                     </div>
                                 </div>
-
-
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
