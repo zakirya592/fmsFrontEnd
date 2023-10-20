@@ -19,7 +19,7 @@ function Createroommaintence() {
         RoomCode: '', RoomName: '', Area: '', Floor:'',
         BuildingCode: '', Buildiingname: '',
         LocationCode: '', Locationname: [],
-        RoomCapacity: '', noofCapacity: '', Vacancy:'',
+        RoomCapacity: '', noofCapacity: '0', Vacancy:'',
     })
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
@@ -437,7 +437,7 @@ function Createroommaintence() {
                                                 No. of Occupancy
                                             </label>
                                             <input
-                                                type='text'
+                                                type='number'
                                                 id='noofCapacity'
                                                 value={value.noofCapacity}
                                                 onChange={e => {
