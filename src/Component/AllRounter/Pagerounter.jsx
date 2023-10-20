@@ -120,6 +120,7 @@ import Createemployeeroomtransfer from '../../Pages/Space Management/Employee Ro
 import Employeeroomtransfer from '../../Pages/Space Management/Employee Room Transfers/Employeeroomtransfer'
 import Viewemployeeroomtransfer from '../../Pages/Space Management/Employee Room Transfers/Viewemployeeroomtransfer'
 import Updateemployeeroomtransfer from '../../Pages/Space Management/Employee Room Transfers/Updateemployeeroomtransfer'
+import Dashbords from '../../Pages/Dashbord/Dashbords'
 
 function Pagerounter() {
 
@@ -331,6 +332,9 @@ function Pagerounter() {
           <Route exact path="/Create/Employee/RoomTransfers" element={<Createemployeeroomtransfer />} />
           <Route exact path="/View/Employee/RoomTransfers/:userId" element={<Viewemployeeroomtransfer />} />
           <Route exact path="/Update/Employee/RoomTransfers/:userId" element={<Updateemployeeroomtransfer />} />
+
+          {/* Dashbords */}
+          <Route exact path="/Dashbord" element={<Dashbords />} />
 
         </Routes>
       </BrowserRouter>

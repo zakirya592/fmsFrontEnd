@@ -1,0 +1,34 @@
+.topmain{
+    display: flex;
+    justify-content: space-between;
+}
+.headingdashbord{
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 600;
+}
+.propdashbord{
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 16px;
+}
+.insdieborder{
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 20px;
+}
+.lastpro{
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: normal;
+}
+@media only screen and (max-width: 768px) {
+   .topmain {
+       display: block;
+       justify-content: space-between;
+       margin: 12px;
+   }
+}

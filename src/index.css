@@ -35,3 +35,6 @@ code {
 .pointerss{
   cursor: pointer !important;
 }
+.bordercolor{
+  border: 1px solid #000;
+}

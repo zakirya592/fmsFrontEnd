@@ -153,7 +153,9 @@ function Fmsmain() {
                                             </div>
                                             {/* Dashboard */}
                                             <div className="w-secCircle">
-                                                <div className="w-secCircleindside">
+                                                <div className="w-secCircleindside" onClick={(() => {
+                                                    navigate('/Dashbord')
+                                                })}>
                                                     <img src={Dashboard} alt="upwork" width='100%' />
                                                 </div>
                                                 <p className='textstyle'>Dashboard</p>
