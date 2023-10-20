@@ -32,6 +32,8 @@ function Dashbords() {
     const [oldestdata, setoldestdata] = useState([])
     const [workrrequest, setworkrrequest] = useState([])
     const [workrequesttotalopen, setworkrequesttotalopen] = useState([])
+    const [LatestworkrequestOpen, setLatestworkrequestOpen] = useState([])
+    const [OldestworkrequestOpen, setOldestworkrequestOpen] = useState([])
     const [Latestpost, setLatestpost] = useState([])
     const [TotalCapacity, setTotalCapacity] = useState([])
     const [totalOccupancy, settotalOccupancy] = useState([])
@@ -75,6 +77,20 @@ function Dashbords() {
                     setLatestpost(lastWorkRequest)
                 } else {
                     console.log("No Date is");
+                }
+                if (openWorkOrders.length > 0) {
+                    // Find the latest "Open" work request
+                    const latestOpenWorkRequest = openWorkOrders.reduce((latest, current) => {
+                        return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
+                    });
+                    // Find the oldest "Open" work request
+                    const oldestOpenWorkRequest = openWorkOrders.reduce((oldest, current) => {
+                        return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
+                    });
+                    setLatestworkrequestOpen(latestOpenWorkRequest);
+                    setOldestworkrequestOpen(oldestOpenWorkRequest);
+                } else {
+                    console.log("No open work requests found");
                 }
             })
             .catch((err) => {
@@ -244,8 +260,8 @@ function Dashbords() {
 
                                             </div>
                                             <div className='text-center mt-2 lastpro'>
-                                                <p className='fs-6 my-1'>Latest - Open : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
-                                                <p className='fs-6 my-1'>Oldest - Open : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
+                                                <p className='fs-6 my-1'>Latest - Open : {moment(LatestworkrequestOpen.RequestDateTime).isValid() ? moment(LatestworkrequestOpen.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WR-{LatestworkrequestOpen.RequestNumber}</p>
+                                                <p className='fs-6 my-1'>Oldest - Open : {moment(OldestworkrequestOpen.RequestDateTime).isValid() ? moment(OldestworkrequestOpen.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WR-{OldestworkrequestOpen.RequestNumber}</p>
                                                 <p className='fs-6 my-1'>Latest - Post : {moment(Latestpost.RequestDateTime).isValid() ? moment(Latestpost.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WR-{Latestpost.RequestNumber}</p>
                                             </div>
                                         </div>
