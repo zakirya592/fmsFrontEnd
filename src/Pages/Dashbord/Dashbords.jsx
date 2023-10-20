@@ -32,14 +32,40 @@ function Dashbords() {
     const [oldestdata, setoldestdata] = useState([])
     const [workrrequest, setworkrrequest] = useState([])
     const [workrequesttotalopen, setworkrequesttotalopen] = useState([])
+    const [TotalCapacity, setTotalCapacity] = useState([])
+    const [totalOccupancy, settotalOccupancy] = useState([])
+    const [TotalEmployees, setTotalEmployees] = useState([])
 
     useEffect(() => {
+        // Total employee
+        axios.get(`/api/AssetsMaster_GET_LIST`)
+            .then((res) => {
+                setTotalEmployees(res.data.recordset)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        // total Vacancy
+        axios.get(`/api/Total_Occupants`)
+            .then((res) => {
+                settotalOccupancy(res.data.data[0].total_Occupants)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        // Total_Capacity
+        axios.get(`/api/Total_Capacity`)
+            .then((res) => {
+                setTotalCapacity(res.data.data[0].total_Capacity)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         // workRequest_GET_LIST 
         axios.get(`/api/workRequest_GET_LIST`)
             .then((res) => {
                 setworkrrequest(res.data.recordset)
                 const workOrders = res.data.recordset
-                console.log(workOrders);
                 const openWorkOrders = workOrders.filter(workOrder => workOrder.RequestStatus === "Open");
                 setworkrequesttotalopen(openWorkOrders);
             })
@@ -50,9 +76,9 @@ function Dashbords() {
         axios.get(`/api/WorkOrders_GET_LIST`)
             .then((res) => {
                 setworkorderlength(res.data.recordset)
-                const workOrders=res.data.recordset
+                const workOrders = res.data.recordset
                 const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
-               setworkroderopen(openWorkOrders);
+                setworkroderopen(openWorkOrders);
                 if (openWorkOrders.length > 0) {
                     openWorkOrders.sort((a, b) => new Date(a.dateField) - new Date(b.dateField));
                     const oldest = openWorkOrders[0];
@@ -92,7 +118,6 @@ function Dashbords() {
             .catch((err) => {
                 console.log(err);
             });
-
         // PurchaseRequest_GET_List
         axios.get(`/api/PurchaseRequest_GET_List`)
             .then((res) => {
@@ -122,8 +147,6 @@ function Dashbords() {
             .catch((err) => {
                 console.log(err);
             });
-     
-
     }, [])
 
     return (
@@ -155,22 +178,22 @@ function Dashbords() {
                                                 <img src={SpaceOccupancy} alt="Space Occupancy" className=' me-2' />
                                                 <div className="my-auto">
                                                     <h6 className='headingdashbord text-center ms-2'>Total Employees</h6>
-                                                    <p className='propdashbord text-center'> 99999</p>
+                                                    <p className='propdashbord text-center'>{TotalEmployees.length}</p>
                                                 </div>
                                             </div>
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Capacity</h6>
-                                                <p className='propdashbord text-center'> 99999</p>
+                                                <p className='propdashbord text-center'>{TotalCapacity}</p>
                                             </div>
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Occupancy</h6>
-                                                <p className='propdashbord text-center'> 99999</p>
+                                                <p className='propdashbord text-center'>{totalOccupancy}</p>
                                             </div>
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Vacancy</h6>
-                                                <p className='propdashbord text-center'> 99999</p>
+                                                <p className='propdashbord text-center'>00000</p>
                                             </div>
                                         </div>
                                     </div>
@@ -213,9 +236,9 @@ function Dashbords() {
 
                                             </div>
                                             <div className='text-center mt-2 lastpro'>
-                                                <p className='fs-6 my-1'>Latest - Open : DD/MM/YYYY HH:MM:SS WO-9999999999</p>
-                                                <p className='fs-6 my-1'>Oldest - Open : DD/MM/YYYY HH:MM:SS WO-9999999999</p>
-                                                <p className='fs-6 my-1'>Latest - Post : DD/MM/YYYY HH:MM:SS WO-9999999999</p>
+                                                <p className='fs-6 my-1'>Latest - Open : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
+                                                <p className='fs-6 my-1'>Oldest - Open : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
+                                                <p className='fs-6 my-1'>Latest - Post : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
                                             </div>
                                         </div>
                                     </div>

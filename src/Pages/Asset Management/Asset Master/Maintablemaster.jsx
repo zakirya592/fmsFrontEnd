@@ -101,10 +101,6 @@ function Maintablemaster() {
             .then((res) => {
                 console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
-                // setWorkTypes(res.data.recordset.map((item,ind)=>{
-                //   console.log("work desc sing",item.WorkType);
-                //   setwordecss(item.WorkType)
-                // }));
             })
             .catch((err) => {
                 console.log(err);
