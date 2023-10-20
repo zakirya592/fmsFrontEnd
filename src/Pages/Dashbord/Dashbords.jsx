@@ -32,6 +32,7 @@ function Dashbords() {
     const [oldestdata, setoldestdata] = useState([])
     const [workrrequest, setworkrrequest] = useState([])
     const [workrequesttotalopen, setworkrequesttotalopen] = useState([])
+    const [Latestpost, setLatestpost] = useState([])
     const [TotalCapacity, setTotalCapacity] = useState([])
     const [totalOccupancy, settotalOccupancy] = useState([])
     const [TotalEmployees, setTotalEmployees] = useState([])
@@ -68,6 +69,13 @@ function Dashbords() {
                 const workOrders = res.data.recordset
                 const openWorkOrders = workOrders.filter(workOrder => workOrder.RequestStatus === "Open");
                 setworkrequesttotalopen(openWorkOrders);
+                const workRequests = res.data.recordset;
+                if (workRequests.length > 0) {
+                    const lastWorkRequest = workRequests[workRequests.length - 1];
+                    setLatestpost(lastWorkRequest)
+                } else {
+                    console.log("No Date is");
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -238,7 +246,7 @@ function Dashbords() {
                                             <div className='text-center mt-2 lastpro'>
                                                 <p className='fs-6 my-1'>Latest - Open : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
                                                 <p className='fs-6 my-1'>Oldest - Open : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
-                                                <p className='fs-6 my-1'>Latest - Post : DD/MM/YYYY HH:MM:SS WR-9999999999</p>
+                                                <p className='fs-6 my-1'>Latest - Post : {moment(Latestpost.RequestDateTime).isValid() ? moment(Latestpost.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WR-{Latestpost.RequestNumber}</p>
                                             </div>
                                         </div>
                                     </div>
