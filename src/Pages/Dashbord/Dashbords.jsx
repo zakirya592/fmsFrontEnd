@@ -110,7 +110,6 @@ function Dashbords() {
                 } else {
                     console.log("No Date is");
                 }
-
                 setworkroderopen(openWorkOrders);
                 if (openWorkOrders.length > 0) {
                     // Find the latest "Open" work request
@@ -122,7 +121,6 @@ function Dashbords() {
                         return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
                     });
                     setLatestworkorderopen(latestOpenWorkRequest);
-                    console.log(latestOpenWorkRequest);
                     setoldestdata(oldestOpenWorkRequest);
                 } else {
                     console.log("No open work requests found");
