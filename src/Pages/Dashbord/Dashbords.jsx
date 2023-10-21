@@ -43,7 +43,7 @@ function Dashbords() {
 
     useEffect(() => {
         // Total employee
-        axios.get(`/api/AssetsMaster_GET_LIST`)
+        axios.get(`/api/EmployeeMaster_GET_LIST`)
             .then((res) => {
                 setTotalEmployees(res.data.recordset)
             })
