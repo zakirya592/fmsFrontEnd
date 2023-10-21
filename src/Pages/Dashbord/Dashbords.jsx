@@ -29,7 +29,9 @@ function Dashbords() {
     const [datapreventlast, setdatapreventlast] = useState([])
     const [workorderlength, setworkorderlength] = useState([])
     const [workroderopen, setworkroderopen] = useState([])
+    const [Latestworkorderpost, setLatestworkorderpost] = useState([])
     const [oldestdata, setoldestdata] = useState([])
+    const [Latestworkorderopen, setLatestworkorderopen] = useState([])
     const [workrrequest, setworkrrequest] = useState([])
     const [workrequesttotalopen, setworkrequesttotalopen] = useState([])
     const [LatestworkrequestOpen, setLatestworkrequestOpen] = useState([])
@@ -102,13 +104,28 @@ function Dashbords() {
                 setworkorderlength(res.data.recordset)
                 const workOrders = res.data.recordset
                 const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
+                if (workOrders.length > 0) {
+                    const Latestworkorder= workOrders[workOrders.length - 1];
+                    setLatestworkorderpost(Latestworkorder)
+                } else {
+                    console.log("No Date is");
+                }
+
                 setworkroderopen(openWorkOrders);
                 if (openWorkOrders.length > 0) {
-                    openWorkOrders.sort((a, b) => new Date(a.dateField) - new Date(b.dateField));
-                    const oldest = openWorkOrders[0];
-                    setoldestdata(oldest)
+                    // Find the latest "Open" work request
+                    const latestOpenWorkRequest = openWorkOrders.reduce((latest, current) => {
+                        return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
+                    });
+                    // Find the oldest "Open" work request
+                    const oldestOpenWorkRequest = openWorkOrders.reduce((oldest, current) => {
+                        return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
+                    });
+                    setLatestworkorderopen(latestOpenWorkRequest);
+                    console.log(latestOpenWorkRequest);
+                    setoldestdata(oldestOpenWorkRequest);
                 } else {
-                    console.log('No open work orders found.');
+                    console.log("No open work requests found");
                 }
             })
             .catch((err) => {
@@ -303,9 +320,9 @@ function Dashbords() {
 
                                                 </div>
                                                 <div className='text-center mt-2 lastpro'>
-                                                    <p className='fs-6 my-1'>Latest - Open : DD/MM/YYYY HH:MM:SS WO-9999999999</p>
-                                                    <p className='fs-6 my-1'>Oldest - Open : {oldestdata.StartWorkOrderDateTime} WO-{oldestdata.WorkOrderNumber}</p>
-                                                    <p className='fs-6 my-1'>Latest - Post : DD/MM/YYYY HH:MM:SS WO-9999999999</p>
+                                                    <p className='fs-6 my-1'>Latest - Open : {moment(Latestworkorderopen.RequestDateTime).isValid() ? moment(Latestworkorderopen.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderopen.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Oldest - Open : {moment(oldestdata.StartWorkOrderDateTime).isValid() ? moment(oldestdata.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{oldestdata.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Latest - Post :{moment(Latestworkorderpost.RequestDateTime).isValid() ? moment(Latestworkorderpost.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderpost.WorkOrderNumber}</p>
                                                 </div>
                                             </div>
                                         </div>
