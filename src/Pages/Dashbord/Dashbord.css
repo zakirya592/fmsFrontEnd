@@ -25,6 +25,31 @@
     font-weight: 600;
     line-height: normal;
 }
+.ant-slider-track {
+    background-color: black;
+}
+
+/* For the draggable track style */
+.ant-slider-handle {
+    border-color: black;
+}
+
+/* Optional: Change the handle color as well */
+.ant-slider-handle:focus {
+    background-color: black;
+}
+
+:where(.css-dev-only-do-not-override-xu9wm8).ant-slider-horizontal .ant-slider-rail {
+    width: 100%;
+    height: 4px;
+    background: black;
+}
+:where(.css-dev-only-do-not-override-xu9wm8).ant-slider-horizontal .ant-slider-rail:focus {
+    width: 100%;
+    height: 4px;
+    background: black;
+}
+
 @media only screen and (max-width: 768px) {
    .topmain {
        display: block;

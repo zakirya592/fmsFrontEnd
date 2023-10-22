@@ -15,6 +15,7 @@ import PurchaseRequest from '../../Image/Purchasing  Management.png'
 import "./Dashbord.css"
 import axios from 'axios';
 import moment from 'moment'
+import { Slider } from 'antd';
 
 function Dashbords() {
     const navigate = useNavigate();
@@ -40,6 +41,25 @@ function Dashbords() {
     const [TotalCapacity, setTotalCapacity] = useState([])
     const [totalOccupancy, settotalOccupancy] = useState([])
     const [TotalEmployees, setTotalEmployees] = useState([])
+
+    const [worrkrequestopenlastweek, setworrkrequestopenlastweek] = useState([])
+    const [worrkrequestopenlastmonth, setworrkrequestopenlastmonth] = useState([])
+    const [worrkrequestopenlastyear, setworrkrequestopenlastyear] = useState([])
+    const [worrkrequestlastweek, setworrkrequestlastweek] = useState([])
+    const [worrkrequestlastmonth, setworrkrequestlastmonth] = useState([])
+    const [worrkrequestlastyear, setworrkrequestlastyear] = useState([])
+    const [PreventiveMaintenancelastweek, setPreventiveMaintenancelastweek] = useState([])
+    const [PreventiveMaintenancelastmonth, setPreventiveMaintenancelastmonth] = useState([])
+    const [PreventiveMaintenancelastyear, setPreventiveMaintenancelastyear] = useState([])
+    const [CleaningWorkslastweek, setCleaningWorkslastweek] = useState([])
+    const [CleaningWorkslastmonth, setCleaningWorkslastmonth] = useState([])
+    const [CleaningWorkslastyear, setCleaningWorkslastyear] = useState([])
+    const [Purchaserequestlastweek, setPurchaserequestlastweek] = useState([])
+    const [Purchaserequestlastmonth, setPurchaserequestlastmonth] = useState([])
+    const [Purchaserequestlastyear, setPurchaserequestlastyear] = useState([])
+    const [Purchaseorderlastweek, setPurchaseorderlastweek] = useState([])
+    const [Purchaseorderlastmonth, setPurchaseorderlastmonth] = useState([])
+    const [Purchaseorderlastyear, setPurchaseorderlastyear] = useState([])
 
     useEffect(() => {
         // Total employee
@@ -77,6 +97,28 @@ function Dashbords() {
                 if (workRequests.length > 0) {
                     const lastWorkRequest = workRequests[workRequests.length - 1];
                     setLatestpost(lastWorkRequest)
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                        const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                    const dataLastYear = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                    setworrkrequestlastyear(dataLastYear)
+                    setworrkrequestlastmonth(dataLastMonth)
+                    setworrkrequestlastweek(dataWithinLastWeek)
+
                 } else {
                     console.log("No Date is");
                 }
@@ -91,6 +133,28 @@ function Dashbords() {
                     });
                     setLatestworkrequestOpen(latestOpenWorkRequest);
                     setOldestworkrequestOpen(oldestOpenWorkRequest);
+                    
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = openWorkOrders.filter(item => {
+                        const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = openWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                    const dataLastYear = openWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                    setworrkrequestopenlastyear(dataLastYear)
+                    setworrkrequestopenlastmonth(dataLastMonth)
+                    setworrkrequestopenlastweek(dataWithinLastWeek)
+
                 } else {
                     console.log("No open work requests found");
                 }
@@ -103,10 +167,55 @@ function Dashbords() {
             .then((res) => {
                 setworkorderlength(res.data.recordset)
                 const workOrders = res.data.recordset
+                // Create an array of promises for the second request
+                const promises = workOrders.map(workOrder => {
+                    const RequestNumber = workOrder.WorkRequestNumber
+                    return axios.post(`/api/getworkRequestsecond`, {
+                        RequestNumber,
+                    })
+                        .then((res) => {
+                            return res.data.recordset;
+                        })
+                        .catch((err) => {
+                            console.log(`Error for work request number ${workOrder.WorkRequestNumber}: ${err}`);
+                            return []; // Return an empty array in case of an error
+                        });
+                });
+                // Wait for all promises to resolve
+                
+                Promise.all(promises)
+                    .then(resultArrays => {
+                        const today = new Date();
+                        const lastWeek = new Date(today);
+                        lastWeek.setDate(today.getDate() - 7);
+
+                        resultArrays.forEach((items, index) => {
+                            const data = {
+                                WorkRequestNumber: workOrders[index].WorkRequestNumber,
+                                records: items
+                            };
+
+                            if (data.records) {
+                                const dataWithinLastWeek = data.records.filter(item => {
+                                    const itemDate = new Date(item.RequestDateTime);
+                                    return itemDate >= lastWeek && itemDate <= today;
+                                });
+                                // console.log(dataWithinLastWeek.length);
+                                console.log(`Work Request Number ${data.WorkRequestNumber} - Data Within Last Week:`, dataWithinLastWeek.length);
+                            } else {
+                                console.log(`No records found for Work Request Number ${data.WorkRequestNumber}`);
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        console.log(`Error in one or more requests: ${err}`);
+                    });
+
                 const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
                 if (workOrders.length > 0) {
-                    const Latestworkorder= workOrders[workOrders.length - 1];
+                    const Latestworkorder = workOrders[workOrders.length - 1];
                     setLatestworkorderpost(Latestworkorder)
+
                 } else {
                     console.log("No Date is");
                 }
@@ -136,6 +245,28 @@ function Dashbords() {
                 if (res.data.recordset.length > 0) {
                     const lastItem = res.data.recordset[res.data.recordset.length - 1];
                     setdatapreventlast(lastItem)
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                        const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                    const dataLastYear = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                    setPreventiveMaintenancelastyear(dataLastYear)
+                    setPreventiveMaintenancelastmonth(dataLastMonth)
+                    setPreventiveMaintenancelastweek(dataWithinLastWeek)
+
                 } else {
                     console.log('The array is empty.');
                 }
@@ -150,6 +281,27 @@ function Dashbords() {
                 if (res.data.recordset.length > 0) {
                     const lastItem = res.data.recordset[res.data.recordset.length - 1];
                     setcleaningdatalast(lastItem)
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                        const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                    const dataLastYear = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                    setCleaningWorkslastyear(dataLastYear)
+                    setCleaningWorkslastmonth(dataLastMonth)
+                    setCleaningWorkslastweek(dataWithinLastWeek)
+
                 } else {
                     console.log('The array is empty.');
                 }
@@ -164,6 +316,28 @@ function Dashbords() {
                 if (res.data.recordset.length > 0) {
                     const lastItem = res.data.recordset[res.data.recordset.length - 1];
                     setlastcreatpurachaserquest(lastItem)
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                        const itemDate = new Date(item.RequestDate); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.RequestDate) >= lastMonthDate);
+                    const dataLastYear = res.data.recordset.filter(item => new Date(item.RequestDate) >= lastYearDate);
+                    setPurchaserequestlastyear(dataLastYear)
+                    setPurchaserequestlastmonth(dataLastMonth)
+                    setPurchaserequestlastweek(dataWithinLastWeek)
+
                 } else {
                     console.log('The array is empty.');
                 }
@@ -178,6 +352,26 @@ function Dashbords() {
                     const lastItem = res.data.recordset[res.data.recordset.length - 1];
                     setLastPurchase(lastItem)
 
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                        const itemDate = new Date(item.PODate); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.PODate) >= lastMonthDate);
+                    const dataLastYear = res.data.recordset.filter(item => new Date(item.PODate) >= lastYearDate);
+                    setPurchaseorderlastyear(dataLastYear)
+                    setPurchaseorderlastmonth(dataLastMonth)
+                    setPurchaseorderlastweek(dataWithinLastWeek)
                 } else {
                     console.log('The array is empty.');
                 }
@@ -206,9 +400,21 @@ function Dashbords() {
                                 </Toolbar>
                             </AppBar>
                             <div className="my-5 container">
+                                <div className='my-5 w-25'>
+                                    <h6 htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
+                                        Date Period* MM/DD/YY to MM/DD/YY
+                                    </h6>
+                                    <Slider
+                                        range={{
+                                            draggableTrack: true,
+                                        }}
+                                        style={{ color: 'black' }}
+                                        defaultValue={[20, 50]}
+                                    />
+                                </div>
 
+                                <hr className='color3 line' />
                                 <div className="">
-
                                     <h6 className='fs-4 text-center my-3 fw-bold'>Space Occupancy</h6>
                                     <div className="bordercolor rounded bgupdata  ">
                                         {/* SPace section */}
@@ -232,7 +438,7 @@ function Dashbords() {
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Vacancy</h6>
-                                                <p className='propdashbord text-center'>00000</p>
+                                                <p className='propdashbord text-center'>{TotalCapacity + totalOccupancy}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -255,9 +461,9 @@ function Dashbords() {
                                                     </div>
                                                 </div>
                                                 <div className="">
-                                                    <p className='insdieborder'>WTD - 99999</p>
-                                                    <p className='insdieborder'>MTD - 99999</p>
-                                                    <p className='insdieborder'>YTD - 99999</p>
+                                                    <p className='insdieborder'>WTD - {worrkrequestopenlastweek.length}</p>
+                                                    <p className='insdieborder'>MTD - {worrkrequestopenlastmonth.length}</p>
+                                                    <p className='insdieborder'>YTD - {worrkrequestopenlastyear.length}</p>
                                                 </div>
 
                                             </div>
@@ -268,9 +474,9 @@ function Dashbords() {
                                                     <p className='propdashbord text-center'>{workrrequest.length}</p>
                                                 </div>
                                                 <div className="">
-                                                    <p className='insdieborder'>WTD - 99999</p>
-                                                    <p className='insdieborder'>MTD - 99999</p>
-                                                    <p className='insdieborder'>YTD - 99999</p>
+                                                    <p className='insdieborder'>WTD - {worrkrequestlastweek.length}</p>
+                                                    <p className='insdieborder'>MTD - {worrkrequestlastmonth.length}</p>
+                                                    <p className='insdieborder'>YTD - {worrkrequestlastyear.length}</p>
                                                 </div>
 
                                             </div>
@@ -341,9 +547,9 @@ function Dashbords() {
                                                     </div>
                                                 </div>
                                                 <div className="">
-                                                    <p className='insdieborder'>WTD - 99999</p>
-                                                    <p className='insdieborder'>MTD - 99999</p>
-                                                    <p className='insdieborder'>YTD - 99999</p>
+                                                    <p className='insdieborder'>WTD - {PreventiveMaintenancelastweek.length}</p>
+                                                    <p className='insdieborder'>MTD - {PreventiveMaintenancelastmonth.length}</p>
+                                                    <p className='insdieborder'>YTD - {PreventiveMaintenancelastyear.length}</p>
                                                 </div>
 
                                             </div>
@@ -370,9 +576,9 @@ function Dashbords() {
                                                     </div>
                                                 </div>
                                                 <div className="">
-                                                    <p className='insdieborder'>WTD - 99999</p>
-                                                    <p className='insdieborder'>MTD - 99999</p>
-                                                    <p className='insdieborder'>YTD - 99999</p>
+                                                    <p className='insdieborder'>WTD - {CleaningWorkslastweek.length}</p>
+                                                    <p className='insdieborder'>MTD - {CleaningWorkslastmonth.length}</p>
+                                                    <p className='insdieborder'>YTD - {CleaningWorkslastyear.length}</p>
                                                 </div>
 
                                             </div>
@@ -399,9 +605,9 @@ function Dashbords() {
                                                     </div>
                                                 </div>
                                                 <div className="">
-                                                    <p className='insdieborder'>WTD - 99999</p>
-                                                    <p className='insdieborder'>MTD - 99999</p>
-                                                    <p className='insdieborder'>YTD - 99999</p>
+                                                    <p className='insdieborder'>WTD - {Purchaserequestlastweek.length}</p>
+                                                    <p className='insdieborder'>MTD - {Purchaserequestlastmonth.length}</p>
+                                                    <p className='insdieborder'>YTD - {Purchaserequestlastyear.length}</p>
                                                 </div>
 
                                             </div>
@@ -427,9 +633,9 @@ function Dashbords() {
                                                     </div>
                                                 </div>
                                                 <div className="">
-                                                    <p className='insdieborder'>WTD - 99999</p>
-                                                    <p className='insdieborder'>MTD - 99999</p>
-                                                    <p className='insdieborder'>YTD - 99999</p>
+                                                    <p className='insdieborder'>WTD - {Purchaseorderlastweek.length}</p>
+                                                    <p className='insdieborder'>MTD - {Purchaseorderlastmonth.length}</p>
+                                                    <p className='insdieborder'>YTD - {Purchaseorderlastyear.length}</p>
                                                 </div>
 
                                             </div>
