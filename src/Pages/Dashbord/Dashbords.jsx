@@ -48,6 +48,12 @@ function Dashbords() {
     const [worrkrequestlastweek, setworrkrequestlastweek] = useState([])
     const [worrkrequestlastmonth, setworrkrequestlastmonth] = useState([])
     const [worrkrequestlastyear, setworrkrequestlastyear] = useState([])
+    const [worrorderopenlastweek, setworrorderopenlastweek] = useState([])
+    const [worrorderopenlastmonth, setworkorderopenlastmonth] = useState([])
+    const [worrorderopenlastyear, setworrorderopenlastyear] = useState([])
+    const [worrkorderlastweek, setworrkorderlastweek] = useState([])
+    const [worrkorderlastmonth, setworkrordertlastmonth] = useState([])
+    const [worrkorderlastyear, setworrkorderlastyear] = useState([])
     const [PreventiveMaintenancelastweek, setPreventiveMaintenancelastweek] = useState([])
     const [PreventiveMaintenancelastmonth, setPreventiveMaintenancelastmonth] = useState([])
     const [PreventiveMaintenancelastyear, setPreventiveMaintenancelastyear] = useState([])
@@ -167,54 +173,30 @@ function Dashbords() {
             .then((res) => {
                 setworkorderlength(res.data.recordset)
                 const workOrders = res.data.recordset
-                // Create an array of promises for the second request
-                const promises = workOrders.map(workOrder => {
-                    const RequestNumber = workOrder.WorkRequestNumber
-                    return axios.post(`/api/getworkRequestsecond`, {
-                        RequestNumber,
-                    })
-                        .then((res) => {
-                            return res.data.recordset;
-                        })
-                        .catch((err) => {
-                            console.log(`Error for work request number ${workOrder.WorkRequestNumber}: ${err}`);
-                            return []; // Return an empty array in case of an error
-                        });
-                });
-                // Wait for all promises to resolve
-                
-                Promise.all(promises)
-                    .then(resultArrays => {
-                        const today = new Date();
-                        const lastWeek = new Date(today);
-                        lastWeek.setDate(today.getDate() - 7);
-
-                        resultArrays.forEach((items, index) => {
-                            const data = {
-                                WorkRequestNumber: workOrders[index].WorkRequestNumber,
-                                records: items
-                            };
-
-                            if (data.records) {
-                                const dataWithinLastWeek = data.records.filter(item => {
-                                    const itemDate = new Date(item.RequestDateTime);
-                                    return itemDate >= lastWeek && itemDate <= today;
-                                });
-                                // console.log(dataWithinLastWeek.length);
-                                console.log(`Work Request Number ${data.WorkRequestNumber} - Data Within Last Week:`, dataWithinLastWeek.length);
-                            } else {
-                                console.log(`No records found for Work Request Number ${data.WorkRequestNumber}`);
-                            }
-                        });
-                    })
-                    .catch(err => {
-                        console.log(`Error in one or more requests: ${err}`);
-                    });
-
-                const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
+               const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
                 if (workOrders.length > 0) {
                     const Latestworkorder = workOrders[workOrders.length - 1];
                     setLatestworkorderpost(Latestworkorder)
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
+                    const dataLastYear = res.data.recordset.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
+                    setworrkorderlastyear(dataLastYear)
+                    setworkrordertlastmonth(dataLastMonth)
+                    setworrkorderlastweek(dataWithinLastWeek)
 
                 } else {
                     console.log("No Date is");
@@ -231,6 +213,28 @@ function Dashbords() {
                     });
                     setLatestworkorderopen(latestOpenWorkRequest);
                     setoldestdata(oldestOpenWorkRequest);
+
+                    // Weeke month and years
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = openWorkOrders.filter(item => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = openWorkOrders.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
+                    const dataLastYear = openWorkOrders.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
+                    setworrorderopenlastyear(dataLastYear)
+                    setworkorderopenlastmonth(dataLastMonth)
+                    setworrorderopenlastweek(dataWithinLastWeek)
                 } else {
                     console.log("No open work requests found");
                 }
@@ -504,9 +508,9 @@ function Dashbords() {
                                                         </div>
                                                     </div>
                                                     <div className="">
-                                                        <p className='insdieborder'>WTD - 99999</p>
-                                                        <p className='insdieborder'>MTD - 99999</p>
-                                                        <p className='insdieborder'>YTD - 99999</p>
+                                                        <p className='insdieborder'>WTD - {worrorderopenlastweek.length}</p>
+                                                        <p className='insdieborder'>MTD - {worrorderopenlastmonth.length}</p>
+                                                        <p className='insdieborder'>YTD - {worrorderopenlastyear.length}</p>
                                                     </div>
 
                                                 </div>
@@ -517,9 +521,9 @@ function Dashbords() {
                                                         <p className='propdashbord text-center'>{workorderlength.length}</p>
                                                     </div>
                                                     <div className="">
-                                                        <p className='insdieborder'>WTD - 99999</p>
-                                                        <p className='insdieborder'>MTD - 99999</p>
-                                                        <p className='insdieborder'>YTD - 99999</p>
+                                                        <p className='insdieborder'>WTD - {worrkorderlastweek.length}</p>
+                                                        <p className='insdieborder'>MTD - {worrkorderlastmonth.length}</p>
+                                                        <p className='insdieborder'>YTD - {worrkorderlastyear.length}</p>
                                                     </div>
 
                                                 </div>

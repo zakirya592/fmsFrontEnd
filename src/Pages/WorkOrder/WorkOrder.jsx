@@ -21,6 +21,16 @@ import Swal from "sweetalert2";
 
 function WorkOrder() {
     const navigate = useNavigate();
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
     const [value, setvalue] = useState({
         orderNumber: '', RequestNumber: null, workStatus: 'open', workPriority: '', WorkCategory: "", failureCode: '',
         solutionCode: '', assignEmployee: null, EmployeeName: '', completeEmployee: null, CompleteEmployeeName:'',
@@ -37,7 +47,7 @@ function WorkOrder() {
     const [solutionCodelist, setsolutionCodelist] = useState([])
 
     // state for the time 
-    const [startDate, setStartDate] = useState('0');
+    const [startDate, setStartDate] = useState(getCurrentDateTimeString());
     const [endDate, setEndDate] = useState('');
     const [timeDifference, setTimeDifference] = useState(0);
     const [minutesdifferent, setminutesdifferent] = useState(0)
@@ -830,7 +840,7 @@ function WorkOrder() {
                                                         workStatus: e.target.value
                                                     }))
                                                 }}>
-                                                <option className='inputsectiondropdpwn' value='Open'>Open</option>
+                                                <option className='inputsectiondropdpwn' value='open'>Open</option>
                                                 {
                                                     RequestStatusLIST && RequestStatusLIST.map((itme, index) => {
                                                         return (
