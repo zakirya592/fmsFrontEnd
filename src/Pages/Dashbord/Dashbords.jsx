@@ -95,8 +95,12 @@ function Dashbords() {
         // workRequest_GET_LIST 
         axios.get(`/api/workRequest_GET_LIST`)
             .then((res) => {
-                setworkrrequest(res.data.recordset)
+                console.log(res.data);
+               
                 const workOrders = res.data.recordset
+                const closeWorkOrders = workOrders.filter(workOrder => workOrder.RequestStatus === "Closed");
+                setworkrrequest(closeWorkOrders)
+
                 const openWorkOrders = workOrders.filter(workOrder => workOrder.RequestStatus === "Open");
                 setworkrequesttotalopen(openWorkOrders);
                 const workRequests = res.data.recordset;
@@ -171,8 +175,10 @@ function Dashbords() {
         // Work Orders
         axios.get(`/api/WorkOrders_GET_LIST`)
             .then((res) => {
-                setworkorderlength(res.data.recordset)
                 const workOrders = res.data.recordset
+                const closeWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Closed");
+
+                setworkorderlength(closeWorkOrders)
                const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
                 if (workOrders.length > 0) {
                     const Latestworkorder = workOrders[workOrders.length - 1];
