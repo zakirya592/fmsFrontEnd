@@ -442,7 +442,7 @@ function Dashbords() {
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Vacancy</h6>
-                                                <p className='propdashbord text-center'>{TotalCapacity + totalOccupancy}</p>
+                                                <p className='propdashbord text-center'>{TotalCapacity - totalOccupancy}</p>
                                             </div>
                                         </div>
                                     </div>
