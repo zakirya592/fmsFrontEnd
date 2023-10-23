@@ -107,7 +107,9 @@ function Dashbords() {
 
                     const today = new Date();
                     const lastWeek = new Date(today);
-                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+                    console.log(lastWeek);
+                    // lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+                    lastWeek.setDate(today.getDate() + 7); // Calculate the date one week from today
 
                     const lastMonthDate = new Date(today);
                     lastMonthDate.setMonth(today.getMonth() - 1);
@@ -117,7 +119,9 @@ function Dashbords() {
 
                     const dataWithinLastWeek = res.data.recordset.filter(item => {
                         const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                        return itemDate >= lastWeek && itemDate <= today;
+                        // return itemDate >= lastWeek && itemDate <= today;
+                        return itemDate >= today && itemDate <= lastWeek;
+
                     });
 
                     const dataLastMonth = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
@@ -144,6 +148,7 @@ function Dashbords() {
                     const today = new Date();
                     const lastWeek = new Date(today);
                     lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+                    lastWeek.setDate(today.getDate() + 7); // Calculate the date one week ago
 
                     const lastMonthDate = new Date(today);
                     lastMonthDate.setMonth(today.getMonth() - 1);
@@ -153,7 +158,9 @@ function Dashbords() {
 
                     const dataWithinLastWeek = openWorkOrders.filter(item => {
                         const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                        return itemDate >= lastWeek && itemDate <= today;
+                        // return itemDate >= lastWeek && itemDate <= today;
+                        return itemDate >= today && itemDate <= lastWeek;
+
                     });
 
                     const dataLastMonth = openWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
