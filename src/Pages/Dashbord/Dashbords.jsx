@@ -186,7 +186,7 @@ function Dashbords() {
                 const closeWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Closed");
                 setworkorderlength(closeWorkOrders)
                const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
-                if (workOrders.length > 0) {
+                if (closeWorkOrders.length > 0) {
                     const Latestworkorder = workOrders[workOrders.length - 1];
                     setLatestworkorderpost(Latestworkorder)
                     const today = new Date();
@@ -199,13 +199,13 @@ function Dashbords() {
                     const lastYearDate = new Date(today);
                     lastYearDate.setFullYear(today.getFullYear() - 1);
 
-                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                    const dataWithinLastWeek = closeWorkOrders.filter(item => {
                         const itemDate = new Date(item.StartWorkOrderDateTime); // Replace "date" with your date field name
                         return itemDate >= lastWeek && itemDate <= today;
                     });
 
-                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
-                    const dataLastYear = res.data.recordset.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
+                    const dataLastMonth = closeWorkOrders.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
+                    const dataLastYear = closeWorkOrders.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
                     setworrkorderlastyear(dataLastYear)
                     setworkrordertlastmonth(dataLastMonth)
                     setworrkorderlastweek(dataWithinLastWeek)
