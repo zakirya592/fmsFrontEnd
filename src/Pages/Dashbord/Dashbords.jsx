@@ -67,7 +67,38 @@ function Dashbords() {
     const [Purchaseorderlastmonth, setPurchaseorderlastmonth] = useState([])
     const [Purchaseorderlastyear, setPurchaseorderlastyear] = useState([])
 
+    const [dropdownLocation, setdropdownLocation] = useState([])
+    const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
+    const [dropdownFloor, setdropdownFloor] = useState([])
+
+    const [value, setvalue] = useState({
+        Floor: '', BuildingCodefiltervalue: '', LocationCodefiltervalue:''
+    })
+
+
     useEffect(() => {
+        // Location
+        axios.get(`/api/Location_LIST`).then((res) => {
+            setdropdownLocation(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // Building_LIST
+        axios.get(`/api/Building_LIST`).then((res) => {
+            setdropdownBuildingLIST(res.data.recordsets[0])
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+            // Floor list
+        axios.get(`/api/Floor_GET_List`).then((res) => {
+            setdropdownFloor(res.data.data)
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
         // Total employee
         axios.get(`/api/EmployeeMaster_GET_LIST`)
             .then((res) => {
@@ -105,11 +136,8 @@ function Dashbords() {
                     const lastWorkRequest = workRequests[workRequests.length - 1];
                     setLatestpost(lastWorkRequest)
                     if (closeWorkOrders.length > 0) {
-
-                   
                     const today = new Date();
                     const lastWeek = new Date(today);
-                    console.log(lastWeek);
                     // lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
                     lastWeek.setDate(today.getDate() + 7); // Calculate the date one week from today
 
@@ -186,9 +214,9 @@ function Dashbords() {
                 const closeWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Closed");
                 setworkorderlength(closeWorkOrders)
                const openWorkOrders = workOrders.filter(workOrder => workOrder.WorkStatus === "Open");
+               const Latestworkorder = workOrders[workOrders.length - 1];
+               setLatestworkorderpost(Latestworkorder)
                 if (closeWorkOrders.length > 0) {
-                    const Latestworkorder = workOrders[workOrders.length - 1];
-                    setLatestworkorderpost(Latestworkorder)
                     const today = new Date();
                     const lastWeek = new Date(today);
                     lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
@@ -217,15 +245,14 @@ function Dashbords() {
                 if (openWorkOrders.length > 0) {
                     // Find the latest "Open" work request
                     const latestOpenWorkRequest = openWorkOrders.reduce((latest, current) => {
-                        return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
+                        return new Date(current.StartWorkOrderDateTime) > new Date(latest.StartWorkOrderDateTime) ? current : latest;
                     });
                     // Find the oldest "Open" work request
                     const oldestOpenWorkRequest = openWorkOrders.reduce((oldest, current) => {
-                        return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
+                        return new Date(current.StartWorkOrderDateTime) < new Date(oldest.StartWorkOrderDateTime) ? current : oldest;
                     });
                     setLatestworkorderopen(latestOpenWorkRequest);
                     setoldestdata(oldestOpenWorkRequest);
-
                     // Weeke month and years
                     const today = new Date();
                     const lastWeek = new Date(today);
@@ -397,6 +424,7 @@ function Dashbords() {
                 console.log(err);
             });
     }, [])
+    const totaleTotalVacancy = TotalCapacity - totalOccupancy
 
     return (
         <>
@@ -416,17 +444,103 @@ function Dashbords() {
                                 </Toolbar>
                             </AppBar>
                             <div className="my-5 container">
-                                <div className='my-5 w-25'>
-                                    <h6 htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
-                                        Date Period* MM/DD/YY to MM/DD/YY
-                                    </h6>
-                                    <Slider
-                                        range={{
-                                            draggableTrack: true,
-                                        }}
-                                        style={{ color: 'black' }}
-                                        defaultValue={[20, 50]}
-                                    />
+                               
+                                {/* Search Fields */}
+                                <div className="row formsection my-5">
+
+                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Datetime' className='lablesection color3 text-start mb-3'>
+                                                Date Period* MM/DD/YY to MM/DD/YY
+                                            </label>
+                                            <Slider
+                                                range={{
+                                                    draggableTrack: true,
+                                                }}
+                                                style={{ color: 'black' }}
+                                                defaultValue={[20, 50]}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 offset-md-4 offset-md-1 offset-lg-3 offset-xl-3">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
+                                                Building
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Building" aria-label="Floating label select example"
+                                                value={value.BuildingCodefiltervalue}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        BuildingCodefiltervalue: e.target.value
+                                                    }))
+                                                }}>
+                                                <option className='inputsectiondropdpwn' value=''>Select Dept Code</option>
+                                                {
+                                                    dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Floor' className='lablesection color3 text-start mb-1'>
+                                                Floor
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
+                                                value={value.Floor}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Floor: e.target.value
+                                                    }))
+                                                }}
+                                            >
+                                                <option className='inputsectiondropdpwn my-1'>Select Floor </option>
+                                                {
+                                                    dropdownFloor && dropdownFloor.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.FloorCode}>{itme.FloorCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
+                                                Location
+                                            </label>
+
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
+                                                value={value.LocationCodefiltervalue}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        LocationCodefiltervalue: e.target.value
+                                                    }))
+                                                }}
+                                            >
+                                                <option className='inputsectiondropdpwn' value=''>Select Location</option>
+                                                {
+                                                    dropdownLocation && dropdownLocation.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.LocationCode}>{itme.LocationCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <hr className='color3 line' />
@@ -449,12 +563,12 @@ function Dashbords() {
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Occupancy</h6>
-                                                <p className='propdashbord text-center'>{totalOccupancy}</p>
+                                                <p className='propdashbord text-center'>{totalOccupancy}&nbsp; &nbsp; {(totalOccupancy / TotalCapacity) * 100}%</p>
                                             </div>
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Vacancy</h6>
-                                                <p className='propdashbord text-center'>{TotalCapacity - totalOccupancy}</p>
+                                                <p className='propdashbord text-center ms-2'>{totaleTotalVacancy} &nbsp; &nbsp;{(totaleTotalVacancy / TotalCapacity) * 100 }%</p>
                                             </div>
                                         </div>
                                     </div>
@@ -540,9 +654,9 @@ function Dashbords() {
 
                                                 </div>
                                                 <div className='text-center mt-2 lastpro'>
-                                                    <p className='fs-6 my-1'>Latest - Open : {moment(Latestworkorderopen.RequestDateTime).isValid() ? moment(Latestworkorderopen.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderopen.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Latest - Open : {moment(Latestworkorderopen.StartWorkOrderDateTime).isValid() ? moment(Latestworkorderopen.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderopen.WorkOrderNumber}</p>
                                                     <p className='fs-6 my-1'>Oldest - Open : {moment(oldestdata.StartWorkOrderDateTime).isValid() ? moment(oldestdata.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{oldestdata.WorkOrderNumber}</p>
-                                                    <p className='fs-6 my-1'>Latest - Post :{moment(Latestworkorderpost.RequestDateTime).isValid() ? moment(Latestworkorderpost.RequestDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderpost.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Latest - Post :{moment(Latestworkorderpost.StartWorkOrderDateTime).isValid() ? moment(Latestworkorderpost.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderpost.WorkOrderNumber}</p>
                                                 </div>
                                             </div>
                                         </div>
