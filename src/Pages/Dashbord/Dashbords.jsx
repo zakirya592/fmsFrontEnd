@@ -446,7 +446,7 @@ function Dashbords() {
                             <div className="my-5 container">
                                
                                 {/* Search Fields */}
-                                <div className="row formsection my-5">
+                                <div className="row formsection mt-5 mb-2">
 
                                     <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3 ">
                                         <div className='emailsection position-relative d-grid my-2'>
