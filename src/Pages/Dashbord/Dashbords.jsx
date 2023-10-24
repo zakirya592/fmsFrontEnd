@@ -476,37 +476,11 @@ function Dashbords() {
                                                         BuildingCodefiltervalue: e.target.value
                                                     }))
                                                 }}>
-                                                <option className='inputsectiondropdpwn' value=''>Select Dept Code</option>
+                                                <option className='inputsectiondropdpwn' value=''>Select Building Code</option>
                                                 {
                                                     dropdownBuildingLIST && dropdownBuildingLIST.map((itme, index) => {
                                                         return (
                                                             <option key={index} value={itme.BuildingCode}>{itme.BuildingCode}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Floor' className='lablesection color3 text-start mb-1'>
-                                                Floor
-                                            </label>
-                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
-                                                value={value.Floor}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        Floor: e.target.value
-                                                    }))
-                                                }}
-                                            >
-                                                <option className='inputsectiondropdpwn my-1'>Select Floor </option>
-                                                {
-                                                    dropdownFloor && dropdownFloor.map((itme, index) => {
-                                                        return (
-                                                            <option key={index} value={itme.FloorCode}>{itme.FloorCode}</option>
                                                         )
                                                     })
                                                 }
@@ -534,6 +508,32 @@ function Dashbords() {
                                                     dropdownLocation && dropdownLocation.map((itme, index) => {
                                                         return (
                                                             <option key={index} value={itme.LocationCode}>{itme.LocationCode}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 ">
+                                        <div className='emailsection position-relative d-grid my-2'>
+                                            <label htmlFor='Floor' className='lablesection color3 text-start mb-1'>
+                                                Floor
+                                            </label>
+                                            <select className='rounded inputsectiondropdpwn color2 py-2' id="Location" aria-label="Floating label select example"
+                                                value={value.Floor}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        Floor: e.target.value
+                                                    }))
+                                                }}
+                                            >
+                                                <option className='inputsectiondropdpwn my-1'>Select Floor </option>
+                                                {
+                                                    dropdownFloor && dropdownFloor.map((itme, index) => {
+                                                        return (
+                                                            <option key={index} value={itme.FloorCode}>{itme.FloorCode}</option>
                                                         )
                                                     })
                                                 }
