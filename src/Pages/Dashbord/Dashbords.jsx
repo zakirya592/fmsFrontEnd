@@ -104,7 +104,9 @@ function Dashbords() {
                 if (workRequests.length > 0) {
                     const lastWorkRequest = workRequests[workRequests.length - 1];
                     setLatestpost(lastWorkRequest)
+                    if (closeWorkOrders.length > 0) {
 
+                   
                     const today = new Date();
                     const lastWeek = new Date(today);
                     console.log(lastWeek);
@@ -117,18 +119,19 @@ function Dashbords() {
                     const lastYearDate = new Date(today);
                     lastYearDate.setFullYear(today.getFullYear() - 1);
 
-                    const dataWithinLastWeek = res.data.recordset.filter(item => {
+                    const dataWithinLastWeek = closeWorkOrders.filter(item => {
                         const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
                         // return itemDate >= lastWeek && itemDate <= today;
                         return itemDate >= today && itemDate <= lastWeek;
 
                     });
 
-                    const dataLastMonth = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
-                    const dataLastYear = res.data.recordset.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                    const dataLastMonth =closeWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                    const dataLastYear = closeWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
                     setworrkrequestlastyear(dataLastYear)
                     setworrkrequestlastmonth(dataLastMonth)
                     setworrkrequestlastweek(dataWithinLastWeek)
+                    }
 
                 } else {
                     console.log("No Date is");
