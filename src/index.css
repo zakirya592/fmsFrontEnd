@@ -32,6 +32,10 @@ code {
 .bgupdata {
  background: #D7F2FD !important;
 }
+.bgtime{
+   background: #c9cccccc !important;
+
+}
 .pointerss{
   cursor: pointer !important;
 }

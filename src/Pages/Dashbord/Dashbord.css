@@ -57,3 +57,11 @@
        margin: 12px;
    }
 }
+.rc-slider-track,
+.rc-slider-tracks{
+    background-color: black !important;
+}
+.rc-slider-handle {
+    background-color: #000 !important;
+    border: solid 2px #0a0a0a !important;
+}

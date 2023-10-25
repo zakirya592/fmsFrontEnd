@@ -15,7 +15,9 @@ import PurchaseRequest from '../../Image/Purchasing  Management.png'
 import "./Dashbord.css"
 import axios from 'axios';
 import moment from 'moment'
-import { Slider } from 'antd';
+import { format, addWeeks, addMonths, addYears } from "date-fns";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css"; // Import the slider styles
 
 function Dashbords() {
     const navigate = useNavigate();
@@ -426,6 +428,51 @@ function Dashbords() {
     }, [])
     const totaleTotalVacancy = TotalCapacity - totalOccupancy
 
+
+    const [selectedRange, setSelectedRange] = useState([0, 100]);
+    const [intervalType, setIntervalType] = useState("weeks");
+
+    let max = 100; // Set your maximum value here
+
+    const handleRangeChange = (value) => {
+        setSelectedRange(value);
+    };
+
+    const handleDropdownChange = (e) => {
+        setIntervalType(e.target.value);
+    };
+
+    if (intervalType === "weeks") {
+        max = 6; // Maximum weeks in a year
+    } else if (intervalType === "months") {
+        max = 12; // Maximum months in a year
+    } else if (intervalType === "years") {
+        max = 10; // Display 10 years in the slider
+    }
+
+    // Calculate the date labels based on the selected range
+    const [minValue, maxValue] = selectedRange;
+    const minDate = format(
+        intervalType === "weeks"
+            ? addWeeks(new Date(), minValue)
+            : intervalType === "months"
+                ? addMonths(new Date(), minValue)
+                : addYears(new Date(), minValue),
+        "dd MMM, yyyy"
+    );
+    const maxDate = format(
+        intervalType === "weeks"
+            ? addWeeks(new Date(), maxValue)
+            : intervalType === "months"
+                ? addMonths(new Date(), maxValue)
+                : addYears(new Date(), maxValue),
+        "dd MMM, yyyy"
+    );
+    // Create the marks with numbers
+    const marks = {};
+    for (let i = 0; i <= max; i++) {
+        marks[i] = i.toString();
+    }
     return (
         <>
             <div className="bg">
@@ -446,24 +493,34 @@ function Dashbords() {
                             <div className="my-5 container">
                                
                                 {/* Search Fields */}
-                                <div className="row formsection mt-5 mb-2">
+                                <div className="row formsection mt-5 mb-3">
 
-                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-3 ">
-                                        <div className='emailsection position-relative d-grid my-2'>
-                                            <label htmlFor='Datetime' className='lablesection color3 text-start mb-3'>
-                                                Date Period* MM/DD/YY to MM/DD/YY
+                                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-5 my-auto">
+                                        <div className="d-flex justify-content-between">
+                                            <p className='my-auto fw-bord lastpro fs-6'>All Periods</p>
+                                            <select value={intervalType} className='border-0 my-auto' onChange={handleDropdownChange} style={{padding:'15px 20px',}}>
+                                                <option value="weeks">Weeks</option>
+                                                <option value="months">Months</option>
+                                                <option value="years">Years</option>
+                                            </select>
+                                        </div>
+                                        <div className='emailsection position-relative d-grid py-2'>
+                                            <label htmlFor='Datetime' className='lablesection color3 text-start my-2'>
+                                                Date Period {minDate} - {maxDate}
                                             </label>
                                             <Slider
-                                                range={{
-                                                    draggableTrack: true,
-                                                }}
-                                                style={{ color: 'black' }}
-                                                defaultValue={[20, 50]}
+                                                min={0}
+                                                max={max}
+                                                range
+                                                value={selectedRange}
+                                                onChange={handleRangeChange}
+                                                marks={marks}
                                             />
+                                            
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 offset-md-4 offset-md-1 offset-lg-3 offset-xl-3">
+                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 mt-auto offset-md-1 offset-lg-1 offset-xl-1">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Building' className='lablesection color3 text-start mb-1'>
                                                 Building
@@ -488,7 +545,7 @@ function Dashbords() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-2 col-lg-2 mt-auto col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Location' className='lablesection color3 text-start mb-1'>
                                                 Location
@@ -515,7 +572,7 @@ function Dashbords() {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 ">
+                                    <div className="col-sm-12 col-md-3 col-lg-2 mt-auto col-xl-2 ">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='Floor' className='lablesection color3 text-start mb-1'>
                                                 Floor
@@ -543,7 +600,7 @@ function Dashbords() {
 
                                 </div>
 
-                                <hr className='color3 line' />
+                                <hr className='color3 line mt-5' />
                                 <div className="">
                                     <h6 className='fs-4 text-center my-3 fw-bold'>Space Occupancy</h6>
                                     <div className="bordercolor rounded bgupdata  ">
