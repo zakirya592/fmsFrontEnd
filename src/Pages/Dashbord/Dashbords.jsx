@@ -443,7 +443,7 @@ function Dashbords() {
     };
 
     if (intervalType === "weeks") {
-        max = 6; // Maximum weeks in a year
+        max = 7; // Maximum weeks in a year
     } else if (intervalType === "months") {
         max = 12; // Maximum months in a year
     } else if (intervalType === "years") {
