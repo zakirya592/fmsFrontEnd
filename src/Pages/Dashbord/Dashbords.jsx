@@ -15,7 +15,7 @@ import PurchaseRequest from '../../Image/Purchasing  Management.png'
 import "./Dashbord.css"
 import axios from 'axios';
 import moment from 'moment'
-import { format, addWeeks, addMonths, addYears } from "date-fns";
+import { format, addWeeks, addDays, addMonths, addYears } from "date-fns";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css"; // Import the slider styles
 
@@ -742,7 +742,7 @@ function Dashbords() {
     const [minValue, maxValue] = selectedRange;
     const minDate = format(
         intervalType === "weeks"
-            ? addWeeks(new Date(), minValue)
+            ? addDays(new Date(), minValue)
             : intervalType === "months"
                 ? addMonths(new Date(), minValue)
                 : addYears(new Date(), minValue),
