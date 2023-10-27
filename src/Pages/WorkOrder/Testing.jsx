@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { format, addWeeks, addMonths, addYears } from "date-fns";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css"; // Import the slider styles
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { format, addDays, addMonths, addYears } from 'date-fns';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css'; // Import the slider styles
 
 function Testing() {
     const [selectedRange, setSelectedRange] = useState([0, 100]);
-    const [intervalType, setIntervalType] = useState("weeks");
-
-    let max = 100; // Set your maximum value here
+    const [intervalType, setIntervalType] = useState('weeks');
+    const [max, setMax] = useState(100);
+    const [data, setData] = useState([]);
+    const [lastPurchase, setLastPurchase] = useState(null);
 
     const handleRangeChange = (value) => {
         setSelectedRange(value);
@@ -17,53 +19,125 @@ function Testing() {
         setIntervalType(e.target.value);
     };
 
-    if (intervalType === "weeks") {
-        max = 52; // Maximum weeks in a year
-    } else if (intervalType === "months") {
-        max = 12; // Maximum months in a year
-    } else if (intervalType === "years") {
-        max = 10; // Display 10 years in the slider
-    }
+    useEffect(() => {
+        if (intervalType === 'weeks') {
+            setMax(7);
+        } else if (intervalType === 'months') {
+            setMax(12);
+        } else if (intervalType === 'years') {
+            setMax(10);
+        }
+    }, [intervalType]);
 
-    // Calculate the date labels based on the selected range
+    useEffect(() => {
+        const [minValue, maxValue] = selectedRange;
+        const today = new Date();
+        const startDate =
+            intervalType === 'weeks'
+                ? addDays(today, minValue * 7)
+                : intervalType === 'months'
+                    ? addMonths(today, minValue)
+                    : addYears(today, minValue);
+
+        const endDate =
+            intervalType === 'weeks'
+                ? addDays(today, (maxValue + 1) * 7)
+                : intervalType === 'months'
+                    ? addMonths(today, maxValue)
+                    : addYears(today, maxValue);
+
+        axios
+            .get('/api/PurchaseOrder_GET_List', {
+                params: {
+                    startDate: startDate.toISOString(),
+                    endDate: endDate.toISOString(),
+                },
+            })
+            .then((res) => {
+                console.log(res);
+                if (res.data.recordset.length > 0) {
+                    const lastItem = res.data.recordset[res.data.recordset.length - 1];
+                    setLastPurchase(lastItem);
+
+                    const filteredData = res.data.recordset.filter((item) => {
+                        const itemDate = new Date(item.PODate);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+
+                    setData(filteredData);
+                } else {
+                    console.log('The array is empty.');
+                    setData([]); // Reset the data if there are no records
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [selectedRange, intervalType]);
+
     const [minValue, maxValue] = selectedRange;
     const minDate = format(
-        intervalType === "weeks"
-            ? addWeeks(new Date(), minValue)
-            : intervalType === "months"
+        intervalType === 'weeks'
+            ? addDays(new Date(), minValue * 7)
+            : intervalType === 'months'
                 ? addMonths(new Date(), minValue)
                 : addYears(new Date(), minValue),
-        "dd MMM, yyyy"
+        'dd MMM, yyyy'
     );
+    console.log('minDate', minDate);
     const maxDate = format(
-        intervalType === "weeks"
-            ? addWeeks(new Date(), maxValue)
-            : intervalType === "months"
+        intervalType === 'weeks'
+            ? addDays(new Date(), (maxValue + 1) * 7)
+            : intervalType === 'months'
                 ? addMonths(new Date(), maxValue)
                 : addYears(new Date(), maxValue),
-        "dd MMM, yyyy"
+        'dd MMM, yyyy'
     );
+
+    const marks = {};
+    for (let i = 0; i <= max; i++) {
+        marks[i] = i.toString();
+    }
 
     return (
         <div>
-            <div className="time-slider">
-                <Slider
-                    min={0}
-                    max={max}
-                    range
-                    value={selectedRange}
-                    onChange={handleRangeChange}
-                />
-            </div>
-            <div className="time-label">
-                <label>{minDate} - {maxDate}</label>
-            </div>
-            <div className="interval-dropdown">
-                <select value={intervalType} onChange={handleDropdownChange}>
-                    <option value="weeks">Weeks</option>
-                    <option value="months">Months</option>
-                    <option value="years">Years</option>
-                </select>
+            <div className="row">
+                <div className="col-sm-12 col-md-4 col-lg-4 col-xl-5 my-auto">
+                    <div className="d-flex justify-content-between">
+                        <p className="my-auto fw-bord lastpro fs-6">All Periods</p>
+                        <select
+                            value={intervalType}
+                            className="border-0 my-auto"
+                            onChange={handleDropdownChange}
+                            style={{ padding: '15px 20px' }}
+                        >
+                            <option value="weeks">Weeks</option>
+                            <option value="months">Months</option>
+                            <option value="years">Years</option>
+                        </select>
+                    </div>
+                    <label htmlFor="Datetime" className="lablesection color3 text-start my-2">
+                        Date Period {minDate} - {maxDate}
+                    </label>
+                    <Slider
+                        min={0}
+                        max={max}
+                        range
+                        value={selectedRange}
+                        onChange={handleRangeChange}
+                        marks={marks}
+                    />
+                    {/* Render other UI elements and display data */}
+                    {intervalType === 'weeks' && data.length > 0 && (
+                        <div>
+                            {data.map((item) => (
+                                <div key={item.id}>
+                                    {/* Render item details here */}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

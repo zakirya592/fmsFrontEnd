@@ -79,6 +79,64 @@ function Dashbords() {
 
 
     useEffect(() => {
+        axios.get(`/api/Rooms_newpage_GET_List`)
+            .then((res) => {
+                // Assuming res.data.data is an array of objects
+                const dataWithinLastWeek = res.data.data;
+
+                // Calculate the total capacity for all data
+                const totalCapacity = dataWithinLastWeek.reduce((accumulator, item) => {
+                    const itemCapacity = item.Capacity;
+                    if (itemCapacity !== undefined && !isNaN(itemCapacity)) {
+                        return accumulator + parseFloat(itemCapacity); // Use parseFloat to handle numeric values
+                    } else {
+                        return accumulator;
+                    }
+                }, 0);
+
+                const selectedFloorCode = value.Floor; // Assuming you have a selected floor code
+
+                if (selectedFloorCode) {
+                    // Filter data based on the selected FloorCode
+                    const filteredData = dataWithinLastWeek.filter((item) =>
+                        item.FloorCode === selectedFloorCode,
+                    );
+
+                    if (filteredData.length > 0) {
+                        // Calculate the total capacity for the filtered data
+                        const totalCapacityFiltered = filteredData.reduce((accumulator, item) => {
+                            const itemCapacity = item.Capacity;
+                            if (itemCapacity !== undefined && !isNaN(itemCapacity)) {
+                                return accumulator + parseFloat(itemCapacity);
+                            } else {
+                                return accumulator;
+                            }
+                        }, 0);
+
+                        const TotalOccupancyFiltered = filteredData.reduce((accumulator, item) => {
+                            const TotalOccupancy = item.Occupants;
+                            if (TotalOccupancy !== undefined && !isNaN(TotalOccupancy)) {
+                                return accumulator + parseFloat(TotalOccupancy);
+                            } else {
+                                return accumulator;
+                            }
+                        }, 0);
+
+                        console.log('Total Capacity for selected FloorCode:', totalCapacityFiltered);
+                        console.log('Total Occupants for selected FloorCode:', TotalOccupancyFiltered);
+                    } else {
+                        console.log('No data for the selected FloorCode.');
+                    }
+                } else {
+                    // console.log('No FloorCode selected.');
+                }
+
+                // console.log('Total Capacity for all data:', totalCapacity);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
             setdropdownLocation(res.data.recordsets[0])
@@ -713,7 +771,7 @@ function Dashbords() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [value.BuildingCodefiltervalue, value.LocationCodefiltervalue])
+    }, [value.BuildingCodefiltervalue, value.LocationCodefiltervalue, value.Floor])
     const totaleTotalVacancy = TotalCapacity - totalOccupancy
 
 
@@ -908,12 +966,12 @@ function Dashbords() {
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Occupancy</h6>
-                                                <p className='propdashbord text-center'>{totalOccupancy}&nbsp; &nbsp; {(totalOccupancy / TotalCapacity) * 100}%</p>
+                                                <p className='propdashbord text-center'>{totalOccupancy}&nbsp; &nbsp; {((totalOccupancy / TotalCapacity) * 100).toFixed(3)}%</p>
                                             </div>
 
                                             <div className="my-auto">
                                                 <h6 className='headingdashbord text-center'>Total Vacancy</h6>
-                                                <p className='propdashbord text-center ms-2'>{totaleTotalVacancy} &nbsp; &nbsp;{(totaleTotalVacancy / TotalCapacity) * 100}%</p>
+                                                <p className='propdashbord text-center ms-2'>{totaleTotalVacancy} &nbsp; &nbsp;{((totaleTotalVacancy / TotalCapacity) * 100).toFixed(3)}%</p>
                                             </div>
                                         </div>
                                     </div>
