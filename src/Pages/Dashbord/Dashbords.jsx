@@ -93,7 +93,7 @@ function Dashbords() {
                         return accumulator;
                     }
                 }, 0);
-              
+
                 const totalOccupancy = dataWithinLastWeek.reduce((accumulator, item) => {
                     const TotalOccupancy = item.Occupants;
                     if (TotalOccupancy !== undefined && !isNaN(TotalOccupancy)) {
@@ -134,12 +134,12 @@ function Dashbords() {
 
                         setTotalCapacity(totalCapacityFiltered)
                         settotalOccupancy(TotalOccupancyFiltered)
-                      
+
                     } else {
                         console.log('No data for the selected FloorCode.');
                         // setTotalCapacity(0)
                         // settotalOccupancy(0)
-                     
+
                     }
                 } else {
                     // console.log('No FloorCode selected.');
@@ -175,22 +175,6 @@ function Dashbords() {
         axios.get(`/api/EmployeeMaster_GET_LIST`)
             .then((res) => {
                 setTotalEmployees(res.data.recordset)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        // total Vacancy
-        axios.get(`/api/Total_Occupants`)
-            .then((res) => {
-                // settotalOccupancy(res.data.data[0].total_Occupants)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        // Total_Capacity
-        axios.get(`/api/Total_Capacity`)
-            .then((res) => {
-                // setTotalCapacity(res.data.data[0].total_Capacity)
             })
             .catch((err) => {
                 console.log(err);
@@ -787,10 +771,9 @@ function Dashbords() {
     const totaleTotalVacancy = TotalCapacity - totalOccupancy
 
 
-    const [selectedRange, setSelectedRange] = useState([0, 100]);
+    const [selectedRange, setSelectedRange] = useState([-2, 100]);
     const [intervalType, setIntervalType] = useState("weeks");
-
-    let max = 100; // Set your maximum value here
+    const [max, setMax] = useState(100);
 
     const handleRangeChange = (value) => {
         setSelectedRange(value);
@@ -800,37 +783,527 @@ function Dashbords() {
         setIntervalType(e.target.value);
     };
 
-    if (intervalType === "weeks") {
-        max = 7; // Maximum weeks in a year
-    } else if (intervalType === "months") {
-        max = 12; // Maximum months in a year
-    } else if (intervalType === "years") {
-        max = 10; // Display 10 years in the slider
-    }
+    useEffect(() => {
+        if (intervalType === 'weeks') {
+            setMax(7);
+        } else if (intervalType === 'months') {
+            setMax(12);
+        } else if (intervalType === 'years') {
+            setMax(10);
+        }
+    }, [intervalType]);
 
-    // Calculate the date labels based on the selected range
+    useEffect(() => {
+        const [minValue, maxValue] = selectedRange;
+        const today = new Date();
+        const startDate =
+            intervalType === 'weeks'
+                ? addDays(today, minValue * 7)
+                : intervalType === 'months'
+                    ? addMonths(today, minValue)
+                    : addYears(today, minValue);
+
+        const endDate =
+            intervalType === 'weeks'
+                ? addDays(today, (maxValue + 1) * 7)
+                : intervalType === 'months'
+                    ? addMonths(today, maxValue)
+                    : addYears(today, maxValue);
+        // PurchaseOrder
+        axios.get('/api/PurchaseOrder_GET_List', {
+            params: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            },
+        }).then((res) => {
+            if (res.data.recordset.length > 0) {
+                const filteredData = res.data.recordset
+                    .filter((item) => item && item.PODate)
+                    .filter((item) => {
+                        const itemDate = new Date(item.PODate);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+
+                if (filteredData.length > 0) {
+                    const lastItem = filteredData[filteredData.length - 1];
+                    setLastPurchase(lastItem);
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = filteredData.filter((item) => {
+                        const itemDate = new Date(item.PODate);
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = filteredData.filter((item) => {
+                        const itemDate = new Date(item.PODate);
+                        return itemDate >= lastMonthDate;
+                    });
+
+                    const dataLastYear = filteredData.filter((item) => {
+                        const itemDate = new Date(item.PODate);
+                        return itemDate >= lastYearDate;
+                    });
+
+                    setPurchaseorderlastyear(dataLastYear);
+                    setPurchaseorderlastmonth(dataLastMonth);
+                    setPurchaseorderlastweek(dataWithinLastWeek);
+                    setgetdata(filteredData);
+                } else {
+                    // console.log('The filtered array is empty.');
+                    // Handle the case where all items were filtered out
+                }
+            } else {
+                console.log('The array is empty.');
+                setgetdata([]); // Reset the data if there are no records
+            }
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // PurchaseRequest
+        axios.get('/api/PurchaseRequest_GET_List', {
+            params: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            },
+        }).then((res) => {
+            if (res.data.recordset.length > 0) {
+                const filteredData = res.data.recordset
+                    .filter((item) => item && item.RequestDate)
+                    .filter((item) => {
+                        const itemDate = new Date(item.RequestDate);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+
+                if (filteredData.length > 0) {
+                    const lastItem = filteredData[filteredData.length - 1];
+                    setlastcreatpurachaserquest(lastItem);
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDate);
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDate);
+                        return itemDate >= lastMonthDate;
+                    });
+
+                    const dataLastYear = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDate);
+                        return itemDate >= lastYearDate;
+                    });
+
+                    setPurchaserequestlastyear(dataLastYear)
+                    setPurchaserequestlastmonth(dataLastMonth)
+                    setPurchaserequestlastweek(dataWithinLastWeek)
+                    settotalpurachaserequuest(filteredData);
+                } else {
+                    // console.log('The filtered array is empty.');
+                    // Handle the case where all items were filtered out
+                }
+            } else {
+                console.log('The array is empty.');
+                setgetdata([]); // Reset the data if there are no records
+            }
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // CleaningWorks
+        axios.get('/api/CleaningWorks_GET_LIST', {
+            params: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            },
+        }).then((res) => {
+            if (res.data.recordset.length > 0) {
+                const filteredData = res.data.recordset
+                    .filter((item) => item && item.RequestDateTime)
+                    .filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+
+                if (filteredData.length > 0) {
+                    const lastItem = filteredData[filteredData.length - 1];
+                    setcleaningdatalast(lastItem);
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= lastMonthDate;
+                    });
+
+                    const dataLastYear = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= lastYearDate;
+                    });
+
+                    setCleaningWorkslastyear(dataLastYear)
+                    setCleaningWorkslastmonth(dataLastMonth)
+                    setCleaningWorkslastweek(dataWithinLastWeek)
+                    setTotalCreated(filteredData)
+
+                } else {
+                    // console.log('The filtered array is empty.');
+                    // Handle the case where all items were filtered out
+                }
+            } else {
+                console.log('The array is empty.');
+                setgetdata([]); // Reset the data if there are no records
+            }
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+        // PreventiveMaintenance
+        axios.get('/api/PreventiveMaintenance_GET_LIST', {
+            params: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            },
+        }).then((res) => {
+            if (res.data.recordset.length > 0) {
+                const filteredData = res.data.recordset
+                    .filter((item) => item && item.RequestDateTime)
+                    .filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+
+                if (filteredData.length > 0) {
+                    const lastItem = filteredData[filteredData.length - 1];
+                    setdatapreventlast(lastItem);
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= lastMonthDate;
+                    });
+
+                    const dataLastYear = filteredData.filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= lastYearDate;
+                    });
+
+                    setPreventiveMaintenancelastyear(dataLastYear)
+                    setPreventiveMaintenancelastmonth(dataLastMonth)
+                    setPreventiveMaintenancelastweek(dataWithinLastWeek)
+                    setpreventivelength(filteredData)
+
+                } else {
+                    // console.log('The filtered array is empty.');
+                    // Handle the case where all items were filtered out
+                }
+            } else {
+                console.log('The array is empty.');
+                setgetdata([]); // Reset the data if there are no records
+            }
+        }).catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`/api/WorkOrders_GET_LIST`, {
+            params: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            },
+        }).then((res) => {
+                const workOrders = res.data.recordset;
+             const closedWorkOrders = workOrders.filter(
+                    (workOrder) => workOrder.WorkStatus === "Closed"
+                );
+
+                // Filter open work orders
+                const openWorkOrders = workOrders.filter(
+                    (workOrder) => workOrder.WorkStatus === "Open"
+                );
+
+                // Set the latest closed work order
+                if (closedWorkOrders.length > 0) {
+                    const filteredDatas = res.data.recordset
+                        .filter((item) => item && item.StartWorkOrderDateTime)
+                        .filter((item) => {
+                            const itemDate = new Date(item.StartWorkOrderDateTime);
+                            return itemDate >= startDate && itemDate <= endDate;
+                        });
+                    const lastItem = closedWorkOrders[closedWorkOrders.length - 1];
+                    setworkroderopen(lastItem);
+
+                    // Calculate date ranges for filtering
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    // Filter data for different date ranges
+                    const dataWithinLastWeek = filteredDatas.filter((item) => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime);
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = filteredDatas.filter((item) => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime);
+                        return itemDate >= lastMonthDate;
+                    });
+
+                    const dataLastYear = filteredDatas.filter((item) => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime);
+                        return itemDate >= lastYearDate;
+                    });
+                 
+
+                    // Update state variables with filtered data
+                    setworrkorderlastyear(dataLastYear);
+                    setworkrordertlastmonth(dataLastMonth);
+                    setworrkorderlastweek(dataWithinLastWeek);
+                    setworkorderlength(filteredDatas);
+                } else {
+                    console.log("No Closed Work Orders found.");
+                }
+
+                if (openWorkOrders.length > 0) {
+                    const filteredDatas = openWorkOrders.filter((item) => item && item.StartWorkOrderDateTime)
+                        .filter((item) => {
+                            const itemDate = new Date(item.StartWorkOrderDateTime);
+                            return itemDate >= startDate && itemDate <= endDate;
+                        });
+                    setworkroderopen(filteredDatas);
+
+                    // Find the latest "Open" work request
+                    const latestOpenWorkRequest = filteredDatas.reduce((latest, current) => {
+                        return new Date(current.StartWorkOrderDateTime) > new Date(latest.StartWorkOrderDateTime) ? current : latest;
+                    });
+                    // Find the oldest "Open" work request
+                    const oldestOpenWorkRequest = filteredDatas.reduce((oldest, current) => {
+                        return new Date(current.StartWorkOrderDateTime) < new Date(oldest.StartWorkOrderDateTime) ? current : oldest;
+                    });
+                    setLatestworkorderopen(latestOpenWorkRequest);
+                    setoldestdata(oldestOpenWorkRequest);
+                    // Weeke month and years
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
+
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                    const dataWithinLastWeek = filteredDatas.filter(item => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime); // Replace "date" with your date field name
+                        return itemDate >= lastWeek && itemDate <= today;
+                    });
+
+                    const dataLastMonth = filteredDatas.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
+                    const dataLastYear = filteredDatas.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
+                    setworrorderopenlastyear(dataLastYear)
+                    setworkorderopenlastmonth(dataLastMonth)
+                    setworrorderopenlastweek(dataWithinLastWeek)
+
+                } else {
+                    console.log("No open work requests found");
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`/api/workRequest_GET_LIST`, {
+            params: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            },
+        }).then((res) => {
+            const workOrders = res.data.recordset;
+            const closedWorkOrders = workOrders.filter(
+                (workOrder) => workOrder.RequestStatus === "Closed"
+            );
+
+            // Filter open work orders
+            const openWorkOrders = workOrders.filter(
+                (workOrder) => workOrder.RequestStatus === "Open"
+            );
+
+            // Set the latest closed work order
+            if (closedWorkOrders.length > 0) {
+                const filteredDatas = res.data.recordset
+                    .filter((item) => item && item.RequestDateTime)
+                    .filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+                const lastItem = closedWorkOrders[closedWorkOrders.length - 1];
+                setLatestpost(lastItem);
+
+                // Calculate date ranges for filtering
+                const today = new Date();
+                const lastWeek = new Date(today);
+                lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                const lastMonthDate = new Date(today);
+                lastMonthDate.setMonth(today.getMonth() - 1);
+
+                const lastYearDate = new Date(today);
+                lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                // Filter data for different date ranges
+                const dataWithinLastWeek = filteredDatas.filter((item) => {
+                    const itemDate = new Date(item.RequestDateTime);
+                    return itemDate >= lastWeek && itemDate <= today;
+                });
+
+                const dataLastMonth = filteredDatas.filter((item) => {
+                    const itemDate = new Date(item.RequestDateTime);
+                    return itemDate >= lastMonthDate;
+                });
+
+                const dataLastYear = filteredDatas.filter((item) => {
+                    const itemDate = new Date(item.RequestDateTime);
+                    return itemDate >= lastYearDate;
+                });
+
+                // Update state variables with filtered data
+                setworrkrequestlastyear(dataLastYear)
+                setworrkrequestlastmonth(dataLastMonth)
+                setworrkrequestlastweek(dataWithinLastWeek)
+                setworkrrequest(filteredDatas);
+            } else {
+                console.log("No Closed Work Orders found.");
+            }
+
+            if (openWorkOrders.length > 0) {
+                const filteredDatas = openWorkOrders.filter((item) => item && item.RequestDateTime)
+                    .filter((item) => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+                setworkrequesttotalopen(filteredDatas);
+
+                // Find the latest "Open" work request
+                const latestOpenWorkRequest = filteredDatas.reduce((latest, current) => {
+                    return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
+                });
+                // Find the oldest "Open" work request
+                const oldestOpenWorkRequest = filteredDatas.reduce((oldest, current) => {
+                    return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
+                });
+                setLatestworkrequestOpen(latestOpenWorkRequest);
+                setOldestworkrequestOpen(oldestOpenWorkRequest);
+                // Weeke month and years
+                const today = new Date();
+                const lastWeek = new Date(today);
+                lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                const lastMonthDate = new Date(today);
+                lastMonthDate.setMonth(today.getMonth() - 1);
+
+                const lastYearDate = new Date(today);
+                lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                const dataWithinLastWeek = filteredDatas.filter(item => {
+                    const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
+                    return itemDate >= lastWeek && itemDate <= today;
+                });
+
+                const dataLastMonth = filteredDatas.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                const dataLastYear = filteredDatas.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                setworrkrequestopenlastyear(dataLastYear)
+                setworrkrequestopenlastmonth(dataLastMonth)
+                setworrkrequestopenlastweek(dataWithinLastWeek)
+
+            } else {
+                console.log("No open work requests found");
+            }
+
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [selectedRange, intervalType]);
+
     const [minValue, maxValue] = selectedRange;
     const minDate = format(
-        intervalType === "weeks"
+        intervalType === 'weeks'
             ? addDays(new Date(), minValue)
-            : intervalType === "months"
+            : intervalType === 'months'
                 ? addMonths(new Date(), minValue)
-                : addYears(new Date(), minValue),
-        "dd MMM, yyyy"
+                : addYears(new Date(2022, 0, 1), minValue),
+        'dd MMM, yyyy'
     );
     const maxDate = format(
-        intervalType === "weeks"
-            ? addWeeks(new Date(), maxValue)
-            : intervalType === "months"
+        intervalType === 'weeks'
+            ? addDays(new Date(), maxValue)
+            : intervalType === 'months'
                 ? addMonths(new Date(), maxValue)
-                : addYears(new Date(), maxValue),
-        "dd MMM, yyyy"
+                : addYears(new Date(2022, 0, 1), maxValue),
+        'dd MMM, yyyy'
     );
     // Create the marks with numbers
     const marks = {};
     for (let i = 0; i <= max; i++) {
         marks[i] = i.toString();
     }
+
     return (
         <>
             <div className="bg">

@@ -24,6 +24,19 @@ function CreateCleaningWorks() {
     const navigate = useNavigate();
 
     const [WorkRequest, setWorkRequest] = useState('')
+
+
+    // current date and time 
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
     //dropdowns
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
@@ -35,6 +48,7 @@ function CreateCleaningWorks() {
     const [dropdownSchedPriorityCode, setdropdownSchedPriorityCode] = useState([])
     const [value, setvalue] = useState({
         EmployeeID: null,
+        RequestDateTime: getCurrentDateTimeString(),
         DepartmentCode: 'Select Dept Code',
         BuildingCode: 'Select Building',
         Location: 'Select Location',
@@ -53,18 +67,6 @@ function CreateCleaningWorks() {
     const abortControllerRef = useRef(null);
     const [DeptDesc, setDeptDesc] = useState([])
     const [CleaningDesc, setCleaningDesc] = useState([])
-
-
-    // current date and time 
-    const getCurrentDateTimeString = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-    };
 
     // all drop down api 
     useEffect(() => {
@@ -549,7 +551,6 @@ function CreateCleaningWorks() {
         }
     }
 
-
     const [Schedulestarttime, setSchedulestarttime] = useState('0');
     const [Scheduleendtime, setScheduleendtime] = useState('');
 
@@ -768,9 +769,14 @@ function CreateCleaningWorks() {
                                             <input
                                                 type="datetime-local"
                                                 id="Employdata"
-                                                // value={value.RequestDateTime || getCurrentDateTimeString()} // Use a default value or value.RequestDateTime
-                                                value={getCurrentDateTimeString()}
-                                                // onChange={handleInputChange}
+                                                value={value.RequestDateTime} // Use a default value or value.RequestDateTime
+                                                // value={getCurrentDateTimeString()}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        RequestDateTime: e.target.value
+                                                    }))
+                                                }}
                                                 name="RequestDateTime"
                                                 className='rounded inputsection py-2'
                                             />

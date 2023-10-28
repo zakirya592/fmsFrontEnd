@@ -235,7 +235,7 @@ function MainCleaningWork() {
                     WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
                     CleaningGroup: row.CleaningGroup,
                     WorkPriority: row.WorkPriority,
-                    RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
+                    RequestDateTime: moment(row.RequestDateTime).isValid() ? moment(row.RequestDateTime).format('DD/MM/YYYY') : '',
                     DepartmentCode: row.DepartmentCode,
                     BuildingCode: row.BuildingCode,
                 };
@@ -248,7 +248,7 @@ function MainCleaningWork() {
                     WorkType: isClosed ? "This Work Type is already closed.." : row.WorkType,
                     CleaningGroup: row.CleaningGroup,
                     WorkPriority: row.WorkPriority,
-                    RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
+                    RequestDateTime: moment(row.RequestDateTime).isValid() ? moment(row.RequestDateTime).format('DD/MM/YYYY') : '',
                     DepartmentCode: row.DepartmentCode,
                     BuildingCode: row.BuildingCode,
                 };

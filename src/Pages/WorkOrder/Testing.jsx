@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { format, addDays, addMonths, addYears } from 'date-fns';
+import { format, addDays,subYears, addMonths, addYears } from 'date-fns';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css'; // Import the slider styles
 
@@ -9,7 +9,6 @@ function Testing() {
     const [intervalType, setIntervalType] = useState('weeks');
     const [max, setMax] = useState(100);
     const [data, setData] = useState([]);
-    const [lastPurchase, setLastPurchase] = useState(null);
 
     const handleRangeChange = (value) => {
         setSelectedRange(value);
@@ -46,8 +45,7 @@ function Testing() {
                     ? addMonths(today, maxValue)
                     : addYears(today, maxValue);
 
-        axios
-            .get('/api/PurchaseOrder_GET_List', {
+        axios.get('/api/PurchaseOrder_GET_List', {
                 params: {
                     startDate: startDate.toISOString(),
                     endDate: endDate.toISOString(),
@@ -56,15 +54,13 @@ function Testing() {
             .then((res) => {
                 console.log(res);
                 if (res.data.recordset.length > 0) {
-                    const lastItem = res.data.recordset[res.data.recordset.length - 1];
-                    setLastPurchase(lastItem);
-
                     const filteredData = res.data.recordset.filter((item) => {
                         const itemDate = new Date(item.PODate);
                         return itemDate >= startDate && itemDate <= endDate;
                     });
 
                     setData(filteredData);
+                    console.log('filteredData', filteredData);
                 } else {
                     console.log('The array is empty.');
                     setData([]); // Reset the data if there are no records
@@ -78,7 +74,7 @@ function Testing() {
     const [minValue, maxValue] = selectedRange;
     const minDate = format(
         intervalType === 'weeks'
-            ? addDays(new Date(), minValue * 7)
+            ? addDays(new Date(), minValue )
             : intervalType === 'months'
                 ? addMonths(new Date(), minValue)
                 : addYears(new Date(), minValue),
@@ -87,7 +83,7 @@ function Testing() {
     console.log('minDate', minDate);
     const maxDate = format(
         intervalType === 'weeks'
-            ? addDays(new Date(), (maxValue + 1) * 7)
+            ? addDays(new Date(), maxValue )
             : intervalType === 'months'
                 ? addMonths(new Date(), maxValue)
                 : addYears(new Date(), maxValue),
@@ -127,16 +123,6 @@ function Testing() {
                         onChange={handleRangeChange}
                         marks={marks}
                     />
-                    {/* Render other UI elements and display data */}
-                    {intervalType === 'weeks' && data.length > 0 && (
-                        <div>
-                            {data.map((item) => (
-                                <div key={item.id}>
-                                    {/* Render item details here */}
-                                </div>
-                            ))}
-                        </div>
-                    )}
                 </div>
             </div>
         </div>

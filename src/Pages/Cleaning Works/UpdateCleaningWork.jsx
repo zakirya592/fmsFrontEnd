@@ -19,7 +19,17 @@ import moment from 'moment';
 function UpdateCleaningWork() {
     const navigate = useNavigate();
     let { userId } = useParams();
-    console.log(userId);
+
+    // current date and time 
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
     //dropdowns
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
@@ -31,6 +41,7 @@ function UpdateCleaningWork() {
     const [dropdownSchedPriorityCode, setdropdownSchedPriorityCode] = useState([])
     const [value, setvalue] = useState({
         EmployeeID: null,
+        RequestDateTime: getCurrentDateTimeString(),
         DepartmentCode: '',
         BuildingCode: '',
         LocationCode: '',
@@ -51,16 +62,6 @@ function UpdateCleaningWork() {
     const [CleaningDesc, setCleaningDesc] = useState([])
 
 
-    // current date and time 
-    const getCurrentDateTimeString = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-    };
 
     const [bdata, setbata] = useState([])
     const [edata, setedata] = useState([])
@@ -68,7 +69,6 @@ function UpdateCleaningWork() {
 
     function GetgetworkRequest() {
         axios.get(`/api/CleaningWorks_GET_BYID/${userId}`).then((res) => {
-            console.log('asdfaf==========++++++=========', res);
             const {
                 EmployeeID,
                 RequestNumber,
@@ -86,7 +86,7 @@ function UpdateCleaningWork() {
                 AssetItemTagID,
                 CleaningGroup,
                 Intruction_Remarks,
-                SchedulingPriority
+                SchedulingPriority,
             } = res.data.recordsets[0][0];
 
 
@@ -923,9 +923,13 @@ function UpdateCleaningWork() {
                                             <input
                                                 type="datetime-local"
                                                 id="Employdata"
-                                                // value={value.RequestDateTime || getCurrentDateTimeString()} // Use a default value or value.RequestDateTime
-                                                value={getCurrentDateTimeString()}
-                                                // onChange={handleInputChange}
+                                                value={value.RequestDateTime}
+                                                onChange={e => {
+                                                    setvalue(prevValue => ({
+                                                        ...prevValue,
+                                                        RequestDateTime: e.target.value
+                                                    }))
+                                                }}
                                                 name="RequestDateTime"
                                                 className='rounded inputsection py-2'
                                             />
