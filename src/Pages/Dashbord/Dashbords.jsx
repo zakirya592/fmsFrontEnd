@@ -171,14 +171,53 @@ function Dashbords() {
                 console.log(err);
             });
 
-        // Total employee
         axios.get(`/api/EmployeeMaster_GET_LIST`)
             .then((res) => {
-                setTotalEmployees(res.data.recordset)
+                // Assuming res.data.recordset is an array of objects
+                const preventiveMaintenanceData = res.data.recordset;
+                console.log(preventiveMaintenanceData);
+                // Find the length of the original array
+                const originalArrayLength = preventiveMaintenanceData.length;
+                setTotalEmployees(originalArrayLength)
+
+                if (value.BuildingCodefiltervalue || value.LocationCodefiltervalue) {
+                    // Create a copy of the original data to filter
+                    let filteredData = [...preventiveMaintenanceData];
+
+                    if (value.BuildingCodefiltervalue) {
+                        // Filter by BuildingCode if it's selected
+                        filteredData = filteredData.filter((item) =>
+                            item.BuildingCode === value.BuildingCodefiltervalue
+                        );
+                    }
+
+                    if (value.LocationCodefiltervalue) {
+                        // Filter by LocationCode if it's selected
+                        filteredData = filteredData.filter((item) =>
+                            item.LocationCode === value.LocationCodefiltervalue
+                        );
+                    }
+
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                    const dataWithinLastWeek = filteredData.filter(item => {
+                        const itemDate = item.EmployeeID; // Replace "date" with your field name
+                        return itemDate;
+                    });
+
+                    // Log the length of the filtered data
+                    const filteredArrayLength = dataWithinLastWeek.length;
+                    setTotalEmployees(filteredArrayLength);
+                } else {
+                    console.log("No data in ");
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
+
         // workRequest_GET_LIST 
         axios.get(`/api/workRequest_GET_LIST`)
             .then((res) => {
@@ -191,7 +230,7 @@ function Dashbords() {
                 if (workRequests.length > 0) {
                     const lastWorkRequest = workRequests[workRequests.length - 1];
                     setLatestpost(lastWorkRequest)
-                    if (closeWorkOrders.length > 0) {
+                    // if (closeWorkOrders.length > 0) {
                         const today = new Date();
                         const lastWeek = new Date(today);
                         // lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
@@ -217,92 +256,67 @@ function Dashbords() {
                         setworrkrequestlastweek(dataWithinLastWeek)
 
 
-                        if (value.BuildingCodefiltervalue || value.LocationCodefiltervalue) {
-                            // Filter preventive maintenance data by location
-                            const preventiveMaintenanceData = res.data.recordset;
-
-                            let filteredDatas = preventiveMaintenanceData;
-
-                            if (value.BuildingCodefiltervalue) {
-                                filteredDatas = filteredDatas.filter((item) =>
-                                    item.BuildingCode === value.BuildingCodefiltervalue
-                                );
-                            }
-
-                            if (value.LocationCodefiltervalue) {
-                                filteredDatas = filteredDatas.filter((item) =>
-                                    item.LocationCode === value.LocationCodefiltervalue
-                                );
-                            }
-                            setworkrrequest(filteredDatas)
-                            console.log(filteredDatas);
-                            if (res.data.recordset.length > 0) {
-                                const lastItem = filteredDatas[filteredDatas.length - 1];
-                                setLatestpost(lastItem)
-
-                                const today = new Date();
-                                const lastWeek = new Date(today);
-                                lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
-
-                                const lastMonthDate = new Date(today);
-                                lastMonthDate.setMonth(today.getMonth() - 1);
-
-                                const lastYearDate = new Date(today);
-                                lastYearDate.setFullYear(today.getFullYear() - 1);
-                                let filteredData = [...preventiveMaintenanceData]; // Initialize with all data
-
-                                if (value.BuildingCodefiltervalue) {
-                                    // Filter by BuildingCode if it's selected
-                                    filteredData = filteredData.filter(
-                                        (item) => item.BuildingCode === value.BuildingCodefiltervalue
-                                    );
-                                }
-
-                                if (value.LocationCodefiltervalue) {
-                                    // Filter by LocationCode if it's selected
-                                    filteredData = filteredData.filter(
-                                        (item) => item.LocationCode === value.LocationCodefiltervalue
-                                    );
-                                }
-                                const dataWithinLastWeek = filteredData.filter(item => {
-                                    const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                                    return itemDate >= today && itemDate <= lastWeek;
-                                });
-                                const dataLastMonth = filteredData.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
-                                const dataLastYear = filteredData.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
-                                setworrkrequestlastyear(dataLastYear)
-                                setworrkrequestlastmonth(dataLastMonth)
-                                setworrkrequestlastweek(dataWithinLastWeek)
-
-                                // Find the latest "Open" work request
-                                const latestOpenWorkRequest = filteredData.reduce((latest, current) => {
-                                    return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
-                                });
-                                console.log('latestOpenWorkRequest', latestOpenWorkRequest);
-                                // Find the oldest "Open" work request
-                                const oldestOpenWorkRequest = filteredData.reduce((oldest, current) => {
-                                    return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
-                                });
-                                setLatestworkrequestOpen(latestOpenWorkRequest);
-                                setOldestworkrequestOpen(oldestOpenWorkRequest);
-
-                            } else {
-                                console.log('The array is empty.');
-                            }
-
-                        }
-                        else {
-                            setworkrrequest(res.data.recordset)
+                    if (value.BuildingCodefiltervalue || value.LocationCodefiltervalue) {
+                        // Filter preventive maintenance data by location
+                        let filteredData = closeWorkOrders; // Initialize with all data
+                        if (value.BuildingCodefiltervalue) {
+                            // Filter by BuildingCode if it's selected
+                            filteredData = filteredData.filter(
+                                (item) => item.BuildingCode === value.BuildingCodefiltervalue
+                            );
                         }
 
+                        if (value.LocationCodefiltervalue) {
+                            // Filter by LocationCode if it's selected
+                            filteredData = filteredData.filter(
+                                (item) => item.LocationCode === value.LocationCodefiltervalue
+                            );
+                        }
+                        
+                        if (filteredData.length > 0) {
+                            setworkrrequest(filteredData);
+                            const lastItem = filteredData[filteredData.length - 1];
+                            setLatestpost(lastItem);
+
+                            const today = new Date();
+                            const lastWeek = new Date(today);
+                            lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                            const lastMonthDate = new Date(today);
+                            lastMonthDate.setMonth(today.getMonth() - 1);
+
+                            const lastYearDate = new Date(today);
+                            lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                            const dataWithinLastWeek = filteredData.filter(item => {
+                                const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
+                                return itemDate >= today && itemDate <= lastWeek;
+                            });
+                            const dataLastMonth = filteredData.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                            const dataLastYear = filteredData.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                            setworrkrequestlastyear(dataLastYear);
+                            setworrkrequestlastmonth(dataLastMonth);
+                            setworrkrequestlastweek(dataWithinLastWeek);
+                        } else {
+                            console.log('The array is empty.');
+                            setworkrrequest([]);
+                            setworrkrequestlastyear([]);
+                            setworrkrequestlastmonth([]);
+                            setworrkrequestlastweek([]);
+
+                        }
+                    } else {
+                        console.log('No filters selected.');
                     }
+
+                    // }
 
                 } else {
                     console.log("No Date is");
                 }
 
-                if (openWorkOrders.length > 0) {
-
+                if (workRequests.length > 0) {
+                    // if (openWorkOrders.length > 0) {
                     const today = new Date();
                     const lastWeek = new Date(today);
                     lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
@@ -338,7 +352,7 @@ function Dashbords() {
 
                     if (value.BuildingCodefiltervalue || value.LocationCodefiltervalue) {
                         // Filter preventive maintenance data by location
-                        const preventiveMaintenanceData = res.data.recordset;
+                        const preventiveMaintenanceData = openWorkOrders;
 
                         let filteredDatas = preventiveMaintenanceData;
 
@@ -353,12 +367,11 @@ function Dashbords() {
                                 item.LocationCode === value.LocationCodefiltervalue
                             );
                         }
-                        setworkrequesttotalopen(filteredDatas)
-                        console.log(filteredDatas);
-                        if (res.data.recordset.length > 0) {
-                            const lastItem = filteredDatas[filteredDatas.length - 1];
-                            // setworkrequesttotalopen(lastItem)
+                        
+                        if (filteredDatas.length > 0) {
 
+                            setworkrequesttotalopen(filteredDatas)
+                            const lastItem = filteredDatas[filteredDatas.length - 1];
                             const today = new Date();
                             const lastWeek = new Date(today);
                             lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
@@ -369,7 +382,7 @@ function Dashbords() {
                             const lastYearDate = new Date(today);
                             lastYearDate.setFullYear(today.getFullYear() - 1);
                             let filteredData = [...preventiveMaintenanceData]; // Initialize with all data
-
+                            
                             if (value.BuildingCodefiltervalue) {
                                 // Filter by BuildingCode if it's selected
                                 filteredData = filteredData.filter(
@@ -392,35 +405,43 @@ function Dashbords() {
                             setworrkrequestopenlastyear(dataLastYear)
                             setworrkrequestopenlastmonth(dataLastMonth)
                             setworrkrequestopenlastweek(dataWithinLastWeek)
-
                             // Find the latest "Open" work request
-                            const latestOpenWorkRequest = filteredData.reduce((latest, current) => {
+                            const latestOpenWorkRequest = filteredDatas.reduce((latest, current) => {
                                 return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
                             });
-                            console.log('latestOpenWorkRequest', latestOpenWorkRequest);
                             // Find the oldest "Open" work request
-                            const oldestOpenWorkRequest = filteredData.reduce((oldest, current) => {
+                            const oldestOpenWorkRequest = filteredDatas.reduce((oldest, current) => {
                                 return new Date(current.RequestDateTime) < new Date(oldest.RequestDateTime) ? current : oldest;
                             });
                             setLatestworkrequestOpen(latestOpenWorkRequest);
                             setOldestworkrequestOpen(oldestOpenWorkRequest);
+                            
 
                         } else {
-                            console.log('The array is empty.');
+                            console.log('No matching data found');
+
+                            setworkrequesttotalopen([]);
+                            // You can also reset other variables as needed
+                            setworrkrequestopenlastyear([]);
+                            setworrkrequestopenlastmonth([]);
+                            setworrkrequestopenlastweek([]);
+                            setLatestworkrequestOpen(null);
+                            setOldestworkrequestOpen(null);
+
                         }
-
+                        
                     }
-                    else {
-                        setworkrequesttotalopen(res.data.recordset)
-                    }
-
-                } else {
+                    
+                }
+               else {
                     console.log("No open work requests found");
+
                 }
 
             })
             .catch((err) => {
                 console.log(err);
+                
             });
         // Work Orders
         axios.get(`/api/WorkOrders_GET_LIST`)
@@ -1441,7 +1462,7 @@ function Dashbords() {
                                                 <img src={SpaceOccupancy} alt="Space Occupancy" className=' me-2' />
                                                 <div className="my-auto">
                                                     <h6 className='headingdashbord text-center ms-2'>Total Employees</h6>
-                                                    <p className='propdashbord text-center'>{TotalEmployees.length}</p>
+                                                    <p className='propdashbord text-center'>{TotalEmployees}</p>
                                                 </div>
                                             </div>
                                             <div className="my-auto">
