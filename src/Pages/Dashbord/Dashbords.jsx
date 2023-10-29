@@ -808,7 +808,7 @@ function Dashbords() {
         if (intervalType === 'weeks') {
             setMax(7);
         } else if (intervalType === 'months') {
-            setMax(12);
+            setMax(11);
         } else if (intervalType === 'years') {
             setMax(10);
         }
