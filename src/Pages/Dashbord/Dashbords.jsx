@@ -1074,7 +1074,7 @@ function Dashbords() {
         }).catch((err) => {
                 console.log(err);
             });
-
+        // WorkOrders List
         axios.get(`/api/WorkOrders_GET_LIST`, {
             params: {
                 startDate: startDate.toISOString(),
@@ -1187,7 +1187,7 @@ function Dashbords() {
             .catch((err) => {
                 console.log(err);
             });
-
+        // workRequest
         axios.get(`/api/workRequest_GET_LIST`, {
             params: {
                 startDate: startDate.toISOString(),
@@ -1319,11 +1319,37 @@ function Dashbords() {
                 : addYears(new Date(2022, 0, 1), maxValue),
         'dd MMM, yyyy'
     );
-    // Create the marks with numbers
-    const marks = {};
-    for (let i = 0; i <= max; i++) {
-        marks[i] = i.toString();
-    }
+
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const monthNames = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    const getMarksForWeeks = () => {
+        const weekMarks = {};
+        for (let i = 0; i <= max; i++) {
+            weekMarks[i] = weekDays[i % 7];
+        }
+        return weekMarks;
+    };
+
+    const getMarksForMonths = () => {
+        const monthMarks = {};
+        for (let i = 0; i <= max; i++) {
+            monthMarks[i] = monthNames[i % 30];
+        }
+        return monthMarks;
+    };
+
+    const getMarksForyears = () => {
+        const yearsMarks = {};
+        for (let i = 0; i <= max; i++) {
+            yearsMarks[i] = i.toString();
+        }
+        return yearsMarks;
+    };
+    
+    const marks = intervalType === 'weeks' ? getMarksForWeeks() : intervalType === 'months' ? getMarksForMonths() : getMarksForyears();
 
     return (
         <>
@@ -1366,7 +1392,7 @@ function Dashbords() {
                                                 range
                                                 value={selectedRange}
                                                 onChange={handleRangeChange}
-                                                marks={marks}
+                                                marks={marks} // Use the state variable for marks
                                             />
 
                                         </div>
