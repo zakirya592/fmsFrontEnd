@@ -806,7 +806,7 @@ function Dashbords() {
 
     useEffect(() => {
         if (intervalType === 'weeks') {
-            setMax(7);
+            setMax(6);
         } else if (intervalType === 'months') {
             setMax(11);
         } else if (intervalType === 'years') {
@@ -1303,24 +1303,38 @@ function Dashbords() {
     }, [selectedRange, intervalType]);
 
     const [minValue, maxValue] = selectedRange;
+    const startMonth = 0; // 0 for January, 1 for February, and so on
+
     const minDate = format(
         intervalType === 'weeks'
-            ? addDays(new Date(), minValue)
+            ? (() => {
+                const startDate = new Date();
+                while (startDate.getDay() !== 1) {
+                    startDate.setDate(startDate.getDate() - 1);
+                }
+                return addDays(startDate, minValue );
+            })()
             : intervalType === 'months'
-                ? addMonths(new Date(), minValue)
-                : addYears(new Date(2022, 0, 1), minValue),
+                ? addMonths(new Date(new Date().getFullYear(), startMonth, 1), minValue)
+                : addYears(new Date(2020, 0, 1), minValue),
         'dd MMM, yyyy'
-    );
+    )
     const maxDate = format(
         intervalType === 'weeks'
-            ? addDays(new Date(), maxValue)
+            ? (() => {
+                const endDate = new Date();
+                while (endDate.getDay() !== 1) {
+                    endDate.setDate(endDate.getDate() + 1);
+                }
+                return addDays(endDate, maxValue);
+            })()
             : intervalType === 'months'
-                ? addMonths(new Date(), maxValue)
-                : addYears(new Date(2022, 0, 1), maxValue),
+                ? addMonths(new Date(new Date().getFullYear(), startMonth, 1), maxValue)
+                : addYears(new Date(2020, 0, 1), maxValue),
         'dd MMM, yyyy'
     );
 
-    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weekDays = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const monthNames = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
@@ -1341,15 +1355,19 @@ function Dashbords() {
         return monthMarks;
     };
 
-    const getMarksForyears = () => {
+    const getMarksForYears = () => {
         const yearsMarks = {};
-        for (let i = 0; i <= max; i++) {
-            yearsMarks[i] = i.toString();
+        const currentYear = new Date().getFullYear();
+        const maxYear = currentYear + 7;
+        for (let year = 2020; year <= maxYear; year++) {
+            yearsMarks[year - 2020] = year.toString();
         }
+
         return yearsMarks;
     };
+
     
-    const marks = intervalType === 'weeks' ? getMarksForWeeks() : intervalType === 'months' ? getMarksForMonths() : getMarksForyears();
+    const marks = intervalType === 'weeks' ? getMarksForWeeks() : intervalType === 'months' ? getMarksForMonths() : getMarksForYears();
 
     return (
         <>
