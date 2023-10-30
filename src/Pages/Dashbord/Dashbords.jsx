@@ -791,7 +791,7 @@ function Dashbords() {
     const totaleTotalVacancy = TotalCapacity - totalOccupancy
 
 
-    const [selectedRange, setSelectedRange] = useState([-2, 100]);
+    const [selectedRange, setSelectedRange] = useState([-2, 10]);
     const [intervalType, setIntervalType] = useState("weeks");
     const [max, setMax] = useState(100);
 
