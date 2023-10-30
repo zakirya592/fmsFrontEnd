@@ -878,12 +878,16 @@ function Dashbords() {
                     setPurchaseorderlastweek(dataWithinLastWeek);
                     setgetdata(filteredData);
                 } else {
-                    // console.log('The filtered array is empty.');
+                    console.log('The Purchase order filtered array is empty.');
                     // Handle the case where all items were filtered out
+                    setgetdata([]); // Reset the data if there are no records
+                    setPurchaseorderlastyear([]);
+                    setPurchaseorderlastmonth([]);
+                    setPurchaseorderlastweek([]);
+                    
                 }
             } else {
                 console.log('The array is empty.');
-                setgetdata([]); // Reset the data if there are no records
             }
 
         })
@@ -898,12 +902,15 @@ function Dashbords() {
             },
         }).then((res) => {
             if (res.data.recordset.length > 0) {
+
+                console.log(res.data.recordset);
                 const filteredData = res.data.recordset
                     .filter((item) => item && item.RequestDate)
                     .filter((item) => {
                         const itemDate = new Date(item.RequestDate);
                         return itemDate >= startDate && itemDate <= endDate;
                     });
+                settotalpurachaserequuest(filteredData)
 
                 if (filteredData.length > 0) {
                     const lastItem = filteredData[filteredData.length - 1];
@@ -939,7 +946,10 @@ function Dashbords() {
                     setPurchaserequestlastweek(dataWithinLastWeek)
                     settotalpurachaserequuest(filteredData);
                 } else {
-                    // console.log('The filtered array is empty.');
+                    console.log('The Purchase Request filtered array is empty.');
+                    setPurchaserequestlastyear([])
+                    setPurchaserequestlastmonth([])
+                    setPurchaserequestlastweek([])
                     // Handle the case where all items were filtered out
                 }
             } else {
@@ -966,6 +976,7 @@ function Dashbords() {
                         return itemDate >= startDate && itemDate <= endDate;
                     });
 
+                setTotalCreated(filteredData)
                 if (filteredData.length > 0) {
                     const lastItem = filteredData[filteredData.length - 1];
                     setcleaningdatalast(lastItem);
@@ -1001,7 +1012,11 @@ function Dashbords() {
                     setTotalCreated(filteredData)
 
                 } else {
-                    // console.log('The filtered array is empty.');
+                    console.log('The CleaningWorks filtered array is empty.');
+                    setCleaningWorkslastyear([])
+                    setCleaningWorkslastmonth([])
+                    setCleaningWorkslastweek([])
+                    setTotalCreated([])
                     // Handle the case where all items were filtered out
                 }
             } else {
@@ -1064,6 +1079,11 @@ function Dashbords() {
 
                 } else {
                     // console.log('The filtered array is empty.');
+
+                    setPreventiveMaintenancelastyear([])
+                    setPreventiveMaintenancelastmonth([])
+                    setPreventiveMaintenancelastweek([])
+                    setpreventivelength([])
                     // Handle the case where all items were filtered out
                 }
             } else {
