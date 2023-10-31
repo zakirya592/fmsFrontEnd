@@ -175,7 +175,6 @@ function Dashbords() {
             .then((res) => {
                 // Assuming res.data.recordset is an array of objects
                 const preventiveMaintenanceData = res.data.recordset;
-                console.log(preventiveMaintenanceData);
                 // Find the length of the original array
                 const originalArrayLength = preventiveMaintenanceData.length;
                 setTotalEmployees(originalArrayLength)
@@ -231,29 +230,31 @@ function Dashbords() {
                     const lastWorkRequest = workRequests[workRequests.length - 1];
                     setLatestpost(lastWorkRequest)
                     // if (closeWorkOrders.length > 0) {
-                        const today = new Date();
-                        const lastWeek = new Date(today);
-                        // lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
-                        lastWeek.setDate(today.getDate() + 7); // Calculate the date one week from today
+                    const today = new Date();
+                    const lastWeek = new Date(today);
+                    const currentDayclosed = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+                    const daysUntilStartOfWeek = currentDayclosed; // Days until Sunday
+                    const daysUntilEndOfWeek = 7 - currentDayclosed; // Days until Saturday
+                    const startOfWeek = new Date(today);
+                    startOfWeek.setDate(today.getDate() - daysUntilStartOfWeek);
+                    const endOfWeek = new Date(today);
+                    endOfWeek.setDate(today.getDate() + daysUntilEndOfWeek);
 
-                        const lastMonthDate = new Date(today);
-                        lastMonthDate.setMonth(today.getMonth() - 1);
+                    const lastMonthDate = new Date(today);
+                    lastMonthDate.setMonth(today.getMonth() - 1);
 
-                        const lastYearDate = new Date(today);
-                        lastYearDate.setFullYear(today.getFullYear() - 1);
+                    const lastYearDate = new Date(today);
+                    lastYearDate.setFullYear(today.getFullYear() - 1);
 
-                        const dataWithinLastWeek = closeWorkOrders.filter(item => {
-                            const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                            // return itemDate >= lastWeek && itemDate <= today;
-                            return itemDate >= today && itemDate <= lastWeek;
-
-                        });
-
-                        const dataLastMonth = closeWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
-                        const dataLastYear = closeWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
-                        setworrkrequestlastyear(dataLastYear)
-                        setworrkrequestlastmonth(dataLastMonth)
-                        setworrkrequestlastweek(dataWithinLastWeek)
+                    const dataWithinCurrentWeek = closeWorkOrders.filter(item => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= startOfWeek && itemDate <= endOfWeek;
+                    });
+                    const dataLastMonth = closeWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
+                    const dataLastYear = closeWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
+                    setworrkrequestlastyear(dataLastYear)
+                    setworrkrequestlastmonth(dataLastMonth)
+                    setworrkrequestlastweek(dataWithinCurrentWeek)
 
 
                     if (value.BuildingCodefiltervalue || value.LocationCodefiltervalue) {
@@ -272,7 +273,7 @@ function Dashbords() {
                                 (item) => item.LocationCode === value.LocationCodefiltervalue
                             );
                         }
-                        
+
                         if (filteredData.length > 0) {
                             setworkrrequest(filteredData);
                             const lastItem = filteredData[filteredData.length - 1];
@@ -280,7 +281,13 @@ function Dashbords() {
 
                             const today = new Date();
                             const lastWeek = new Date(today);
-                            lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+                            const currentDayclosed = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+                            const daysUntilStartOfWeek = currentDayclosed; // Days until Sunday
+                            const daysUntilEndOfWeek = 7 - currentDayclosed; // Days until Saturday
+                            const startOfWeek = new Date(today);
+                            startOfWeek.setDate(today.getDate() - daysUntilStartOfWeek);
+                            const endOfWeek = new Date(today);
+                            endOfWeek.setDate(today.getDate() + daysUntilEndOfWeek);
 
                             const lastMonthDate = new Date(today);
                             lastMonthDate.setMonth(today.getMonth() - 1);
@@ -288,15 +295,15 @@ function Dashbords() {
                             const lastYearDate = new Date(today);
                             lastYearDate.setFullYear(today.getFullYear() - 1);
 
-                            const dataWithinLastWeek = filteredData.filter(item => {
-                                const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                                return itemDate >= today && itemDate <= lastWeek;
+                            const dataWithinCurrentWeek = filteredData.filter(item => {
+                                const itemDate = new Date(item.RequestDateTime);
+                                return itemDate >= startOfWeek && itemDate <= endOfWeek;
                             });
                             const dataLastMonth = filteredData.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
                             const dataLastYear = filteredData.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
                             setworrkrequestlastyear(dataLastYear);
                             setworrkrequestlastmonth(dataLastMonth);
-                            setworrkrequestlastweek(dataWithinLastWeek);
+                            setworrkrequestlastweek(dataWithinCurrentWeek);
                         } else {
                             console.log('The array is empty.');
                             setworkrrequest([]);
@@ -319,8 +326,14 @@ function Dashbords() {
                     // if (openWorkOrders.length > 0) {
                     const today = new Date();
                     const lastWeek = new Date(today);
-                    lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
-                    lastWeek.setDate(today.getDate() + 7); // Calculate the date one week ago
+
+                    const currentDay = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+                    const daysUntilStartOfWeek = currentDay; // Days until Sunday
+                    const daysUntilEndOfWeek = 7 - currentDay; // Days until Saturday
+                    const startOfWeek = new Date(today);
+                    startOfWeek.setDate(today.getDate() - daysUntilStartOfWeek);
+                    const endOfWeek = new Date(today);
+                    endOfWeek.setDate(today.getDate() + daysUntilEndOfWeek);
 
                     const lastMonthDate = new Date(today);
                     lastMonthDate.setMonth(today.getMonth() - 1);
@@ -328,17 +341,16 @@ function Dashbords() {
                     const lastYearDate = new Date(today);
                     lastYearDate.setFullYear(today.getFullYear() - 1);
 
-                    const dataWithinLastWeek = openWorkOrders.filter(item => {
-                        const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                        return itemDate >= today && itemDate <= lastWeek;
-
+                    const dataWithinCurrentWeek = workRequests.filter(item => {
+                        const itemDate = new Date(item.RequestDateTime);
+                        return itemDate >= startOfWeek && itemDate <= endOfWeek;
                     });
 
                     const dataLastMonth = openWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
                     const dataLastYear = openWorkOrders.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
                     setworrkrequestopenlastyear(dataLastYear)
                     setworrkrequestopenlastmonth(dataLastMonth)
-                    setworrkrequestopenlastweek(dataWithinLastWeek)
+                    setworrkrequestopenlastweek(dataWithinCurrentWeek)
                     // Find the latest "Open" work request
                     const latestOpenWorkRequest = openWorkOrders.reduce((latest, current) => {
                         return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
@@ -367,27 +379,28 @@ function Dashbords() {
                                 item.LocationCode === value.LocationCodefiltervalue
                             );
                         }
-                        
-                        if (filteredDatas.length > 0) {
 
-                            setworkrequesttotalopen(filteredDatas)
+                        setworkrequesttotalopen(filteredDatas)
+                        if (filteredDatas.length > 0) {
                             const lastItem = filteredDatas[filteredDatas.length - 1];
                             const today = new Date();
-                            const lastWeek = new Date(today);
-                            lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
 
-                            const lastMonthDate = new Date(today);
-                            lastMonthDate.setMonth(today.getMonth() - 1);
+                            const currentDay = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+                            const daysUntilStartOfWeek = currentDay; // Days until Sunday
+                            const daysUntilEndOfWeek = 7 - currentDay; // Days until Saturday
+                            const startOfWeek = new Date(today);
+                            startOfWeek.setDate(today.getDate() - daysUntilStartOfWeek);
+                            const endOfWeek = new Date(today);
+                            endOfWeek.setDate(today.getDate() + daysUntilEndOfWeek);
 
-                            const lastYearDate = new Date(today);
-                            lastYearDate.setFullYear(today.getFullYear() - 1);
-                            let filteredData = [...preventiveMaintenanceData]; // Initialize with all data
-                            
+                           let filteredData = [...preventiveMaintenanceData]; // Initialize with all data
+
                             if (value.BuildingCodefiltervalue) {
                                 // Filter by BuildingCode if it's selected
                                 filteredData = filteredData.filter(
                                     (item) => item.BuildingCode === value.BuildingCodefiltervalue
                                 );
+                                
                             }
 
                             if (value.LocationCodefiltervalue) {
@@ -396,15 +409,15 @@ function Dashbords() {
                                     (item) => item.LocationCode === value.LocationCodefiltervalue
                                 );
                             }
-                            const dataWithinLastWeek = filteredData.filter(item => {
-                                const itemDate = new Date(item.RequestDateTime); // Replace "date" with your date field name
-                                return itemDate >= today && itemDate <= lastWeek;
+                            const dataWithinCurrentWeek = filteredData.filter(item => {
+                                const itemDate = new Date(item.RequestDateTime);
+                                return itemDate >= startOfWeek && itemDate <= endOfWeek;
                             });
                             const dataLastMonth = filteredData.filter(item => new Date(item.RequestDateTime) >= lastMonthDate);
                             const dataLastYear = filteredData.filter(item => new Date(item.RequestDateTime) >= lastYearDate);
                             setworrkrequestopenlastyear(dataLastYear)
                             setworrkrequestopenlastmonth(dataLastMonth)
-                            setworrkrequestopenlastweek(dataWithinLastWeek)
+                            setworrkrequestopenlastweek(dataWithinCurrentWeek)
                             // Find the latest "Open" work request
                             const latestOpenWorkRequest = filteredDatas.reduce((latest, current) => {
                                 return new Date(current.RequestDateTime) > new Date(latest.RequestDateTime) ? current : latest;
@@ -415,11 +428,10 @@ function Dashbords() {
                             });
                             setLatestworkrequestOpen(latestOpenWorkRequest);
                             setOldestworkrequestOpen(oldestOpenWorkRequest);
-                            
+
 
                         } else {
-                            console.log('No matching data found');
-
+                            // console.log('No matching data found');
                             setworkrequesttotalopen([]);
                             // You can also reset other variables as needed
                             setworrkrequestopenlastyear([]);
@@ -429,18 +441,18 @@ function Dashbords() {
                             setOldestworkrequestOpen(null);
 
                         }
-                        
+
                     }
-                    
+
                 }
-               else {
+                else {
                     console.log("No open work requests found");
                 }
 
             })
             .catch((err) => {
                 console.log(err);
-                
+
             });
         // Work Orders
         axios.get(`/api/WorkOrders_GET_LIST`)
@@ -884,7 +896,7 @@ function Dashbords() {
                     setPurchaseorderlastyear([]);
                     setPurchaseorderlastmonth([]);
                     setPurchaseorderlastweek([]);
-                    
+
                 }
             } else {
                 console.log('The array is empty.');
@@ -902,8 +914,6 @@ function Dashbords() {
             },
         }).then((res) => {
             if (res.data.recordset.length > 0) {
-
-                console.log(res.data.recordset);
                 const filteredData = res.data.recordset
                     .filter((item) => item && item.RequestDate)
                     .filter((item) => {
@@ -1091,8 +1101,8 @@ function Dashbords() {
                 setgetdata([]); // Reset the data if there are no records
             }
         }).catch((err) => {
-                console.log(err);
-            });
+            console.log(err);
+        });
         // WorkOrders List
         axios.get(`/api/WorkOrders_GET_LIST`, {
             params: {
@@ -1100,28 +1110,74 @@ function Dashbords() {
                 endDate: endDate.toISOString(),
             },
         }).then((res) => {
-                const workOrders = res.data.recordset;
-             const closedWorkOrders = workOrders.filter(
-                    (workOrder) => workOrder.WorkStatus === "Closed"
-                );
+            const workOrders = res.data.recordset;
+            const closedWorkOrders = workOrders.filter(
+                (workOrder) => workOrder.WorkStatus === "Closed"
+            );
 
-                // Filter open work orders
-                const openWorkOrders = workOrders.filter(
-                    (workOrder) => workOrder.WorkStatus === "Open"
-                );
+            // Filter open work orders
+            const openWorkOrders = workOrders.filter(
+                (workOrder) => workOrder.WorkStatus === "Open"
+            );
 
-                // Set the latest closed work order
-                if (closedWorkOrders.length > 0) {
-                    const filteredDatas = res.data.recordset
-                        .filter((item) => item && item.StartWorkOrderDateTime)
-                        .filter((item) => {
-                            const itemDate = new Date(item.StartWorkOrderDateTime);
-                            return itemDate >= startDate && itemDate <= endDate;
-                        });
-                    const lastItem = closedWorkOrders[closedWorkOrders.length - 1];
-                    setworkroderopen(lastItem);
+            // Set the latest closed work order
+            if (closedWorkOrders.length > 0) {
+                const filteredDatas = res.data.recordset
+                    .filter((item) => item && item.StartWorkOrderDateTime)
+                    .filter((item) => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+                const lastItem = closedWorkOrders[closedWorkOrders.length - 1];
+                setworkroderopen(lastItem);
 
-                    // Calculate date ranges for filtering
+                // Calculate date ranges for filtering
+                const today = new Date();
+                const lastWeek = new Date(today);
+                lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
+
+                const lastMonthDate = new Date(today);
+                lastMonthDate.setMonth(today.getMonth() - 1);
+
+                const lastYearDate = new Date(today);
+                lastYearDate.setFullYear(today.getFullYear() - 1);
+
+                // Filter data for different date ranges
+                const dataWithinLastWeek = filteredDatas.filter((item) => {
+                    const itemDate = new Date(item.StartWorkOrderDateTime);
+                    return itemDate >= lastWeek && itemDate <= today;
+                });
+
+                const dataLastMonth = filteredDatas.filter((item) => {
+                    const itemDate = new Date(item.StartWorkOrderDateTime);
+                    return itemDate >= lastMonthDate;
+                });
+
+                const dataLastYear = filteredDatas.filter((item) => {
+                    const itemDate = new Date(item.StartWorkOrderDateTime);
+                    return itemDate >= lastYearDate;
+                });
+
+
+                // Update state variables with filtered data
+                setworrkorderlastyear(dataLastYear);
+                setworkrordertlastmonth(dataLastMonth);
+                setworrkorderlastweek(dataWithinLastWeek);
+                setworkorderlength(filteredDatas);
+            } else {
+                console.log("No Closed Work Orders found.");
+            }
+
+            if (openWorkOrders.length > 0) {
+                const filteredDatas = openWorkOrders.filter((item) => item && item.StartWorkOrderDateTime)
+                    .filter((item) => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime);
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+                setworkroderopen(filteredDatas);
+
+                if (filteredDatas.length > 0) {
+                    // Weeke month and years
                     const today = new Date();
                     const lastWeek = new Date(today);
                     lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
@@ -1132,88 +1188,42 @@ function Dashbords() {
                     const lastYearDate = new Date(today);
                     lastYearDate.setFullYear(today.getFullYear() - 1);
 
-                    // Filter data for different date ranges
-                    const dataWithinLastWeek = filteredDatas.filter((item) => {
-                        const itemDate = new Date(item.StartWorkOrderDateTime);
+                    const dataWithinLastWeek = filteredDatas.filter(item => {
+                        const itemDate = new Date(item.StartWorkOrderDateTime); // Replace "date" with your date field name
                         return itemDate >= lastWeek && itemDate <= today;
                     });
 
-                    const dataLastMonth = filteredDatas.filter((item) => {
-                        const itemDate = new Date(item.StartWorkOrderDateTime);
-                        return itemDate >= lastMonthDate;
-                    });
+                    const dataLastMonth = filteredDatas.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
+                    const dataLastYear = filteredDatas.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
+                    setworrorderopenlastyear(dataLastYear)
+                    setworkorderopenlastmonth(dataLastMonth)
+                    setworrorderopenlastweek(dataWithinLastWeek)
+                    // Find the latest "Open" work request
+                    const latestOpenWorkRequest = filteredDatas.reduce((latest, current) => {
+                        return new Date(current.StartWorkOrderDateTime) > new Date(latest.StartWorkOrderDateTime) ? current : latest;
+                    }, filteredDatas[0]); // Provide the initial value as the first item
 
-                    const dataLastYear = filteredDatas.filter((item) => {
-                        const itemDate = new Date(item.StartWorkOrderDateTime);
-                        return itemDate >= lastYearDate;
-                    });
-                 
+                    // Find the oldest "Open" work request
+                    const oldestOpenWorkRequest = filteredDatas.reduce((oldest, current) => {
+                        return new Date(current.StartWorkOrderDateTime) < new Date(oldest.StartWorkOrderDateTime) ? current : oldest;
+                    }, filteredDatas[0]); // Provide the initial value as the first item
 
-                    // Update state variables with filtered data
-                    setworrkorderlastyear(dataLastYear);
-                    setworkrordertlastmonth(dataLastMonth);
-                    setworrkorderlastweek(dataWithinLastWeek);
-                    setworkorderlength(filteredDatas);
-                } else {
-                    console.log("No Closed Work Orders found.");
-                }
-
-                if (openWorkOrders.length > 0) {
-                    const filteredDatas = openWorkOrders.filter((item) => item && item.StartWorkOrderDateTime)
-                        .filter((item) => {
-                            const itemDate = new Date(item.StartWorkOrderDateTime);
-                            return itemDate >= startDate && itemDate <= endDate;
-                        });
-                    setworkroderopen(filteredDatas);
-
-                    if (filteredDatas.length > 0) {
-                        // Weeke month and years
-                        const today = new Date();
-                        const lastWeek = new Date(today);
-                        lastWeek.setDate(today.getDate() - 7); // Calculate the date one week ago
-
-                        const lastMonthDate = new Date(today);
-                        lastMonthDate.setMonth(today.getMonth() - 1);
-
-                        const lastYearDate = new Date(today);
-                        lastYearDate.setFullYear(today.getFullYear() - 1);
-
-                        const dataWithinLastWeek = filteredDatas.filter(item => {
-                            const itemDate = new Date(item.StartWorkOrderDateTime); // Replace "date" with your date field name
-                            return itemDate >= lastWeek && itemDate <= today;
-                        });
-
-                        const dataLastMonth = filteredDatas.filter(item => new Date(item.StartWorkOrderDateTime) >= lastMonthDate);
-                        const dataLastYear = filteredDatas.filter(item => new Date(item.StartWorkOrderDateTime) >= lastYearDate);
-                        setworrorderopenlastyear(dataLastYear)
-                        setworkorderopenlastmonth(dataLastMonth)
-                        setworrorderopenlastweek(dataWithinLastWeek)
-                        // Find the latest "Open" work request
-                        const latestOpenWorkRequest = filteredDatas.reduce((latest, current) => {
-                            return new Date(current.StartWorkOrderDateTime) > new Date(latest.StartWorkOrderDateTime) ? current : latest;
-                        }, filteredDatas[0]); // Provide the initial value as the first item
-
-                        // Find the oldest "Open" work request
-                        const oldestOpenWorkRequest = filteredDatas.reduce((oldest, current) => {
-                            return new Date(current.StartWorkOrderDateTime) < new Date(oldest.StartWorkOrderDateTime) ? current : oldest;
-                        }, filteredDatas[0]); // Provide the initial value as the first item
-
-                        setLatestworkorderopen(latestOpenWorkRequest);
-                        setoldestdata(oldestOpenWorkRequest);
-                        // Rest of your code for weeks, months, and years
-                        // ...
-                    } else {
-                        console.log("No open work requests found");
-                        setworrorderopenlastyear([]);
-                        setworkorderopenlastmonth([]);
-                        setworrorderopenlastweek([]);
-                    }
-
+                    setLatestworkorderopen(latestOpenWorkRequest);
+                    setoldestdata(oldestOpenWorkRequest);
+                    // Rest of your code for weeks, months, and years
+                    // ...
                 } else {
                     console.log("No open work requests found");
+                    setworrorderopenlastyear([]);
+                    setworkorderopenlastmonth([]);
+                    setworrorderopenlastweek([]);
                 }
 
-            })
+            } else {
+                console.log("No open work requests found");
+            }
+
+        })
             .catch((err) => {
                 console.log(err);
             });
@@ -1322,7 +1332,7 @@ function Dashbords() {
                 });
                 setLatestworkrequestOpen(latestOpenWorkRequest);
                 setOldestworkrequestOpen(oldestOpenWorkRequest);
-            }else{
+            } else {
 
                 setworkrequesttotalopen([]);
                 // You can also reset other variables as needed
@@ -1351,7 +1361,7 @@ function Dashbords() {
                 while (startDate.getDay() !== 1) {
                     startDate.setDate(startDate.getDate() - 1);
                 }
-                return addDays(startDate, minValue );
+                return addDays(startDate, minValue);
             })()
             : intervalType === 'months'
                 ? addMonths(new Date(new Date().getFullYear(), startMonth, 1), minValue)
@@ -1373,7 +1383,7 @@ function Dashbords() {
         'dd MMM, yyyy'
     );
 
-    const weekDays = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const monthNames = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
@@ -1405,7 +1415,7 @@ function Dashbords() {
         return yearsMarks;
     };
 
-    
+
     const marks = intervalType === 'weeks' ? getMarksForWeeks() : intervalType === 'months' ? getMarksForMonths() : getMarksForYears();
 
     return (
