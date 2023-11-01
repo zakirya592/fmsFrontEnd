@@ -95,7 +95,6 @@ function CreatePreventiveMaintainance() {
         // asset type
         axios.get(`/api/AssetType_GET_LIST`).then((res) => {
             setassetTypelist(res.data.recordsets[0])
-            console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
@@ -111,7 +110,6 @@ function CreatePreventiveMaintainance() {
         // priority
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
             setWorkPrioritlist(res.data.recordsets[0])
-            console.log(res.data);
         })
             .catch((err) => {
                 console.log(err);
@@ -364,7 +362,6 @@ function CreatePreventiveMaintainance() {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
                 // setModelError(true);
             } else {
-                console.log(res.data);
                 const {
                     WorkType,
                     WorkTrade,
@@ -563,27 +560,131 @@ function CreatePreventiveMaintainance() {
 
     const [Schedulestarttime, setSchedulestarttime] = useState('');
     const [Scheduleendtime, setScheduleendtime] = useState('');
+const [workordernumber, setworkordernumber] = useState('')
+
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].WorkOrderNumber;
+                // const reqput=1000
+                let formattedRequestNumber;
+                if (reqput >= 1 && reqput <= 9) {
+                    formattedRequestNumber = `000-000-00${reqput}`;
+                } else if (reqput >= 10 && reqput <= 99) {
+                    formattedRequestNumber = `000-000-0${reqput}`;
+                } else if (reqput >= 100 && reqput <= 999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else if (reqput >= 1000 && reqput <= 9999) {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                } else {
+                    formattedRequestNumber = `000-000-${reqput}`;
+                }
+
+                console.log('formattedRequestNumber', formattedRequestNumber);
+                setworkordernumber(formattedRequestNumber)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        Requestnumberapi()
+    }, [])
+
+    const requestincreas = async () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].WorkOrderNumber + 1;
+                axios.put(`/api/WorkOrderNumberCount_Put/1`, {
+                    WorkOrderNumber: reqput
+                })
+                    .then((res) => {
+                        console.log('Work Request Number put Api', res.data);
+                        // const reqput = res.data.recordset[0].WorkOrderNumber + 1;
+                        // setworkordernumber(reqput)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const workordereapi = async () => {
+        try {
+        await axios.post(`/api/WorkOrders_post`, {
+            WorkOrderNumber: workordernumber,
+            WorkRequestNumber: value.RequestNumber,
+            WorkStatus: '',
+            WorkPriority: '',
+            WorkCategoryCode: '',
+            WorkDescription: '',
+            FailureCode: '',
+            SolutionCode: '',
+            AssignedtoEmployeeID: '',
+            AppointmentDateTime: '0',
+            ScheduledDateTime: '0',
+            StartWorkOrderDateTime: '0',
+            EndWorkOrderDateTime: '0',
+            TotalDays: '0',
+            TotalHours: '0',
+            TotalMinutes: '0',
+            TotalCostofWork: '0',
+            CompletedByEmployeeID: '0',
+            CompletionDateTime: '0',
+        },)
+            .then((res) => {
+                console.log('Add work api first api', res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleGenerateClick = () => {
-        let alertMessage = "Please fill in:";
-        
+        let alertMessage = ":";
+
+        if (!value.RequestNumber) {
+            alertMessage += "\n Work Request Number";
+        }
         if (!Schedulestarttime) {
-            alertMessage += "\n- Schedule-Start Date/Time";
+            alertMessage += "\n Schedule-Start Date/Time";
         }
         if (!Scheduleendtime) {
-            alertMessage += "\n- Schedule-End Date/Time";
+            alertMessage += "\n Schedule-End Date/Time";
         }
         if (!selectedOption) {
-            alertMessage += "\n- Frequency";
+            alertMessage += "\n Frequency";
         }
 
-        if (alertMessage === "Please fill in:") {
-            // All fields are filled, proceed with your logic
+        if (alertMessage === ":") {
             alert("Thank you for filling in all fields.");
+            // All fields are filled, proceed with your logic
+            if (selectedOption === "Daily") {
+                // Post data to the API once for Daily
+                requestincreas()
+                workordereapi()
+            } else if (selectedOption === "Weekly") {
+                // Post data to the API 4 times for Weekly
+                for (let i = 0; i < 4; i++) {
+                   console.log("Data data is post ",i);
+                    requestincreas()
+                    requestincreas()
+                    workordereapi()
+                }
+
+            }
         } else {
             Swal.fire({
                 title: "Error",
-                text: `${alertMessage}`,
+                text: `${alertMessage} is required for Generate`,
                 icon: "error",
                 confirmButtonText: "OK",
             })
