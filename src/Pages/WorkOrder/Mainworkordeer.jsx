@@ -826,7 +826,7 @@ function Mainworkordeer() {
         { field: 'OrderStatus', headerName: 'ORDER STATUS', width: 160 },
         { field: 'WorkRequestNumber', headerName: 'REQUEST NUMBER#', width: 160 },
         { field: 'WorkPriority', headerName: 'PRIORITY', width: 150 },
-        { field: 'RequestDateTime', headerName: 'REQUEST DATE', width: 200 },
+        { field: 'StartWorkOrderDateTime', headerName: 'Start Date/Time', width: 200 },
         { field: 'WorkCategory', headerName: 'WORK CATEGORY ', width: 160 },
         { field: 'SOLUCTIONCODE', headerName: 'SOLUCTION CODE ', width: 160 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
@@ -880,7 +880,7 @@ function Mainworkordeer() {
         );
     }
     const [filteredRowsss, setFilteredRowsss] = useState([]);
-
+    console.log('filteredRowsss', filteredRowsss);
     useEffect(() => {
         const filteredRowsss = (getdata || []).filter(row => (
             (!RequestStatusFilterValue || row.WorkStatus === RequestStatusFilterValue) &&
@@ -900,7 +900,8 @@ function Mainworkordeer() {
                     OrderStatus: isClosed ? "This Work Order is already closed.." : row.WorkStatus,
                     WorkRequestNumber: row.WorkRequestNumber,
                     WorkPriority: row.WorkPriority,
-                    RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
+                    // RequestDateTime: moment(row.StartWorkOrderDateTime).isValid() ? moment(row.StartWorkOrderDateTime).format('DD/MM/YYYY') : '',
+                    StartWorkOrderDateTime: moment(row.StartWorkOrderDateTime).isValid() ? moment(row.StartWorkOrderDateTime).format('DD/MM/YYYY') : '',
                     WorkCategory: row.WorkCategoryCode,
                     SOLUCTIONCODE: row.SolutionCode,
                 };
@@ -914,6 +915,7 @@ function Mainworkordeer() {
                     WorkRequestNumber: row.WorkRequestNumber,
                     WorkPriority: row.WorkPriority,
                     RequestDateTime: moment(row.ScheduledDateTime).isValid() ? moment(row.ScheduledDateTime).format('DD/MM/YYYY') : '',
+                    StartWorkOrderDateTime: moment(row.StartWorkOrderDateTime).isValid() ? moment(row.StartWorkOrderDateTime).format('DD/MM/YYYY') : '',
                     WorkCategory: row.WorkCategoryCode,
                     SOLUCTIONCODE: row.SolutionCode,
                 };

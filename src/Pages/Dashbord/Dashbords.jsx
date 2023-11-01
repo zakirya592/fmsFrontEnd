@@ -1189,6 +1189,7 @@ function Dashbords() {
                     const itemDate = new Date(item.StartWorkOrderDateTime);
                     return itemDate >= startOfWeek && itemDate <= endOfWeek;
                 });
+                
 
                 const lastMonthDate = new Date(today);
                 lastMonthDate.setMonth(today.getMonth() - 1);

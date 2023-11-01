@@ -104,6 +104,7 @@ function MainPurachase() {
         { field: 'PurchaseOrderNumber', headerName: 'Purchase Order Number', width: 200 },
         { field: 'PurchaseRequestNumber', headerName: 'Purchase Request Number', width: 200 },
         { field: 'ApprovedByEmpl', headerName: 'Approved ByEmployeeID', width: 200 },
+        { field: 'podata', headerName: 'PO Date', width: 200 },
         { field: 'VendorID', headerName: 'Vendor ID', width: 200 },
         { field: 'RequestDate', headerName: 'Request Date', width: 200 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
@@ -212,7 +213,8 @@ function MainPurachase() {
         VendorID: row.VendorID,
         PurchaseRequestNumber: row.PurchaseRequestNumber,
         ApprovedByEmpl: row.ApprovedByEmpl,
-        RequestDate: moment(row.RequestDate).isValid() ? moment(row.RequestDate).format('DD/MM/YYYY') : ''
+        RequestDate: moment(row.RequestDate).isValid() ? moment(row.RequestDate).format('DD/MM/YYYY') : '',
+        podata: moment(row.PODate).isValid() ? moment(row.PODate).format('DD/MM/YYYY') : ''
     }))
 
 
