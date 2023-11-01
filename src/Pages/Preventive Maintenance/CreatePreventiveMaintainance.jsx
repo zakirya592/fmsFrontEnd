@@ -546,7 +546,6 @@ function CreatePreventiveMaintainance() {
                         }
                     });
                 }
-                console.log(res.data.error);
             })
             .catch((err) => {
                 console.log(err.response.data.error);
@@ -562,8 +561,34 @@ function CreatePreventiveMaintainance() {
         setSelectedOption(event.target.value);
     };
 
-    const [Schedulestarttime, setSchedulestarttime] = useState('0');
+    const [Schedulestarttime, setSchedulestarttime] = useState('');
     const [Scheduleendtime, setScheduleendtime] = useState('');
+
+    const handleGenerateClick = () => {
+        let alertMessage = "Please fill in:";
+        
+        if (!Schedulestarttime) {
+            alertMessage += "\n- Schedule-Start Date/Time";
+        }
+        if (!Scheduleendtime) {
+            alertMessage += "\n- Schedule-End Date/Time";
+        }
+        if (!selectedOption) {
+            alertMessage += "\n- Frequency";
+        }
+
+        if (alertMessage === "Please fill in:") {
+            // All fields are filled, proceed with your logic
+            alert("Thank you for filling in all fields.");
+        } else {
+            Swal.fire({
+                title: "Error",
+                text: `${alertMessage}`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
+        }
+    };
 
     const handleStartDateChange = (event) => {
         const selectedStartDate = new Date(event.target.value);
@@ -1338,7 +1363,7 @@ function CreatePreventiveMaintainance() {
                                     <div className="d-flex">
 
                                         <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
-                                        <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2"><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
+                                        <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2" onClick={handleGenerateClick}><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
                                     </div>
 
                                 </div>
