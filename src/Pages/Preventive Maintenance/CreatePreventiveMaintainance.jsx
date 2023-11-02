@@ -563,7 +563,7 @@ function CreatePreventiveMaintainance() {
 const [workordernumber, setworkordernumber] = useState('')
 
     const Requestnumberapi = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
+        axios.get(`/api/workRequestCount_GET_BYID/1 `)
             .then((res) => {
                 const reqput = res.data.recordset[0].WorkOrderNumber;
                 // const reqput=1000
@@ -598,8 +598,7 @@ const [workordernumber, setworkordernumber] = useState('')
                 const reqput = res.data.recordset[0].WorkOrderNumber + 1;
                 axios.put(`/api/WorkOrderNumberCount_Put/1`, {
                     WorkOrderNumber: reqput
-                })
-                    .then((res) => {
+                }).then((res) => {
                         console.log('Work Request Number put Api', res.data);
                         // const reqput = res.data.recordset[0].WorkOrderNumber + 1;
                         // setworkordernumber(reqput)
@@ -615,26 +614,9 @@ const [workordernumber, setworkordernumber] = useState('')
 
     const workordereapi = async () => {
         try {
-        await axios.post(`/api/WorkOrders_post`, {
-            WorkOrderNumber: workordernumber,
+            await axios.post(`/api/Wordorder_post_week`, {
+            WorkOrderNumbers: workordernumber,
             WorkRequestNumber: value.RequestNumber,
-            WorkStatus: '',
-            WorkPriority: '',
-            WorkCategoryCode: '',
-            WorkDescription: '',
-            FailureCode: '',
-            SolutionCode: '',
-            AssignedtoEmployeeID: '',
-            AppointmentDateTime: '0',
-            ScheduledDateTime: '0',
-            StartWorkOrderDateTime: '0',
-            EndWorkOrderDateTime: '0',
-            TotalDays: '0',
-            TotalHours: '0',
-            TotalMinutes: '0',
-            TotalCostofWork: '0',
-            CompletedByEmployeeID: '0',
-            CompletionDateTime: '0',
         },)
             .then((res) => {
                 console.log('Add work api first api', res.data);
