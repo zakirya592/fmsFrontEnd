@@ -22,10 +22,6 @@ import TextField from '@mui/material/TextField';
 
 function CreateCleaningWorks() {
     const navigate = useNavigate();
-
-    const [WorkRequest, setWorkRequest] = useState('')
-
-
     // current date and time 
     const getCurrentDateTimeString = () => {
         const now = new Date();
@@ -36,7 +32,6 @@ function CreateCleaningWorks() {
         const minutes = now.getMinutes().toString().padStart(2, '0');
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
-
     //dropdowns
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
@@ -72,74 +67,64 @@ function CreateCleaningWorks() {
     useEffect(() => {
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
-            // console.log("dropdownBuilding LIST", res.data.recordset);
             setdropdownBuildingLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // dropdownCleaning
         axios.get(`/api/CleaningGroup_GET_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
             setdropdownCleaning(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // Scheduling
         axios.get(`/api/SchedPriority_GET_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
             setdropdownSchedPriorityCode(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // WorkType_LIST
         axios.get(`/api/WorkType_LIST`).then((res) => {
-            // console.log("WorkType LIST", res.data.recordset);
             setdropdownworktypesLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // WorkPriority_LIST
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
-            // console.log("WorkPriority LIST", res.data.recordset);
             setdropdownWorkPriorityLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
-            // console.log("Loaction list", res.data.recordset);
             setdropdownLocation(res.data.recordsets[0])
         })
             .catch((err) => {
-                // console.log(err);;
+                console.log(err);
             });
         // Work Trade
         axios.get(`/api/WorkTRADE_GET_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
             setdropdownWorkTrade(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
 
     }, [])
 
-
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
@@ -180,7 +165,6 @@ function CreateCleaningWorks() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -191,12 +175,10 @@ function CreateCleaningWorks() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
 
         }
-
 
         catch (error) {
             if (error?.name === 'CanceledError') {
@@ -206,11 +188,8 @@ function CreateCleaningWorks() {
                     EmployeeID: []
                 }))
                 setAutocompleteLoading(true);
-                console.log(error)
                 return;
             }
-            console.error(error);
-            console.log(error)
             setUnitCode([])
             setOpen(false);
             setAutocompleteLoading(false);
@@ -221,7 +200,6 @@ function CreateCleaningWorks() {
         axios.post(`/api/getworkRequest_by_EPID`, {
             EmployeeID,
         }).then((res) => {
-            // console.log(res.data)
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Employee ID not found!', 'error')
                 // setModelError(true);
@@ -252,21 +230,19 @@ function CreateCleaningWorks() {
                     WorkTradeCode,
                     // RequestNumber
                 }));
-                console.log('-------------------', res.data.recordsets[0][0]);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
-                console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
                     })
                     .catch((err) => {
-                        //// console.log(err);;
+                        console.log(err);
                     });
 
             }
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
 
@@ -280,11 +256,10 @@ function CreateCleaningWorks() {
         }))
         axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
             .then((res) => {
-                // console.log(res.data);
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
             })
             .catch((err) => {
-                // console.log(err);;
+                console.log(err);
             });
     }
     // department
@@ -296,11 +271,10 @@ function CreateCleaningWorks() {
         }));
         axios.get(`/api/Department_desc_LIST/${Deptnale}`)
             .then((res) => {
-                // console.log(res.data);
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
             })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
     // Cleaning
@@ -312,16 +286,13 @@ function CreateCleaningWorks() {
         }));
         axios.get(`/api/CleaningGroup_GET_BYID/${Deptnale}`)
             .then((res) => {
-                console.log(res.data, "cleaningdsjdf kdsfj");
                 setCleaningDesc(res.data.recordset[0].CleaningGroupDesc)
             })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -334,7 +305,6 @@ function CreateCleaningWorks() {
                 ...prevValue,
                 EmployeeID: value.EmployeeID
             }));
-            console.log('Received value----------:', value.EmployeeID);
             localStorage.setItem('EmployeeIDset', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
@@ -354,7 +324,6 @@ function CreateCleaningWorks() {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error');
                 // setModelError(true);
             } else {
-                console.log(res.data);
                 const {
                     WorkType,
                     WorkTrade,
@@ -405,7 +374,6 @@ function CreateCleaningWorks() {
 
         },)
             .then((res) => {
-                console.log('Add work api first api', res.data);
                 if (res.status == 201) {
                     Swal.fire({
                         title: "Success",
@@ -428,7 +396,6 @@ function CreateCleaningWorks() {
                 }
             })
             .catch((err) => {
-                console.log(err);
                 Swal.fire({
                     title: "Error",
                     text: `${err.response.data.error}`,
@@ -447,8 +414,6 @@ function CreateCleaningWorks() {
         setSelectedOption(event.target.value);
     };
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-        console.log('==========+++++++======', newInputValuecompleteemployee)
-
         if (reason === 'reset' || reason === 'clear') {
             setGpcListcompleteemployee([]); // Clear the data list if there is no input
             setUnitCodecompleteemployee([])
@@ -489,7 +454,6 @@ function CreateCleaningWorks() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/workRequest_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -501,13 +465,10 @@ function CreateCleaningWorks() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
 
         }
-
-
         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
@@ -519,8 +480,6 @@ function CreateCleaningWorks() {
                 console.log(error)
                 return;
             }
-            console.error(error);
-            console.log(error)
             setUnitCodecompleteemployee([])
             setOpencompleteemployee(false);
             setAutocompleteLoadingcompleteemployee(false);
@@ -528,8 +487,6 @@ function CreateCleaningWorks() {
 
     }
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -545,7 +502,6 @@ function CreateCleaningWorks() {
                 RequestNumber: value.RequestNumber,
                 RequestStatus: value.RequestStatus
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -553,6 +509,144 @@ function CreateCleaningWorks() {
 
     const [Schedulestarttime, setSchedulestarttime] = useState('0');
     const [Scheduleendtime, setScheduleendtime] = useState('');
+
+    const [workordernumber, setworkordernumber] = useState([])
+    // A function to format the WorkOrderNumber
+    const formatWorkOrderNumber = (reqput) => {
+        if (reqput >= 1 && reqput <= 9) {
+            return `000-000-00${reqput}`;
+        } else if (reqput >= 10 && reqput <= 99) {
+            return `000-000-0${reqput}`;
+        } else if (reqput >= 100 && reqput <= 999) {
+            return `000-000-${reqput}`;
+        } else if (reqput >= 1000 && reqput <= 9999) {
+            return `000-000-${reqput}`;
+        } else {
+            return `000-000-${reqput}`;
+        }
+    };
+
+    const Requestnumberapi = () => {
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
+            .then((res) => {
+                const reqput = res.data.recordset[0].WorkOrderNumber;
+                const formattedRequestNumber = formatWorkOrderNumber(reqput);
+                setworkordernumber(formattedRequestNumber);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        Requestnumberapi();
+    }, [])
+
+    const successmessage = () => {
+        Swal.fire({
+            title: "Success",
+            text: `Work Order has been Generate successfully`,
+            icon: "success",
+            confirmButtonText: "OK",
+        })
+    }
+
+    const requestincreas = async () => {
+        try {
+            const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
+            const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
+            const reqput = currentWorkOrderNumber + 1;
+
+            const formattedRequestNumberssss = formatWorkOrderNumber(reqput);
+
+            const formattedRequestNumber1 = formatWorkOrderNumber(reqput + 1);
+
+            const formattedRequestNumber2 = formatWorkOrderNumber(reqput + 2);
+
+            const formattedRequestNumber3 = formatWorkOrderNumber(reqput + 3);
+
+            const ordernumber = [formattedRequestNumberssss, formattedRequestNumber1, formattedRequestNumber2, formattedRequestNumber3]
+            const stringArray = ordernumber.map(String);
+            axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
+                WorkOrderNumber: reqput + 3
+            });
+            axios.post(`/api/Wordorder_post_week`, {
+                WorkOrderNumbers: stringArray,
+                WorkRequestNumber: value.RequestNumber,
+            }).then((res) => {
+                    successmessage()
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // Week post
+    const requestincreasweek = async () => {
+        try {
+            const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
+            const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
+            const reqput = currentWorkOrderNumber + 1;
+            axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
+                WorkOrderNumber: reqput,
+            }).then((res) => {
+                axios.post(`/api/Wordorder_post_week`, {
+                    WorkOrderNumbers: workordernumber,
+                    WorkRequestNumber: value.RequestNumber,
+                })
+                    .then((res) => {
+                        Requestnumberapi()
+                        successmessage()
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleGenerateClick = () => {
+        let alertMessage = ":";
+
+        if (!value.RequestNumber) {
+            alertMessage += "\n Work Request Number";
+        }
+        if (!Schedulestarttime) {
+            alertMessage += "\n Schedule-Start Date/Time";
+        }
+        if (!Scheduleendtime) {
+            alertMessage += "\n Schedule-End Date/Time";
+        }
+        if (!selectedOption) {
+            alertMessage += "\n Frequency";
+        }
+
+        if (alertMessage === ":") {
+            // All fields are filled, proceed with your logic
+            if (selectedOption === "Daily") {
+                // Post data to the API once for Daily
+                requestincreasweek()
+            } else if (selectedOption === "Weekly") {
+                // Post data to the API 4 times for Weekly
+                requestincreas()
+            }
+        } else {
+            Swal.fire({
+                title: "Error",
+                text: `${alertMessage} is required for Generate`,
+                icon: "error",
+                confirmButtonText: "OK",
+            })
+        }
+    };
 
     const handleStartDateChange = (event) => {
         const selectedStartDate = new Date(event.target.value);
@@ -1214,7 +1308,7 @@ function CreateCleaningWorks() {
                                     <div className="d-flex">
 
                                         <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
-                                        <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2"><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
+                                        <button type="button" class="border-0 px-3 mx-2 proceedbtn py-2" onClick={handleGenerateClick}><VideoLibraryIcon className='me-2' />GENERATE  PM WORK ORDERS</button>
                                     </div>
 
                                 </div>
