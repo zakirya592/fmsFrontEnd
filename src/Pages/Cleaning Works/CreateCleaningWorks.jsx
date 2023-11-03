@@ -49,7 +49,7 @@ function CreateCleaningWorks() {
         Intruction_Remarks: '',
         Scheduleendtime: "",
         Schedulestarttime: "",
-        RequestNumber:''
+        RequestNumber: ''
     })
     const [unitCode, setUnitCode] = useState([]);
     const [gpcList, setGpcList] = useState([]); // gpc list
@@ -351,7 +351,7 @@ function CreateCleaningWorks() {
     const [selectedOption, setSelectedOption] = useState(null);
     const Createapi = async () => {
         await axios.post(`/api/CleaningWorks_post`, {
-            RequestNumber: value.RequestNumber, 
+            RequestNumber: value.RequestNumber,
             EmployeeID: value.EmployeeID,
             RequestDateTime: value.RequestDateTime,
             WorkType: value.WorkType,
@@ -573,6 +573,39 @@ function CreateCleaningWorks() {
         weeks.push(currentWeek);
     }
 
+    // Get the starting and ending dates for each week
+    const weekDates = weeks.map(week => {
+        const firstDay = week[0];
+        const lastDay = week[week.length - 1];
+
+        if (firstDay && lastDay) {
+            const startDate = new Date(year, month, firstDay);
+
+            const endDate = new Date(year, month, lastDay);
+            return { startDate, endDate };
+        }
+        return 'null'; // Handle incomplete weeks
+    });
+
+    function formatDate(date) {
+        // Get the day, month, and year components
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-based, so add 1
+        const year = date.getFullYear();
+
+        // Ensure the day and month have leading zeros if necessary
+        const formattedDay = String(day).padStart(2, '0');
+        const formattedMonth = String(month).padStart(2, '0');
+
+        // Combine the components and return the formatted date
+        return `${formattedMonth}/${formattedDay}/${year}`;
+    }
+    const formattedDate = `${formatDate(weekDates[1].startDate)} ${formatDate(weekDates[2].startDate)} ${formatDate(weekDates[3].startDate)} ${formatDate(weekDates[4].startDate)}`
+    const StartWorkOrderDateTimeweek = formattedDate.split(' ')
+
+    const enddataweek = `${formatDate(weekDates[1].endDate)} ${formatDate(weekDates[2].endDate)} ${formatDate(weekDates[3].endDate)} ${formatDate(weekDates[4].endDate)}`
+    const endWorkOrderDateTimeweek = enddataweek.split(' ')
+
     const requestincreas = async () => {
         try {
             const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
@@ -595,11 +628,12 @@ function CreateCleaningWorks() {
             axios.post(`/api/Wordorder_post_week`, {
                 WorkOrderNumbers: stringArray,
                 WorkRequestNumber: value.RequestNumber,
-                StartWorkOrderDateTime: Schedulestarttime,
-                EndWorkOrderDateTime: Scheduleendtime,
+                StartWorkOrderDateTime: StartWorkOrderDateTimeweek,
+                EndWorkOrderDateTime: endWorkOrderDateTimeweek,
             }).then((res) => {
-                    successmessage()
-                })
+                successmessage()
+                console.log(res.data);
+            })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -607,7 +641,7 @@ function CreateCleaningWorks() {
             console.log(err);
         }
     }
-    
+
     // Daily post
     // current date and time     
     const currentStartingData = () => {
@@ -644,15 +678,15 @@ function CreateCleaningWorks() {
                     FailureCode: '',
                     SolutionCode: '',
                     AssignedtoEmployeeID: '',
-                    AppointmentDateTime:'',
+                    AppointmentDateTime: '',
                     EndWorkOrderDateTime: '',
                     TotalDays: '0',
                     TotalHours: '0',
                     TotalMinutes: '0',
                     TotalCostofWork: '0',
-                    CompletedByEmployeeID:'0',
+                    CompletedByEmployeeID: '0',
                     CompletionDateTime: '0',
-                    
+
                 })
                     .then((res) => {
                         console.log(res);
@@ -759,7 +793,7 @@ function CreateCleaningWorks() {
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>Create Cleaning Works</p>
-                                   
+
                                 </div>
 
                                 <hr className='color3 line' />
