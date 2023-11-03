@@ -547,6 +547,32 @@ function CreateCleaningWorks() {
         })
     }
 
+    const weeks = [];
+    let currentWeek = [];
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0 for Sunday, 1 for Monday, etc.
+
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        currentWeek.push(null); // Placeholder for days before the first day of the month
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        currentWeek.push(day);
+        if (currentWeek.length === 7) {
+            weeks.push(currentWeek);
+            currentWeek = [];
+        }
+    }
+
+    if (currentWeek.length > 0) {
+        // Add the last week if it's not complete
+        weeks.push(currentWeek);
+    }
+
     const requestincreas = async () => {
         try {
             const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
@@ -569,6 +595,8 @@ function CreateCleaningWorks() {
             axios.post(`/api/Wordorder_post_week`, {
                 WorkOrderNumbers: stringArray,
                 WorkRequestNumber: value.RequestNumber,
+                StartWorkOrderDateTime: Schedulestarttime,
+                EndWorkOrderDateTime: Scheduleendtime,
             }).then((res) => {
                     successmessage()
                 })
@@ -579,21 +607,55 @@ function CreateCleaningWorks() {
             console.log(err);
         }
     }
-
-    // Week post
+    
+    // Daily post
+    // current date and time     
+    const currentStartingData = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return [year, month, day, hours, minutes];
+    };
+    const dailyStartEndData = currentStartingData()
     const requestincreasweek = async () => {
         try {
             const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
             const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
             const reqput = currentWorkOrderNumber + 1;
+            const startWorkOrderDateTime = dailyStartEndData.join('-') + 'T' + dailyStartEndData[3] + ':' + dailyStartEndData[4];
+            const endWorkOrderDateTime = startWorkOrderDateTime;
+
             axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
                 WorkOrderNumber: reqput,
             }).then((res) => {
-                axios.post(`/api/Wordorder_post_week`, {
-                    WorkOrderNumbers: workordernumber,
+                axios.post(`/api/WorkOrders_post`, {
+
+                    WorkOrderNumber: workordernumber,
                     WorkRequestNumber: value.RequestNumber,
+                    ScheduledDateTime: startWorkOrderDateTime,
+                    StartWorkOrderDateTime: endWorkOrderDateTime,
+                    WorkStatus: '',
+                    WorkPriority: '',
+                    WorkCategoryCode: '',
+                    WorkDescription: '',
+                    FailureCode: '',
+                    SolutionCode: '',
+                    AssignedtoEmployeeID: '',
+                    AppointmentDateTime:'',
+                    EndWorkOrderDateTime: '',
+                    TotalDays: '0',
+                    TotalHours: '0',
+                    TotalMinutes: '0',
+                    TotalCostofWork: '0',
+                    CompletedByEmployeeID:'0',
+                    CompletionDateTime: '0',
+                    
                 })
                     .then((res) => {
+                        console.log(res);
                         Requestnumberapi()
                         successmessage()
                     })
@@ -672,6 +734,7 @@ function CreateCleaningWorks() {
 
         }
     };
+
 
     return (
         <>
