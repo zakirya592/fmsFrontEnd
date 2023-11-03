@@ -632,7 +632,6 @@ function CreateCleaningWorks() {
                 EndWorkOrderDateTime: endWorkOrderDateTimeweek,
             }).then((res) => {
                 successmessage()
-                console.log(res.data);
             })
                 .catch((err) => {
                     console.log(err);

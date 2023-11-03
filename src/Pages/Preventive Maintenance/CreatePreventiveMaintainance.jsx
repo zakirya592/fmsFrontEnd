@@ -2,13 +2,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import "./Preventive.css"
-import excel from "../../Image/excel.png"
-import PrintIcon from '@mui/icons-material/Print';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import { SearchOutlined } from '@ant-design/icons';
 import "react-phone-number-input/style.css";
-import Create from '../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Siderbar from '../../Component/Siderbar/Siderbar'
@@ -79,18 +76,16 @@ function CreatePreventiveMaintainance() {
             });
         // Location
         axios.get(`/api/Location_LIST`).then((res) => {
-            // console.log("Loaction list", res.data.recordset);
             setdropdownLocation(res.data.recordsets[0])
         })
             .catch((err) => {
-                // console.log(err);;
+                console.log(err);
             });
         axios.get(`/api/WorkTRADE_GET_LIST`).then((res) => {
-            // console.log("Loaction list", res.data.recordset);
             setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                // console.log(err);;
+                console.log(err);
             });
         // asset type
         axios.get(`/api/AssetType_GET_LIST`).then((res) => {
@@ -101,11 +96,10 @@ function CreatePreventiveMaintainance() {
             });
         // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
-            // console.log("Department LIST", res.data.recordset);
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // priority
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
@@ -134,11 +128,10 @@ function CreatePreventiveMaintainance() {
         }));
         axios.get(`/api/Department_desc_LIST/${Deptnale}`)
             .then((res) => {
-                // console.log(res.data);
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
             })
             .catch((err) => {
-                // console.log(err);;
+                console.log(err);
             });
     }
     const [WorkTypedesc, setWorkTypedesc] = useState('')
@@ -190,7 +183,6 @@ function CreatePreventiveMaintainance() {
             });
     }
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
@@ -207,7 +199,6 @@ function CreatePreventiveMaintainance() {
             return;
         }
         if (newInputValue === null) {
-
             // perform operation when input is cleared
             setGpcList([]);
             setUnitCode([])
@@ -217,7 +208,6 @@ function CreatePreventiveMaintainance() {
             }))
             return;
         }
-
         // postapi(newInputValue.EmployeeID);
         setAutocompleteLoading(true);
         setOpen(true);
@@ -231,10 +221,9 @@ function CreatePreventiveMaintainance() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    
+
                     const data = response?.data?.recordset;
                     //name state da setdropname
-                    //or Id state da setGpcList da 
                     setUnitCode(data ?? [])
                     setOpen(true);
                     setAutocompleteLoading(false);
@@ -242,14 +231,9 @@ function CreatePreventiveMaintainance() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
-
-        }
-
-
-        catch (error) {
+        } catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
                 setvalue(prevValue => ({
@@ -306,27 +290,22 @@ function CreatePreventiveMaintainance() {
                     WorkPriority,
                     // RequestNumber
                 }));
-                console.log('-------------------', res.data.recordsets[0][0]);
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
-                console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
-                        // console.log(res.data);
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
                     })
                     .catch((err) => {
-                        // console.log(err);;
+                        console.log(err);
                     });
 
             }
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -339,7 +318,6 @@ function CreatePreventiveMaintainance() {
                 ...prevValue,
                 EmployeeID: value.EmployeeID
             }));
-            console.log('Received value----------:', value.EmployeeID);
             localStorage.setItem('EmployeeIDset', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
@@ -359,7 +337,6 @@ function CreatePreventiveMaintainance() {
         }).then((res) => {
             if (res.data.recordsets[0].length === 0) {
                 Swal.fire('Oops...!', 'Something went wrong!', 'error')
-                // setModelError(true);
             } else {
                 const {
                     WorkType,
@@ -385,26 +362,22 @@ function CreatePreventiveMaintainance() {
                     BuildingCode,
                 }));
                 const Depauto = res.data.recordsets[0][0].DepartmentCode
-                // console.log('-------------------------------------------', Depauto);
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
-                        // console.log(res.data);
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
                     })
                     .catch((err) => {
-                        // console.log(err);;
+                        console.log(err);
                     });
                 const workaout = res.data.recordsets[0][0].WorkType
                 axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                     .then((res) => {
-                        // console.log(res.data);
                         setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
                     })
                     .catch((err) => {
                         console.log(err);
                     });
                 const worktrude = res.data.recordsets[0][0].WorkType
-                console.log('worktrude', worktrude);
                 axios.get(`/api/WorkTrade_LIST/${worktrude}`).then((res) => {
                     setdropdownWorkTradeLIST(res.data.recordsets[0])
                 })
@@ -418,7 +391,7 @@ function CreatePreventiveMaintainance() {
             });
     }
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
-                if (reason === 'reset' || reason === 'clear') {
+        if (reason === 'reset' || reason === 'clear') {
             setGpcListcompleteemployee([]); // Clear the data list if there is no input
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -478,11 +451,8 @@ function CreatePreventiveMaintainance() {
                     RequestNumber: [],
                     RequestStatus: []
                 }))
-                console.log(error)
                 return;
             }
-            console.error(error);
-            console.log(error)
             setUnitCodecompleteemployee([])
             setOpencompleteemployee(false);
             setAutocompleteLoadingcompleteemployee(false);
@@ -491,7 +461,7 @@ function CreatePreventiveMaintainance() {
     }
 
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-                if (value === null || value === '-') {
+        if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
                 RequestNumber: [],
@@ -543,7 +513,6 @@ function CreatePreventiveMaintainance() {
                 }
             })
             .catch((err) => {
-                console.log(err.response.data.error);
                 Swal.fire({
                     title: "Error",
                     text: `${err.response.data.error}`,
@@ -558,7 +527,7 @@ function CreatePreventiveMaintainance() {
 
     const [Schedulestarttime, setSchedulestarttime] = useState('');
     const [Scheduleendtime, setScheduleendtime] = useState('');
-const [workordernumber, setworkordernumber] = useState([])
+    const [workordernumber, setworkordernumber] = useState([])
     // A function to format the WorkOrderNumber
     const formatWorkOrderNumber = (reqput) => {
         if (reqput >= 1 && reqput <= 9) {
@@ -573,13 +542,12 @@ const [workordernumber, setworkordernumber] = useState([])
             return `000-000-${reqput}`;
         }
     };
-    
+
     const Requestnumberapi = () => {
         axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
                 const reqput = res.data.recordset[0].WorkOrderNumber;
                 const formattedRequestNumber = formatWorkOrderNumber(reqput);
-                console.log('formattedRequestNumber', formattedRequestNumber);
                 setworkordernumber(formattedRequestNumber);
             })
             .catch((err) => {
@@ -591,7 +559,7 @@ const [workordernumber, setworkordernumber] = useState([])
         Requestnumberapi();
     }, [])
 
-    const successmessage =()=>{
+    const successmessage = () => {
         Swal.fire({
             title: "Success",
             text: `Work Order has been Generate successfully`,
@@ -599,6 +567,64 @@ const [workordernumber, setworkordernumber] = useState([])
             confirmButtonText: "OK",
         })
     }
+
+    const weeks = [];
+    let currentWeek = [];
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0 for Sunday, 1 for Monday, etc.
+
+ for (let i = 0; i < firstDayOfWeek; i++) {
+        currentWeek.push(null); // Placeholder for days before the first day of the month
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        currentWeek.push(day);
+        if (currentWeek.length === 7) {
+            weeks.push(currentWeek);
+            currentWeek = [];
+        }
+    }
+
+    if (currentWeek.length > 0) {
+        // Add the last week if it's not complete
+        weeks.push(currentWeek);
+    }
+
+    // Get the starting and ending dates for each week
+    const weekDates = weeks.map(week => {
+        const firstDay = week[0];
+        const lastDay = week[week.length - 1];
+
+        if (firstDay && lastDay) {
+            const startDate = new Date(year, month, firstDay);
+
+            const endDate = new Date(year, month, lastDay);
+            return { startDate, endDate };
+        }
+        return 'null'; // Handle incomplete weeks
+    });
+
+    function formatDate(date) {
+        // Get the day, month, and year components
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-based, so add 1
+        const year = date.getFullYear();
+
+        const formattedDay = String(day).padStart(2, '0');
+        const formattedMonth = String(month).padStart(2, '0');
+
+        // Combine the components and return the formatted date
+        return `${formattedMonth}/${formattedDay}/${year}`;
+    }
+    const formattedDate = `${formatDate(weekDates[1].startDate)} ${formatDate(weekDates[2].startDate)} ${formatDate(weekDates[3].startDate)} ${formatDate(weekDates[4].startDate)}`
+    const StartWorkOrderDateTimeweek = formattedDate.split(' ')
+
+    const enddataweek = `${formatDate(weekDates[1].endDate)} ${formatDate(weekDates[2].endDate)} ${formatDate(weekDates[3].endDate)} ${formatDate(weekDates[4].endDate)}`
+    const endWorkOrderDateTimeweek = enddataweek.split(' ')
 
     const requestincreas = async () => {
         try {
@@ -608,55 +634,86 @@ const [workordernumber, setworkordernumber] = useState([])
 
             const formattedRequestNumberssss = formatWorkOrderNumber(reqput);
 
-            const formattedRequestNumber1 = formatWorkOrderNumber(reqput+1);
+            const formattedRequestNumber1 = formatWorkOrderNumber(reqput + 1);
 
             const formattedRequestNumber2 = formatWorkOrderNumber(reqput + 2);
 
             const formattedRequestNumber3 = formatWorkOrderNumber(reqput + 3);
 
-             const ordernumber = [formattedRequestNumberssss, formattedRequestNumber1, formattedRequestNumber2, formattedRequestNumber3] 
+            const ordernumber = [formattedRequestNumberssss, formattedRequestNumber1, formattedRequestNumber2, formattedRequestNumber3]
             const stringArray = ordernumber.map(String);
-             axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
+            axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
                 WorkOrderNumber: reqput + 3
             });
-                     axios.post(`/api/Wordorder_post_week`, {
-                         WorkOrderNumbers: stringArray,
-                        WorkRequestNumber: value.RequestNumber,
-                    })
-                        .then((res) => {
-                            console.log('Add work API response', res.data);
-                            successmessage()
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+            axios.post(`/api/Wordorder_post_week`, {
+                WorkOrderNumbers: stringArray,
+                WorkRequestNumber: value.RequestNumber,
+                StartWorkOrderDateTime: StartWorkOrderDateTimeweek,
+                EndWorkOrderDateTime: endWorkOrderDateTimeweek,
+            }).then((res) => {
+                successmessage()
+            })
+                .catch((err) => {
+                    console.log(err);
+                });
         } catch (err) {
             console.log(err);
         }
     }
 
-    // Week post
+    // Daily post current date and time  
+    const currentStartingData = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return [year, month, day, hours, minutes];
+    };
+    const dailyStartEndData = currentStartingData()
     const requestincreasweek = async () => {
         try {
             const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
             const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
             const reqput = currentWorkOrderNumber + 1;
+            const startWorkOrderDateTime = dailyStartEndData.join('-') + 'T' + dailyStartEndData[3] + ':' + dailyStartEndData[4];
+            const endWorkOrderDateTime = startWorkOrderDateTime;
+
             axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
                 WorkOrderNumber: reqput,
             }).then((res) => {
-                    axios.post(`/api/Wordorder_post_week`, {
-                        WorkOrderNumbers: workordernumber,
-                        WorkRequestNumber: value.RequestNumber,
-                    })
-                        .then((res) => {
-                            console.log('Add work API response', res.data);
-                            Requestnumberapi()
-                            successmessage()
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                axios.post(`/api/WorkOrders_post`, {
+
+                    WorkOrderNumber: workordernumber,
+                    WorkRequestNumber: value.RequestNumber,
+                    ScheduledDateTime: startWorkOrderDateTime,
+                    StartWorkOrderDateTime: endWorkOrderDateTime,
+                    WorkStatus: '',
+                    WorkPriority: '',
+                    WorkCategoryCode: '',
+                    WorkDescription: '',
+                    FailureCode: '',
+                    SolutionCode: '',
+                    AssignedtoEmployeeID: '',
+                    AppointmentDateTime: '',
+                    EndWorkOrderDateTime: '',
+                    TotalDays: '0',
+                    TotalHours: '0',
+                    TotalMinutes: '0',
+                    TotalCostofWork: '0',
+                    CompletedByEmployeeID: '0',
+                    CompletionDateTime: '0',
+
                 })
+                    .then((res) => {
+                        Requestnumberapi()
+                        successmessage()
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
                 .catch((err) => {
                     console.log(err);
                 });
