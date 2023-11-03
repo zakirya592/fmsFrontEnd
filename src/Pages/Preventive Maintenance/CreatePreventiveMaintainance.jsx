@@ -119,7 +119,6 @@ function CreatePreventiveMaintainance() {
         axios.get(`/api/SchedPriority_GET_LIST`)
             .then((res) => {
                 setschedulingprioritylist(res.data.recordsets[0]);
-                console.log('schedulingprioritylist', schedulingprioritylist);
             })
             .catch((err) => {
                 console.error("Gender API error:", err);
@@ -407,7 +406,6 @@ function CreatePreventiveMaintainance() {
                 const worktrude = res.data.recordsets[0][0].WorkType
                 console.log('worktrude', worktrude);
                 axios.get(`/api/WorkTrade_LIST/${worktrude}`).then((res) => {
-                    console.log("WorkTrade_LIST", res.data.recordset);
                     setdropdownWorkTradeLIST(res.data.recordsets[0])
                 })
                     .catch((err) => {
@@ -560,28 +558,29 @@ function CreatePreventiveMaintainance() {
 
     const [Schedulestarttime, setSchedulestarttime] = useState('');
     const [Scheduleendtime, setScheduleendtime] = useState('');
-const [workordernumber, setworkordernumber] = useState('')
-
+const [workordernumber, setworkordernumber] = useState([])
+    // A function to format the WorkOrderNumber
+    const formatWorkOrderNumber = (reqput) => {
+        if (reqput >= 1 && reqput <= 9) {
+            return `000-000-00${reqput}`;
+        } else if (reqput >= 10 && reqput <= 99) {
+            return `000-000-0${reqput}`;
+        } else if (reqput >= 100 && reqput <= 999) {
+            return `000-000-${reqput}`;
+        } else if (reqput >= 1000 && reqput <= 9999) {
+            return `000-000-${reqput}`;
+        } else {
+            return `000-000-${reqput}`;
+        }
+    };
+    
     const Requestnumberapi = () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1 `)
+        axios.get(`/api/workRequestCount_GET_BYID/1`)
             .then((res) => {
                 const reqput = res.data.recordset[0].WorkOrderNumber;
-                // const reqput=1000
-                let formattedRequestNumber;
-                if (reqput >= 1 && reqput <= 9) {
-                    formattedRequestNumber = `000-000-00${reqput}`;
-                } else if (reqput >= 10 && reqput <= 99) {
-                    formattedRequestNumber = `000-000-0${reqput}`;
-                } else if (reqput >= 100 && reqput <= 999) {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                } else if (reqput >= 1000 && reqput <= 9999) {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                } else {
-                    formattedRequestNumber = `000-000-${reqput}`;
-                }
-
+                const formattedRequestNumber = formatWorkOrderNumber(reqput);
                 console.log('formattedRequestNumber', formattedRequestNumber);
-                setworkordernumber(formattedRequestNumber)
+                setworkordernumber(formattedRequestNumber);
             })
             .catch((err) => {
                 console.log(err);
@@ -589,46 +588,82 @@ const [workordernumber, setworkordernumber] = useState('')
     }
 
     useEffect(() => {
-        Requestnumberapi()
+        Requestnumberapi();
     }, [])
 
-    const requestincreas = async () => {
-        axios.get(`/api/workRequestCount_GET_BYID/1`)
-            .then((res) => {
-                const reqput = res.data.recordset[0].WorkOrderNumber + 1;
-                axios.put(`/api/WorkOrderNumberCount_Put/1`, {
-                    WorkOrderNumber: reqput
-                }).then((res) => {
-                        console.log('Work Request Number put Api', res.data);
-                        // const reqput = res.data.recordset[0].WorkOrderNumber + 1;
-                        // setworkordernumber(reqput)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    const successmessage =()=>{
+        Swal.fire({
+            title: "Success",
+            text: `Work Order has been Generate successfully`,
+            icon: "success",
+            confirmButtonText: "OK",
+        })
     }
 
-    const workordereapi = async () => {
+    const requestincreas = async () => {
         try {
-            await axios.post(`/api/Wordorder_post_week`, {
-            WorkOrderNumbers: workordernumber,
-            WorkRequestNumber: value.RequestNumber,
-        },)
-            .then((res) => {
-                console.log('Add work api first api', res.data);
-            })
-            .catch((err) => {
-                console.log(err);
+            const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
+            const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
+            const reqput = currentWorkOrderNumber + 1;
+
+            const formattedRequestNumberssss = formatWorkOrderNumber(reqput);
+
+            const formattedRequestNumber1 = formatWorkOrderNumber(reqput+1);
+
+            const formattedRequestNumber2 = formatWorkOrderNumber(reqput + 2);
+
+            const formattedRequestNumber3 = formatWorkOrderNumber(reqput + 3);
+
+             const ordernumber = [formattedRequestNumberssss, formattedRequestNumber1, formattedRequestNumber2, formattedRequestNumber3] 
+            const stringArray = ordernumber.map(String);
+             axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
+                WorkOrderNumber: reqput + 3
             });
+                     axios.post(`/api/Wordorder_post_week`, {
+                         WorkOrderNumbers: stringArray,
+                        WorkRequestNumber: value.RequestNumber,
+                    })
+                        .then((res) => {
+                            console.log('Add work API response', res.data);
+                            successmessage()
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+        } catch (err) {
+            console.log(err);
         }
-        catch (error) {
-            console.log(error);
+    }
+
+    // Week post
+    const requestincreasweek = async () => {
+        try {
+            const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
+            const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
+            const reqput = currentWorkOrderNumber + 1;
+            axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
+                WorkOrderNumber: reqput,
+            }).then((res) => {
+                    axios.post(`/api/Wordorder_post_week`, {
+                        WorkOrderNumbers: workordernumber,
+                        WorkRequestNumber: value.RequestNumber,
+                    })
+                        .then((res) => {
+                            console.log('Add work API response', res.data);
+                            Requestnumberapi()
+                            successmessage()
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) {
+            console.log(err);
         }
-    };
+    }
 
     const handleGenerateClick = () => {
         let alertMessage = ":";
@@ -647,21 +682,13 @@ const [workordernumber, setworkordernumber] = useState('')
         }
 
         if (alertMessage === ":") {
-            alert("Thank you for filling in all fields.");
             // All fields are filled, proceed with your logic
             if (selectedOption === "Daily") {
                 // Post data to the API once for Daily
-                requestincreas()
-                workordereapi()
+                requestincreasweek()
             } else if (selectedOption === "Weekly") {
                 // Post data to the API 4 times for Weekly
-                for (let i = 0; i < 4; i++) {
-                   console.log("Data data is post ",i);
-                    requestincreas()
-                    requestincreas()
-                    workordereapi()
-                }
-
+                requestincreas()
             }
         } else {
             Swal.fire({
