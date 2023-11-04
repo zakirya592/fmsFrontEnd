@@ -52,7 +52,6 @@ function CreateCleaningWorks() {
         RequestNumber: ''
     })
     const [unitCode, setUnitCode] = useState([]);
-    const [gpcList, setGpcList] = useState([]); // gpc list
     const [autocompleteLoading, setAutocompleteLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const abortControllerRef = useRef(null);
@@ -122,7 +121,6 @@ function CreateCleaningWorks() {
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         if (reason === 'reset' || reason === 'clear') {
-            setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
@@ -132,14 +130,10 @@ function CreateCleaningWorks() {
 
         if (!newInputValue || newInputValue.trim() === '') {
             // perform operation when input is cleared
-            setGpcList([]);
             setUnitCode([])
             return;
         }
         if (newInputValue === null) {
-
-            // perform operation when input is cleared
-            setGpcList([]);
             setUnitCode([])
             setvalue(prevValue => ({
                 ...prevValue,
@@ -163,7 +157,6 @@ function CreateCleaningWorks() {
                 .then((response) => {
                     const data = response?.data?.recordset;
                     //name state da setdropname
-                    //or Id state da setGpcList da 
                     setUnitCode(data ?? [])
                     setOpen(true);
                     setAutocompleteLoading(false);
@@ -308,7 +301,6 @@ function CreateCleaningWorks() {
     }
     // all about work request number
     const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
-    const [gpcListcompleteemployee, setGpcListcompleteemployee] = useState([]); // gpc list
     const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
     const [opencompleteemployee, setOpencompleteemployee] = useState(false);
     const abortControllerRefcompleteemployee = useRef(null);
@@ -411,7 +403,6 @@ function CreateCleaningWorks() {
     };
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
         if (reason === 'reset' || reason === 'clear') {
-            setGpcListcompleteemployee([]); // Clear the data list if there is no input
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
@@ -421,14 +412,10 @@ function CreateCleaningWorks() {
 
         if (!newInputValuecompleteemployee || newInputValuecompleteemployee.trim() === '') {
             // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
             setUnitCodecompleteemployee([])
             return;
         }
         if (newInputValuecompleteemployee === null) {
-
-            // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
             setUnitCodecompleteemployee([])
             setvalue(prevValue => ({
                 ...prevValue,

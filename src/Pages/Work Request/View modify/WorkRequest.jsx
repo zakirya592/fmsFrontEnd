@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import AppBar from '@mui/material/AppBar';
@@ -904,8 +904,6 @@ function WorkRequest() {
 
         axios.get(`/api/assetworkrequest_GET_BYID/${clickedRow.RequestNumber}`)
           .then((res) => {
-            const AssetItemDescriptionsssss = res.data.recordset
-            // setgetdata(res.data.recordset);
             const SAQ = res.data.recordset.map((item) => item.seq);
             const AssetItemDescriptionsss = res.data.recordset.map((item) => item.AssetItemDescription);
             const promises = res.data.recordset.map((item) => {
@@ -928,9 +926,7 @@ function WorkRequest() {
 
             });
 
-            const assetItemTagIDs = [];
-
-            // Create an array of promises for fetching data and updating assetItemTagIDs
+            // Create an array of promises for fetching data and updating
             const promisesNumber = res.data.recordset.map((item) => {
               const itid = item.AssetItemDescription;
               return axios.get(`/api/AssetTransactions_GET_ItemDescription/${itid}`)
@@ -1040,21 +1036,6 @@ function WorkRequest() {
   });
   // Calculate the overall TOTAL_PRICE
   const overallTotalPrice = filteredRows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
-  // Calculate the initial overallTotalPrice
-
-  const initialOverallTotalPrice = calculateOverallTotalPrice(filteredRows);
-  const [overallTotalPricess, setOverallTotalPricess] = useState(initialOverallTotalPrice);
-  // Function to calculate the overallTotalPrice
-  function calculateOverallTotalPrice(rows) {
-    return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
-  }
-  filteredRows.forEach(row => {
-    const description = row.AssetItemDescription;
-    const count = row.AssetQty;
-    const AssetItemTagID = "sdf";
-  });
-
-
 
   const handleAddToWorkRequest = () => {
     if (!selectedRow || selectedRow.length === 0) {

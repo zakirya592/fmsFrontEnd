@@ -79,51 +79,22 @@ function Viewwork() {
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
                     })
                     .catch((err) => {
-                        //// console.log(err);;
+                        console.log(err);
                     });
             }
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
-    const [AssetItemTagautom, setAssetItemTagautom] = useState('Asset ItemCode')
+
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             postapi(value.EmployeeID);
         }
     }
-
-    const Update = async () => {
-        await axios.put(`/api/updateWorkRequest`, {
-            EmployeeID: value.EmployeeID,
-            Firstname: value.Firstname,
-            Middlename: value.Middlename,
-            Lastname: value.Lastname,
-            MobileNumber: value.MobileNumber,
-            LandlineNumber: value.LandlineNumber,
-            BuildingCode: value.BuildingCode,
-            DepartmentCode: value.DepartmentCode,
-            LocationCode: value.LocationCode,
-        },)
-            .then((res) => {
-                // console.log('Updata the api data ', res.data);
-                setvalue(prevState => ({ ...prevState, EmployeeID: '', Firstname: '', Middlename: '', Lastname: '', WorkRequest: '', MobileNumber: '', LandlineNumber: '', BuildingCode: '', DepartmentCode: '', LocationCode: '' }));
-                Swal.fire({
-                    title: "Success",
-                    text: "you have Success Updata the Data",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                })
-            })
-            .catch((err) => {
-                //// console.log(err);;
-            });
-    };
-
     // Dropdown list
-
     const [RequestStatusLIST, setRequestStatusLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
@@ -150,7 +121,7 @@ function Viewwork() {
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }, [])
 
@@ -159,48 +130,27 @@ function Viewwork() {
     const [dropdownworktypesLIST, setdropdownworktypesLIST] = useState([])
     const [dropdownWorkPriorityLIST, setdropdownWorkPriorityLIST] = useState([])
     const [dropdownWorkTradeLIST, setdropdownWorkTradeLIST] = useState([])
-    const [dropdownAssetTypeLIST, setdropdownAssetTypeLIST] = useState([])
-    const [dropdownProblemCategoryLIST, setdropdownProblemCategoryLIST] = useState([])
     useEffect(() => {
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
-            // console.log("dropdownBuilding LIST", res.data.recordset);
             setdropdownBuildingLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // WorkType_LIST
         axios.get(`/api/WorkType_LIST`).then((res) => {
-            // console.log("WorkType LIST", res.data.recordset);
             setdropdownworktypesLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
         // WorkPriority_LIST
         axios.get(`/api/WorkPriority_LIST`).then((res) => {
-            // console.log("WorkPriority LIST", res.data.recordset);
             setdropdownWorkPriorityLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
-            });
-        // AssetType_LIST
-        axios.get(`/api/AssetType_LIST`).then((res) => {
-            // console.log("AssetType_LIST", res.data.recordset);
-            setdropdownAssetTypeLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                //// console.log(err);;
-            });
-        // ProblemCategory_LIST
-        axios.get(`/api/ProblemCategory_LIST`).then((res) => {
-            // console.log("ProblemCategory_LIST", res.data.recordset);
-            setdropdownProblemCategoryLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
 
     }, [])
@@ -215,11 +165,11 @@ function Viewwork() {
         }));
         axios.get(`/api/Department_desc_LIST/${Deptnale}`)
             .then((res) => {
-                
+
                 setDeptDesc(res.data.recordset[0].DepartmentDesc)
             })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
     // WorkTypedesc
@@ -232,7 +182,7 @@ function Viewwork() {
         }))
         axios.get(`/api/WorkType_descri_LIST/${Deptnale}`)
             .then((res) => {
-                
+
                 setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
             })
             .catch((err) => {
@@ -244,7 +194,7 @@ function Viewwork() {
             setdropdownWorkTradeLIST(res.data.recordsets[0])
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
 
     }
@@ -263,156 +213,11 @@ function Viewwork() {
                 setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
             })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
-    // AssetType_descrip_LIST
-    const [AssetTypedesc, setAssetTypedesc] = useState([])
-    const [Manufacturerdesc, setManufacturerdesc] = useState([])
-    const [AssetCategory, setAssetCategory] = useState([])
-    const [Model, setModel] = useState()
-
     // Work Request Number
     const [imtedata, setimtedata] = useState('')
-    function Workrequestpost(RequestNumber) {
-        axios.post(`/api/getworkRequestsecond`, {
-            RequestNumber,
-        }).then((res) => {
-            if (res.data.recordsets[0].length === 0) {
-                Swal.fire('Oops...!', 'Something went wrong!', 'error')
-                // setModelError(true);
-            } else {
-                const {
-                    WorkType,
-                    WorkTrade,
-                    WorkPriority,
-                    ProblemDescription,
-                    RequestStatus,
-                    ProblemCategory,
-                    RequestDateTime,
-                    AssetItemTagID
-                } = res.data.recordsets[0][0];
-                setvalue((prevValue) => ({
-                    ...prevValue,
-                    WorkType,
-                    WorkTrade,
-                    WorkPriority,
-                    ProblemDescription,
-                    RequestStatus,
-                    ProblemCategory,
-                    RequestDateTime,
-                    AssetItemTagID
-                }));
-                const workaout = res.data.recordsets[0][0].WorkType
-                axios.get(`/api/WorkType_descri_LIST/${workaout}`)
-                    .then((res) => {
-                        
-                        setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-                axios.get(`/api/WorkTrade_LIST/${workaout}`).then((res) => {
-                    // console.log("WorkTrade_LIST", res.data.recordset);
-                    setdropdownWorkTradeLIST(res.data.recordsets[0])
-                    const worktradauto = res.data.recordsets[0][0].WorkTradeCode;
-                    axios.get(`/api/WorkTrade_descri_LIST/${worktradauto}`)
-                        .then((res) => {
-                            setWorkTradedescp(res.data.recordset[0].WorkTradeDesc)
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-                const AssetItemTagIDauto = res.data.recordsets[0][0].AssetItemTagID
-                axios.get(`/api/AssetType_descrip_LIST/${AssetItemTagIDauto}`)
-                    .then((res) => {
-                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                        const modellist = res.data.recordset[0].AssetItemDescription
-                        axios.get(`/api/AssetType_model_all_LIST/${modellist}`)
-                            .then((res) => {
-                                
-                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                                setAssetCategory(res.data.recordset[0].AssetCategory)
-                                setModel(res.data.recordset[0].Model)
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    function handleKeyPressworkrequest(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            Workrequestpost(value.RequestNumber);
-            axios.get(`/api/WorkRequestItems_GET_BYID/${value.RequestNumber}`)
-                .then((res) => {
-                    setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                    const assetdascauto = res.data.recordset[0].AssetItemTagID
-                    axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
-                        .then((res) => {
-                            setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                            const modellistmode = res.data.recordset[0].AssetItemDescription
-                            axios.get(`/api/AssetType_model_all_LIST/${modellistmode}`)
-                                .then((res) => {
-                                    
-                                    setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                                    setAssetCategory(res.data.recordset[0].AssetCategory)
-                                    setModel(res.data.recordset[0].Model)
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                });
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-
-        }
-    }
-
-    // Updata the data api
-    const WorkRequestNumber = async () => {
-        await axios.put(`/api/updatesecondWorkRequest`, {
-            RequestNumber: value.RequestNumber,
-            WorkType: value.WorkType,
-            WorkTrade: value.WorkTrade,
-            WorkPriority: value.WorkPriority,
-        },)
-            .then((res) => {
-                Swal.fire({
-                    title: "Success",
-                    text: "you have Success Updata the Data",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                })
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    // All function 
-    const Updatealldata = () => {
-        Update();
-        WorkRequestNumber();
-    }
 
     // To get the all Data Work Request Number 
     function GetgetworkRequest() {
@@ -451,14 +256,14 @@ function Viewwork() {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
                 })
                 .catch((err) => {
-                    //// console.log(err);;
+                    console.log(err);
                 });
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
-   const [RequestDateTimeform, setRequestDateTimeform] = useState([])
+    const [RequestDateTimeform, setRequestDateTimeform] = useState([])
 
     const [datanumber, setdatanumber] = useState([])
     // Work Request
@@ -618,12 +423,12 @@ function Viewwork() {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
                 })
                 .catch((err) => {
-                    //// console.log(err);;
+                    console.log(err);
                 });
             const workaout = res.data.recordsets[0][0].WorkType
             axios.get(`/api/WorkType_descri_LIST/${workaout}`)
                 .then((res) => {
-                    
+
                     setWorkTypedesc(res.data.recordset[0].WorkTypeDesc)
                 })
                 .catch((err) => {
@@ -652,40 +457,7 @@ function Viewwork() {
             });
     }
 
-
-    // Get by Requst ID Now
-    const apicall = () => {
-        axios.get(`/api/WorkRequestItems_GET_BYID/${userId}`)
-            .then((res) => {
-                setAssetItemTagautom(res.data.recordset[0].AssetItemTagID)
-                const assetdascauto = res.data.recordset[0].AssetItemTagID
-                // console.log(assetdascauto);
-                axios.get(`/api/AssetType_descrip_LIST/${assetdascauto}`)
-                    .then((res) => {
-                        setAssetTypedesc(res.data.recordset[0].AssetItemDescription)
-                        const modellistmode = res.data.recordset[0].AssetItemDescription
-                        axios.get(`/api/AssetType_model_all_LIST/${modellistmode}`)
-                            .then((res) => {
-                                
-                                setManufacturerdesc(res.data.recordset[0].Manufacturer)
-                                setAssetCategory(res.data.recordset[0].AssetCategory)
-                                setModel(res.data.recordset[0].Model)
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
     useEffect(() => {
-        apicall()
         GetgetworkRequest()
         Workrequestget()
     }, [])
@@ -699,7 +471,7 @@ function Viewwork() {
         { field: 'AssetItemDescription', headerName: 'ASSET ITEM DESCRIPTION', width: 220 },
         { field: 'AssetQty', headerName: 'ASSET QTY', width: 150 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
-        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200 , },
+        { field: 'Manufacturer', headerName: 'MONIFACTURER', width: 200, },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
@@ -726,7 +498,6 @@ function Viewwork() {
             if (result.isConfirmed) {
                 axios.delete(`/api/assetworkrequest_DELETE_BYID/${ASQS}`)
                     .then((res) => {
-                        apicall()
                         Workrequestget()
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
@@ -752,13 +523,13 @@ function Viewwork() {
 
         return (
             <div>
-                    <MenuItem onClick={() => {
+                <MenuItem onClick={() => {
                     Deletedapi(params.row.ASQS)
-                        handleMenuClose();
-                    }}>
-                        <span style={{ paddingRight: '10px' }}>Delete</span>
-                        <DeleteIcon />
-                    </MenuItem>
+                    handleMenuClose();
+                }}>
+                    <span style={{ paddingRight: '10px' }}>Delete</span>
+                    <DeleteIcon />
+                </MenuItem>
             </div>
         );
     }
@@ -778,8 +549,8 @@ function Viewwork() {
             'TOTAL_PRICE': row.TOTAL_PRICE,
         }));
 
-       
-       const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
+
+        const headerStyle = 'font-weight: bold; background:#3d41cf, color:white ;padding: 5px';
         const tableHtml = `
         <p style='text-align: center;
     background: #426d93;
@@ -1260,11 +1031,6 @@ function Viewwork() {
     function calculateOverallTotalPrice(rows) {
         return rows.reduce((total, row) => total + row.TOTAL_PRICE, 0);
     }
-    filteredRows.forEach(row => {
-        const description = row.AssetItemDescription;
-        const count = row.AssetQty;
-        const AssetItemTagID = "sdf";
-    });
 
     const [paginationModel, setPaginationModel] = React.useState({
         pageSize: 5,
@@ -1296,16 +1062,7 @@ function Viewwork() {
                                 <div className="d-flex justify-content-between my-auto">
                                     <p className='color1 workitoppro my-auto'>View/Modify Work Request</p>
                                     <div className="d-flex">
-                                        {/* pagepin  */}
                                         <Create />
-                                        {/* create */}
-                                        {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                            navigate('/createworkrequest')
-                                        })}><AddCircleOutlineIcon className='me-1' />Create</button> */}
-                                        {/* print  */}
-                                        {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork"><PrintIcon className='me-1' />Print</button> */}
-                                        {/* excel  */}
-                                        {/* <button type="button" className="btn btn-outline-primary color2"><img src={excel} /> Export</button> */}
                                     </div>
                                 </div>
 
@@ -1341,7 +1098,7 @@ function Viewwork() {
                                             </p>
                                         </div>
                                     </div>
-                                   
+
                                     <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div className='emailsection position-relative d-grid my-2'>
                                             <label htmlFor='WorkRequest' className='lablesection color3 text-start mb-1'>
@@ -1358,7 +1115,7 @@ function Viewwork() {
                                                         RequestNumber: e.target.value
                                                     }))
                                                 }}
-                                                onKeyDown={handleKeyPressworkrequest}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Enter Request Number'
                                                 required
@@ -1578,13 +1335,6 @@ function Viewwork() {
                                                 types='text'
                                                 id='Departmentname'
                                                 value={DeptDesc}
-
-                                                // onChange={e => {
-                                                //     setvalue(prevValue => ({
-                                                //         ...prevValue,
-                                                //         Departmentname: e.target.value
-                                                //     }))
-                                                // }}
                                                 className='rounded inputsection py-2'
                                                 placeholder='Department Name'
                                                 required
@@ -1668,7 +1418,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='WorkTypeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Type Description 
+                                                Work Type Description
                                             </label>
 
                                             <input
@@ -1742,7 +1492,7 @@ function Viewwork() {
                                     <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 ">
                                         <div className='emailsection d-grid my-2'>
                                             <label htmlFor='workTradeDescription' className='lablesection color3 text-start mb-1'>
-                                                Work Trade Description  
+                                                Work Trade Description
                                             </label>
 
                                             <input
@@ -1782,7 +1532,7 @@ function Viewwork() {
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}><PrintIcon className='me-1' />Print</button>
 
-                               </div>
+                                </div>
                             </div>
                         </div>
                     </Box>

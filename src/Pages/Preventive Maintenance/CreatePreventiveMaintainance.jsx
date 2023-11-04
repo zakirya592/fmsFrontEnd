@@ -26,7 +26,6 @@ function CreatePreventiveMaintainance() {
     const [assetTypeDiscription, setassetTypeDiscription] = useState("");
 
     const [unitCode, setUnitCode] = useState([]);
-    const [gpcList, setGpcList] = useState([]); // gpc list
     const [open, setOpen] = useState(false);
     const [autocompleteLoading, setAutocompleteLoading] = useState(false);
     const abortControllerRef = useRef(null);
@@ -184,7 +183,6 @@ function CreatePreventiveMaintainance() {
     }
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         if (reason === 'reset' || reason === 'clear') {
-            setGpcList([]); // Clear the data list if there is no input
             setUnitCode([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
@@ -194,13 +192,11 @@ function CreatePreventiveMaintainance() {
 
         if (!newInputValue || newInputValue.trim() === '') {
             // perform operation when input is cleared
-            setGpcList([]);
             setUnitCode([])
             return;
         }
         if (newInputValue === null) {
             // perform operation when input is cleared
-            setGpcList([]);
             setUnitCode([])
             setvalue(prevValue => ({
                 ...prevValue,
@@ -328,7 +324,6 @@ function CreatePreventiveMaintainance() {
     const [unitCodecompleteemployee, setUnitCodecompleteemployee] = useState([]);
     const [opencompleteemployee, setOpencompleteemployee] = useState(false);
     const [autocompleteLoadingcompleteemployee, setAutocompleteLoadingcompleteemployee] = useState(false);
-    const [gpcListcompleteemployee, setGpcListcompleteemployee] = useState([]); // gpc list
     const abortControllerRefcompleteemployee = useRef(null);
 
     function Workrequestpost(RequestNumber) {
@@ -392,7 +387,6 @@ function CreatePreventiveMaintainance() {
     }
     const handleAutoCompleteInputChangecompleteemployee = async (eventcompleteemployee, newInputValuecompleteemployee, reason) => {
         if (reason === 'reset' || reason === 'clear') {
-            setGpcListcompleteemployee([]); // Clear the data list if there is no input
             setUnitCodecompleteemployee([])
             return; // Do not perform search if the input is cleared or an option is selected
         }
@@ -402,13 +396,10 @@ function CreatePreventiveMaintainance() {
 
         if (!newInputValuecompleteemployee || newInputValuecompleteemployee.trim() === '') {
             // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
             setUnitCodecompleteemployee([])
             return;
         }
         if (newInputValuecompleteemployee === null) {
-            // perform operation when input is cleared
-            setGpcListcompleteemployee([]);
             setUnitCodecompleteemployee([])
             setvalue(prevValue => ({
                 ...prevValue,
