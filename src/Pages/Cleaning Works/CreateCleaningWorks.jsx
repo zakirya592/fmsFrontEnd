@@ -694,12 +694,6 @@ function CreateCleaningWorks() {
         if (!value.RequestNumber) {
             alertMessage += "\n Work Request Number";
         }
-        if (!Schedulestarttime) {
-            alertMessage += "\n Schedule-Start Date/Time";
-        }
-        if (!Scheduleendtime) {
-            alertMessage += "\n Schedule-End Date/Time";
-        }
         if (!selectedOption) {
             alertMessage += "\n Frequency";
         }
