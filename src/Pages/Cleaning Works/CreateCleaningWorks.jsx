@@ -576,16 +576,14 @@ function CreateCleaningWorks() {
 
     function formatDate(date) {
         // Get the day, month, and year components
-        const day = date.getDate();
-        const month = date.getMonth() + 1; // Months are zero-based, so add 1
-        const year = date.getFullYear();
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
 
-        // Ensure the day and month have leading zeros if necessary
-        const formattedDay = String(day).padStart(2, '0');
-        const formattedMonth = String(month).padStart(2, '0');
-
-        // Combine the components and return the formatted date
-        return `${formattedMonth}/${formattedDay}/${year}`;
     }
     const formattedDate = `${formatDate(weekDates[1].startDate)} ${formatDate(weekDates[2].startDate)} ${formatDate(weekDates[3].startDate)} ${formatDate(weekDates[4].startDate)}`
     const StartWorkOrderDateTimeweek = formattedDate.split(' ')
@@ -593,6 +591,7 @@ function CreateCleaningWorks() {
     const enddataweek = `${formatDate(weekDates[1].endDate)} ${formatDate(weekDates[2].endDate)} ${formatDate(weekDates[3].endDate)} ${formatDate(weekDates[4].endDate)}`
     const endWorkOrderDateTimeweek = enddataweek.split(' ')
 
+    console.log(endWorkOrderDateTimeweek);
     const requestincreas = async () => {
         try {
             const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
@@ -627,9 +626,8 @@ function CreateCleaningWorks() {
             console.log(err);
         }
     }
-
-    // Daily post
-    // current date and time     
+   
+    // Daily post // current date and time
     const currentStartingData = () => {
         const now = new Date();
         const year = now.getFullYear();
@@ -637,17 +635,16 @@ function CreateCleaningWorks() {
         const day = now.getDate().toString().padStart(2, '0');
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
-        return [year, month, day, hours, minutes];
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
     const dailyStartEndData = currentStartingData()
+
     const requestincreasweek = async () => {
         try {
             const response = await axios.get(`/api/workRequestCount_GET_BYID/1`);
             const currentWorkOrderNumber = response.data.recordset[0].WorkOrderNumber;
             const reqput = currentWorkOrderNumber + 1;
-            const startWorkOrderDateTime = dailyStartEndData.join('-') + 'T' + dailyStartEndData[3] + ':' + dailyStartEndData[4];
-            const endWorkOrderDateTime = startWorkOrderDateTime;
-
+            const startWorkOrderDateTime = dailyStartEndData;
             axios.put(`/api/WorkOrderNumberCount_Puts/1`, {
                 WorkOrderNumber: reqput,
             }).then((res) => {
@@ -655,8 +652,9 @@ function CreateCleaningWorks() {
 
                     WorkOrderNumber: workordernumber,
                     WorkRequestNumber: value.RequestNumber,
-                    ScheduledDateTime: startWorkOrderDateTime,
-                    StartWorkOrderDateTime: endWorkOrderDateTime,
+                    EndWorkOrderDateTime: startWorkOrderDateTime,
+                    StartWorkOrderDateTime: startWorkOrderDateTime,
+                    ScheduledDateTime: '',
                     WorkStatus: '',
                     WorkPriority: '',
                     WorkCategoryCode: '',
@@ -665,7 +663,6 @@ function CreateCleaningWorks() {
                     SolutionCode: '',
                     AssignedtoEmployeeID: '',
                     AppointmentDateTime: '',
-                    EndWorkOrderDateTime: '',
                     TotalDays: '0',
                     TotalHours: '0',
                     TotalMinutes: '0',
@@ -728,6 +725,7 @@ function CreateCleaningWorks() {
 
     const handleStartDateChange = (event) => {
         const selectedStartDate = new Date(event.target.value);
+        console.log(selectedStartDate);
         const nextDay = new Date(selectedStartDate);
         nextDay.setDate(selectedStartDate.getDate() + 1);
 
@@ -754,7 +752,6 @@ function CreateCleaningWorks() {
 
         }
     };
-
 
     return (
         <>
