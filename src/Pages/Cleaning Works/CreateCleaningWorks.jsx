@@ -576,15 +576,25 @@ function CreateCleaningWorks() {
 
     function formatDate(date) {
         // Get the day, month, and year components
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-based, so add 1
+        const year = date.getFullYear();
+
+        // Ensure the day and month have leading zeros if necessary
+        const formattedDay = String(day).padStart(2, '0');
+        const formattedMonth = String(month).padStart(2, '0');
+
         const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
+        return `${year}-${formattedMonth}-${formattedDay}T${hours}:${minutes}`;
 
+        // Combine the components and return the formatted date
+        // return `${formattedMonth}/${formattedDay}/${year}`;
     }
+
+
+
     const formattedDate = `${formatDate(weekDates[1].startDate)} ${formatDate(weekDates[2].startDate)} ${formatDate(weekDates[3].startDate)} ${formatDate(weekDates[4].startDate)}`
     const StartWorkOrderDateTimeweek = formattedDate.split(' ')
 
@@ -618,6 +628,7 @@ function CreateCleaningWorks() {
                 EndWorkOrderDateTime: endWorkOrderDateTimeweek,
             }).then((res) => {
                 successmessage()
+                console.log(res.data);
             })
                 .catch((err) => {
                     console.log(err);
@@ -649,7 +660,6 @@ function CreateCleaningWorks() {
                 WorkOrderNumber: reqput,
             }).then((res) => {
                 axios.post(`/api/WorkOrders_post`, {
-
                     WorkOrderNumber: workordernumber,
                     WorkRequestNumber: value.RequestNumber,
                     EndWorkOrderDateTime: startWorkOrderDateTime,
@@ -670,8 +680,7 @@ function CreateCleaningWorks() {
                     CompletedByEmployeeID: '0',
                     CompletionDateTime: '0',
 
-                })
-                    .then((res) => {
+                }).then((res) => {
                         console.log(res);
                         Requestnumberapi()
                         successmessage()
