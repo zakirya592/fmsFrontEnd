@@ -665,7 +665,7 @@ function CreateCleaningWorks() {
                     EndWorkOrderDateTime: startWorkOrderDateTime,
                     StartWorkOrderDateTime: startWorkOrderDateTime,
                     ScheduledDateTime: '',
-                    WorkStatus: '',
+                    WorkStatus: 'Open',
                     WorkPriority: '',
                     WorkCategoryCode: '',
                     WorkDescription: '',

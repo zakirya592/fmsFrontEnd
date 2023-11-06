@@ -683,7 +683,7 @@ function CreatePreventiveMaintainance() {
                     WorkRequestNumber: value.RequestNumber,
                     EndWorkOrderDateTime: startWorkOrderDateTime,
                     StartWorkOrderDateTime: startWorkOrderDateTime,
-                    WorkStatus: '',
+                    WorkStatus: 'Open',
                     WorkPriority: '',
                     WorkCategoryCode: '',
                     WorkDescription: '',
