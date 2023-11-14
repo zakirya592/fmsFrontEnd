@@ -486,9 +486,6 @@ function Updataworkrequest() {
                 RequestDateTime,
                 AssetItemTagID,
                 EmployeeID,
-                // DepartmentCode,
-                // LocationCode,
-                // BuildingCode,
             } = res.data.recordsets[0][0];
             const data = moment(RequestDateTime).format('YYYY-MM-DD')
             setRequestDateTimeform(data)
@@ -535,12 +532,19 @@ function Updataworkrequest() {
                     BuildingCode,
                     LocationCode,
                 }));
+                const Depauto = res.data.recordsets[0][0].DepartmentCode
+                axios.get(`/api/Department_desc_LIST/${Depauto}`)
+                    .then((res) => {
+                        setDeptDesc(res.data.recordset[0].DepartmentDesc)
+                        console.log('khan', res.data);
+                    })
+                    .catch((err) => {
+                        console.log('The error due to the ', err);
+                    });
             })
                 .catch((err) => {
                      console.log(err);
                 });
-
-
 
             axios.get(`/api/assetworkrequest_GET_BYID/${userId}`)
                 .then((res) => {
@@ -582,8 +586,6 @@ function Updataworkrequest() {
                                 };
 
                             })
-
-
                             .catch((err) => {
                                 console.log(err);
                                 return {
@@ -625,10 +627,6 @@ function Updataworkrequest() {
 
                         });
 
-
-
-
-
                 })
                 .catch((err) => {
                     console.log(err);
@@ -640,7 +638,7 @@ function Updataworkrequest() {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
                 })
                 .catch((err) => {
-                     console.log(err);
+                     console.log('The error due to the ',err);
                 });
             const workaout = res.data.recordsets[0][0].WorkType
             axios.get(`/api/WorkType_descri_LIST/${workaout}`)
@@ -1457,27 +1455,6 @@ function Updataworkrequest() {
                                             <label htmlFor='EmployeeID' className='lablesection color3 text-start mb-1'>
                                                 Employee
                                             </label>
-
-                                            {/* <input
-                                                types='text'
-                                                id='EmployeeID'
-                                                value={value.EmployeeID}
-                                                onChange={e => {
-                                                    setvalue(prevValue => ({
-                                                        ...prevValue,
-                                                        EmployeeID: e.target.value
-                                                    }))
-                                                }}
-                                                onKeyDown={handleKeyPress}
-                                                className='rounded inputsection py-2'
-                                                placeholder='Enter Employee Number'
-                                                required
-                                            ></input>
-                                            <p
-                                                className='position-absolute text-end serachicon'
-                                            >
-                                                <SearchOutlined className=' serachicon' onClick={searchbtn}/>
-                                            </p> */}
 
                                             <Autocomplete
                                                 id="serachGpc"
