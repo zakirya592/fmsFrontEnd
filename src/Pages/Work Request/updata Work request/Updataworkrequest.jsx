@@ -536,7 +536,6 @@ function Updataworkrequest() {
                 axios.get(`/api/Department_desc_LIST/${Depauto}`)
                     .then((res) => {
                         setDeptDesc(res.data.recordset[0].DepartmentDesc)
-                        console.log('khan', res.data);
                     })
                     .catch((err) => {
                         console.log('The error due to the ', err);
