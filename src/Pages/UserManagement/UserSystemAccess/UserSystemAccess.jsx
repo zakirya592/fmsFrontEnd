@@ -78,10 +78,8 @@ function UserSystemAccess() {
     const [getdata, setgetdata] = useState([])
     // List a data thougth api 
     const getapi = () => {
-        axios.get(`/api/UserSystemAccess_GET_LIST`, {
-        },)
+        axios.get(`/api/UserSystemAccess_GET_LIST`)
             .then((res) => {
-                console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
             })
             .catch((err) => {
@@ -93,9 +91,9 @@ function UserSystemAccess() {
     }, [])
 
     const columns = [
-        { field: 'id', headerName: 'SEQ.', width: 100 },
-        { field: 'EmployeeID', headerName: 'Employee ID', width: 200 },
-        { field: 'UserAuthorityCode', headerName: 'UserAuthorityCode', width: 330 },
+        { field: 'id', headerName: 'SEQ.', width: 110 },
+        { field: 'EmployeeID', headerName: 'Employee ID', width: 250 },
+        { field: 'UserAuthorityCode', headerName: 'UserAuthorityCode', width: 350 },
         { field: 'ACTIONS', headerName: 'ACTIONS', width: 140, renderCell: ActionButtons },
     ];
 
