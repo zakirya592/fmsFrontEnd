@@ -2,15 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
-import excel from "../../../Image/excel.png"
-import pagepin from "../../../Image/pagepin.png"
-import PrintIcon from '@mui/icons-material/Print';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import Create from '../../../Component/View work/Create'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import axios from 'axios'
@@ -26,10 +23,8 @@ function Createusersystem() {
     const navigate = useNavigate();
 
     const getapitable = () => {
-        axios.get(`/api/SystemModules_GET_LIST`, {
-        },)
+        axios.get(`/api/SystemModules_GET_LIST`)
             .then((res) => {
-                console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
             })
             .catch((err) => {
@@ -49,7 +44,6 @@ function Createusersystem() {
         ...row,
         id: indes + 1,
         SystemModuleCode: row.SystemModuleCode,
-
     }))
 
     const [value, setvalue] = useState({
@@ -60,9 +54,8 @@ function Createusersystem() {
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
+
     useEffect(() => {
-        // AssetCondition_GET_LIST
-        // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
@@ -112,7 +105,6 @@ function Createusersystem() {
         axios.post(`/api/getworkRequest_by_EPID`, {
             EmployeeID,
         }).then((res) => {
-
             const {
                 Firstname,
                 Middlename,
@@ -134,9 +126,7 @@ function Createusersystem() {
                 MobileNumber,
                 LandlineNumber
             }));
-            console.log('-------------------', res.data.recordsets[0][0]);
             const Depauto = res.data.recordsets[0][0].DepartmentCode
-            console.log('-------------------------------------------', Depauto);
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -146,11 +136,11 @@ function Createusersystem() {
                 });
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
+
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setUnitCode([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -186,7 +176,6 @@ function Createusersystem() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     setUnitCode(data ?? [])
@@ -196,13 +185,9 @@ function Createusersystem() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
-
         }
-
-
         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
@@ -211,11 +196,8 @@ function Createusersystem() {
                     EmployeeID: []
                 }))
                 setAutocompleteLoading(true);
-                console.log(error)
                 return;
             }
-            console.error(error);
-            console.log(error)
             setUnitCode([])
             setOpen(false);
             setAutocompleteLoading(false);
@@ -224,8 +206,6 @@ function Createusersystem() {
     }
 
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -239,7 +219,6 @@ function Createusersystem() {
                 EmployeeID: value.EmployeeID,
                 Firstname: value.Firstname
             }));
-            console.log('Received value----------:', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -282,7 +261,6 @@ function Createusersystem() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/UserAuthority_GET_DropdownList')
                 .then((response) => {
-                    console.log('Dropdown me=====', response.data.recordset)
                     const data = response?.data?.recordset;
                     //name state da setdropname
                     //or Id state da setGpcList da 
@@ -294,13 +272,9 @@ function Createusersystem() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
-
         }
-
-
         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
@@ -308,11 +282,8 @@ function Createusersystem() {
                     ...prevValue,
                     UserAuthorityCode: [],
                 }))
-                console.log(error)
                 return;
             }
-            console.error(error);
-            console.log(error)
             setUnitCodecompleteemployee([])
             setOpencompleteemployee(false);
             setAutocompleteLoadingcompleteemployee(false);
@@ -320,8 +291,6 @@ function Createusersystem() {
 
     }
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -334,7 +303,6 @@ function Createusersystem() {
                 ...prevValue,
                 UserAuthorityCode: value.UserAuthorityCode,
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -350,7 +318,8 @@ function Createusersystem() {
 
         })
             .then((res) => {
-                console.log(res.data);
+                localStorage.removeItem('EmployeeIDusemoduule');
+                localStorage.clear();
                 Swal.fire(
                     'Created!',
                     `User SystemAccess ${value.EmployeeID} has been created successfully`,
@@ -362,15 +331,50 @@ function Createusersystem() {
             .catch((err) => {
                 console.log(err);
                 const statuss = err.response.data.error
-
                 Swal.fire(
                     'Error!',
                     ` ${statuss} `,
                     'error'
                 )
             });
-
     };
+
+    const Assetcodebtn = (e) => {
+        localStorage.setItem('EmployeeIDusemoduule', value.EmployeeID)
+        if (value.EmployeeID !== null && value.EmployeeID !== '') {
+            navigate('/Add/usersystemaccess')
+        }
+        else {
+            Swal.fire(
+                'Erro!',
+                ` Employee ID is required add to System Module`,
+                'error'
+            )
+        }
+    }
+
+    useEffect(() => {
+        const storedEmployeeID = localStorage.getItem('EmployeeIDusemoduule');
+
+        if (storedEmployeeID) {
+            setvalue((prevValue) => ({
+                ...prevValue,
+                EmployeeID: storedEmployeeID,
+            }));
+        } else {
+            setvalue((prevValue) => ({
+                ...prevValue,
+                EmployeeID: '', // Set a default value
+            }));
+        }
+    }, []);
+
+
+    const backbtn = (() => {
+        localStorage.removeItem('EmployeeIDusemoduule');
+        localStorage.clear();
+        navigate('/usersystemaccess')
+    })
 
     return (
         <div>
@@ -381,9 +385,7 @@ function Createusersystem() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                        navigate('/usersystemaccess')
-                                    })} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto ms-5">User Management</p>
                                 </Typography>
                             </Toolbar>
@@ -400,7 +402,6 @@ function Createusersystem() {
 
                                 <hr className='color3 line' />
                                 {/* Row section */}
-                                {/* line one */}
                                 <div className="row mx-auto formsection">
                                     {/* Employee name  */}
                                     <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
@@ -780,6 +781,10 @@ function Createusersystem() {
 
                                 </div>
                                 {/* break line */}
+
+                                <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
+                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={Assetcodebtn}> <AddCircleOutlineIcon className='me-1' />ADD SYSTEM MODULES</button>
+                                </div>
                                 <hr className='color3 line' />
                                 {/* Table */}
                                 <div style={{ height: 420, width: '50%', margin: 'auto' }} className='tableleft'>
@@ -794,9 +799,7 @@ function Createusersystem() {
 
                                 {/* below Buttons */}
                                 <div className="d-flex justify-content-between mt-3">
-                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
-                                        navigate('/usersystemaccess')
-                                    })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
+                                    <button type="button" className="border-0 px-3  savebtn py-2" onClick={backbtn}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
                                     <button type="button" class="border-0 px-3 mx-2  savebtn py-2" onClick={Createapi}><SaveIcon className='me-2' />SAVE</button>
                                 </div>
                             </div>

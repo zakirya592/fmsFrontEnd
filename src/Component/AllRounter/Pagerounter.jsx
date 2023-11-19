@@ -121,6 +121,7 @@ import Employeeroomtransfer from '../../Pages/Space Management/Employee Room Tra
 import Viewemployeeroomtransfer from '../../Pages/Space Management/Employee Room Transfers/Viewemployeeroomtransfer'
 import Updateemployeeroomtransfer from '../../Pages/Space Management/Employee Room Transfers/Updateemployeeroomtransfer'
 import Dashbords from '../../Pages/Dashbord/Dashbords'
+import Addsystemmodule from '../System Module/Addsystemmodule'
 
 function Pagerounter() {
 
@@ -266,6 +267,7 @@ function Pagerounter() {
           {/* userSystemAccess */}
           <Route exact path="/usersystemaccess" element={<UserSystemAccess />} />
           <Route exact path="/Create/usersystemaccess" element={<Createusersystem />} />
+          <Route exact path="/Add/usersystemaccess" element={<Addsystemmodule />} />
           <Route exact path='/Update/usersystemaccess/:userId' element={<Updateusersystemasset />} />
           <Route exact path='/View/usersystemaccess/:userId' element={<Viewusersystemaccess />} />
           {/* ===================== Asset Management=====================  */}

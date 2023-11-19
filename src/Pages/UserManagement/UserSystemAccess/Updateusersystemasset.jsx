@@ -15,6 +15,7 @@ import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Swal from "sweetalert2";
 import SaveIcon from '@mui/icons-material/Save';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Updateusersystemasset() {
 
@@ -23,10 +24,8 @@ function Updateusersystemasset() {
 
     const [getdata, setgetdata] = useState([])
     const getapitable = () => {
-        axios.get(`/api/SystemModules_GET_LIST`, {
-        },)
+        axios.get(`/api/SystemModules_GET_LIST`)
             .then((res) => {
-                console.log('TO get the list', res);
                 setgetdata(res.data.recordset)
             })
             .catch((err) => {
@@ -56,8 +55,7 @@ function Updateusersystemasset() {
     })
 
     const getapi = () => {
-        axios.get(`/api/UserSystemAccess_GET_BYID/${userId}`, {
-        },)
+        axios.get(`/api/UserSystemAccess_GET_BYID/${userId}`)
             .then((res) => {
                 console.log('TO Assets Master By ID', res.data);
                 setvalue((prevValue) => ({
@@ -118,8 +116,6 @@ function Updateusersystemasset() {
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     useEffect(() => {
-        // AssetCondition_GET_LIST
-        // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             setdropdownDepartmentLIST(res.data.recordsets[0])
         })
@@ -427,6 +423,24 @@ function Updateusersystemasset() {
 
     };
 
+    const Assetcodebtn = (e) => {
+        localStorage.setItem('updataEmployeeIDusemoduule', value.EmployeeID)
+        if (value.EmployeeID !== null && value.EmployeeID !== '') {
+            navigate('/Add/usersystemaccess')
+        }
+        else {
+            Swal.fire(
+                'Erro!',
+                ` Employee ID is required add to System Module`,
+                'error'
+            )
+        }
+    }
+    const backbtn = (() => {
+        localStorage.removeItem('updataEmployeeIDusemoduule');
+        localStorage.clear();
+        navigate('/usersystemaccess')
+    })
     return (
         <div>
             <div className='bg'>
@@ -436,9 +450,7 @@ function Updateusersystemasset() {
                         <AppBar className="fortrans locationfortrans" position="fixed">
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" className="d-flex py-2 ">
-                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={(() => {
-                                        navigate('/usersystemaccess')
-                                    })} />
+                                    <ArrowCircleLeftOutlinedIcon className="my-auto text-start me-5 ms-2" onClick={backbtn} />
                                     <p className="text-center my-auto ms-5">User Management</p>
                                 </Typography>
                             </Toolbar>
@@ -836,6 +848,9 @@ function Updateusersystemasset() {
 
                                 </div>
                                 {/* break line */}
+                                <div className="col-sm-3 my-auto col-md-3 col-lg-3 col-xl-3 ">
+                                    <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork mt-3 btnworkactive" onClick={Assetcodebtn}> <AddCircleOutlineIcon className='me-1' />ADD SYSTEM MODULES</button>
+                                </div>
                                 <hr className='color3 line' />
                                 {/* Table */}
                                 <div style={{ height: 420, width: '53%', margin: 'auto' }} className='tableleft'>

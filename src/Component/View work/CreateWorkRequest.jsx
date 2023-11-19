@@ -591,7 +591,6 @@ function CreateWorkRequest() {
             });
     };
 
-
     const [lenght, setlenght] = useState('')
     const [empreq, setempreq] = useState(false)
     // All Createapi function
@@ -1031,7 +1030,6 @@ function CreateWorkRequest() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
-
 
     const backbtn = (() => {
         localStorage.removeItem('postemployid');

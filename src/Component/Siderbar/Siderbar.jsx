@@ -274,7 +274,7 @@ function Siderbar(props) {
                             <ListItem key={text} disablePadding onClick={WarehouseManagementheandle}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={WarehouseManagement} className="sidebaricon my-auto text-center" /> : <img src={WarehouseManagement} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={WarehouseManagement} className="sidebaricon my-auto text-center" alt='ogout' /> : <img src={WarehouseManagement} alt='ogout' className="sidebaricon my-auto" />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -291,7 +291,7 @@ function Siderbar(props) {
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={Dashboard} className="sidebaricon my-auto" /> : <img src={Dashboard} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={Dashboard} className="sidebaricon my-auto" alt='ogout' /> : <img src={Dashboard} className="sidebaricon my-auto" alt='ogout' />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -307,7 +307,7 @@ function Siderbar(props) {
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={Reports} className="sidebaricon my-auto" /> : <img src={Reports} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={Reports} className="sidebaricon my-auto" alt='ogout' /> : <img src={Reports} className="sidebaricon my-auto" alt='ogout' />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -321,7 +321,7 @@ function Siderbar(props) {
                             <ListItem key={text} disablePadding onClick={spaceManagementheandle}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={SpaceManagement} className="sidebaricon my-auto" /> : <img src={SpaceManagement} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={SpaceManagement} className="sidebaricon my-auto" alt='ogout' /> : <img src={SpaceManagement} className="sidebaricon my-auto" alt='ogout' />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -338,7 +338,7 @@ function Siderbar(props) {
                             })}>
                                 <ListItemButton>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <img src={Logout} className="sidebaricon my-auto" /> : <img src={Logout} className="sidebaricon my-auto" />}
+                                        {index % 2 === 0 ? <img src={Logout} className="sidebaricon my-auto" alt='ogout' /> : <img src={Logout} className="sidebaricon my-auto" alt='ogout'/>}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
