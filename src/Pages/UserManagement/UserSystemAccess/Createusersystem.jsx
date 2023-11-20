@@ -375,6 +375,13 @@ function Createusersystem() {
         localStorage.removeItem('EmployeeIDusemoduule');
         localStorage.clear();
         navigate('/usersystemaccess')
+        axios.delete(`/api/usersystem_access_DELETE_BY_emid/${value.EmployeeID}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log('Error deleting', err);
+            });
     })
 
     return (
