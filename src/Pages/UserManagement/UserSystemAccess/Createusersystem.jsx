@@ -23,7 +23,8 @@ function Createusersystem() {
     const navigate = useNavigate();
 
     const getapitable = () => {
-        axios.get(`/api/SystemModules_GET_LIST`)
+        const empid = localStorage.getItem('EmployeeIDusemoduule')
+        axios.get(`/api/usersystemAccess_get_Em_id/${empid}`)
             .then((res) => {
                 setgetdata(res.data.recordset)
             })
@@ -392,7 +393,6 @@ function Createusersystem() {
                         </AppBar>
                         <div className="topermaringpage mb-4 container">
                             <div className="py-3">
-
 
                                 {/* Top section */}
                                 <div className="d-flex justify-content-between my-auto">

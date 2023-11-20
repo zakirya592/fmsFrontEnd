@@ -13,98 +13,69 @@ import axios from 'axios'
 import Autocomplete from '@mui/material/Autocomplete';
 import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Swal from "sweetalert2";
-import SaveIcon from '@mui/icons-material/Save';
 
 function Viewusersystemaccess() {
 
     let { userId } = useParams();
     const navigate = useNavigate();
-
     const [getdata, setgetdata] = useState([])
-    const getapitable = () => {
-        axios.get(`/api/SystemModules_GET_LIST`, {
-        },)
-            .then((res) => {
-                console.log('TO get the list', res);
-                setgetdata(res.data.recordset)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-    useEffect(() => {
-        getapitable()
-    }, [])
+    const [value, setvalue] = useState({
+        EmployeeID: null, DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '', MobileNumber: '', LandlineNumber: '', Firstname: '', Middlename: '', Lastname: '',
+        windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '', Title: '', UserAuthorityCode: null
+    })
 
     const columns = [
         { field: 'id', headerName: 'SEQ.', width: 160 },
-        { field: 'SystemModuleCode', headerName: 'SYSTEM MODULES', width: 400 },
+        { field: 'SystemModuleCode', headerName: 'SYSTEM MODULES', width: 470 },
     ];
 
     const filteredData = getdata && getdata.map((row, indes) => ({
         ...row,
         id: indes + 1,
         SystemModuleCode: row.SystemModuleCode,
-
     }))
 
-
-    const [value, setvalue] = useState({
-        EmployeeID: null, DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '', MobileNumber: '', LandlineNumber: '', Firstname: '', Middlename: '', Lastname: '',
-        windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '', Title: '', UserAuthorityCode: null
-    })
-
     const getapi = () => {
-        axios.get(`/api/UserSystemAccess_GET_BYID/${userId}`, {
-        },)
+        axios.get(`/api/UserSystemAccess_GET_BYID/${userId}`)
             .then((res) => {
-                console.log('TO Assets Master By ID', res.data);
                 setvalue((prevValue) => ({
                     ...prevValue,
                     EmployeeID: res.data.recordset[0].EmployeeID,
                     UserAuthorityCode: res.data.recordset[0].UserAuthorityCode
                 }));
-
                 const EmployeeID = res.data.recordset[0].EmployeeID
+                axios.get(`/api/usersystemAccess_get_Em_id/${EmployeeID}`)
+                    .then((res) => {
+                        setgetdata(res.data.recordset)
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                 axios.post(`/api/getworkRequest_by_EPID`, {
                     EmployeeID,
                 }).then((res) => {
 
                     const {
-                        Firstname,
-                        Lastname,
-                        Middlename,
-                        LandlineNumber,
-                        MobileNumber,
-                        DepartmentCode,
-                        BuildingCode,
-                        LocationCode,
+                        Firstname, Lastname, Middlename,
+                        LandlineNumber, MobileNumber,
+                        DepartmentCode, BuildingCode, LocationCode,
                     } = res.data.recordsets[0][0];
                     setvalue((prevValue) => ({
                         ...prevValue,
-                        Firstname,
-                        Lastname,
-                        Middlename,
-                        LandlineNumber,
-                        MobileNumber,
-                        DepartmentCode,
-                        BuildingCode,
-                        LocationCode,
-                    })); console.log('-------------------', res.data.recordsets[0][0]);
+                        Firstname, Lastname, Middlename,
+                        LandlineNumber, MobileNumber,
+                        DepartmentCode, BuildingCode, LocationCode,
+                    }));
                     const Depauto = res.data.recordsets[0][0].DepartmentCode
-                    console.log('-------------------------------------------', Depauto);
                     axios.get(`/api/Department_desc_LIST/${Depauto}`)
                         .then((res) => {
                             setDeptDesc(res.data.recordset[0].DepartmentDesc)
                         })
                         .catch((err) => {
+                            console.log(err);
                         });
-                })
-                    .catch((err) => {
-                        //// console.log(err);;
-                    });
-
+                }).catch((err) => {
+                    console.log(err);
+                });
             })
             .catch((err) => {
                 console.log(err);
@@ -118,29 +89,23 @@ function Viewusersystemaccess() {
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
     useEffect(() => {
-        // AssetCondition_GET_LIST
-        // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             setdropdownDepartmentLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
+        }).catch((err) => {
+            console.log(err);
+        });
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
             setdropdownBuildingLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
+        }).catch((err) => {
+            console.log(err);
+        });
         // Location_LIST
         axios.get(`/api/Location_LIST`).then((res) => {
             setdropdownLocation(res.data.recordsets[0])
-        })
-            .catch((err) => {
-                console.log(err);
-            });
-
+        }).catch((err) => {
+            console.log(err);
+        });
     }, [])
     // Department
     const [DeptDesc, setDeptDesc] = useState('')
@@ -171,29 +136,17 @@ function Viewusersystemaccess() {
         }).then((res) => {
 
             const {
-                Firstname,
-                Middlename,
-                Lastname,
-                DepartmentCode,
-                BuildingCode,
-                LocationCode,
-                MobileNumber,
-                LandlineNumber
+                Firstname, Middlename, Lastname,
+                DepartmentCode, BuildingCode, LocationCode,
+                MobileNumber, LandlineNumber
             } = res.data.recordsets[0][0];
             setvalue((prevValue) => ({
                 ...prevValue,
-                Firstname,
-                Middlename,
-                Lastname,
-                DepartmentCode,
-                BuildingCode,
-                LocationCode,
-                MobileNumber,
-                LandlineNumber
+                Firstname, Middlename, Lastname,
+                DepartmentCode, BuildingCode, LocationCode,
+                MobileNumber, LandlineNumber
             }));
-            console.log('-------------------', res.data.recordsets[0][0]);
             const Depauto = res.data.recordsets[0][0].DepartmentCode
-            console.log('-------------------------------------------', Depauto);
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -203,11 +156,10 @@ function Viewusersystemaccess() {
                 });
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setUnitCode([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -217,7 +169,6 @@ function Viewusersystemaccess() {
         }
 
         if (!newInputValue || newInputValue.trim() === '') {
-            // perform operation when input is cleared
             setUnitCode([])
             return;
         }
@@ -230,7 +181,6 @@ function Viewusersystemaccess() {
             return;
         }
 
-        // postapi(newInputValue.EmployeeID);
         setAutocompleteLoading(true);
         setOpen(true);
         try {
@@ -240,7 +190,6 @@ function Viewusersystemaccess() {
             }
             // Create a new AbortController
             abortControllerRef.current = new AbortController();
-            // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
                     console.log('Dropdown me', response.data.recordset)
@@ -253,13 +202,9 @@ function Viewusersystemaccess() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
-
         }
-
-
         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
@@ -277,12 +222,9 @@ function Viewusersystemaccess() {
             setOpen(false);
             setAutocompleteLoading(false);
         }
-
     }
 
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -296,7 +238,6 @@ function Viewusersystemaccess() {
                 EmployeeID: value.EmployeeID,
                 Firstname: value.Firstname
             }));
-            console.log('Received value----------:', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -339,10 +280,7 @@ function Viewusersystemaccess() {
             // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/UserAuthority_GET_DropdownList')
                 .then((response) => {
-                    console.log('Dropdown me=====', response.data.recordset)
                     const data = response?.data?.recordset;
-                    //name state da setdropname
-                    //or Id state da setGpcList da 
                     setUnitCodecompleteemployee(data ?? [])
                     setOpencompleteemployee(true);
                     setUnitCodecompleteemployee(data)
@@ -351,13 +289,9 @@ function Viewusersystemaccess() {
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
-
         }
-
-
         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
@@ -377,8 +311,6 @@ function Viewusersystemaccess() {
 
     }
     const handleGPCAutoCompleteChangecompleteemployee = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === '-') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -391,7 +323,6 @@ function Viewusersystemaccess() {
                 ...prevValue,
                 UserAuthorityCode: value.UserAuthorityCode,
             }));
-            console.log('Received value----------:', value);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
@@ -427,7 +358,6 @@ function Viewusersystemaccess() {
 
                                 <hr className='color3 line' />
                                 {/* Row section */}
-                                {/* line one */}
                                 <div className="row mx-auto formsection">
                                     {/* Employee name  */}
                                     <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 ">
@@ -439,14 +369,14 @@ function Viewusersystemaccess() {
                                                 id="EmployeeID"
                                                 className='rounded inputsection py-0 mt-0'
                                                 required
-                                                options={unitCode} // Use the formattedGpcList here
-                                                // getOptionLabel={(option) => option?.EmployeeID + ' - ' + option?.Firstname}
+                                                options={unitCode} 
                                                 getOptionLabel={(option) =>
                                                     option?.EmployeeID
                                                         ? option.EmployeeID + ' - ' + option.Firstname
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                                readOnly
+                                                // getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
                                                 onChange={handleGPCAutoCompleteChange}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
@@ -516,7 +446,7 @@ function Viewusersystemaccess() {
                                                         ? option.UserAuthorityCode
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.UserAuthorityCode === value.UserAuthorityCode}
+                                                // getOptionSelected={(option, value) => option.UserAuthorityCode === value.UserAuthorityCode}
                                                 onChange={handleGPCAutoCompleteChangecompleteemployee}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>
@@ -746,6 +676,10 @@ function Viewusersystemaccess() {
                                                 types='text'
                                                 id='Departmentname'
                                                 value={DeptDesc}
+                                                onClick={((e) => {
+                                                    setDeptDesc(e.target.value)
+                                                })}
+                                                readOnly
                                                 className='rounded inputsection py-2'
                                                 placeholder='Department Name'
                                                 required
@@ -824,7 +758,7 @@ function Viewusersystemaccess() {
                                     <button type="button" className="border-0 px-3  savebtn py-2" onClick={(() => {
                                         navigate('/usersystemaccess')
                                     })}><ArrowCircleLeftOutlinedIcon className='me-2' />Back</button>
-                                   </div>
+                                </div>
                             </div>
                         </div>
                     </Box>
