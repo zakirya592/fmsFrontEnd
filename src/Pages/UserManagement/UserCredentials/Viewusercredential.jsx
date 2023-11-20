@@ -3,8 +3,6 @@ import Siderbar from '../../../Component/Siderbar/Siderbar'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import { SearchOutlined } from '@ant-design/icons';
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +13,6 @@ import { CircularProgress } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import './Usecredential.css'
-import Swal from "sweetalert2";
 import { useNavigate, useParams } from 'react-router-dom';
 
 function Viewusercredential() {
