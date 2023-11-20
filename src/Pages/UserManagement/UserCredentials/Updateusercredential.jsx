@@ -27,7 +27,7 @@ function Updateusercredential() {
 
     const [value, setvalue] = useState({
         EmployeeID: null, DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '', MobileNumber: '', LandlineNumber: '', Firstname: '', Middlename: '', Lastname: '',
-        windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '',
+        windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '', UserAuthorityCode: '',
     })
 
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
@@ -44,11 +44,8 @@ function Updateusercredential() {
         setwindowuserpasswordshow(!windowuserpasswordshow);
     };
     const getapi = () => {
-        axios.get(`/api/UserCredentials_GET_BYID/${userId}`, {
-        },)
+        axios.get(`/api/UserCredentials_GET_BYID/${userId}`)
             .then((res) => {
-                console.log('TO Assets Master By ID', res.data);
-
                 const Departmentcode = res.data.recordset[0].DepartmentCode
                 setvalue((prevValue) => ({
                     ...prevValue,
@@ -85,9 +82,19 @@ function Updateusercredential() {
                         DepartmentCode,
                         BuildingCode,
                         LocationCode,
-                    })); console.log('-------------------', res.data.recordsets[0][0]);
+                    }));
+                    const EmployeeIDss = res.data.recordsets[0][0].EmployeeID
+                    axios.get(`/api/UserSystemAccess_GET_BYID/${EmployeeIDss}`)
+                        .then((res) => {
+                            setvalue((prevValue) => ({
+                                ...prevValue,
+                                UserAuthorityCode: res.data.recordset[0].UserAuthorityCode,
+                            }));
+                        })
+                        .catch((err) => {
+                            console.log(err);;
+                        });
                     const Depauto = res.data.recordsets[0][0].DepartmentCode
-                    console.log('-------------------------------------------', Depauto);
                     axios.get(`/api/Department_desc_LIST/${Depauto}`)
                         .then((res) => {
                             setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -195,9 +202,18 @@ function Updateusercredential() {
                 MobileNumber,
                 LandlineNumber
             }));
-            console.log('-------------------', res.data.recordsets[0][0]);
+            const EmployeeIDss = res.data.recordsets[0][0].EmployeeID
+            axios.get(`/api/UserSystemAccess_GET_BYID/${EmployeeIDss}`)
+                .then((res) => {
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        UserAuthorityCode: res.data.recordset[0].UserAuthorityCode,
+                    }));
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
             const Depauto = res.data.recordsets[0][0].DepartmentCode
-            console.log('-------------------------------------------', Depauto);
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -308,7 +324,7 @@ function Updateusercredential() {
 
     const addtransaction = async () => {
         axios.put(`/api/UserCredentials_Put/${userId}`, {
-            UserAuthorityCode: value.userRole,
+            UserAuthorityCode: value.UserAuthorityCode,
             UserID: value.userId,
             UserPassword: value.userIdPassword,
             WindowsID: value.windowuserid,
@@ -388,7 +404,7 @@ function Updateusercredential() {
                                                         ? option.EmployeeID + ' - ' + option.Firstname
                                                         : ''
                                                 }
-                                                getOptionSelected={(option, value) => option.EmployeeID === value.EmployeeID} // This determines which value gets sent to the API
+                                                readOnly
                                                 onChange={handleGPCAutoCompleteChange}
                                                 renderOption={(props, option) => (
                                                     <li {...props} style={{ color: option.isHighlighted ? 'blue' : 'black' }}>

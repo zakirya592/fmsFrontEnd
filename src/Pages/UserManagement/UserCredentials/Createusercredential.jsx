@@ -24,13 +24,12 @@ function Createusercredential() {
 
     const [value, setvalue] = useState({
         EmployeeID: null, DepartmentCode: '', Departmentname: '', BuildingCode: '', LocationCode: '', MobileNumber: '', LandlineNumber: '', Firstname: '', Middlename: '', Lastname: '',
-        windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '',
+        windowuserid: '', emailAddress: '', userId: '', userIdPassword: '', windowuserpassword: '', userRole: '', UserAuthorityCode:'',
     })
 
     const [dropdownDepartmentLIST, setdropdownDepartmentLIST] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownLocation, setdropdownLocation] = useState([])
-
     const [showPassword, setShowPassword] = useState(false);
     const [windowuserpasswordshow, setwindowuserpasswordshow] = useState(false);
 
@@ -43,28 +42,23 @@ function Createusercredential() {
 
     useEffect(() => {
         // AssetCondition_GET_LIST
-        // dropdownDepartmentLIST
         axios.get(`/api/Department_LIST`).then((res) => {
             setdropdownDepartmentLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
+        }).catch((err) => {
                 console.log(err);
             });
         // Building_LIST
         axios.get(`/api/Building_LIST`).then((res) => {
             setdropdownBuildingLIST(res.data.recordsets[0])
-        })
-            .catch((err) => {
+        }).catch((err) => {
                 console.log(err);
             });
         // Location_LIST
         axios.get(`/api/Location_LIST`).then((res) => {
             setdropdownLocation(res.data.recordsets[0])
-        })
-            .catch((err) => {
+        }).catch((err) => {
                 console.log(err);
             });
-
     }, [])
     // Department
     const [DeptDesc, setDeptDesc] = useState('')
@@ -94,7 +88,6 @@ function Createusercredential() {
         axios.post(`/api/getworkRequest_by_EPID`, {
             EmployeeID,
         }).then((res) => {
-
             const {
                 Firstname,
                 Middlename,
@@ -116,9 +109,18 @@ function Createusercredential() {
                 MobileNumber,
                 LandlineNumber
             }));
-            console.log('-------------------', res.data.recordsets[0][0]);
+            const EmployeeIDss = res.data.recordsets[0][0].EmployeeID
+            axios.get(`/api/UserSystemAccess_GET_BYID/${EmployeeIDss}`)
+                .then((res) => {
+                    setvalue((prevValue) => ({
+                        ...prevValue,
+                        UserAuthorityCode: res.data.recordset[0].UserAuthorityCode,
+                    }));
+                })
+                .catch((err) => {
+                    console.log(err);;
+                });
             const Depauto = res.data.recordsets[0][0].DepartmentCode
-            console.log('-------------------------------------------', Depauto);
             axios.get(`/api/Department_desc_LIST/${Depauto}`)
                 .then((res) => {
                     setDeptDesc(res.data.recordset[0].DepartmentDesc)
@@ -128,11 +130,10 @@ function Createusercredential() {
                 });
         })
             .catch((err) => {
-                //// console.log(err);;
+                console.log(err);
             });
     }
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
-        console.log('==========+++++++======', newInputValue)
         if (reason === 'reset' || reason === 'clear') {
             setUnitCode([])
             return; // Do not perform search if the input is cleared or an option is selected
@@ -165,27 +166,19 @@ function Createusercredential() {
             }
             // Create a new AbortController
             abortControllerRef.current = new AbortController();
-            // I dont know what is the response of your api but integrate your api into this block of code thanks 
             axios.get('/api/EmployeeID_GET_LIST')
                 .then((response) => {
-                    console.log('Dropdown me', response.data.recordset)
                     const data = response?.data?.recordset;
-                    //name state da setdropname
                     setUnitCode(data ?? [])
                     setOpen(true);
                     setAutocompleteLoading(false);
-                    // 
                 })
                 .catch((error) => {
                     console.log('-----', error);
-
                 }
                 );
-
         }
-
-
-        catch (error) {
+         catch (error) {
             if (error?.name === 'CanceledError') {
                 // Ignore abort errors
                 setvalue(prevValue => ({
@@ -202,12 +195,9 @@ function Createusercredential() {
             setOpen(false);
             setAutocompleteLoading(false);
         }
-
     }
 
     const handleGPCAutoCompleteChange = (event, value) => {
-
-        console.log('Received value:', value); // Debugging line
         if (value === null || value === ' -') {
             setvalue(prevValue => ({
                 ...prevValue,
@@ -221,16 +211,14 @@ function Createusercredential() {
                 EmployeeID: value.EmployeeID,
                 Firstname: value.Firstname
             }));
-            console.log('Received value----------:', value.EmployeeID);
         } else {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
-
     const addtransaction = async () => {
         axios.post(`/api/UserCredentials_post`, {
             EmployeeID: value.EmployeeID,
-            UserAuthorityCode: value.userRole,
+            UserAuthorityCode: value.UserAuthorityCode,
             UserID: value.userId,
             UserPassword: value.userIdPassword,
             WindowsID: value.windowuserid,
@@ -238,21 +226,16 @@ function Createusercredential() {
             CreatedByAdminID: value.emailAddress,
             CreationDateTime: '0',
 
-        })
-            .then((res) => {
-                console.log(res.data);
+        }).then((res) => {
                 Swal.fire(
                     'Created!',
                     `User Credentials ${value.EmployeeID} has been created successfully`,
                     'success'
                 )
                 navigate('/userCredentials')
-
             })
             .catch((err) => {
-                console.log(err);
                 const statuss = err.response.data.error
-
                 Swal.fire(
                     'Error!',
                     ` ${statuss} `,
@@ -261,8 +244,6 @@ function Createusercredential() {
             });
 
     };
-
-
 
     return (
         <div>
