@@ -140,6 +140,13 @@ function Createusersystem() {
                 console.log(err);
             });
     }
+    useEffect(() => {
+        const storedEmployeeID = localStorage.getItem('EmployeeIDusemoduule');
+        if (storedEmployeeID) {
+            postapi(storedEmployeeID);
+        }
+    }, []);
+    
 
     const handleAutoCompleteInputChange = async (event, newInputValue, reason) => {
         if (reason === 'reset' || reason === 'clear') {
@@ -182,7 +189,6 @@ function Createusersystem() {
                     setUnitCode(data ?? [])
                     setOpen(true);
                     setAutocompleteLoading(false);
-                    // 
                 })
                 .catch((error) => {
                     console.log('-----', error);
@@ -369,7 +375,6 @@ function Createusersystem() {
             }));
         }
     }, []);
-
 
     const backbtn = (() => {
         localStorage.removeItem('EmployeeIDusemoduule');
