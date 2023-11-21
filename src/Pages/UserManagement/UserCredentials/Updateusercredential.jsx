@@ -85,9 +85,11 @@ function Updateusercredential() {
                     const EmployeeIDss = res.data.recordsets[0][0].EmployeeID
                     axios.get(`/api/UserSystemAccess_GET_BYID/${EmployeeIDss}`)
                         .then((res) => {
+                            const userAuthorityCode = res.data.recordset[0]?.UserAuthorityCode || null;
+
                             setvalue((prevValue) => ({
                                 ...prevValue,
-                                UserAuthorityCode: res.data.recordset[0].UserAuthorityCode,
+                                UserAuthorityCode: userAuthorityCode,
                             }));
                         })
                         .catch((err) => {

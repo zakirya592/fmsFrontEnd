@@ -112,9 +112,11 @@ function Createusercredential() {
             const EmployeeIDss = res.data.recordsets[0][0].EmployeeID
             axios.get(`/api/UserSystemAccess_GET_BYID/${EmployeeIDss}`)
                 .then((res) => {
+                    const userAuthorityCode = res.data.recordset[0]?.UserAuthorityCode || null;
+
                     setvalue((prevValue) => ({
                         ...prevValue,
-                        UserAuthorityCode: res.data.recordset[0].UserAuthorityCode,
+                        UserAuthorityCode: userAuthorityCode,
                     }));
                 })
                 .catch((err) => {
@@ -215,7 +217,19 @@ function Createusercredential() {
             console.log('Value or value.EmployeeID is null:', value); // Debugging line
         }
     }
+    const getCurrentDateTimeString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
     const addtransaction = async () => {
+        const RequestDateTimepost = getCurrentDateTimeString()
         axios.post(`/api/UserCredentials_post`, {
             EmployeeID: value.EmployeeID,
             UserAuthorityCode: value.UserAuthorityCode,
@@ -224,9 +238,10 @@ function Createusercredential() {
             WindowsID: value.windowuserid,
             WindowsPassword: value.windowuserpassword,
             CreatedByAdminID: value.emailAddress,
-            CreationDateTime: '0',
+            CreationDateTime: RequestDateTimepost,
 
         }).then((res) => {
+            console.log(res);
                 Swal.fire(
                     'Created!',
                     `User Credentials ${value.EmployeeID} has been created successfully`,
@@ -242,7 +257,6 @@ function Createusercredential() {
                     'error'
                 )
             });
-
     };
 
     return (
@@ -748,7 +762,7 @@ function Createusercredential() {
                                                     }))
                                                 }}
                                                 className='rounded inputsection py-2'
-                                                placeholder='Enter Window User ID'
+                                                placeholder='Enter Email Address'
                                                 required
                                             ></input>
 

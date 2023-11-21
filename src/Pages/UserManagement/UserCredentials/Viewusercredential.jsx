@@ -81,9 +81,8 @@ function Viewusercredential() {
                         DepartmentCode,
                         BuildingCode,
                         LocationCode,
-                    })); console.log('-------------------', res.data.recordsets[0][0]);
+                    }));
                     const Depauto = res.data.recordsets[0][0].DepartmentCode
-                    console.log('-------------------------------------------', Depauto);
                     axios.get(`/api/Department_desc_LIST/${Depauto}`)
                         .then((res) => {
                             setDeptDesc(res.data.recordset[0].DepartmentDesc)
