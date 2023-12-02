@@ -13,7 +13,6 @@ import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
-import Newday from '../../../Component/AllRounter/setup configuration/Day/Newday';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
 import axios from 'axios';
