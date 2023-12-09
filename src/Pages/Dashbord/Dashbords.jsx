@@ -15,7 +15,7 @@ import PurchaseRequest from '../../Image/Purchasing  Management.png'
 import "./Dashbord.css"
 import axios from 'axios';
 import moment from 'moment'
-import { format, addWeeks, addDays, addMonths, addYears } from "date-fns";
+import { format, addDays, addMonths, addYears } from "date-fns";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css"; // Import the slider styles
 
@@ -43,7 +43,6 @@ function Dashbords() {
     const [TotalCapacity, setTotalCapacity] = useState([])
     const [totalOccupancy, settotalOccupancy] = useState([])
     const [TotalEmployees, setTotalEmployees] = useState([])
-
     const [worrkrequestopenlastweek, setworrkrequestopenlastweek] = useState([])
     const [worrkrequestopenlastmonth, setworrkrequestopenlastmonth] = useState([])
     const [worrkrequestopenlastyear, setworrkrequestopenlastyear] = useState([])
@@ -68,7 +67,6 @@ function Dashbords() {
     const [Purchaseorderlastweek, setPurchaseorderlastweek] = useState([])
     const [Purchaseorderlastmonth, setPurchaseorderlastmonth] = useState([])
     const [Purchaseorderlastyear, setPurchaseorderlastyear] = useState([])
-
     const [dropdownLocation, setdropdownLocation] = useState([])
     const [dropdownBuildingLIST, setdropdownBuildingLIST] = useState([])
     const [dropdownFloor, setdropdownFloor] = useState([])
@@ -922,8 +920,6 @@ function Dashbords() {
                     setPurchaseorderlastweek(dataWithinLastWeek);
                     setgetdata(filteredData);
                 } else {
-                    console.log('The Purchase order filtered array is empty.');
-                    // Handle the case where all items were filtered out
                     setgetdata([]); // Reset the data if there are no records
                     setPurchaseorderlastyear([]);
                     setPurchaseorderlastmonth([]);
@@ -933,7 +929,6 @@ function Dashbords() {
             } else {
                 console.log('The array is empty.');
             }
-
         })
             .catch((err) => {
                 console.log(err);
@@ -1725,10 +1720,11 @@ function Dashbords() {
 
                                                 </div>
                                                 <div className='text-center mt-2 lastpro'>
-                                                    <p className='fs-6 my-1'>Latest - Open : {moment(Latestworkorderopen.StartWorkOrderDateTime).isValid() ? moment(Latestworkorderopen.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderopen.WorkOrderNumber}</p>
-                                                    <p className='fs-6 my-1'>Oldest - Open : {moment(oldestdata.StartWorkOrderDateTime).isValid() ? moment(oldestdata.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{oldestdata.WorkOrderNumber}</p>
-                                                    <p className='fs-6 my-1'>Latest - Post :{moment(Latestworkorderpost.StartWorkOrderDateTime).isValid() ? moment(Latestworkorderpost.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderpost.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Latest - Open : {moment(Latestworkorderopen?.StartWorkOrderDateTime).isValid() ? moment(Latestworkorderopen?.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderopen?.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Oldest - Open : {moment(oldestdata?.StartWorkOrderDateTime).isValid() ? moment(oldestdata?.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{oldestdata?.WorkOrderNumber}</p>
+                                                    <p className='fs-6 my-1'>Latest - Post :{moment(Latestworkorderpost?.StartWorkOrderDateTime).isValid() ? moment(Latestworkorderpost?.StartWorkOrderDateTime).format('DD-MM-YYYY hh:mm:ss A') : 'DD-MM-YYYY HH:MM:SS A'} WO-{Latestworkorderpost?.WorkOrderNumber}</p>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
