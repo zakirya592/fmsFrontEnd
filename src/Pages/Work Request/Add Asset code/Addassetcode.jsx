@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Siderbar from '../../../Component/Siderbar/Siderbar';
 import AppBar from '@mui/material/AppBar';
@@ -11,13 +11,6 @@ import excel from '../../../Image/excel.png';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { CSVLink } from "react-csv";
 import Swal from "sweetalert2";
@@ -108,13 +101,10 @@ function Addassetcode() {
     const handleCellClick = (params, event) => {
         const columnField = params.field;
         if (columnField === '__check__') {
-            // This condition checks if the clicked cell is a checkbox cell
-            // Retrieve the entire data of the clicked row using its ID
             const clickedRow = filteredRows.find((row) => row.id === params.id);
             if (clickedRow) {
                 console.log("Selected row data:", clickedRow);
             }
-            //    =======
             if (clickedRow) {
                 setSelectedRowIds((prevSelected) => ({
                     ...prevSelected,
@@ -141,45 +131,6 @@ function Addassetcode() {
         { field: 'Manufacturer', headerName: 'MANUFACTURE', width: 200 },
         { field: 'Model', headerName: 'MODEL', width: 200 },
     ];
-
-    // Deleted api section
-    const Deletedapi = (AssetItemDescription) => {
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success mx-2',
-                cancelButton: 'btn btn-danger mx-2',
-                // actions: 'mx-3'
-            },
-            buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: "You want to delete this AssetCode",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.delete(`/api/AssetsMaster_DELETE_BYID/${AssetItemDescription}`)
-                    .then((res) => {
-                        getapi()
-                    })
-                    .catch((err) => {
-                        // Handle delete error
-                        console.log('Error deleting', err);
-                    });
-                swalWithBootstrapButtons.fire(
-                    'Deleted!',
-                    'AssetCode has been deleted.',
-                    'success'
-                )
-            }
-        })
-
-    };
 
     const [getemplodata, setgetemplodata] = useState([])
     const putapi = (AssetItemDescription) => {
@@ -233,10 +184,8 @@ function Addassetcode() {
     };
 
     const [requestByEmployee, setrequestByEmployee] = useState('');
-    const [RequestStatusFilterValue, setRequestStatusFilterValue] = useState('')
 
     const filteredRows = getdata && getdata.filter(row => (
-        (!RequestStatusFilterValue || row.RequestStatus === RequestStatusFilterValue) &&
         (!requestByEmployee || row.AssetItemDescription.toLowerCase().includes(requestByEmployee.toLowerCase()))
     )).map((row, index) => {
         const isLastPurchaseDateValid = !isNaN(Date.parse(row.LastPurchaseDate));
@@ -292,11 +241,6 @@ function Addassetcode() {
                                         <p className="color1 workitoppro my-auto">
                                             Asset Master List</p>
                                         <div className="d-flex">
-                                            {/* <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={(() => {
-                                                navigate('/createworkrequest')
-                                            })}>
-                                          <AddCircleOutlineIcon className='me-1' />Create
-                                          </button> */}
 
                                             <button type="button" className="btn btn-outline-primary mx-1 color2 btnwork" onClick={() => handlePrintTable(filteredRows)}>
                                                 <PrintIcon className="me-1" />
@@ -336,28 +280,7 @@ function Addassetcode() {
                                                 </p>
                                             </div>
                                         </div>
-                                        {/* <div className="col-sm-10 col-md-4 col-lg-4 col-xl-3">
-                                            <div className='emailsection position-relative d-grid my-2'>
-                                                <label className='lablesection color3 text-start mb-1 filter-label'>
-                                                    Asset Item Group<span className='star'>*</span>
-                                                </label>
-
-                                                <select
-                                                    id='RequestStatus'
-                                                    value={RequestStatusFilterValue}
-                                                    className='rounded inputsection py-2'
-                                                    onChange={(e) => setRequestStatusFilterValue(e.target.value)}
-                                                >
-                                                    <option value=''>Select Status</option>
-                                                    <option value='Open'>Open</option>
-                                                    <option value='Closed'>Closed</option>
-                                                    <option value='Cancelled'>Cancelled</option>
-                                                </select>
-
-                                            </div>
-                                        </div> */}
                                         <div className="col-sm-2 col-md-3 col-lg-3 col-xl-3 my-auto">
-                                            {/* <p></p> */}
                                             <button type="button" className="border-0 px-3 mt-4 savebtn py-2" onClick={handleAddToWorkRequest}><AddCircleOutlineIcon className='me-2' />Add To Work Request</button>
                                         </div>
                                         <div className="col-sm-2 col-md-3 col-lg-3 text-end col-xl-3 my-auto">
